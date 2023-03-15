@@ -1,0 +1,8 @@
+https://cplusplus.com/forum/beginner/138673/
+Summary:
+1. First make a resource (.rc) file which refers to the icon like so:
+id ICON "path/to/my.ico"
+2. Compile it into an object:
+windres my.rc -O coff -o my.res
+3. Link it into your exe with the rest of your project:
+g++ -o my_app obj1.o obj2.o my.res
