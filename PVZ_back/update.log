@@ -1,0 +1,50 @@
+01/03/2023:
+Basic game logic:
+	Sun, pea, zombie moving.
+	Handle click to choose seed and plant.
+	Double click to dig the plant.
+	Increase player's sun_count and remove sun after click.
+	SDL render basic: Make a window class for necessary functions.
+	Handle collision: pea vs zombie, zombie vs plant.
+	Walnut has his 3 appearance depending on his health.
+	Remove plant if it reach its bite-limit.
+	Get and random number waves, zombies from level files.
+	Read player saved data.
+	Display all things in 'Elements' struct on screen.
+
+07/03/2023:
+	Render things base on their image ratio.
+	Using map for loading each image only once.
+
+08/03/2023:
+Add more features:
+	Double click or click on other plant to cancel choosing plant.
+	Change the click priority. Remove double clicking for dig a plant.
+	Cannot plant on an used tile.
+	Change some void functions to bool ones for optimization.
+Divide game.cpp into some headers and cpps.
+
+12/03/2023:
+Change game logic:
+	Suns from sunflowers will not appear at the same time.
+	Peas from peashooters will not appear at the same time.
+	One pea hit only one zombies at a time.
+
+
+15/03/2023:
+Add more features:
+	Now plant seed has refresh remaining time.
+	Control game FPS.
+	Change some elements' speed.
+	Change peashooter, sunflower, zombie from image to sprite sheet.
+
+16/03/2023:
+	FPS down to 60
+	Render plant at the mouse position when its plant seed is chosen.
+	Zombie blink when attacked.
+	Update losing screen.
+	Using enum for image instead of string to remove map<string, SDL_Texture*> in rsdl.cpp.
+	Change Walnut sprite sheet.
+	Add blink when being attacked for sunflower.
+
+	

@@ -13,6 +13,7 @@ struct Sun
     int final_row;
     int y_location;
     int wait_seconds;
+    bool is_clicked;
 };
 
 struct Sunflower
@@ -20,13 +21,16 @@ struct Sunflower
     int row, col;
     int bite;
     int sec_for_another_sun = SUN_GEN_SUNFLOWER_CLK_COUNT;
+    int frame = 0;
+    int is_attacked = 0;
 };
 
 struct Walnut
 {
     int row, col;
     int bite;
-    string directory;
+    int directory_num;
+    int frame = 0;
 };
 
 struct Peashooter
@@ -34,6 +38,7 @@ struct Peashooter
     int row, col;
     int bite;
     int sec_for_another_pea = 1;
+    int frame = 0;
 };
 
 struct Pea
@@ -56,7 +61,9 @@ struct Zombie
     int x_location;
     int health;
     bool is_moving;
-    string directory;
+    int directory_num;
+    int frame = 0;
+    int is_attacked = 0;
 };
 
 /*--------------------------------------------------------------------

@@ -148,7 +148,7 @@ void create_new_plant(Player &player, Map &map, Elements &elements, Icons &icons
         temp.row = row;
         temp.col = col;
         temp.bite = 0;
-        temp.directory = WALNUT_UNTOUCHED_DIRECTORY;
+        temp.directory_num = WALNUT_1_DIRECTORY;
         elements.walnuts.push_back(temp);
         player.sun_count -= WALNUT_PRICE;
         map[row][col].is_planted = 1;

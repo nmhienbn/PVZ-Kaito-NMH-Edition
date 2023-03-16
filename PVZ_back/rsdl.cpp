@@ -19,7 +19,7 @@ void window::init()
         throw "TTF_Init Fail";
 }
 
-window::window(int width, int height, std::string title) : WINDOW_WIDTH(width), WINDOW_HEIGHT(height)
+window::window(int width, int height, string title)
 {
     init();
     SDL_CreateWindowAndRenderer(width, height, 0, &win, &renderer);
@@ -64,65 +64,105 @@ void window::set_color(RGB color)
     SDL_SetRenderDrawColor(renderer, color.red, color.green, color.blue, 255);
 }
 
-void window::draw_bmp(string filename, int x, int y, int width, int height)
+void window::draw_bmp(int file_num, int x, int y, int width, int height)
 {
-    SDL_Texture *res = texture_cache[filename];
+    SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        SDL_Surface *surface = SDL_LoadBMP(filename.c_str());
+        SDL_Surface *surface = SDL_LoadBMP(image_directory[file_num].c_str());
         res = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
-        texture_cache[filename] = res;
+        texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
 
-void window::draw_png_scale(string filename, int x, int y, int width, int height)
+void window::draw_png_scale(int file_num, int x, int y, int width, int height)
 {
-    SDL_Texture *res = texture_cache[filename];
+    SDL_Texture *res = texture_cache[file_num];
     int mWidth = 0, mHeight = 0;
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, filename.c_str());
-        texture_cache[filename] = res;
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        texture_cache[file_num] = res;
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {x, y, width, width * mHeight / mWidth};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
 
-void window::draw_png(string filename, int x, int y, int width, int height)
+void window::draw_png(int file_num, int x, int y, int width, int height)
 {
-    SDL_Texture *res = texture_cache[filename];
+    SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, filename.c_str());
-        texture_cache[filename] = res;
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
 
-void window::draw_png(string filename, int x, int y, int width, int height, int angle)
+void window::draw_png(int file_num, int x, int y, int width, int height, int angle)
 {
-    SDL_Texture *res = texture_cache[filename];
+    SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, filename.c_str());
-        texture_cache[filename] = res;
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
 }
 
-void window::draw_bg(string filename, int x, int y)
+void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
-    SDL_Texture *res = texture_cache[filename];
+    SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, filename.c_str());
-        texture_cache[filename] = res;
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        // Color key image
+        // SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+        if (file_num == ZOMBIE_BLINK_SHEET_DIRECTORY || file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY)
+        {
+            SDL_SetTextureAlphaMod(res, 100);
+        }
+        texture_cache[file_num] = res;
+    }
+    SDL_Rect src = {sx, sy, sw, sh};
+    SDL_Rect dst = {dx, dy, dw, sh * dw / sw};
+    SDL_RenderCopy(renderer, res, &src, &dst);
+}
+
+void window::draw_bg(int file_num, int x, int y)
+{
+    SDL_Texture *res = texture_cache[file_num];
+    if (res == NULL)
+    {
+        // SDL_Surface *loadedSurface = IMG_Load(image_directory[file_num].c_str());
+        // if (loadedSurface == NULL)
+        // {
+        //     printf("Unable to load image %s! SDL_image Error: %s\n", image_directory[file_num].c_str(), IMG_GetError());
+        // }
+        // else
+        // {
+        //     // Color key image
+        //     SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
+
+        //     // Create texture from surface pixels
+        //     res = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+        //     if (res == NULL)
+        //     {
+        //         printf("Unable to create texture from %s! SDL Error: %s\n", image_directory[file_num].c_str(), SDL_GetError());
+        //     }
+        // }
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        if (file_num == BLACK_SCREEN_DIRECTORY)
+        {
+            SDL_SetTextureAlphaMod(res, 150);
+        }
+        texture_cache[file_num] = res;
     }
     SDL_Rect src = {x, y, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_Rect dst = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};

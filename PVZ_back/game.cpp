@@ -4,7 +4,7 @@
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 bool quit = false;
-long int clk = 0;
+int clk = 0;
 Level level;
 Elements game_characters;
 Icons icons;
@@ -18,9 +18,10 @@ int main(int argv, char **args)
 
     while (!quit)
     {
+        Uint32 start_time = SDL_GetTicks();
 
         if (has_player_lost(game_characters))
-            display_losing_message(win);
+            display_losing_message(win, game_characters, map);
         else if (has_player_won(level, game_characters))
             display_winning_message(win);
         else
@@ -42,7 +43,12 @@ int main(int argv, char **args)
 
         clk++;
         win.update_screen();
-        DELAY(CLK_LENGTH);
+
+        Uint32 now_time = SDL_GetTicks() - start_time;
+        if (now_time < sec_per_frame)
+        {
+            DELAY(sec_per_frame - now_time);
+        }
     }
     return 0;
 }

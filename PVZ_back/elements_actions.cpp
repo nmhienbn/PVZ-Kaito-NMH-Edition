@@ -73,12 +73,14 @@ void handle_pea_zombie_encounter(Elements &elements, Map &map)
 
 /*
 If a pea collide with a zombie: apply it to hit the zombie
+Updated: zombie blink
 */
 bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
 {
     if (has_pea_reached_zombie(elements.peas[p_ind], elements.zombies[z_ind]))
     {
         elements.zombies[z_ind].health--;
+        elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
         elements.peas.erase(elements.peas.begin() + p_ind);
         determine_zombie_appearanc(elements.zombies[z_ind]);
         if (elements.zombies[z_ind].health == 0)
@@ -128,6 +130,7 @@ void apply_zombie_bite_on_sunflower(Elements &elements, int z_ind, int s_ind, Ma
     if (has_zombie_reached_element(elements.zombies[z_ind], elements.sunflowers[s_ind].row, elements.sunflowers[s_ind].col, map))
     {
         elements.sunflowers[s_ind].bite++;
+        elements.sunflowers[s_ind].is_attacked = MAX_TIME_BLINK;
         if (elements.sunflowers[s_ind].bite == SUNFLOWER_BITE_LIMIT)
         {
             elements.zombies[z_ind].is_moving = true;
@@ -178,18 +181,21 @@ void apply_zombie_bite_on_walnut(Elements &elements, int z_ind, int w_ind, Map &
 }
 
 /*
-bite <= (1/3) * WALNUT_BITE_LIMIT: healthy
-bite <= (2/3) * WALNUT_BITE_LIMIT: uncracked 1
-bite <= (3/3) * WALNUT_BITE_LIMIT: uncracked 2
+bite <= (1/4) * WALNUT_BITE_LIMIT: 1
+bite <= (2/4) * WALNUT_BITE_LIMIT: 2
+bite <= (3/4) * WALNUT_BITE_LIMIT: 3
+bite <= (4/4) * WALNUT_BITE_LIMIT: 4
 */
 void determine_walnut_appearance(Walnut &walnut)
 {
-    if (walnut.bite <= WALNUT_BITE_LIMIT / 3)
-        walnut.directory = WALNUT_UNTOUCHED_DIRECTORY;
-    else if (walnut.bite <= WALNUT_BITE_LIMIT * 2 / 3)
-        walnut.directory = WALNUT_CRACKED_1_DIRECTORY;
+    if (walnut.bite <= WALNUT_BITE_LIMIT / 4)
+        walnut.directory_num = WALNUT_1_DIRECTORY;
+    else if (walnut.bite <= WALNUT_BITE_LIMIT / 2)
+        walnut.directory_num = WALNUT_2_DIRECTORY;
+    else if (walnut.bite <= WALNUT_BITE_LIMIT * 3 / 4)
+        walnut.directory_num = WALNUT_3_DIRECTORY;
     else
-        walnut.directory = WALNUT_CRACKED_2_DIRECTORY;
+        walnut.directory_num = WALNUT_4_DIRECTORY;
 }
 
 /*
@@ -199,9 +205,9 @@ health <= ZOMBIE_NORMAL_HEALTH_LIMIT / 2: injured
 void determine_zombie_appearanc(Zombie &zombie)
 {
     if (zombie.health > (ZOMBIE_NORMAL_HEALTH_LIMIT >> 1))
-        zombie.directory = ZOMBIE_HEALTHY_DIRECTORY;
+        zombie.directory_num = ZOMBIE_HEALTHY_DIRECTORY;
     else
-        zombie.directory = ZOMBIE_INJURED_DIRECTORY;
+        zombie.directory_num = ZOMBIE_INJURED_DIRECTORY;
 }
 
 /*
@@ -274,10 +280,10 @@ void create_new_zombies(Elements &elements, Level &level)
 {
     srand(time(NULL));
     Zombie temp;
-    temp.x_location = ZOMBIE_INIT_X;
+    temp.x_location = ZOMBIE_INIT_X + 40 + rand() % 20;
     temp.health = ZOMBIE_NORMAL_HEALTH_LIMIT;
     temp.is_moving = true;
-    temp.directory = ZOMBIE_HEALTHY_DIRECTORY;
+    temp.directory_num = ZOMBIE_HEALTHY_DIRECTORY;
 
     if (level.waves_finished == false)
     {
