@@ -21,7 +21,19 @@ int main(int argv, char **args)
     {
         Uint32 start_time = SDL_GetTicks();
 
-        if (has_player_lost(game_characters))
+        if (clk < 30)
+        {
+            display_ready_set_plant(win, START_READY_DIRECTORY);
+        }
+        else if (clk < 60)
+        {
+            display_ready_set_plant(win, START_SET_DIRECTORY);
+        }
+        else if (clk < 90)
+        {
+            display_ready_set_plant(win, START_PLANT_DIRECTORY);
+        }
+        else if (has_player_lost(game_characters))
             display_losing_message(win, game_characters, map);
         else if (has_player_won(level, game_characters))
             display_winning_message(win);

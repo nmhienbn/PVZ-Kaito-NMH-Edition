@@ -12,7 +12,6 @@ void handle_movements(Elements &elements, Map &map, int clk);
 bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &map);
 bool has_zombie_reached_any_elements(Elements &elements, Zombie &zombie, Map &map);
 void update_moving_status_for_zombies(Elements &elements, Map &map);
-void determine_zombie_appearanc(Zombie &zombie);
 void create_new_zombies(Elements &elements, Level &level);
 void move_zombies(vector<Zombie> &zombies, Elements &elements, Map &map);
 bool can_zombie_move(Zombie &zombie, Elements &elements, Map &map);
@@ -58,7 +57,6 @@ void gen_sun_from_a_sunflower(Elements &elements, Sunflower sunflower, Map &map)
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Wall-nut actions
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-void determine_walnut_appearance(Walnut &walnut);
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Icon actions

@@ -73,7 +73,10 @@ void handle_pea_zombie_encounter(Elements &elements, Map &map)
 
 /*
 If a pea collide with a zombie: apply it to hit the zombie
-Updated: zombie blink
+Updated:
+    Zombie blink.
+    Remove zombie's 2 appearances.
+    Add zombies' death struct.
 */
 bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
 {
@@ -88,7 +91,6 @@ bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
             DeadZombie tmp;
             tmp.row = elements.zombies[z_ind].row;
             tmp.x_location = elements.zombies[z_ind].x_location - DEAD_ZOMBIE_WIDTH + ZOMBIE_G_WIDTH / 2;
-            tmp.type_head = rand() % 3;
             elements.dead_zombies.push_back(tmp);
             elements.zombies.erase(elements.zombies.begin() + z_ind);
         }
@@ -171,6 +173,8 @@ If the zombie reached wallnut, apply its bites on the wallnut:
     + bite++
     + determine wallnut's apperance
     + if wallnut's bite == LIMIT: reset zombie moving and delete that wallnut
+Updated:
+    + If walnut is attacked, it will blink
 */
 void apply_zombie_bite_on_walnut(Elements &elements, int z_ind, int w_ind, Map &map)
 {
@@ -178,7 +182,6 @@ void apply_zombie_bite_on_walnut(Elements &elements, int z_ind, int w_ind, Map &
     {
         elements.walnuts[w_ind].bite++;
         elements.walnuts[w_ind].is_attacked = MAX_TIME_BLINK;
-        determine_walnut_appearance(elements.walnuts[w_ind]);
         if (elements.walnuts[w_ind].bite == WALNUT_BITE_LIMIT)
         {
             elements.zombies[z_ind].is_moving = true;
@@ -186,48 +189,6 @@ void apply_zombie_bite_on_walnut(Elements &elements, int z_ind, int w_ind, Map &
             elements.walnuts.erase(elements.walnuts.begin() + w_ind);
         }
     }
-}
-
-/*
-bite <= (1/4) * WALNUT_BITE_LIMIT: 1
-bite <= (2/4) * WALNUT_BITE_LIMIT: 2
-bite <= (3/4) * WALNUT_BITE_LIMIT: 3
-bite <= (4/4) * WALNUT_BITE_LIMIT: 4
-*/
-void determine_walnut_appearance(Walnut &walnut)
-{
-    if (walnut.bite <= WALNUT_BITE_LIMIT / 4)
-    {
-        walnut.directory_num = WALNUT_1_DIRECTORY;
-        walnut.blink_directory_num = WALNUT_1_BLINK_DIRECTORY;
-    }
-    else if (walnut.bite <= WALNUT_BITE_LIMIT / 2)
-    {
-        walnut.directory_num = WALNUT_2_DIRECTORY;
-        walnut.blink_directory_num = WALNUT_2_BLINK_DIRECTORY;
-    }
-    else if (walnut.bite <= WALNUT_BITE_LIMIT * 3 / 4)
-    {
-        walnut.directory_num = WALNUT_3_DIRECTORY;
-        walnut.blink_directory_num = WALNUT_3_BLINK_DIRECTORY;
-    }
-    else
-    {
-        walnut.directory_num = WALNUT_4_DIRECTORY;
-        walnut.blink_directory_num = WALNUT_4_BLINK_DIRECTORY;
-    }
-}
-
-/*
-health > ZOMBIE_NORMAL_HEALTH_LIMIT / 2: healthy
-health <= ZOMBIE_NORMAL_HEALTH_LIMIT / 2: injured
-*/
-void determine_zombie_appearanc(Zombie &zombie)
-{
-    if (zombie.health > (ZOMBIE_NORMAL_HEALTH_LIMIT >> 1))
-        zombie.directory_num = ZOMBIE_HEALTHY_DIRECTORY;
-    else
-        zombie.directory_num = ZOMBIE_INJURED_DIRECTORY;
 }
 
 /*

@@ -79,7 +79,6 @@ struct DeadZombie
     int body = ZOMBIE_DIE_DIRECTORY;
     int head = ZOMBIE_HEAD_DIRECTORY;
     int frame = 0;
-    int type_head = 0;
 };
 /*--------------------------------------------------------------------
 Player and others

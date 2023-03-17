@@ -47,6 +47,7 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win)
 
 /*
 Display the game element: plants, zombies and the suns.
+Updated: render order.
 */
 void display_game_elements(window &win, Elements &elements, Map &map)
 {
@@ -101,9 +102,8 @@ void display_suns(window &win, vector<Sun> suns, Map &map)
 }
 
 /*Updated
-Change to sprite sheet
-Add blink.
-Add eating and dead status.
+Change to sprite sheet.
+Render sprite sheet of exactly status.
 */
 void display_zombies(window &win, vector<Zombie> &zombies, Map &map)
 {
@@ -186,14 +186,46 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map)
         }
     }
 }
+
 /*
-updated: change sprite sheet
-add blink
+bite <= (1/4) * WALNUT_BITE_LIMIT: 1
+bite <= (2/4) * WALNUT_BITE_LIMIT: 2
+bite <= (3/4) * WALNUT_BITE_LIMIT: 3
+bite <= (4/4) * WALNUT_BITE_LIMIT: 4
+*/
+void determine_walnut_appearance(Walnut &walnut)
+{
+    if (walnut.bite <= WALNUT_BITE_LIMIT / 4)
+    {
+        walnut.directory_num = WALNUT_1_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_1_BLINK_DIRECTORY;
+    }
+    else if (walnut.bite <= WALNUT_BITE_LIMIT / 2)
+    {
+        walnut.directory_num = WALNUT_2_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_2_BLINK_DIRECTORY;
+    }
+    else if (walnut.bite <= WALNUT_BITE_LIMIT * 3 / 4)
+    {
+        walnut.directory_num = WALNUT_3_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_3_BLINK_DIRECTORY;
+    }
+    else
+    {
+        walnut.directory_num = WALNUT_4_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_4_BLINK_DIRECTORY;
+    }
+}
+
+/*Updated:
+Change to sprite sheet.
+Render sprite sheet of exactly status.
 */
 void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map)
 {
     for (int i = 0; i < walnuts.size(); i++)
     {
+        determine_walnut_appearance(walnuts[i]);
         int col = walnuts[i].col;
         int row = walnuts[i].row;
 
@@ -215,16 +247,11 @@ void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map)
             walnuts[i].is_attacked--;
         }
         ++walnuts[i].frame;
-        // if (++walnuts[i].frame >= 8 * WALNUT_SHEET)
-        // {
-        //     walnuts[i].frame = 0;
-        // }
-        // win.draw_png_scale(walnuts[i].directory_num, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }
 
 /* New function:
-
+If any plant seed is chosen: render it at the mouse position.
 */
 void display_chosen_plant(window &win, Player player, Icons icons)
 {
@@ -246,6 +273,9 @@ void display_chosen_plant(window &win, Player player, Icons icons)
     }
 }
 
+/*New function:
+Display zombie dead independently.
+*/
 void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &map)
 {
     for (int i = 0; i < dead_zombies.size(); i++)
@@ -254,20 +284,25 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ma
         int y_location = map[row][0].y1 - 20;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
         int frame = dead_zombies[i].frame / 10;
-        if (frame <= HEAD_ZOMBIE_N_SHEET)
+        if (frame <= DEAD_ZOMBIE_N_SHEET)
         {
-            int scol = (frame >> 1) % HEAD_ZOMBIE_C_SHEET;
-            int srow = dead_zombies[i].type_head;
-            win.draw_png(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
+            int scol = frame % DEAD_ZOMBIE_C_SHEET;
+            int srow = frame / DEAD_ZOMBIE_C_SHEET;
+            win.draw_png(ZOMBIE_DIE_DIRECTORY, DEAD_ZOMBIE_WIDTH * scol, DEAD_ZOMBIE_HEIGHT * srow, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT);
         }
-        int scol = frame % DEAD_ZOMBIE_C_SHEET;
-        int srow = frame / DEAD_ZOMBIE_C_SHEET;
-        win.draw_png(ZOMBIE_DIE_DIRECTORY, DEAD_ZOMBIE_WIDTH * scol, DEAD_ZOMBIE_HEIGHT * srow, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT);
+        int scol = frame % HEAD_ZOMBIE_C_SHEET;
+        int srow = frame / HEAD_ZOMBIE_C_SHEET;
+        win.draw_png(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
 
-        if (++dead_zombies[i].frame >= 10 * DEAD_ZOMBIE_N_SHEET)
+        if (++dead_zombies[i].frame >= 10 * HEAD_ZOMBIE_N_SHEET)
         {
 
             dead_zombies.erase(dead_zombies.begin() + i);
         }
     }
+}
+void display_ready_set_plant(window &win, int image_num)
+{
+    win.draw_bg(BACKGROUND_DIRECTORY);
+    win.draw_png(image_num, (WINDOW_WIDTH - READY_WIDTH) >> 1, (WINDOW_HEIGHT - READY_HEIGHT) >> 1, READY_WIDTH, READY_HEIGHT);
 }

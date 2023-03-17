@@ -43,7 +43,7 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 /*
 Moving speed of some elements
 */
-#define ZOMBIE_INIT_X 900
+#define ZOMBIE_INIT_X WINDOW_WIDTH
 #define ZOMBIE_DX 2
 #define PEA_DX 15
 #define SUN_DY 3
@@ -61,11 +61,11 @@ Moving speed of some elements
 #define DEAD_ZOMBIE_N_SHEET 10
 
 #define HEAD_ZOMBIE_WIDTH 150
-#define HEAD_ZOMBIE_HEIGHT 186
-#define HEAD_ZOMBIE_C_SHEET 4
-#define HEAD_ZOMBIE_N_SHEET 4
-#define HEAD_ZOMBIE_G_WIDTH 150
-#define HEAD_ZOMBIE_G_HEIGHT 186
+#define HEAD_ZOMBIE_HEIGHT 187
+#define HEAD_ZOMBIE_C_SHEET 12
+#define HEAD_ZOMBIE_N_SHEET 12
+#define HEAD_ZOMBIE_G_WIDTH 125
+#define HEAD_ZOMBIE_G_HEIGHT 155
 
 /*Playground elements size*/
 #define WINDOW_WIDTH 1050
@@ -139,6 +139,8 @@ Moving speed of some elements
 #define ELEMENT_WIDTH 90
 #define ELEMENT_HEIGHT 90
 #define TILE_WIDTH 75
+#define READY_WIDTH 300
+#define READY_HEIGHT 133
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Directories
@@ -185,6 +187,9 @@ enum
     ZOMBIE_HEAD_DIRECTORY,
     ZOMBIE_EATING_DIRECTORY,
     ZOMBIE_EATING_BLINK_DIRECTORY,
+    START_READY_DIRECTORY,
+    START_SET_DIRECTORY,
+    START_PLANT_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -228,7 +233,10 @@ const string image_directory[] = {
     "./Image_Assets/Zombie_die.png",              // ZOMBIE_DIE_DIRECTORY
     "./Image_Assets/Zombie_head.png",             // ZOMBIE_HEAD_DIRECTORY
     "./Image_Assets/Zombie_eating.png",           // ZOMBIE_EATING_DIRECTORY
-    "./Image_Assets/Zombie_eating_blink.png"      // ZOMBIE_EATING_BLINK_DIRECTORY
+    "./Image_Assets/Zombie_eating_blink.png",     // ZOMBIE_EATING_BLINK_DIRECTORY
+    "./Image_Assets/StartReady.png",              // START_READY_DIRECTORY
+    "./Image_Assets/StartSet.png",                // START_SET_DIRECTORY
+    "./Image_Assets/StartPlant.png"               // START_PLANT_DIRECTORY
 
 };
 /*
