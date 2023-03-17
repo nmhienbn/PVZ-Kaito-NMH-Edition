@@ -29,7 +29,7 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 #define PEASHOOTER_LOADING 250 // Peashooter loading
 #define SUNFLOWER_LOADING 250  // Sunflower loading
 #define WALNUT_LOADING 1000    // Walnut loading
-#define MAX_TIME_BLINK 10
+#define MAX_TIME_BLINK 5
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -54,6 +54,19 @@ Moving speed of some elements
 #define PEASHOOTER_BITE_LIMIT 20
 #define ZOMBIE_NORMAL_HEALTH_LIMIT 10
 
+#define DEAD_ZOMBIE_FRAMES 12
+#define DEAD_ZOMBIE_WIDTH 166
+#define DEAD_ZOMBIE_HEIGHT 144
+#define DEAD_ZOMBIE_C_SHEET 3
+#define DEAD_ZOMBIE_N_SHEET 10
+
+#define HEAD_ZOMBIE_WIDTH 150
+#define HEAD_ZOMBIE_HEIGHT 186
+#define HEAD_ZOMBIE_C_SHEET 4
+#define HEAD_ZOMBIE_N_SHEET 4
+#define HEAD_ZOMBIE_G_WIDTH 150
+#define HEAD_ZOMBIE_G_HEIGHT 186
+
 /*Playground elements size*/
 #define WINDOW_WIDTH 1050
 #define WINDOW_HEIGHT 600
@@ -70,8 +83,8 @@ Moving speed of some elements
 #define TAP_TO_START_Y2 585
 #define ICON_BAR_X1 20
 #define ICON_BAR_X2 125
-#define ICON_BAR_Y1 102
-#define ICON_BAR_Y2 292
+#define ICON_BAR_Y1 100
+#define ICON_BAR_Y2 310
 
 #define INIT_SUN_Y 5
 #define SUNFLOWER_ICON_Y1 100
@@ -93,6 +106,8 @@ Moving speed of some elements
 
 #define PEASHOOTER_WIDTH 185
 #define PEASHOOTER_HEIGHT 157
+#define PEASHOOTER_G_WIDTH 200
+#define PEASHOOTER_G_HEIGHT 157 //**
 #define PEASHOOTER_SHEET 60
 #define PEASHOOTER_R_SHEET 8
 #define PEASHOOTER_C_SHEET 8
@@ -105,17 +120,25 @@ Moving speed of some elements
 
 #define WALNUT_WIDTH 185
 #define WALNUT_HEIGHT 185
+#define WALNUT_G_WIDTH 200
+#define WALNUT_G_HEIGHT 200
 
 #define ZOMBIE_WIDTH 92
 #define ZOMBIE_HEIGHT 126
-#define ZOMBIE_SHEET 22
-#define ZOMBIE_R_SHEET 4
+
+#define ZOMBIE_FRAME 9
 #define ZOMBIE_C_SHEET 6
+#define ZOMBIE_N_SHEET 22
+
 #define ZOMBIE_G_WIDTH 92
 #define ZOMBIE_G_HEIGHT 126
 
-#define ELEMENT_WIDTH 70
-#define ELEMENT_HEIGHT 80
+#define ZOMBIE_EATING_C_SHEET 7
+#define ZOMBIE_EATING_N_SHEET 21
+
+#define ELEMENT_WIDTH 90
+#define ELEMENT_HEIGHT 90
+#define TILE_WIDTH 75
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Directories
@@ -154,6 +177,14 @@ enum
     WALNUT_2_DIRECTORY,
     WALNUT_3_DIRECTORY,
     WALNUT_4_DIRECTORY,
+    WALNUT_1_BLINK_DIRECTORY,
+    WALNUT_2_BLINK_DIRECTORY,
+    WALNUT_3_BLINK_DIRECTORY,
+    WALNUT_4_BLINK_DIRECTORY,
+    ZOMBIE_DIE_DIRECTORY,
+    ZOMBIE_HEAD_DIRECTORY,
+    ZOMBIE_EATING_DIRECTORY,
+    ZOMBIE_EATING_BLINK_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -189,7 +220,15 @@ const string image_directory[] = {
     "./Image_Assets/Walnut-sheet-1.png",          // WALNUT_1_DIRECTORY
     "./Image_Assets/Walnut-sheet-2.png",          // WALNUT_2_DIRECTORY
     "./Image_Assets/Walnut-sheet-3.png",          // WALNUT_3_DIRECTORY
-    "./Image_Assets/Walnut-sheet-4.png"           // WALNUT_4_DIRECTORY
+    "./Image_Assets/Walnut-sheet-4.png",          // WALNUT_4_DIRECTORY
+    "./Image_Assets/Walnut-sheet-1_blink.png",    // WALNUT_1_BLINK_DIRECTORY
+    "./Image_Assets/Walnut-sheet-2_blink.png",    // WALNUT_2_BLINK_DIRECTORY
+    "./Image_Assets/Walnut-sheet-3_blink.png",    // WALNUT_3_BLINK_DIRECTORY
+    "./Image_Assets/Walnut-sheet-4_blink.png",    // WALNUT_4_BLINK_DIRECTORY
+    "./Image_Assets/Zombie_die.png",              // ZOMBIE_DIE_DIRECTORY
+    "./Image_Assets/Zombie_head.png",             // ZOMBIE_HEAD_DIRECTORY
+    "./Image_Assets/Zombie_eating.png",           // ZOMBIE_EATING_DIRECTORY
+    "./Image_Assets/Zombie_eating_blink.png"      // ZOMBIE_EATING_BLINK_DIRECTORY
 
 };
 /*

@@ -29,8 +29,10 @@ struct Walnut
 {
     int row, col;
     int bite;
-    int directory_num;
+    int directory_num = WALNUT_1_DIRECTORY;
+    int blink_directory_num = WALNUT_1_BLINK_DIRECTORY;
     int frame = 0;
+    int is_attacked = 0;
 };
 
 struct Peashooter
@@ -61,11 +63,24 @@ struct Zombie
     int x_location;
     int health;
     bool is_moving;
-    int directory_num;
+    int directory_num = ZOMBIE_SHEET_DIRECTORY;
+    int blink_directory_num = ZOMBIE_BLINK_SHEET_DIRECTORY;
+    int n_sheet = ZOMBIE_N_SHEET;
+    int c_sheet = ZOMBIE_C_SHEET;
     int frame = 0;
     int is_attacked = 0;
-};
 
+    void change_zombie_eating_status();
+};
+struct DeadZombie
+{
+    int row;
+    int x_location;
+    int body = ZOMBIE_DIE_DIRECTORY;
+    int head = ZOMBIE_HEAD_DIRECTORY;
+    int frame = 0;
+    int type_head = 0;
+};
 /*--------------------------------------------------------------------
 Player and others
 --------------------------------------------------------------------*/
@@ -84,6 +99,7 @@ struct Elements
 {
     vector<Sun> suns;
     vector<Zombie> zombies;
+    vector<DeadZombie> dead_zombies;
     vector<Peashooter> peashooters;
     vector<Pea> peas;
     vector<Sunflower> sunflowers;

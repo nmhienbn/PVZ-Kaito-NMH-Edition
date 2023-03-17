@@ -14,6 +14,7 @@ Map map;
 window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 int main(int argv, char **args)
 {
+    srand(time(NULL));
     init_game(win, level, player, map);
 
     while (!quit)

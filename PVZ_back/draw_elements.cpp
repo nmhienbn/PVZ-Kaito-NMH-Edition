@@ -50,10 +50,13 @@ Display the game element: plants, zombies and the suns.
 */
 void display_game_elements(window &win, Elements &elements, Map &map)
 {
-    display_zombies(win, elements.zombies, map);
     display_peashooters(win, elements.peashooters, map);
     display_sunflowers(win, elements.sunflowers, map);
     display_walnuts(win, elements.walnuts, map);
+
+    display_zombies(win, elements.zombies, map);
+    display_dead_zombies(win, elements.dead_zombies, map);
+
     display_peas(win, elements.peas, map);
     display_suns(win, elements.suns, map);
 }
@@ -99,6 +102,8 @@ void display_suns(window &win, vector<Sun> suns, Map &map)
 
 /*Updated
 Change to sprite sheet
+Add blink.
+Add eating and dead status.
 */
 void display_zombies(window &win, vector<Zombie> &zombies, Map &map)
 {
@@ -107,16 +112,16 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &map)
         int row = zombies[i].row;
         int y_location = map[row][0].y1 - 20;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        int frame = zombies[i].frame / 9;
-        int scol = frame % ZOMBIE_C_SHEET;
-        int srow = frame / ZOMBIE_C_SHEET;
-        win.draw_png(ZOMBIE_SHEET_DIRECTORY, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+        int frame = zombies[i].frame / ZOMBIE_FRAME;
+        int scol = frame % zombies[i].c_sheet;
+        int srow = frame / zombies[i].c_sheet;
+        win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
         if (zombies[i].is_attacked)
         {
-            win.draw_png(ZOMBIE_BLINK_SHEET_DIRECTORY, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+            win.draw_png(zombies[i].blink_directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
             zombies[i].is_attacked--;
         }
-        if (++zombies[i].frame >= 9 * ZOMBIE_SHEET)
+        if (++zombies[i].frame >= ZOMBIE_FRAME * zombies[i].n_sheet)
         {
             zombies[i].frame = 0;
         }
@@ -156,6 +161,7 @@ void display_peas(window &win, vector<Pea> &peas, Map &map)
 
 /*Updated
 Change to sprite sheet
+Add blink
 */
 void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map)
 {
@@ -180,7 +186,10 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map)
         }
     }
 }
-
+/*
+updated: change sprite sheet
+add blink
+*/
 void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map)
 {
     for (int i = 0; i < walnuts.size(); i++)
@@ -198,7 +207,13 @@ void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map)
         {
             scol = frame & 1;
         }
-        win.draw_png(walnuts[i].directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png(walnuts[i].directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, map[row][col].x1 - 5, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+
+        if (walnuts[i].is_attacked)
+        {
+            win.draw_png(walnuts[i].blink_directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, map[row][col].x1 - 5, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            walnuts[i].is_attacked--;
+        }
         ++walnuts[i].frame;
         // if (++walnuts[i].frame >= 8 * WALNUT_SHEET)
         // {
@@ -228,5 +243,31 @@ void display_chosen_plant(window &win, Player player, Icons icons)
     else if (icons.is_walnut_chosen)
     {
         win.draw_png_scale(WALNUT_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+    }
+}
+
+void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &map)
+{
+    for (int i = 0; i < dead_zombies.size(); i++)
+    {
+        int row = dead_zombies[i].row;
+        int y_location = map[row][0].y1 - 20;
+        // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        int frame = dead_zombies[i].frame / 10;
+        if (frame <= HEAD_ZOMBIE_N_SHEET)
+        {
+            int scol = (frame >> 1) % HEAD_ZOMBIE_C_SHEET;
+            int srow = dead_zombies[i].type_head;
+            win.draw_png(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
+        }
+        int scol = frame % DEAD_ZOMBIE_C_SHEET;
+        int srow = frame / DEAD_ZOMBIE_C_SHEET;
+        win.draw_png(ZOMBIE_DIE_DIRECTORY, DEAD_ZOMBIE_WIDTH * scol, DEAD_ZOMBIE_HEIGHT * srow, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT);
+
+        if (++dead_zombies[i].frame >= 10 * DEAD_ZOMBIE_N_SHEET)
+        {
+
+            dead_zombies.erase(dead_zombies.begin() + i);
+        }
     }
 }

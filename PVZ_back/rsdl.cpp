@@ -85,6 +85,7 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
         texture_cache[file_num] = res;
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
@@ -98,6 +99,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
         texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
@@ -110,6 +112,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
         texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
@@ -122,11 +125,18 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
         // Color key image
         // SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-        if (file_num == ZOMBIE_BLINK_SHEET_DIRECTORY || file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY)
+        if (file_num == ZOMBIE_BLINK_SHEET_DIRECTORY ||
+            file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
+            file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
+            file_num == WALNUT_1_BLINK_DIRECTORY ||
+            file_num == WALNUT_2_BLINK_DIRECTORY ||
+            file_num == WALNUT_3_BLINK_DIRECTORY ||
+            file_num == WALNUT_4_BLINK_DIRECTORY)
         {
-            SDL_SetTextureAlphaMod(res, 100);
+            SDL_SetTextureAlphaMod(res, 70);
         }
         texture_cache[file_num] = res;
     }
@@ -158,6 +168,7 @@ void window::draw_bg(int file_num, int x, int y)
         //     }
         // }
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
         if (file_num == BLACK_SCREEN_DIRECTORY)
         {
             SDL_SetTextureAlphaMod(res, 150);
@@ -203,4 +214,12 @@ void window::draw_rect(int x, int y, int width, int height, RGB color)
     draw_line(x, y, x, y + height, color);
     draw_line(x, y + height, x + width, y + height, color);
     draw_line(x + width, y, x + width, y + height, color);
+}
+void print_error(SDL_Texture *res)
+{
+    if (res == NULL)
+    {
+        throw string("SDL_WasInit Failed ") + SDL_GetError();
+        exit(-1);
+    }
 }

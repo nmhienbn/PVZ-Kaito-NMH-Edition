@@ -15,3 +15,4 @@ void display_peas(window &win, vector<Pea> &peas, Map &map);
 void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map);
 void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map);
 void display_chosen_plant(window &win, Player player, Icons icons);
+void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &map);

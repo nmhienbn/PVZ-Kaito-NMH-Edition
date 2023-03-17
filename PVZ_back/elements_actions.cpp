@@ -82,9 +82,16 @@ bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
         elements.zombies[z_ind].health--;
         elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
         elements.peas.erase(elements.peas.begin() + p_ind);
-        determine_zombie_appearanc(elements.zombies[z_ind]);
+        // determine_zombie_appearanc(elements.zombies[z_ind]);
         if (elements.zombies[z_ind].health == 0)
+        {
+            DeadZombie tmp;
+            tmp.row = elements.zombies[z_ind].row;
+            tmp.x_location = elements.zombies[z_ind].x_location - DEAD_ZOMBIE_WIDTH + ZOMBIE_G_WIDTH / 2;
+            tmp.type_head = rand() % 3;
+            elements.dead_zombies.push_back(tmp);
             elements.zombies.erase(elements.zombies.begin() + z_ind);
+        }
         return true;
     }
     return false;
@@ -170,6 +177,7 @@ void apply_zombie_bite_on_walnut(Elements &elements, int z_ind, int w_ind, Map &
     if (has_zombie_reached_element(elements.zombies[z_ind], elements.walnuts[w_ind].row, elements.walnuts[w_ind].col, map))
     {
         elements.walnuts[w_ind].bite++;
+        elements.walnuts[w_ind].is_attacked = MAX_TIME_BLINK;
         determine_walnut_appearance(elements.walnuts[w_ind]);
         if (elements.walnuts[w_ind].bite == WALNUT_BITE_LIMIT)
         {
@@ -189,13 +197,25 @@ bite <= (4/4) * WALNUT_BITE_LIMIT: 4
 void determine_walnut_appearance(Walnut &walnut)
 {
     if (walnut.bite <= WALNUT_BITE_LIMIT / 4)
+    {
         walnut.directory_num = WALNUT_1_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_1_BLINK_DIRECTORY;
+    }
     else if (walnut.bite <= WALNUT_BITE_LIMIT / 2)
+    {
         walnut.directory_num = WALNUT_2_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_2_BLINK_DIRECTORY;
+    }
     else if (walnut.bite <= WALNUT_BITE_LIMIT * 3 / 4)
+    {
         walnut.directory_num = WALNUT_3_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_3_BLINK_DIRECTORY;
+    }
     else
+    {
         walnut.directory_num = WALNUT_4_DIRECTORY;
+        walnut.blink_directory_num = WALNUT_4_BLINK_DIRECTORY;
+    }
 }
 
 /*
@@ -283,7 +303,6 @@ void create_new_zombies(Elements &elements, Level &level)
     temp.x_location = ZOMBIE_INIT_X + 40 + rand() % 20;
     temp.health = ZOMBIE_NORMAL_HEALTH_LIMIT;
     temp.is_moving = true;
-    temp.directory_num = ZOMBIE_HEALTHY_DIRECTORY;
 
     if (level.waves_finished == false)
     {
@@ -387,12 +406,11 @@ Check if Zombie is in query tile or not.
 */
 bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &map)
 {
-    int right_limit = map[row][col].x2 - 35;
-    int left_limit = map[row][col].x1;
+    int right_limit = map[row][col].x2 - TILE_WIDTH / 2;
+    int left_limit = map[row][col].x1 - TILE_WIDTH / 2;
     int zombie_new_location = zombie.x_location - ZOMBIE_DX;
     if (zombie.row == row &&
-        zombie_new_location < right_limit &&
-        zombie_new_location > left_limit)
+        left_limit < zombie_new_location && zombie_new_location < right_limit)
         return true;
     return false;
 }
@@ -444,21 +462,26 @@ bool has_zombie_reached_any_elements(Elements &elements, Zombie &zombie, Map &ma
         if (has_zombie_reached_element(zombie, elements.walnuts[i].row, elements.walnuts[i].col, map))
         {
             zombie.is_moving = false;
+            zombie.change_zombie_eating_status();
             return true;
         }
     for (int i = 0; i < elements.peashooters.size(); i++)
         if (has_zombie_reached_element(zombie, elements.peashooters[i].row, elements.peashooters[i].col, map))
         {
             zombie.is_moving = false;
+            zombie.change_zombie_eating_status();
             return true;
         }
     for (int i = 0; i < elements.sunflowers.size(); i++)
         if (has_zombie_reached_element(zombie, elements.sunflowers[i].row, elements.sunflowers[i].col, map))
         {
             zombie.is_moving = false;
+            zombie.change_zombie_eating_status();
             return true;
         }
+
     zombie.is_moving = true;
+    zombie.change_zombie_eating_status();
     return false;
 }
 
