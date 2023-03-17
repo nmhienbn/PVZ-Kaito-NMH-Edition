@@ -40,13 +40,18 @@ struct Peashooter
     int row, col;
     int bite;
     int sec_for_another_pea = 1;
+    int directory_num = PEASHOOTER_SHEET_DIRECTORY;
+    int blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
     int frame = 0;
+    int is_attacked = 0;
 };
 
 struct Pea
 {
     int row;
     int x_location;
+    int directory_num = PEA_DIRECTORY;
+    int explode = MAX_TIME_BLINK * 2;
 };
 
 /*

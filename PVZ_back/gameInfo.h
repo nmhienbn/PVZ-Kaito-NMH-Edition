@@ -108,8 +108,7 @@ Moving speed of some elements
 #define PEASHOOTER_HEIGHT 157
 #define PEASHOOTER_G_WIDTH 200
 #define PEASHOOTER_G_HEIGHT 157 //**
-#define PEASHOOTER_SHEET 60
-#define PEASHOOTER_R_SHEET 8
+#define PEASHOOTER_N_SHEET 60
 #define PEASHOOTER_C_SHEET 8
 
 #define SUNFLOWER_WIDTH 100
@@ -150,8 +149,11 @@ enum
 {
     PEASHOOTER_DIRECTORY,
     PEASHOOTER_SHEET_DIRECTORY,
+    PEASHOOTER_SHEET_BLINK_DIRECTORY,
     PEASHOOTER_ATTACK_DIRECTORY,
+    PEASHOOTER_ATTACK_BLINK_DIRECTORY,
     PEA_DIRECTORY,
+    PEA_EXPLODE_DIRECTORY,
     SUNFLOWER_DIRECTORY,
     SUNFLOWER_SHEET_DIRECTORY,
     SUNFLOWER_SHEET_BLINK_DIRECTORY,
@@ -197,8 +199,11 @@ enum
 const string image_directory[] = {
     "./Image_Assets/Peashooter.png",              // PEASHOOTER_DIRECTORY
     "./Image_Assets/peashooter_sheet.png",        // PEASHOOTER_SHEET_DIRECTORY
+    "./Image_Assets/peashooter_sheet_blink.png",  // PEASHOOTER_SHEET_BLINK_DIRECTORY
     "./Image_Assets/peashooter_attack.png",       // PEASHOOTER_ATTACK_DIRECTORY
+    "./Image_Assets/peashooter_attack_blink.png", // PEASHOOTER_ATTACK_BLINK_DIRECTORY
     "./Image_Assets/pea.png",                     // PEA_DIRECTORY
+    "./Image_Assets/pea_explode.png",             // PEA_EXPLODE_DIRECTORY
     "./Image_Assets/Sunflower.png",               // SUNFLOWER_DIRECTORY
     "./Image_Assets/sunflower_sheet.png",         // SUNFLOWER_SHEET_DIRECTORY
     "./Image_Assets/sunflower_sheet_blink.png",   // SUNFLOWER_SHEET_BLINK_DIRECTORY

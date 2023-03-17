@@ -137,11 +137,11 @@ void display_peashooters(window &win, vector<Peashooter> &peashooters, Map &map)
     {
         int col = peashooters[i].col;
         int row = peashooters[i].row;
-        int frame = peashooters[i].frame / 4;
+        int frame = peashooters[i].frame;
         int scol = frame % PEASHOOTER_C_SHEET;
         int srow = frame / PEASHOOTER_C_SHEET;
-        win.draw_png(PEASHOOTER_SHEET_DIRECTORY, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        if (++peashooters[i].frame >= 4 * PEASHOOTER_SHEET)
+        win.draw_png(peashooters[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (++peashooters[i].frame >= PEASHOOTER_N_SHEET)
         {
             peashooters[i].frame = 0;
         }
@@ -155,7 +155,7 @@ void display_peas(window &win, vector<Pea> &peas, Map &map)
         int row = peas[i].row;
         int y_location = map[row][0].y1 + 20;
         if (peas[i].x_location < (map[0][8].x2 - 35))
-            win.draw_png_scale(PEA_DIRECTORY, peas[i].x_location, y_location, PEA_WIDTH, PEA_HEIGHT);
+            win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH, PEA_HEIGHT);
     }
 }
 

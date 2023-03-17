@@ -86,6 +86,12 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
+        if (file_num == PEASHOOTER_DIRECTORY ||
+            file_num == SUNFLOWER_DIRECTORY ||
+            file_num == WALNUT_DIRECTORY)
+        {
+            SDL_SetTextureAlphaMod(res, 150);
+        }
         texture_cache[file_num] = res;
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);

@@ -51,6 +51,8 @@ Add more features:
 	Add zombie status animation: Zombie die, zombie eat.
 	Add walnut blink.
 	Ready - Set - Plant before the game start.
-
+	Plant from seleted plant seed will be opaque.
+	Add peashooters blink and attacking status.
+	Divide elements_actions into more files. Make some template function (zombie.h) to shorten the code.
 
 	
