@@ -50,6 +50,7 @@ public:
 	void draw_line(int x1, int y1, int x2, int y2, RGB color = WHITE);
 	void draw_point(int x, int y, RGB color = WHITE);
 	void draw_rect(int x, int y, int width, int height, RGB color = WHITE);
+	void clear_renderer();
 
 private:
 	SDL_Window *win;

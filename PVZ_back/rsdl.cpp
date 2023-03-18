@@ -223,6 +223,10 @@ void window::draw_rect(int x, int y, int width, int height, RGB color)
     draw_line(x, y + height, x + width, y + height, color);
     draw_line(x + width, y, x + width, y + height, color);
 }
+void window::clear_renderer()
+{
+    SDL_RenderClear(renderer);
+}
 void print_error(SDL_Texture *res)
 {
     if (res == NULL)

@@ -183,9 +183,9 @@ void display_starting_screen(window &win)
 {
     bool game_started = false;
     bool quit = false;
+    win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     while (!quit && !game_started)
     {
-        win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         HANDLE(
             QUIT(quit = true; exit(0););
             // KEY_PRESS(q, quit = true);
@@ -207,9 +207,10 @@ void display_choosing_level_screen(window &win)
 {
     bool level_chosen = false;
     bool quit = false;
+    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    win.show_text("Level 1", 75, 175);
     while (!quit && !level_chosen)
     {
-        win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         HANDLE(
             QUIT(quit = true; exit(0););
             // KEY_PRESS(q, quit = true);
