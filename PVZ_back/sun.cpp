@@ -34,6 +34,16 @@ void move_suns(vector<Sun> &suns, Map &map)
 {
     for (int i = 0; i < suns.size(); i++)
     {
+        if (suns[i].is_clicked)
+        {
+            suns[i].y_location -= CLICKED_SUN_D * suns[i].y_location / suns[i].x_location;
+            suns[i].x_location -= CLICKED_SUN_D;
+            if (suns[i].x_location <= 0)
+            {
+                suns.erase(suns.begin() + i);
+            }
+            continue;
+        }
         int row = suns[i].final_row;
         int col = suns[i].final_col;
         int lower_limit = map[row][col].y1 + 30;

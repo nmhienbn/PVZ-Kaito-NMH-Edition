@@ -11,14 +11,15 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 #include <time.h>
 #define string std::string
 #define vector std::vector
+
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Speed properties: increase or decrease the following 9 define values to speed up or speed down entities in the game
 // CLK meaning : clock
-#define FPS 45
-#define sec_per_frame 1000 / FPS
+#define FPS 40
+#define ticks_per_frame 1000 / FPS
 
 #define SUN_GEN_SKY_CLK_COUNT 1000       // Sun from sky frequency
-#define SUN_GEN_SUNFLOWER_CLK_COUNT 2000 // Sun from sunflower frequency
+#define SUN_GEN_SUNFLOWER_CLK_COUNT 1000 // Sun from sunflower frequency
 #define ZOMBIE_CREATE_CLK_COUNT 600      // Time between zombies' different groups
 #define FIRE_PEA_CLK_COUNT 100           // Fire pea refresh frequency
 #define BITE_CLK_COUNT 50                // Zombie bite plant frequency
@@ -43,10 +44,11 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 /*
 Moving speed of some elements
 */
-#define ZOMBIE_INIT_X WINDOW_WIDTH
-#define ZOMBIE_DX 2
+#define ZOMBIE_INIT_X WINDOW_WIDTH - 75
+#define ZOMBIE_DX 3
 #define PEA_DX 15
 #define SUN_DY 3
+#define CLICKED_SUN_D 100
 
 /*Health of plants and zombies*/
 #define WALNUT_BITE_LIMIT 72
@@ -101,8 +103,10 @@ Moving speed of some elements
 #define SUN_COUNT_HEIGHT 30
 #define SUN_WIDTH 80
 #define SUN_HEIGHT 80
+
 #define PEA_WIDTH 25
 #define PEA_HEIGHT 25
+#define PEA_EXPLODE_TIME 35
 
 #define PEASHOOTER_WIDTH 185
 #define PEASHOOTER_HEIGHT 157
@@ -141,6 +145,18 @@ Moving speed of some elements
 #define READY_WIDTH 300
 #define READY_HEIGHT 133
 
+#define SHOVEL_X1 140
+#define SHOVEL_X2 215
+#define SHOVEL_Y1 500
+#define SHOVEL_Y2 575
+#define SHOVEL_WIDTH 139
+#define SHOVEL_HEIGHT 141
+
+#define LEVEL_1_X1 15
+#define LEVEL_1_X2 240
+#define LEVEL_1_Y1 40
+#define LEVEL_1_Y2 205
+
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Directories
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -171,6 +187,7 @@ enum
     ZOMBIE_BLINK_SHEET_DIRECTORY,
     ZOMBIE_INJURED_DIRECTORY,
     STARTING_SCREEN_DIRECTORY,
+    CHOOSE_LEVELS_DIRECTORY,
     BACKGROUND_DIRECTORY,
     BACKGROUND_DIM_DIRECTORY,
     LOSING_MESSAGE_DIRECTORY,
@@ -192,6 +209,8 @@ enum
     START_READY_DIRECTORY,
     START_SET_DIRECTORY,
     START_PLANT_DIRECTORY,
+    SHOVEL_BAR_DIRECTORY,
+    SHOVEL_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -208,7 +227,7 @@ const string image_directory[] = {
     "./Image_Assets/sunflower_sheet.png",         // SUNFLOWER_SHEET_DIRECTORY
     "./Image_Assets/sunflower_sheet_blink.png",   // SUNFLOWER_SHEET_BLINK_DIRECTORY
     "./Image_Assets/sun.png",                     // SUN_DIRECTORY
-    "./Image_Assets/sun_bar.png",                 // SUN_BAR_DIRECTORY
+    "./Image_Assets/sun_bar2.png",                // SUN_BAR_DIRECTORY
     "./Image_Assets/Item_Bar.png",                // ICON_BAR_DIRECTORY
     "./Image_Assets/icon_peashooter_100.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     "./Image_Assets/icon_peashooter_100_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
@@ -221,6 +240,7 @@ const string image_directory[] = {
     "./Image_Assets/ZOMBIEWALK1_blink.png",       // ZOMBIE_BLINK_SHEET_DIRECTORY
     "./Image_Assets/Zombie_Injured.png",          // ZOMBIE_INJURED_DIRECTORY
     "./Image_Assets/Starting_Screen.png",         // STARTING_SCREEN_DIRECTORY
+    "./Image_Assets/Choose_levels.png",           // CHOOSE_LEVELS_DIRECTORY
     "./Image_Assets/Frontyard.png",               // BACKGROUND_DIRECTORY
     "./Image_Assets/Frontyard_dim.jpeg",          // BACKGROUND_DIM_DIRECTORY
     "./Image_Assets/ZombiesWon.png",              // LOSING_MESSAGE_DIRECTORY
@@ -241,42 +261,8 @@ const string image_directory[] = {
     "./Image_Assets/Zombie_eating_blink.png",     // ZOMBIE_EATING_BLINK_DIRECTORY
     "./Image_Assets/StartReady.png",              // START_READY_DIRECTORY
     "./Image_Assets/StartSet.png",                // START_SET_DIRECTORY
-    "./Image_Assets/StartPlant.png"               // START_PLANT_DIRECTORY
+    "./Image_Assets/StartPlant.png",              // START_PLANT_DIRECTORY
+    "./Image_Assets/Shovel.png",                  // SHOVEL_BAR_DIRECTORY
+    "./Image_Assets/Shovel2.png"                  // SHOVEL_DIRECTORY
 
 };
-/*
-#define PEASHOOTER_DIRECTORY "./Image_Assets/Peashooter.png"
-#define PEASHOOTER_SHEET_DIRECTORY "./Image_Assets/peashooter_sheet.png"
-#define PEASHOOTER_ATTACK_DIRECTORY "./Image_Assets/peashooter_attack.png"
-#define PEA_DIRECTORY "./Image_Assets/pea.png"
-
-#define SUNFLOWER_DIRECTORY "./Image_Assets/Sunflower.png"
-#define SUNFLOWER_SHEET_DIRECTORY "./Image_Assets/sunflower_sheet.png"
-
-#define WALNUT_UNTOUCHED_DIRECTORY "./Image_Assets/Wallnut_body.png"
-#define WALNUT_CRACKED_1_DIRECTORY "./Image_Assets/Wallnut_cracked1.png"
-#define WALNUT_CRACKED_2_DIRECTORY "./Image_Assets/Wallnut_cracked2.png"
-
-#define SUN_DIRECTORY "./Image_Assets/sun.png"
-#define SUN_BAR_DIRECTORY "./Image_Assets/sun_bar.png"
-
-#define ICON_BAR_DIRECTORY "./Image_Assets/Item_Bar.png"
-#define PEASHOOTER_ICON_BRIGHT_DIRECTORY "./Image_Assets/icon_peashooter_100.png"
-#define PEASHOOTER_ICON_DIM_DIRECTORY "./Image_Assets/icon_peashooter_100_dim.png"
-#define SUNFLOWER_ICON_BRIGHT_DIRECTORY "./Image_Assets/icon_sunflower.png"
-#define SUNFLOWER_ICON_DIM_DIRECTORY "./Image_Assets/icon_sunflower_dim.png"
-#define WALNUT_ICON_BRIGHT_DIRECTORY "./Image_Assets/icon_walnut.png"
-#define WALNUT_ICON_DIM_DIRECTORY "./Image_Assets/icon_walnut_dim.png"
-
-#define ZOMBIE_HEALTHY_DIRECTORY "./Image_Assets/Zombie_healthy.png"
-#define ZOMBIE_SHEET_DIRECTORY "./Image_Assets/ZOMBIEWALK1.png"
-#define ZOMBIE_BLINK_SHEET_DIRECTORY "./Image_Assets/ZOMBIEWALK1_blink.png"
-#define ZOMBIE_INJURED_DIRECTORY "./Image_Assets/Zombie_Injured.png"
-
-#define STARTING_SCREEN_DIRECTORY "./Image_Assets/Starting_Screen.png"
-#define BACKGROUND_DIRECTORY "./Image_Assets/Frontyard.png"
-#define BACKGROUND_DIM_DIRECTORY "./Image_Assets/Frontyard_dim.jpeg"
-#define LOSING_MESSAGE_DIRECTORY "./Image_Assets/ZombiesWon.png"
-#define WINNING_MESSAGE_DIRECTORY "./Image_Assets/Winning_Pic.png"
-#define BLACK_SCREEN_DIRECTORY "./Image_Assets/Black_Screen.png"
-*/

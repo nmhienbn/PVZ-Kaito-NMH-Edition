@@ -1,13 +1,27 @@
 #include "player_click.h"
 /* Need update: remove a plant
+Handle all user click
 If player click on sun: handle sun click, then return;
 If player click on plant seed: find type of that plant, then return;
 If player is choosing a plant and click on a tile: create a new plant there.
 */
-void handle_user_click(Player &player, Icons &icons, Elements &elements, Map &map, int mouse_x, int mouse_y)
+void handle_user_click(Player &player, Icons &icons, Elements &elements, Map &map, const int &mouse_x, const int &mouse_y)
 {
     if (pick_sun_if_clicked_on(elements, map, mouse_x, mouse_y, player))
         return;
+    if (player.is_shoveling)
+    {
+        if (click_is_in_frontyard(map, mouse_x, mouse_y))
+            remove_element_if_clicked_on(map, elements, mouse_x, mouse_y);
+        player.is_shoveling = false;
+        return;
+    }
+    if (is_shovel_clicked(mouse_x, mouse_y))
+    {
+        player.is_shoveling = true;
+        player.is_choosing_a_plant = false;
+        return;
+    }
     if (is_a_plant_seed_clicked_on(mouse_x, mouse_y))
     {
         which_plant_is_chosen(player, icons, mouse_y, player.is_choosing_a_plant);
@@ -23,14 +37,12 @@ void handle_user_click(Player &player, Icons &icons, Elements &elements, Map &ma
         }
     }
     // remove a plant
-    // if (click_is_in_frontyard(map, mouse_x, mouse_y))
-    //     remove_element_if_clicked_on(map, elements, mouse_x, mouse_y);
 }
 
 /*
 Check if the mouse is in ICON BAR (the bar that contains plant seed)
 */
-bool is_a_plant_seed_clicked_on(int mouse_x, int mouse_y)
+bool is_a_plant_seed_clicked_on(const int &mouse_x, const int &mouse_y)
 {
     if (mouse_x > ICON_BAR_X1 && mouse_x < ICON_BAR_X2 &&
         mouse_y > ICON_BAR_Y1 && mouse_y < ICON_BAR_Y2)
@@ -77,7 +89,7 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
 /*
 Check if mouse is in frontyard or not
 */
-bool click_is_in_frontyard(Map &map, int mouse_x, int mouse_y)
+bool click_is_in_frontyard(Map &map, const int &mouse_x, const int &mouse_y)
 {
     int right_bound = map[0][8].x2;
     int left_bound = map[0][0].x1;
@@ -92,7 +104,7 @@ bool click_is_in_frontyard(Map &map, int mouse_x, int mouse_y)
 /*
 Find which row and column is chosen by click
 */
-void determine_row_and_col_chosen_by_second_click(Map &map, int mouse_x, int mouse_y, int &row, int &col)
+void determine_row_and_col_chosen_by_second_click(Map &map, const int &mouse_x, const int &mouse_y, int &row, int &col)
 {
     for (int y = 0; y < VERT_BLOCK_COUNT; y++)
         for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
@@ -110,7 +122,7 @@ Updated:
     Cannot plant if the tile has planted.
     Second click to cancel choosing plant.
 */
-void create_new_plant(Player &player, Map &map, Elements &elements, Icons &icons, int mouse_x, int mouse_y)
+void create_new_plant(Player &player, Map &map, Elements &elements, Icons &icons, const int &mouse_x, const int &mouse_y)
 {
     int row, col;
     determine_row_and_col_chosen_by_second_click(map, mouse_x, mouse_y, row, col);
@@ -158,29 +170,41 @@ void create_new_plant(Player &player, Map &map, Elements &elements, Icons &icons
 /*
 Remove plant if click on its tile
 */
-void remove_element_if_clicked_on(Map &map, Elements &elements, int mouse_x, int mouse_y)
+void remove_element_if_clicked_on(Map &map, Elements &elements, const int &mouse_x, const int &mouse_y)
 {
     for (int i = 0; i < elements.sunflowers.size(); i++)
     {
         if (is_click_made_in_element_block(elements.sunflowers[i].row, elements.sunflowers[i].col, mouse_x, mouse_y, map))
+        {
             elements.sunflowers.erase(elements.sunflowers.begin() + i);
+            map[elements.sunflowers[i].row][elements.sunflowers[i].col].is_planted = false;
+            return;
+        }
     }
     for (int i = 0; i < elements.peashooters.size(); i++)
     {
         if (is_click_made_in_element_block(elements.peashooters[i].row, elements.peashooters[i].col, mouse_x, mouse_y, map))
+        {
             elements.peashooters.erase(elements.peashooters.begin() + i);
+            map[elements.peashooters[i].row][elements.peashooters[i].col].is_planted = false;
+            return;
+        }
     }
     for (int i = 0; i < elements.walnuts.size(); i++)
     {
         if (is_click_made_in_element_block(elements.walnuts[i].row, elements.walnuts[i].col, mouse_x, mouse_y, map))
+        {
             elements.walnuts.erase(elements.walnuts.begin() + i);
+            map[elements.walnuts[i].row][elements.walnuts[i].col].is_planted = false;
+            return;
+        }
     }
 }
 
 /*
 Check if player click in the tile in 'row' and 'col'
 */
-bool is_click_made_in_element_block(int row, int col, int mouse_x, int mouse_y, Map &map)
+bool is_click_made_in_element_block(int row, int col, const int &mouse_x, const int &mouse_y, Map &map)
 {
     if (mouse_x > map[row][col].x1 && mouse_x < map[row][col].x2 &&
         mouse_y > map[row][col].y1 && mouse_y < map[row][col].y2)
@@ -191,23 +215,29 @@ bool is_click_made_in_element_block(int row, int col, int mouse_x, int mouse_y, 
 /* Update: change void into bool
 For all the suns to check if any sun is clicked on.
 */
-bool pick_sun_if_clicked_on(Elements &elements, Map &map, int mouse_x, int mouse_y, Player &player)
+bool pick_sun_if_clicked_on(Elements &elements, Map &map, const int &mouse_x, const int &mouse_y, Player &player)
 {
-    for (int i = 0; i < elements.suns.size(); i++)
+    for (auto &sun : elements.suns)
     {
-        int row = elements.suns[i].final_row;
-        int col = elements.suns[i].final_col;
+        int row = sun.final_row;
+        int col = sun.final_col;
         int right_bound = map[row][col].x2;
         int left_bound = map[row][col].x1;
-        int upper_bound = elements.suns[i].y_location;
-        int lower_bound = elements.suns[i].y_location + ELEMENT_HEIGHT;
+        int upper_bound = sun.y_location;
+        int lower_bound = sun.y_location + ELEMENT_HEIGHT;
         if (mouse_x > left_bound && mouse_x < right_bound &&
             mouse_y > upper_bound && mouse_y < lower_bound)
         {
-            elements.suns.erase(elements.suns.begin() + i);
+            sun.is_clicked = true;
+            sun.x_location = left_bound;
             player.sun_count += 50;
             return true;
         }
     }
     return false;
+}
+
+bool is_shovel_clicked(const int &mouse_x, const int &mouse_y)
+{
+    return Shovel.is_mouse_in(mouse_x, mouse_y);
 }

@@ -140,9 +140,11 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
             file_num == WALNUT_1_BLINK_DIRECTORY ||
             file_num == WALNUT_2_BLINK_DIRECTORY ||
             file_num == WALNUT_3_BLINK_DIRECTORY ||
-            file_num == WALNUT_4_BLINK_DIRECTORY)
+            file_num == WALNUT_4_BLINK_DIRECTORY ||
+            file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
+            file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
         {
-            SDL_SetTextureAlphaMod(res, 70);
+            SDL_SetTextureAlphaMod(res, 50);
         }
         texture_cache[file_num] = res;
     }

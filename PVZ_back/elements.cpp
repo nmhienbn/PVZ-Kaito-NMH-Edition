@@ -29,3 +29,27 @@ void Zombie::change_zombie_eating_status()
         }
     }
 }
+
+Button::Button()
+{
+}
+
+Button::Button(int _x1, int _x2, int _y1, int _y2)
+{
+    x1 = _x1;
+    x2 = _x2;
+    y1 = _y1;
+    y2 = _y2;
+}
+
+Button::~Button()
+{
+}
+
+bool Button::is_mouse_in(int mouse_x, int mouse_y) const
+{
+    if (x1 < mouse_x && mouse_x < x2 &&
+        y1 < mouse_y && mouse_y < y2)
+        return true;
+    return false;
+}

@@ -55,8 +55,7 @@ Read level's information from level files:
 void read_level(Level &level)
 {
     string wave_cnt, zombie_seq, wave_dur, temp;
-    string file_name = "";
-    file_name.push_back(level.level_num + '0');
+    string file_name = std::to_string(level.level_num);
     file_name += ".level.txt";
     std::ifstream myfile(file_name);
     int num_ind = 0;
@@ -128,13 +127,15 @@ Initialize game:
 */
 void init_game(window &win, Level &level, Player &player, Map &map)
 {
-    desplay_starting_screen(win);
+    display_starting_screen(win);
+    display_choosing_level_screen(win);
     read_savedata(player, level);
     read_level(level);
     decide_zombie_cnt_for_each_sec(level);
     map = create_a_collection_of_blocks();
     player.sun_count = INIT_SUN_COUNT;
     player.is_choosing_a_plant = false;
+    player.is_shoveling = false;
 }
 
 /*
@@ -148,29 +149,27 @@ void decide_zombie_cnt_for_each_sec(Level &level)
 
     for (int wave = 0; wave < level.wave_count; wave++)
     {
-        vector<int> temp;
+        vector<int> temp(level.wave_duration[wave], 0);
         enough_zombies = false;
 
+        sum = 0;
         for (int sec = 0; sec < level.wave_duration[wave]; sec++)
         {
             z_cnt = (rand() % 5) + 1;
-            sum = 0;
-            for (int i = 0; i < temp.size(); i++)
-                sum += temp[i];
 
             if (enough_zombies)
-                temp.push_back(0);
-
+                temp[sec] = 0;
             else
             {
                 if (z_cnt + sum <= level.wave_zombie_count[wave])
-                    temp.push_back(z_cnt);
+                    temp[sec] = z_cnt;
                 else
                 {
-                    temp.push_back(level.wave_zombie_count[wave] - sum);
+                    temp[sec] = level.wave_zombie_count[wave] - sum;
                     enough_zombies = true;
                 }
             }
+            sum += temp[sec];
         }
         level.zombie_distr_for_wave.push_back(temp);
     }
@@ -180,7 +179,7 @@ void decide_zombie_cnt_for_each_sec(Level &level)
 Display starting screen
 Updated: Now player can exit game from here.
 */
-void desplay_starting_screen(window &win)
+void display_starting_screen(window &win)
 {
     bool game_started = false;
     bool quit = false;
@@ -201,16 +200,37 @@ void desplay_starting_screen(window &win)
         DELAY(10);
     }
 }
+/*New function: Display choosing level
+Display choosing level screen.
+*/
+void display_choosing_level_screen(window &win)
+{
+    bool level_chosen = false;
+    bool quit = false;
+    while (!quit && !level_chosen)
+    {
+        win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        HANDLE(
+            QUIT(quit = true; exit(0););
+            // KEY_PRESS(q, quit = true);
+            LCLICK({
+                if (LEVEL_1.is_mouse_in(mouse_x, mouse_y))
+                    level_chosen = true;
+            });
+
+        );
+
+        win.update_screen();
+        DELAY(10);
+    }
+}
 
 /*
 If player click on start game: return true
 */
 bool user_clicked_on_start(int mouse_x, int mouse_y)
 {
-    if (mouse_x > TAP_TO_START_X1 && mouse_y < TAP_TO_START_X2 &&
-        mouse_y > TAP_TO_START_Y1 && mouse_y < TAP_TO_START_Y2)
-        return true;
-    return false;
+    return TAP_TO_START.is_mouse_in(mouse_x, mouse_y);
 }
 
 /*

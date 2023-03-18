@@ -9,11 +9,10 @@ Plants and zombies
 --------------------------------------------------------------------*/
 struct Sun
 {
-    int final_col;
-    int final_row;
-    int y_location;
+    int final_col, final_row;
+    int x_location, y_location;
     int wait_seconds;
-    bool is_clicked;
+    bool is_clicked = false;
 };
 
 struct Sunflower
@@ -51,7 +50,7 @@ struct Pea
     int row;
     int x_location;
     int directory_num = PEA_DIRECTORY;
-    int explode = MAX_TIME_BLINK * 2;
+    int explode = PEA_EXPLODE_TIME;
 };
 
 /*
@@ -123,7 +122,7 @@ struct Player
     string name;
     int sun_count;
     int level;
-    bool is_choosing_a_plant;
+    bool is_choosing_a_plant, is_shoveling;
 };
 
 struct Icons
@@ -167,3 +166,16 @@ struct Level
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;
+
+struct Button
+{
+    int x1, x2, y1, y2;
+    Button();
+    Button(int _x1, int _x2, int _y1, int _y2);
+    ~Button();
+    bool is_mouse_in(int mouse_x, int mouse_y) const;
+};
+
+const Button Shovel(SHOVEL_X1, SHOVEL_X2, SHOVEL_Y1, SHOVEL_Y2);
+const Button TAP_TO_START(TAP_TO_START_X1, TAP_TO_START_X2, TAP_TO_START_Y1, TAP_TO_START_Y2);
+const Button LEVEL_1(LEVEL_1_X1, LEVEL_1_X2, LEVEL_1_Y1, LEVEL_1_Y2);

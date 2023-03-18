@@ -6,7 +6,7 @@
 bool has_pea_reached_zombie(Pea pea, Zombie zombie)
 {
     if (zombie.row == pea.row &&
-        pea.x_location + PEA_DX > zombie.x_location + 30)
+        pea.x_location + PEA_DX > zombie.x_location + 50)
         return true;
     return false;
 }
@@ -90,8 +90,8 @@ Return true if pea can move
 */
 bool can_pea_move(Pea &pea, Elements &elements, Map &map)
 {
-    int right_bound = WINDOW_WIDTH + 250;
-    if (pea.x_location + PEA_DX > right_bound)
+    int right_bound = WINDOW_WIDTH;
+    if (pea.x_location > right_bound)
         return false;
     for (int i = 0; i < elements.zombies.size(); i++)
         if (has_pea_reached_zombie(pea, elements.zombies[i]))

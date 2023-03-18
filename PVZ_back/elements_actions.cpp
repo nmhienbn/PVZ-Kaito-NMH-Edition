@@ -44,7 +44,6 @@ void create_new_zombies(Elements &elements, Level &level)
 {
     srand(time(NULL));
     Zombie temp;
-    temp.x_location = ZOMBIE_INIT_X + rand() % 100;
     temp.health = ZOMBIE_NORMAL_HEALTH_LIMIT;
     temp.is_moving = true;
 
@@ -55,6 +54,7 @@ void create_new_zombies(Elements &elements, Level &level)
         temp.row = rand() % 5;
         for (int i = 0; i < zombie_cnt; i++)
         {
+            temp.x_location = ZOMBIE_INIT_X + rand() % 100 + 200;
             elements.zombies.push_back(temp);
             temp.row = (temp.row + 1 < 4) ? temp.row + 1 : 0;
         }
@@ -70,10 +70,6 @@ void create_new_zombies(Elements &elements, Level &level)
             level.waves_finished = true;
     }
 }
-
-//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-// Collision Detection
-//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 /*
 Handle all movement is happening: zombies, suns, peas.

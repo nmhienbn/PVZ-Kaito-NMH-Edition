@@ -55,4 +55,16 @@ Add more features:
 	Add peashooters blink and attacking status.
 	Divide elements_actions into more files. Make some template function (zombie.h) to shorten the code.
 
+18/03/2023:
+	Divide into more files.
+	Fix some pea's bug.
+	Add animation for clicked suns.
+	Add Button struct.
+	Now we can remove planted plant using Shovel.
+	Add choosing level screen.
+	Fix to fast FPS.
+Not in code:
+	Change font using.
+
+
 	

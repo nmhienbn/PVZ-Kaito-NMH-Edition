@@ -45,7 +45,7 @@ Peashooter is attack only if there are some zombies in the row.
 bool are_there_zombies_in_peashooter_row(Peashooter peashooter, Elements &elements)
 {
     for (Zombie zombie : elements.zombies)
-        if (peashooter.row == zombie.row && zombie.x_location <= WINDOW_WIDTH - 100)
+        if (peashooter.row == zombie.row && zombie.x_location < ZOMBIE_INIT_X)
             return true;
     return false;
 }

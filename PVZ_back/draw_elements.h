@@ -18,3 +18,4 @@ void display_chosen_plant(window &win, Player player, Icons icons);
 void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &map);
 void display_ready_set_plant(window &win, int image_num);
 void determine_walnut_appearance(Walnut &walnut);
+void display_shovel(window &win);

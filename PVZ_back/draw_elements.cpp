@@ -11,9 +11,10 @@ void display_game_layout(window &win, Player player, Icons icons)
     win.draw_bg(BACKGROUND_DIRECTORY);
     win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
+    display_shovel(win);
     display_icons_in_icon_bar(icons, player, win);
-    display_chosen_plant(win, player, icons);
-    win.show_text(std::to_string(player.sun_count), 100, 33);
+
+    win.show_text(std::to_string(player.sun_count), 85, 33, BLACK);
 }
 
 /*
@@ -93,11 +94,14 @@ void display_winning_message(window &win)
 
 void display_suns(window &win, vector<Sun> suns, Map &map)
 {
-    for (int i = 0; i < suns.size(); i++)
+    for (auto &sun : suns)
     {
-        int col = suns[i].final_col;
-        int x_location = map[0][col].x1;
-        win.draw_png_scale(SUN_DIRECTORY, x_location, suns[i].y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (!sun.is_clicked)
+        {
+            int col = sun.final_col;
+            sun.x_location = map[0][col].x1;
+        }
+        win.draw_png_scale(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }
 
@@ -154,8 +158,10 @@ void display_peas(window &win, vector<Pea> &peas, Map &map)
     {
         int row = peas[i].row;
         int y_location = map[row][0].y1 + 20;
-        if (peas[i].x_location < (map[0][8].x2 - 35))
-            win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH, PEA_HEIGHT);
+        int more_px = 0;
+        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY)
+            more_px += 25;
+        win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
     }
 }
 
@@ -171,11 +177,11 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map)
         int row = sunflowers[i].row;
         // win.draw_png_scale(SUNFLOWER_DIRECTORY, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
-        int frame = sunflowers[i].frame / 8;
+        int frame = sunflowers[i].frame / 2;
         int scol = frame % SUNFLOWER_C_SHEET;
         int srow = frame / SUNFLOWER_C_SHEET;
         win.draw_png(SUNFLOWER_SHEET_DIRECTORY, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        if (++sunflowers[i].frame >= 8 * SUNFLOWER_SHEET)
+        if (++sunflowers[i].frame >= 2 * SUNFLOWER_SHEET)
         {
             sunflowers[i].frame = 0;
         }
@@ -257,6 +263,11 @@ void display_chosen_plant(window &win, Player player, Icons icons)
 {
     int _x = 0, _y = 0;
     SDL_GetMouseState(&_x, &_y);
+    if (player.is_shoveling)
+    {
+        win.draw_png_scale(SHOVEL_DIRECTORY, _x, _y - ELEMENT_HEIGHT, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        return;
+    }
     _x -= ELEMENT_WIDTH >> 1;
     _y -= ELEMENT_HEIGHT >> 1;
     if (icons.is_peashooter_chosen)
@@ -305,4 +316,8 @@ void display_ready_set_plant(window &win, int image_num)
 {
     win.draw_bg(BACKGROUND_DIRECTORY);
     win.draw_png(image_num, (WINDOW_WIDTH - READY_WIDTH) >> 1, (WINDOW_HEIGHT - READY_HEIGHT) >> 1, READY_WIDTH, READY_HEIGHT);
+}
+void display_shovel(window &win)
+{
+    win.draw_png(SHOVEL_BAR_DIRECTORY, 0, 0, SHOVEL_WIDTH, SHOVEL_HEIGHT, SHOVEL_X1, SHOVEL_Y1, SHOVEL_X2 - SHOVEL_X1, SHOVEL_Y2 - SHOVEL_Y1);
 }
