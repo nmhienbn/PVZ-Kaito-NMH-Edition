@@ -321,3 +321,8 @@ void display_shovel(window &win)
 {
     win.draw_png(SHOVEL_BAR_DIRECTORY, 0, 0, SHOVEL_WIDTH, SHOVEL_HEIGHT, SHOVEL_X1, SHOVEL_Y1, SHOVEL_X2 - SHOVEL_X1, SHOVEL_Y2 - SHOVEL_Y1);
 }
+
+void display_level_is_locked(window &win, const Button &button)
+{
+    win.draw_png_scale(BLACK_SCREEN_DIRECTORY, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+}

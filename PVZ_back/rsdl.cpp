@@ -22,9 +22,12 @@ void window::init()
 window::window(int width, int height, string title)
 {
     init();
-    SDL_CreateWindowAndRenderer(width, height, 0, &win, &renderer);
-    if (win == NULL || renderer == NULL)
+    win = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+    if (win == NULL)
         throw string("Window could not be created! SDL_Error: ") + SDL_GetError();
+    renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL)
+        throw string("Renderer could not be created! SDL_Error: ") + SDL_GetError();
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     SDL_SetWindowTitle(win, title.c_str());
     // set_color(BLACK);
@@ -40,6 +43,9 @@ window::~window()
     SDL_Quit();
 }
 
+/*
+Fixed: cannot show many texts.
+*/
 void window::show_text(string input, int x, int y, RGB color, string font_addr, int size)
 {
     SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
@@ -53,9 +59,9 @@ void window::show_text(string input, int x, int y, RGB color, string font_addr, 
     }
     SDL_Surface *textSurface = TTF_RenderText_Solid(font, input.c_str(), textColor);
     SDL_Texture *text = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface);
     SDL_Rect renderQuad = {x, y, textSurface->w, textSurface->h};
     SDL_RenderCopy(renderer, text, NULL, &renderQuad);
+    SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(text);
 }
 
@@ -92,6 +98,10 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
         {
             SDL_SetTextureAlphaMod(res, 150);
         }
+        else if (file_num == BLACK_SCREEN_DIRECTORY)
+        {
+            SDL_SetTextureAlphaMod(res, 150);
+        }
         texture_cache[file_num] = res;
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
@@ -125,6 +135,16 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
     SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
 }
 
+/// @brief
+/// @param file_num
+/// @param sx
+/// @param sy
+/// @param sw
+/// @param sh
+/// @param dx
+/// @param dy
+/// @param dw
+/// @param dh
 void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
     SDL_Texture *res = texture_cache[file_num];

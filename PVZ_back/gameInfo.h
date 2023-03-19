@@ -152,11 +152,6 @@ Moving speed of some elements
 #define SHOVEL_WIDTH 139
 #define SHOVEL_HEIGHT 141
 
-#define LEVEL_1_X1 15
-#define LEVEL_1_X2 240
-#define LEVEL_1_Y1 40
-#define LEVEL_1_Y2 205
-
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Directories
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*

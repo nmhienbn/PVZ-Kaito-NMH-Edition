@@ -4,6 +4,11 @@ This file include game elements
 #pragma once
 #include "gameInfo.h"
 
+#define LEVEL_1_X1 15
+#define LEVEL_1_X2 240
+#define LEVEL_1_Y1 40
+#define LEVEL_1_Y2 205
+
 /*--------------------------------------------------------------------
 Plants and zombies
 --------------------------------------------------------------------*/
@@ -123,6 +128,7 @@ struct Player
     int sun_count;
     int level;
     bool is_choosing_a_plant, is_shoveling;
+    int unlocked_level;
 };
 
 struct Icons
@@ -178,4 +184,6 @@ struct Button
 
 const Button Shovel(SHOVEL_X1, SHOVEL_X2, SHOVEL_Y1, SHOVEL_Y2);
 const Button TAP_TO_START(TAP_TO_START_X1, TAP_TO_START_X2, TAP_TO_START_Y1, TAP_TO_START_Y2);
-const Button LEVEL_1(LEVEL_1_X1, LEVEL_1_X2, LEVEL_1_Y1, LEVEL_1_Y2);
+const Button LEVEL_1 = Button(15, 240, 40, 205);
+const Button LEVEL_2 = Button(260, 485, 40, 205);
+const Button LEVEL_3 = Button(505, 730, 40, 205);

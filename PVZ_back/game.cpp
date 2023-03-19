@@ -3,6 +3,7 @@
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
+bool level_chosen = false;
 bool quit = false;
 int clk = 0;
 Level level;
@@ -17,61 +18,26 @@ int main(int argv, char **args)
 {
     srand(time(NULL));
     init_game(win, level, player, map);
+    init_music();
 
     while (!quit)
     {
-        int start_time = SDL_GetTicks();
-        if (!is_game_started)
+        if (!level_chosen)
         {
-            if (clk < 30)
+            display_choosing_level_screen(win, level.level_num, player.unlocked_level, level_chosen, quit);
+            if (level_chosen)
             {
-                display_ready_set_plant(win, START_READY_DIRECTORY);
-            }
-            else if (clk < 60)
-            {
-                display_ready_set_plant(win, START_SET_DIRECTORY);
-            }
-            else if (clk < 90)
-            {
-                display_ready_set_plant(win, START_PLANT_DIRECTORY);
-            }
-            else
-            {
+                load_level(player, level);
                 clk = 0;
-                is_game_started = true;
+                is_game_started = false;
             }
         }
-        if (is_game_started)
+        else
         {
-            if (has_player_lost(game_characters))
-                display_losing_message(win, game_characters, map);
-            else if (has_player_won(level, game_characters))
-                display_winning_message(win);
-            else
-            {
-                display_game_layout(win, player, icons);
-                display_game_elements(win, game_characters, map);
-                display_chosen_plant(win, player, icons);
-                handle_movements(game_characters, map, clk);
-                handle_changes(icons, game_characters, map, level, clk);
-            }
+            start_level_3(win, player, icons, map, level, game_characters, clk, quit, is_game_started, level_chosen);
         }
-
-        HANDLE(
-            QUIT(quit = true);
-            KEY_PRESS(q, quit = true);
-            LCLICK({
-                handle_user_click(player, icons, game_characters, map, mouse_x, mouse_y);
-            });
-
-        );
-
-        clk++;
-        win.update_screen();
-
-        int now_time = SDL_GetTicks() - start_time;
-        int delay_time = max(5, ticks_per_frame - now_time);
-        DELAY(delay_time);
     }
+    close_music();
+
     return 0;
 }

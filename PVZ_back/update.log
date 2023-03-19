@@ -66,5 +66,17 @@ Add more features:
 Not in code:
 	Change font using.
 
+19/03/2023:
+	Fix cannot show many texts at once.
+	Using Vsync.
+	Add some level choosing feature and animation.
+	Add music: Brainiac Maniac.
+	Add update player's data (the number of unlocked levels).
+	Press w to win the game.
+	Dim the locked levels.
+	*Now we can choose level after a level finished.*
+
+
+NEED TO ADD COMMENT
 
 	

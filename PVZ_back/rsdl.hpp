@@ -57,6 +57,7 @@ private:
 	SDL_Renderer *renderer;
 	SDL_Texture *texture_cache[COUNT_USED_DIRECTORY];
 	std::map<string, TTF_Font *> fonts_cache;
+	std::map<string, SDL_Texture *> string_cache;
 	void set_color(RGB color);
 	void dump_err() { std::cerr << SDL_GetError() << '\n'; }
 	void init();
@@ -91,6 +92,18 @@ private:
 	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_##Char) \
 	{                                                             \
 		Code;                                                     \
+	}
+// #define KEY_TO_WIN(Code)                                                                                                                                                   \
+// 	if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_LCTRL || e.key.keysym.sym == SDLK_RCTRL) && (e.key.keysym.sym == SDLK_LALT || e.key.keysym.sym == SDLK_RALT) && \
+// 		(e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT) && (e.key.keysym.sym == SDLK_w))                                                              \
+// 	{                                                                                                                                                                      \
+// 		Code;                                                                                                                                                              \
+// 	}
+
+#define KEY_TO_WIN(Code)                                     \
+	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_w) \
+	{                                                        \
+		Code;                                                \
 	}
 #define LRELEASE(Code)                                                     \
 	if (e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) \

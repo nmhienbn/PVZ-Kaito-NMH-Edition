@@ -33,17 +33,38 @@ Read player saved data:
 void read_savedata(Player &player, Level &level)
 {
     string line;
-    std::ifstream myfile("savedata.txt");
+    std::ifstream myfile(SAVED_DATA_DIRECTORY);
     if (myfile.is_open())
     {
         getline(myfile, line);
         player.name = line;
         getline(myfile, line);
-        level.level_num = stoi(line);
+        player.unlocked_level = stoi(line);
         myfile.close();
     }
     else
         std::cout << "Unable to open saved data file";
+}
+
+void update_unlocked_level()
+{
+    std::ifstream infile(SAVED_DATA_DIRECTORY);
+    if (!infile)
+    {
+        std::cerr << "Unable to open saved data file!";
+    }
+    string player_name;
+    int player_unlocked_levels;
+    infile >> player_name >> player_unlocked_levels;
+    infile.close();
+    std::ofstream outfile(SAVED_DATA_DIRECTORY);
+    if (!outfile)
+    {
+        std::cerr << "Unable to open saved data file!";
+    }
+    outfile << player_name << '\n'
+            << player_unlocked_levels + 1;
+    outfile.close();
 }
 
 /*Need update: number and type of zombie each wave.
@@ -128,14 +149,8 @@ Initialize game:
 void init_game(window &win, Level &level, Player &player, Map &map)
 {
     display_starting_screen(win);
-    display_choosing_level_screen(win);
     read_savedata(player, level);
-    read_level(level);
-    decide_zombie_cnt_for_each_sec(level);
     map = create_a_collection_of_blocks();
-    player.sun_count = INIT_SUN_COUNT;
-    player.is_choosing_a_plant = false;
-    player.is_shoveling = false;
 }
 
 /*
@@ -175,65 +190,6 @@ void decide_zombie_cnt_for_each_sec(Level &level)
     }
 }
 
-/*Need update: Fake loading screen
-Display starting screen
-Updated: Now player can exit game from here.
-*/
-void display_starting_screen(window &win)
-{
-    bool game_started = false;
-    bool quit = false;
-    win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    while (!quit && !game_started)
-    {
-        HANDLE(
-            QUIT(quit = true; exit(0););
-            // KEY_PRESS(q, quit = true);
-            LCLICK({
-                if (user_clicked_on_start(mouse_x, mouse_y))
-                    game_started = true;
-            });
-
-        );
-
-        win.update_screen();
-        DELAY(10);
-    }
-}
-/*New function: Display choosing level
-Display choosing level screen.
-*/
-void display_choosing_level_screen(window &win)
-{
-    bool level_chosen = false;
-    bool quit = false;
-    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    win.show_text("Level 1", 75, 175);
-    while (!quit && !level_chosen)
-    {
-        HANDLE(
-            QUIT(quit = true; exit(0););
-            // KEY_PRESS(q, quit = true);
-            LCLICK({
-                if (LEVEL_1.is_mouse_in(mouse_x, mouse_y))
-                    level_chosen = true;
-            });
-
-        );
-
-        win.update_screen();
-        DELAY(10);
-    }
-}
-
-/*
-If player click on start game: return true
-*/
-bool user_clicked_on_start(int mouse_x, int mouse_y)
-{
-    return TAP_TO_START.is_mouse_in(mouse_x, mouse_y);
-}
-
 /*
 Check if player has lost: Any zombie go to the house
 */
@@ -255,4 +211,104 @@ bool has_player_won(Level &level, Elements &elements)
     if (level.waves_finished && elements.zombies.size() == 0)
         return true;
     return false;
+}
+
+/*
+DISPLAY STARTING SCREEN AND CHOOSING LEVEL SCREEN
+*/
+
+/*Need update: Fake loading screen
+Display starting screen
+Updated: Now player can exit game from here.
+*/
+void display_starting_screen(window &win)
+{
+    bool game_started = false;
+    bool quit = false;
+    win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    while (!quit && !game_started)
+    {
+        HANDLE(
+            QUIT(quit = true; exit(0););
+            // KEY_PRESS(q, quit = true);
+            LCLICK({
+                if (TAP_TO_START.is_mouse_in(mouse_x, mouse_y))
+                    game_started = true;
+            });
+
+        );
+
+        win.update_screen();
+        DELAY(10);
+    }
+    win.clear_renderer();
+}
+
+void load_level(Player &player, Level &level)
+{
+    read_level(level);
+    decide_zombie_cnt_for_each_sec(level);
+    player.sun_count = INIT_SUN_COUNT;
+    player.is_choosing_a_plant = false;
+    player.is_shoveling = false;
+}
+
+/*New function: Display choosing level
+Display choosing level screen.
+*/
+void display_choosing_level_screen(window &win, int &level_num, const int &unlocked_level, bool &level_chosen, bool &quit)
+{
+    win.clear_renderer();
+    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    win.show_text("Level 1", 75, 170);
+    if (unlocked_level >= 2)
+        win.show_text("Level 2", 320, 170);
+    else
+    {
+        win.show_text("Level 2", 320, 170, BLACK);
+        display_level_is_locked(win, LEVEL_2);
+    }
+    if (unlocked_level >= 3)
+        win.show_text("Level 3", 565, 170);
+    else
+    {
+        win.show_text("Level 3", 565, 170, BLACK);
+        display_level_is_locked(win, LEVEL_3);
+    }
+    HANDLE(
+        QUIT(quit = true; exit(0););
+        // KEY_PRESS(q, quit = true);
+        LCLICK({
+            if (LEVEL_1.is_mouse_in(mouse_x, mouse_y))
+            {
+                level_num = 1;
+                level_chosen = true;
+            }
+            else if (unlocked_level >= 2 && LEVEL_2.is_mouse_in(mouse_x, mouse_y))
+            {
+                level_num = 2;
+                level_chosen = true;
+            }
+            else if (unlocked_level >= 3 && LEVEL_3.is_mouse_in(mouse_x, mouse_y))
+            {
+                level_num = 3;
+                level_chosen = true;
+            }
+        });
+
+    );
+    win.update_screen();
+}
+/*New function (Need update):
+Reset all things after a level finished.
+*/
+void reset_level(Elements &elements)
+{
+    elements.dead_zombies.clear();
+    elements.peas.clear();
+    elements.peashooters.clear();
+    elements.sunflowers.clear();
+    elements.suns.clear();
+    elements.walnuts.clear();
+    elements.zombies.clear();
 }
