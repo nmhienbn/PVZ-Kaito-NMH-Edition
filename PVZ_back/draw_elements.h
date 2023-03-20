@@ -4,7 +4,7 @@
 #include "elements.h"
 
 void display_game_elements(window &win, Elements &elements, Map &map);
-void display_game_layout(window &win, Player player, Icons icons);
+void display_game_layout(window &win, Player player, Icons icons, Level &level);
 void display_icons_in_icon_bar(Icons icons, Player player, window &win);
 void display_winning_message(window &win);
 void display_losing_message(window &win, Elements &elements, Map &map);
@@ -16,7 +16,7 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map);
 void display_walnuts(window &win, vector<Walnut> &walnuts, Map &map);
 void display_chosen_plant(window &win, Player player, Icons icons);
 void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &map);
-void display_ready_set_plant(window &win, int image_num);
+void display_ready_set_plant(window &win, int image_num, Level &level);
 void determine_walnut_appearance(Walnut &walnut);
 void display_shovel(window &win);
 void display_level_is_locked(window &win, const Button &button);

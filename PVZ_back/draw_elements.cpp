@@ -5,10 +5,10 @@ Display game layout:
     + Sun and Player's Sun Count.
     + Plants' seed (Chosen or not).
 */
-void display_game_layout(window &win, Player player, Icons icons)
+void display_game_layout(window &win, Player player, Icons icons, Level &level)
 {
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
-    win.draw_bg(BACKGROUND_DIRECTORY);
+    win.draw_bg(level.background_directory);
     win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
     display_shovel(win);
@@ -83,8 +83,8 @@ If player win, display this
 */
 void display_winning_message(window &win)
 {
+    // win.draw_bg(BACKGROUND_DIRECTORY);
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
-    win.draw_bg(BACKGROUND_DIM_DIRECTORY);
     win.draw_png_scale(WINNING_MESSAGE_DIRECTORY, WINDOW_WIDTH / 3, WINDOW_HEIGHT / 8 - 60, 300, 550);
 }
 
@@ -294,7 +294,7 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ma
         int row = dead_zombies[i].row;
         int y_location = map[row][0].y1 - 20;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        int frame = dead_zombies[i].frame / 10;
+        int frame = dead_zombies[i].frame / ZOMBIE_FRAME;
         if (frame <= DEAD_ZOMBIE_N_SHEET)
         {
             int scol = frame % DEAD_ZOMBIE_C_SHEET;
@@ -312,9 +312,9 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ma
         }
     }
 }
-void display_ready_set_plant(window &win, int image_num)
+void display_ready_set_plant(window &win, int image_num, Level &level)
 {
-    win.draw_bg(BACKGROUND_DIRECTORY);
+    win.draw_bg(level.background_directory);
     win.draw_png(image_num, (WINDOW_WIDTH - READY_WIDTH) >> 1, (WINDOW_HEIGHT - READY_HEIGHT) >> 1, READY_WIDTH, READY_HEIGHT);
 }
 void display_shovel(window &win)

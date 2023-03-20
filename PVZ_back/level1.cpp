@@ -1,7 +1,8 @@
-#include "level3.h"
+#include "level1.h"
 
-void start_level_3(window &win, Player &player, Icons &icons, Map &map, Level &level, Elements &game_characters, int &clk, bool &quit, bool &is_game_started, bool &is_level_chosen)
+void start_level_1(window &win, Player &player, Icons &icons, Map &map, Level &level, Elements &game_characters, int &clk, bool &quit, bool &is_game_started, bool &is_level_chosen)
 {
+    win.clear_renderer();
     int start_time = SDL_GetTicks();
     if (!is_game_started)
     {
@@ -28,21 +29,11 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &map, Level &l
         if (has_player_lost(game_characters))
         {
             display_losing_message(win, game_characters, map);
-            win.update_screen();
-            SDL_Delay(3000);
-            level.waves_finished = false;
-            is_level_chosen = false;
             Mix_HaltMusic();
-            reset_level(game_characters);
         }
         else if (has_player_won(level, game_characters))
         {
-            display_game_layout(win, player, icons, level);
-            display_game_elements(win, game_characters, map);
-            display_chosen_plant(win, player, icons);
             display_winning_message(win);
-            win.update_screen();
-            SDL_Delay(3000);
             update_unlocked_level(player, level);
             level.waves_finished = false;
             is_level_chosen = false;

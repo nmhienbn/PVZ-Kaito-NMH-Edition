@@ -76,6 +76,13 @@ Not in code:
 	Dim the locked levels.
 	*Now we can choose level after a level finished.*
 
+20/03/2023:
+	New feature:
+		If a plant seed is chosen and next click is invalid, remove it.
+		Level 1, 2 has another background. Change the map coordinates connected with them.
+	Fix the winning and losing background is not shown.
+	Change game icon.
+
 
 NEED TO ADD COMMENT
 

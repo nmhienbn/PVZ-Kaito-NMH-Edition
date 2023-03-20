@@ -129,7 +129,7 @@ Moving speed of some elements
 #define ZOMBIE_WIDTH 92
 #define ZOMBIE_HEIGHT 126
 
-#define ZOMBIE_FRAME 9
+#define ZOMBIE_FRAME 6
 #define ZOMBIE_C_SHEET 6
 #define ZOMBIE_N_SHEET 22
 
@@ -184,7 +184,8 @@ enum
     STARTING_SCREEN_DIRECTORY,
     CHOOSE_LEVELS_DIRECTORY,
     BACKGROUND_DIRECTORY,
-    BACKGROUND_DIM_DIRECTORY,
+    BACKGROUND_LV1_DIRECTORY,
+    BACKGROUND_LV2_DIRECTORY,
     LOSING_MESSAGE_DIRECTORY,
     WINNING_MESSAGE_DIRECTORY,
     BLACK_SCREEN_DIRECTORY,
@@ -237,7 +238,8 @@ const string image_directory[] = {
     "./Image_Assets/Starting_Screen.png",         // STARTING_SCREEN_DIRECTORY
     "./Image_Assets/Choose_levels.png",           // CHOOSE_LEVELS_DIRECTORY
     "./Image_Assets/Frontyard.png",               // BACKGROUND_DIRECTORY
-    "./Image_Assets/Frontyard_dim.jpeg",          // BACKGROUND_DIM_DIRECTORY
+    "./Image_Assets/Frontyard_LV1.png",           // BACKGROUND_LV1_DIRECTORY
+    "./Image_Assets/Frontyard_LV2.png",           // BACKGROUND_LV2_DIRECTORY
     "./Image_Assets/ZombiesWon.png",              // LOSING_MESSAGE_DIRECTORY
     "./Image_Assets/Winning_Pic.png",             // WINNING_MESSAGE_DIRECTORY
     "./Image_Assets/Black_Screen.png",            // BLACK_SCREEN_DIRECTORY

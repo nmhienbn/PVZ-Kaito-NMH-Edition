@@ -46,7 +46,7 @@ void read_savedata(Player &player, Level &level)
         std::cout << "Unable to open saved data file";
 }
 
-void update_unlocked_level()
+void update_unlocked_level(Player &player, Level &level)
 {
     std::ifstream infile(SAVED_DATA_DIRECTORY);
     if (!infile)
@@ -54,16 +54,19 @@ void update_unlocked_level()
         std::cerr << "Unable to open saved data file!";
     }
     string player_name;
-    int player_unlocked_levels;
-    infile >> player_name >> player_unlocked_levels;
+    infile >> player_name >> player.unlocked_level;
     infile.close();
     std::ofstream outfile(SAVED_DATA_DIRECTORY);
     if (!outfile)
     {
         std::cerr << "Unable to open saved data file!";
     }
+    int num_level = std::max(1, player.unlocked_level - 1);
+    if (num_level < level.level_num)
+        num_level = level.level_num;
+    player.unlocked_level = num_level + 1;
     outfile << player_name << '\n'
-            << player_unlocked_levels + 1;
+            << player.unlocked_level;
     outfile.close();
 }
 
@@ -256,7 +259,7 @@ void load_level(Player &player, Level &level)
 /*New function: Display choosing level
 Display choosing level screen.
 */
-void display_choosing_level_screen(window &win, int &level_num, const int &unlocked_level, bool &level_chosen, bool &quit)
+void display_choosing_level_screen(window &win, Level &level, const int &unlocked_level, bool &level_chosen, bool &quit)
 {
     win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -281,17 +284,20 @@ void display_choosing_level_screen(window &win, int &level_num, const int &unloc
         LCLICK({
             if (LEVEL_1.is_mouse_in(mouse_x, mouse_y))
             {
-                level_num = 1;
+                level.level_num = 1;
+                level.background_directory = BACKGROUND_LV1_DIRECTORY;
                 level_chosen = true;
             }
             else if (unlocked_level >= 2 && LEVEL_2.is_mouse_in(mouse_x, mouse_y))
             {
-                level_num = 2;
+                level.level_num = 2;
+                level.background_directory = BACKGROUND_LV2_DIRECTORY;
                 level_chosen = true;
             }
             else if (unlocked_level >= 3 && LEVEL_3.is_mouse_in(mouse_x, mouse_y))
             {
-                level_num = 3;
+                level.level_num = 3;
+                level.background_directory = BACKGROUND_DIRECTORY;
                 level_chosen = true;
             }
         });

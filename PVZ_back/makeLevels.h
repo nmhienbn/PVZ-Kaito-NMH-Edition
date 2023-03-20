@@ -5,7 +5,7 @@
 
 Map create_a_collection_of_blocks();
 void read_savedata(Player &player, Level &level);
-void update_unlocked_level();
+void update_unlocked_level(Player &player, Level &level);
 void read_level(Level &level);
 void save_wave_cnt_str_as_int(Level &level, string wave_cnt);
 void save_zombie_seq_str_as_int_vect(Level &level, string zombie_seq);
@@ -16,6 +16,6 @@ bool has_player_lost(Elements &elements);
 bool has_player_won(Level &level, Elements &elements);
 
 void display_starting_screen(window &win);
-void display_choosing_level_screen(window &win, int &level_num, const int &unlocked_level, bool &level_chosen, bool &quit);
+void display_choosing_level_screen(window &win, Level &level, const int &unlocked_level, bool &level_chosen, bool &quit);
 void load_level(Player &player, Level &level);
 void reset_level(Elements &elements);

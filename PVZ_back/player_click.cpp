@@ -5,13 +5,13 @@ If player click on sun: handle sun click, then return;
 If player click on plant seed: find type of that plant, then return;
 If player is choosing a plant and click on a tile: create a new plant there.
 */
-void handle_user_click(Player &player, Icons &icons, Elements &elements, Map &map, const int &mouse_x, const int &mouse_y)
+void handle_user_click(Player &player, Level &level, Icons &icons, Elements &elements, Map &map, const int &mouse_x, const int &mouse_y)
 {
     if (pick_sun_if_clicked_on(elements, map, mouse_x, mouse_y, player))
         return;
     if (player.is_shoveling)
     {
-        if (click_is_in_frontyard(map, mouse_x, mouse_y))
+        if (click_is_in_frontyard(map, level, mouse_x, mouse_y))
             remove_element_if_clicked_on(map, elements, mouse_x, mouse_y);
         player.is_shoveling = false;
         return;
@@ -29,10 +29,15 @@ void handle_user_click(Player &player, Icons &icons, Elements &elements, Map &ma
     }
     if (player.is_choosing_a_plant == true)
     {
-        if (click_is_in_frontyard(map, mouse_x, mouse_y))
+        if (click_is_in_frontyard(map, level, mouse_x, mouse_y))
         {
             create_new_plant(player, map, elements, icons, mouse_x, mouse_y);
             player.is_choosing_a_plant = false;
+            return;
+        }
+        else
+        {
+            remove_chosen_plant(player, icons);
             return;
         }
     }
@@ -89,12 +94,27 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
 /*
 Check if mouse is in frontyard or not
 */
-bool click_is_in_frontyard(Map &map, const int &mouse_x, const int &mouse_y)
+bool click_is_in_frontyard(Map &map, Level &level, const int &mouse_x, const int &mouse_y)
 {
     int right_bound = map[0][8].x2;
     int left_bound = map[0][0].x1;
-    int upper_bound = map[0][0].y1;
-    int lower_bound = map[4][0].y2;
+    int upper_bound;
+    int lower_bound;
+    if (level.level_num == 1)
+    {
+        upper_bound = map[2][0].y1;
+        lower_bound = map[2][0].y2;
+    }
+    else if (level.level_num == 2)
+    {
+        upper_bound = map[1][0].y1;
+        lower_bound = map[3][0].y2;
+    }
+    else
+    {
+        upper_bound = map[0][0].y1;
+        lower_bound = map[4][0].y2;
+    }
     if (mouse_x > left_bound && mouse_x < right_bound &&
         mouse_y > upper_bound && mouse_y < lower_bound)
         return true;
@@ -117,6 +137,17 @@ void determine_row_and_col_chosen_by_second_click(Map &map, const int &mouse_x, 
             }
 }
 
+/*New function:
+Remove chosen plant.
+*/
+void remove_chosen_plant(Player &player, Icons &icons)
+{
+    player.is_choosing_a_plant = false;
+    icons.is_sunflower_chosen = false;
+    icons.is_peashooter_chosen = false;
+    icons.is_walnut_chosen = false;
+}
+
 /*Need update: Show notification if the tile has planted
 Updated:
     Cannot plant if the tile has planted.
@@ -127,7 +158,10 @@ void create_new_plant(Player &player, Map &map, Elements &elements, Icons &icons
     int row, col;
     determine_row_and_col_chosen_by_second_click(map, mouse_x, mouse_y, row, col);
     if (map[row][col].is_planted)
+    {
+        remove_chosen_plant(player, icons);
         return;
+    }
     if (icons.is_sunflower_chosen)
     {
         icons.is_sunflower_chosen = false;

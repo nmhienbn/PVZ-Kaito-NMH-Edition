@@ -51,12 +51,15 @@ void create_new_zombies(Elements &elements, Level &level)
     {
         // Generate zombies for current wave and current second.
         int zombie_cnt = level.zombie_distr_for_wave[level.cur_wave][level.cur_sec];
-        temp.row = rand() % 5;
+        temp.row = rand(0, 4);
+        if (level.level_num == 1)
+            temp.row = 2;
+        else if (level.level_num == 2)
+            temp.row = rand(1, 3);
         for (int i = 0; i < zombie_cnt; i++)
         {
             temp.x_location = ZOMBIE_INIT_X + rand() % 100 + 200;
             elements.zombies.push_back(temp);
-            temp.row = (temp.row + 1 < 4) ? temp.row + 1 : 0;
         }
         // Move to the next second and maybe next wave
         if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])

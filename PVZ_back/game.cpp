@@ -22,9 +22,10 @@ int main(int argv, char **args)
 
     while (!quit)
     {
+        win.clear_renderer();
         if (!level_chosen)
         {
-            display_choosing_level_screen(win, level.level_num, player.unlocked_level, level_chosen, quit);
+            display_choosing_level_screen(win, level, player.unlocked_level, level_chosen, quit);
             if (level_chosen)
             {
                 load_level(player, level);

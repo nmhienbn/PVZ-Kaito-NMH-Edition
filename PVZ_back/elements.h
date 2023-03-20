@@ -4,10 +4,7 @@ This file include game elements
 #pragma once
 #include "gameInfo.h"
 
-#define LEVEL_1_X1 15
-#define LEVEL_1_X2 240
-#define LEVEL_1_Y1 40
-#define LEVEL_1_Y2 205
+int rand(int L, int R);
 
 /*--------------------------------------------------------------------
 Plants and zombies
@@ -165,6 +162,8 @@ struct Level
     int cur_wave;
     int cur_sec;
     bool waves_finished;
+
+    int background_directory = BACKGROUND_DIRECTORY;
 
     vector<vector<int>> zombie_distr_for_wave;
     vector<int> wave_zombie_count;

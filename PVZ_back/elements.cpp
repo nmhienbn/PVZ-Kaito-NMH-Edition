@@ -53,3 +53,10 @@ bool Button::is_mouse_in(int mouse_x, int mouse_y) const
         return true;
     return false;
 }
+
+int rand(int L, int R)
+{
+    if (L > R)
+        exit(-10);
+    return rand() % (R - L + 1) + L;
+}
