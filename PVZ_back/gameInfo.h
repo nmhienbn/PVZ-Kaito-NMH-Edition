@@ -115,11 +115,16 @@ Moving speed of some elements
 #define PEASHOOTER_N_SHEET 60
 #define PEASHOOTER_C_SHEET 8
 
-#define SUNFLOWER_WIDTH 100
-#define SUNFLOWER_HEIGHT 108
-#define SUNFLOWER_SHEET 27
-#define SUNFLOWER_R_SHEET 5
-#define SUNFLOWER_C_SHEET 6
+#define SUNFLOWER_WIDTH 215
+#define SUNFLOWER_HEIGHT 251
+#define SUNFLOWER_N_SHEET 60
+#define SUNFLOWER_C_SHEET 8
+
+#define SUNFLOWER_H_WIDTH 215
+#define SUNFLOWER_H_HEIGHT 251
+#define SUNFLOWER_H_N_SHEET 15
+#define SUNFLOWER_H_C_SHEET 8
+#define SUNFLOWER_F_SHEET 6
 
 #define WALNUT_WIDTH 185
 #define WALNUT_HEIGHT 185
@@ -168,6 +173,8 @@ enum
     SUNFLOWER_DIRECTORY,
     SUNFLOWER_SHEET_DIRECTORY,
     SUNFLOWER_SHEET_BLINK_DIRECTORY,
+    SUNFLOWER_HAPPY_DIRECTORY,
+    SUNFLOWER_HAPPY_BLINK_DIRECTORY,
     SUN_DIRECTORY,
     SUN_BAR_DIRECTORY,
     ICON_BAR_DIRECTORY,
@@ -222,6 +229,8 @@ const string image_directory[] = {
     "./Image_Assets/Sunflower.png",               // SUNFLOWER_DIRECTORY
     "./Image_Assets/sunflower_sheet.png",         // SUNFLOWER_SHEET_DIRECTORY
     "./Image_Assets/sunflower_sheet_blink.png",   // SUNFLOWER_SHEET_BLINK_DIRECTORY
+    "./Image_Assets/sunflower_happy.png",         // SUNFLOWER_HAPPY_DIRECTORY
+    "./Image_Assets/sunflower_happy_blink.png",   // SUNFLOWER_HAPPY_BLINK_DIRECTORY
     "./Image_Assets/sun.png",                     // SUN_DIRECTORY
     "./Image_Assets/sun_bar2.png",                // SUN_BAR_DIRECTORY
     "./Image_Assets/Item_Bar.png",                // ICON_BAR_DIRECTORY

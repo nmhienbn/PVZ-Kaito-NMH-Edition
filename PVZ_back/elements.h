@@ -22,6 +22,8 @@ struct Sunflower
     int row, col;
     int bite;
     int sec_for_another_sun = SUN_GEN_SUNFLOWER_CLK_COUNT;
+    int directory_num = SUNFLOWER_SHEET_DIRECTORY;
+    int blink_directory_num = SUNFLOWER_SHEET_BLINK_DIRECTORY;
     int frame = 0;
     int is_attacked = 0;
 };

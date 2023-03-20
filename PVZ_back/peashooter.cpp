@@ -32,8 +32,14 @@ void fire_peas(Elements &elements, Map &map)
         }
         else
         {
-            peashooter.directory_num = PEASHOOTER_SHEET_DIRECTORY;
-            peashooter.blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
+            if (peashooter.directory_num == PEASHOOTER_ATTACK_DIRECTORY)
+            {
+                if (peashooter.frame == 0)
+                {
+                    peashooter.directory_num = PEASHOOTER_SHEET_DIRECTORY;
+                    peashooter.blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
+                }
+            }
         }
     }
 }

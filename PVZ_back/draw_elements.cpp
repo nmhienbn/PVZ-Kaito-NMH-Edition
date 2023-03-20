@@ -171,24 +171,47 @@ Add blink
 */
 void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &map)
 {
-    for (int i = 0; i < sunflowers.size(); i++)
+    for (auto &sunflower : sunflowers)
     {
-        int col = sunflowers[i].col;
-        int row = sunflowers[i].row;
-        // win.draw_png_scale(SUNFLOWER_DIRECTORY, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (sunflower.directory_num == SUNFLOWER_SHEET_DIRECTORY)
+        {
+            int col = sunflower.col;
+            int row = sunflower.row;
+            // win.draw_png_scale(SUNFLOWER_DIRECTORY, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
-        int frame = sunflowers[i].frame / 2;
-        int scol = frame % SUNFLOWER_C_SHEET;
-        int srow = frame / SUNFLOWER_C_SHEET;
-        win.draw_png(SUNFLOWER_SHEET_DIRECTORY, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        if (++sunflowers[i].frame >= 2 * SUNFLOWER_SHEET)
-        {
-            sunflowers[i].frame = 0;
+            int frame = sunflower.frame;
+            int scol = frame % SUNFLOWER_C_SHEET;
+            int srow = frame / SUNFLOWER_C_SHEET;
+            win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, map[row][col].x1, map[row][col].y1 - 10, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            if (++sunflower.frame >= SUNFLOWER_N_SHEET)
+            {
+                sunflower.frame = 0;
+            }
+            if (sunflower.is_attacked)
+            {
+                win.draw_png(sunflower.blink_directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, map[row][col].x1, map[row][col].y1 - 10, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                sunflower.is_attacked--;
+            }
         }
-        if (sunflowers[i].is_attacked)
+        else
         {
-            win.draw_png(SUNFLOWER_SHEET_BLINK_DIRECTORY, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-            sunflowers[i].is_attacked--;
+            int col = sunflower.col;
+            int row = sunflower.row;
+            // win.draw_png_scale(SUNFLOWER_DIRECTORY, map[row][col].x1 + 9, map[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+
+            int frame = sunflower.frame / SUNFLOWER_F_SHEET;
+            int scol = frame % SUNFLOWER_H_C_SHEET;
+            int srow = frame / SUNFLOWER_H_C_SHEET;
+            win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, map[row][col].x1, map[row][col].y1 - 10, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            if (++sunflower.frame >= SUNFLOWER_F_SHEET * SUNFLOWER_H_N_SHEET)
+            {
+                sunflower.frame = 0;
+            }
+            if (sunflower.is_attacked)
+            {
+                win.draw_png(sunflower.blink_directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, map[row][col].x1, map[row][col].y1 - 10, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                sunflower.is_attacked--;
+            }
         }
     }
 }
