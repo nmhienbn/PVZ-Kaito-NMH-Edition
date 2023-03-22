@@ -72,11 +72,10 @@ void display_game_elements(window &win, Elements &elements, Map &cells)
 }
 
 /*
-If player lose, display this.
+Display the game element when paused: plants, zombies and the suns.
 */
-void display_losing_message(window &win, Elements &elements, Map &cells, Level &level)
+void display_game_paused_elements(window &win, Elements &elements, Map &cells, Level &level)
 {
-    win.draw_bg(level.background_directory);
     display_zombies(win, elements.zombies, cells, true);
     display_dead_zombies(win, elements.dead_zombies, cells, true);
     display_peashooters(win, elements.peashooters, cells, true);
@@ -84,7 +83,19 @@ void display_losing_message(window &win, Elements &elements, Map &cells, Level &
     display_walnuts(win, elements.walnuts, cells, true);
     display_peas(win, elements.peas, cells);
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
-    win.draw_png_scale(LOSING_MESSAGE_DIRECTORY, WINDOW_WIDTH / 4, WINDOW_HEIGHT / 8 - 40, 500, 500);
+}
+
+/*
+If player lose, display this.
+*/
+void display_losing_message(window &win, Elements &elements, Map &cells, Level &level)
+{
+    win.draw_bg(level.background_directory);
+    display_game_paused_elements(win, elements, cells, level);
+    win.draw_png_scale(LOSING_MESSAGE_DIRECTORY,
+                       (WINDOW_WIDTH - LOSING_MESSAGE_WIDTH) / 2, (WINDOW_HEIGHT - LOSING_MESSAGE_HEIGHT) / 2,
+                       LOSING_MESSAGE_WIDTH, LOSING_MESSAGE_HEIGHT);
+    win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
 
 /*
@@ -93,26 +104,17 @@ If player win, display this
 void display_winning_message(window &win, Elements &elements, Map &cells, Level &level)
 {
     win.draw_bg(level.background_directory);
-    display_zombies(win, elements.zombies, cells, true);
-    display_dead_zombies(win, elements.dead_zombies, cells, true);
-    display_peashooters(win, elements.peashooters, cells, true);
-    display_sunflowers(win, elements.sunflowers, cells, true);
-    display_walnuts(win, elements.walnuts, cells, true);
-    display_peas(win, elements.peas, cells);
-    win.draw_bg(BLACK_SCREEN_DIRECTORY);
-    win.draw_png_scale(WINNING_MESSAGE_DIRECTORY, WINDOW_WIDTH / 3, WINDOW_HEIGHT / 8 - 60, 300, 550);
+    display_game_paused_elements(win, elements, cells, level);
+    win.draw_png_scale(WINNING_MESSAGE_DIRECTORY,
+                       (WINDOW_WIDTH - WINNING_MESSAGE_WIDTH) / 2, (WINDOW_HEIGHT - WINNING_MESSAGE_HEIGHT) / 2,
+                       WINNING_MESSAGE_WIDTH, WINNING_MESSAGE_HEIGHT);
+    win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
 
 void display_game_pause(window &win, Elements &elements, Map &cells, Level &level)
 {
     win.draw_bg(level.background_directory);
-    display_zombies(win, elements.zombies, cells, true);
-    display_dead_zombies(win, elements.dead_zombies, cells, true);
-    display_peashooters(win, elements.peashooters, cells, true);
-    display_sunflowers(win, elements.sunflowers, cells, true);
-    display_walnuts(win, elements.walnuts, cells, true);
-    display_peas(win, elements.peas, cells);
-    win.draw_bg(BLACK_SCREEN_DIRECTORY);
+    display_game_paused_elements(win, elements, cells, level);
     display_menu(win);
 }
 

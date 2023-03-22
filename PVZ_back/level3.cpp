@@ -32,23 +32,41 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         {
             display_losing_message(win, game_characters, cells, level);
             win.update_screen();
-            SDL_Delay(3000);
-            level.waves_finished = false;
-            is_level_chosen = false;
-            Mix_HaltMusic();
-            reset_level(game_characters, cells);
+            HANDLE(
+                QUIT(quit = true);
+                KEY_PRESS(q, quit = true);
+                LCLICK({
+                    if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
+                    {
+                        level.waves_finished = false;
+                        is_level_chosen = false;
+                        Mix_HaltMusic();
+                        reset_level(game_characters, cells);
+                    }
+                });
+
+            );
             return;
         }
         if (has_player_won(level, game_characters))
         {
             display_winning_message(win, game_characters, cells, level);
             win.update_screen();
-            SDL_Delay(3000);
-            update_unlocked_level(player, level);
-            level.waves_finished = false;
-            is_level_chosen = false;
-            Mix_HaltMusic();
-            reset_level(game_characters, cells);
+            HANDLE(
+                QUIT(quit = true);
+                KEY_PRESS(q, quit = true);
+                LCLICK({
+                    if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
+                    {
+                        update_unlocked_level(player, level);
+                        level.waves_finished = false;
+                        is_level_chosen = false;
+                        reset_level(game_characters, cells);
+                        Mix_HaltMusic();
+                    }
+                });
+
+            );
             return;
         }
         if (is_paused)

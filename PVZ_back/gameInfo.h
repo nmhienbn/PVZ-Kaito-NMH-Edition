@@ -18,7 +18,7 @@ using namespace std;
 #define ticks_per_frame 1000 / FPS
 
 #define SUN_GEN_SKY_CLK_COUNT 1000       // Sun from sky frequency
-#define SUN_GEN_SUNFLOWER_CLK_COUNT 2000 // Sun from sunflower frequency
+#define SUN_GEN_SUNFLOWER_CLK_COUNT 1500 // Sun from sunflower frequency
 #define ZOMBIE_CREATE_CLK_COUNT 600      // Time between zombies' different groups
 #define FIRE_PEA_CLK_COUNT 100           // Fire pea refresh frequency
 #define BITE_CLK_COUNT 50                // Zombie bite plant frequency
@@ -26,9 +26,9 @@ using namespace std;
 #define SUN_CLK_COUNT 4                  // Sun moving frequency
 #define PEA_CLK_COUNT 2                  // Pea moving frequency
 
-#define PEASHOOTER_LOADING 250 // Peashooter loading
-#define SUNFLOWER_LOADING 250  // Sunflower loading
-#define WALNUT_LOADING 1000    // Walnut loading
+#define PEASHOOTER_LOADING 400 // Peashooter loading
+#define SUNFLOWER_LOADING 350  // Sunflower loading
+#define WALNUT_LOADING 1300    // Walnut loading
 #define MAX_TIME_BLINK 5
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
@@ -148,46 +148,29 @@ Moving speed of some elements
 
 #define SHOVEL_WIDTH 139
 #define SHOVEL_HEIGHT 141
+#define WINNING_MESSAGE_WIDTH 400
+#define WINNING_MESSAGE_HEIGHT 407
+#define LOSING_MESSAGE_WIDTH 564
+#define LOSING_MESSAGE_HEIGHT 468
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Directories
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 enum
-{
+{ // Plant seed
     PEASHOOTER_DIRECTORY,
     PEASHOOTER_SHEET_DIRECTORY,
     PEASHOOTER_SHEET_BLINK_DIRECTORY,
     PEASHOOTER_ATTACK_DIRECTORY,
     PEASHOOTER_ATTACK_BLINK_DIRECTORY,
-    PEA_DIRECTORY,
-    PEA_EXPLODE_DIRECTORY,
+
     SUNFLOWER_DIRECTORY,
     SUNFLOWER_SHEET_DIRECTORY,
     SUNFLOWER_SHEET_BLINK_DIRECTORY,
     SUNFLOWER_HAPPY_DIRECTORY,
     SUNFLOWER_HAPPY_BLINK_DIRECTORY,
-    SUN_DIRECTORY,
-    SUN_BAR_DIRECTORY,
-    ICON_BAR_DIRECTORY,
-    PEASHOOTER_ICON_BRIGHT_DIRECTORY,
-    PEASHOOTER_ICON_DIM_DIRECTORY,
-    SUNFLOWER_ICON_BRIGHT_DIRECTORY,
-    SUNFLOWER_ICON_DIM_DIRECTORY,
-    WALNUT_ICON_BRIGHT_DIRECTORY,
-    WALNUT_ICON_DIM_DIRECTORY,
-    ZOMBIE_HEALTHY_DIRECTORY,
-    ZOMBIE_SHEET_DIRECTORY,
-    ZOMBIE_BLINK_SHEET_DIRECTORY,
-    ZOMBIE_INJURED_DIRECTORY,
-    STARTING_SCREEN_DIRECTORY,
-    CHOOSE_LEVELS_DIRECTORY,
-    BACKGROUND_DIRECTORY,
-    BACKGROUND_LV1_DIRECTORY,
-    BACKGROUND_LV2_DIRECTORY,
-    LOSING_MESSAGE_DIRECTORY,
-    WINNING_MESSAGE_DIRECTORY,
-    BLACK_SCREEN_DIRECTORY,
+
     WALNUT_DIRECTORY,
     WALNUT_1_DIRECTORY,
     WALNUT_2_DIRECTORY,
@@ -197,74 +180,114 @@ enum
     WALNUT_2_BLINK_DIRECTORY,
     WALNUT_3_BLINK_DIRECTORY,
     WALNUT_4_BLINK_DIRECTORY,
-    ZOMBIE_DIE_DIRECTORY,
-    ZOMBIE_HEAD_DIRECTORY,
-    ZOMBIE_EATING_DIRECTORY,
-    ZOMBIE_EATING_BLINK_DIRECTORY,
-    START_READY_DIRECTORY,
-    START_SET_DIRECTORY,
-    START_PLANT_DIRECTORY,
+
+    PEASHOOTER_ICON_BRIGHT_DIRECTORY,
+    PEASHOOTER_ICON_DIM_DIRECTORY,
+    SUNFLOWER_ICON_BRIGHT_DIRECTORY,
+    SUNFLOWER_ICON_DIM_DIRECTORY,
+    WALNUT_ICON_BRIGHT_DIRECTORY,
+    WALNUT_ICON_DIM_DIRECTORY,
+
+    PEA_DIRECTORY,
+    PEA_EXPLODE_DIRECTORY,
+
+    STARTING_SCREEN_DIRECTORY,
+    CHOOSE_LEVELS_DIRECTORY,
+    BACKGROUND_DIRECTORY,
+    BACKGROUND_LV1_DIRECTORY,
+    BACKGROUND_LV2_DIRECTORY,
+    LOSING_MESSAGE_DIRECTORY,
+    WINNING_MESSAGE_DIRECTORY,
+
+    SUN_DIRECTORY,
+    SUN_BAR_DIRECTORY,
+    ICON_BAR_DIRECTORY,
     SHOVEL_BAR_DIRECTORY,
     SHOVEL_DIRECTORY,
     MENU_ICON_DIRECTORY,
     MENU_DIRECTORY,
+    CONTINUE_DIRECTORY,
+
+    ZOMBIE_HEALTHY_DIRECTORY,
+    ZOMBIE_SHEET_DIRECTORY,
+    ZOMBIE_BLINK_SHEET_DIRECTORY,
+    ZOMBIE_INJURED_DIRECTORY,
+    ZOMBIE_DIE_DIRECTORY,
+    ZOMBIE_HEAD_DIRECTORY,
+    ZOMBIE_EATING_DIRECTORY,
+    ZOMBIE_EATING_BLINK_DIRECTORY,
+
+    START_READY_DIRECTORY,
+    START_SET_DIRECTORY,
+    START_PLANT_DIRECTORY,
+    BLACK_SCREEN_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
 
 const string image_directory[] = {
-    "./image/Peashooter.png",                          // PEASHOOTER_DIRECTORY
+    // Plant sheet
+    "./image/Plant_sheet/Peashooter.png",              // PEASHOOTER_DIRECTORY
     "./image/Plant_sheet/peashooter_sheet.png",        // PEASHOOTER_SHEET_DIRECTORY
     "./image/Plant_sheet/peashooter_sheet_blink.png",  // PEASHOOTER_SHEET_BLINK_DIRECTORY
     "./image/Plant_sheet/peashooter_attack.png",       // PEASHOOTER_ATTACK_DIRECTORY
     "./image/Plant_sheet/peashooter_attack_blink.png", // PEASHOOTER_ATTACK_BLINK_DIRECTORY
-    "./image/pea.png",                                 // PEA_DIRECTORY
-    "./image/pea_explode.png",                         // PEA_EXPLODE_DIRECTORY
-    "./image/Sunflower.png",                           // SUNFLOWER_DIRECTORY
-    "./image/Plant_sheet/sunflower_sheet.png",         // SUNFLOWER_SHEET_DIRECTORY
-    "./image/Plant_sheet/sunflower_sheet_blink.png",   // SUNFLOWER_SHEET_BLINK_DIRECTORY
-    "./image/Plant_sheet/sunflower_happy.png",         // SUNFLOWER_HAPPY_DIRECTORY
-    "./image/Plant_sheet/sunflower_happy_blink.png",   // SUNFLOWER_HAPPY_BLINK_DIRECTORY
-    "./image/sun.png",                                 // SUN_DIRECTORY
-    "./image/sun_bar2.png",                            // SUN_BAR_DIRECTORY
-    "./image/Item_Bar.png",                            // ICON_BAR_DIRECTORY
-    "./image/Plant_seed/icon_peashooter_100.png",      // PEASHOOTER_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_peashooter_100_dim.png",  // PEASHOOTER_ICON_DIM_DIRECTORY
-    "./image/Plant_seed/icon_sunflower.png",           // SUNFLOWER_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_sunflower_dim.png",       // SUNFLOWER_ICON_DIM_DIRECTORY
-    "./image/Plant_seed/icon_walnut.png",              // WALNUT_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_walnut_dim.png",          // WALNUT_ICON_DIM_DIRECTORY
-    "./image/Zombie_healthy.png",                      // ZOMBIE_HEALTHY_DIRECTORY
-    "./image/ZOMBIEWALK1.png",                         // ZOMBIE_SHEET_DIRECTORY
-    "./image/ZOMBIEWALK1_blink.png",                   // ZOMBIE_BLINK_SHEET_DIRECTORY
-    "./image/Zombie_Injured.png",                      // ZOMBIE_INJURED_DIRECTORY
-    "./image/Starting_Screen.png",                     // STARTING_SCREEN_DIRECTORY
-    "./image/Choose_levels.png",                       // CHOOSE_LEVELS_DIRECTORY
-    "./image/Frontyard.png",                           // BACKGROUND_DIRECTORY
-    "./image/Frontyard_LV1.png",                       // BACKGROUND_LV1_DIRECTORY
-    "./image/Frontyard_LV2.png",                       // BACKGROUND_LV2_DIRECTORY
-    "./image/ZombiesWon.png",                          // LOSING_MESSAGE_DIRECTORY
-    "./image/Winning_Pic.png",                         // WINNING_MESSAGE_DIRECTORY
-    "./image/Black_Screen.png",                        // BLACK_SCREEN_DIRECTORY
-    "./image/Walnut.png",                              // WALNUT_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-1.png",          // WALNUT_1_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-2.png",          // WALNUT_2_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-3.png",          // WALNUT_3_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-4.png",          // WALNUT_4_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-1_blink.png",    // WALNUT_1_BLINK_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-2_blink.png",    // WALNUT_2_BLINK_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-3_blink.png",    // WALNUT_3_BLINK_DIRECTORY
-    "./image/Plant_sheet/Walnut-sheet-4_blink.png",    // WALNUT_4_BLINK_DIRECTORY
-    "./image/Zombie_die.png",                          // ZOMBIE_DIE_DIRECTORY
-    "./image/Zombie_head.png",                         // ZOMBIE_HEAD_DIRECTORY
-    "./image/Zombie_eating.png",                       // ZOMBIE_EATING_DIRECTORY
-    "./image/Zombie_eating_blink.png",                 // ZOMBIE_EATING_BLINK_DIRECTORY
-    "./image/StartReady.png",                          // START_READY_DIRECTORY
-    "./image/StartSet.png",                            // START_SET_DIRECTORY
-    "./image/StartPlant.png",                          // START_PLANT_DIRECTORY
-    "./image/Shovel.png",                              // SHOVEL_BAR_DIRECTORY
-    "./image/Shovel2.png",                             // SHOVEL_DIRECTORY
-    "./image/menu_icon.png",                           // MENU_ICON_DIRECTORY
-    "./image/menu.png"                                 // MENU_DIRECTORY
+
+    "./image/Plant_sheet/Sunflower.png",             // SUNFLOWER_DIRECTORY
+    "./image/Plant_sheet/sunflower_sheet.png",       // SUNFLOWER_SHEET_DIRECTORY
+    "./image/Plant_sheet/sunflower_sheet_blink.png", // SUNFLOWER_SHEET_BLINK_DIRECTORY
+    "./image/Plant_sheet/sunflower_happy.png",       // SUNFLOWER_HAPPY_DIRECTORY
+    "./image/Plant_sheet/sunflower_happy_blink.png", // SUNFLOWER_HAPPY_BLINK_DIRECTORY
+
+    "./image/Plant_sheet/Walnut.png",               // WALNUT_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-1.png",       // WALNUT_1_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-2.png",       // WALNUT_2_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-3.png",       // WALNUT_3_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-4.png",       // WALNUT_4_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-1_blink.png", // WALNUT_1_BLINK_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-2_blink.png", // WALNUT_2_BLINK_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-3_blink.png", // WALNUT_3_BLINK_DIRECTORY
+    "./image/Plant_sheet/Walnut-sheet-4_blink.png", // WALNUT_4_BLINK_DIRECTORY
+
+    "./image/Plant_seed/icon_peashooter_100.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/icon_peashooter_100_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/icon_sunflower.png",          // SUNFLOWER_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/icon_sunflower_dim.png",      // SUNFLOWER_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/icon_walnut.png",             // WALNUT_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/icon_walnut_dim.png",         // WALNUT_ICON_DIM_DIRECTORY
+
+    "./image/Bullets/Pea/pea.png",         // PEA_DIRECTORY
+    "./image/Bullets/Pea/pea_explode.png", // PEA_EXPLODE_DIRECTORY
+
+    "./image/Background/Starting_Screen.png", // STARTING_SCREEN_DIRECTORY
+    "./image/Background/Choose_levels.png",   // CHOOSE_LEVELS_DIRECTORY
+    "./image/Background/Frontyard.png",       // BACKGROUND_DIRECTORY
+    "./image/Background/Frontyard_LV1.png",   // BACKGROUND_LV1_DIRECTORY
+    "./image/Background/Frontyard_LV2.png",   // BACKGROUND_LV2_DIRECTORY
+    "./image/Background/ZombiesWon.png",      // LOSING_MESSAGE_DIRECTORY
+    "./image/Background/Winning_Pic.png",     // WINNING_MESSAGE_DIRECTORY
+
+    "./image/Icons/sun.png",       // SUN_DIRECTORY
+    "./image/Icons/sun_bar.png",   // SUN_BAR_DIRECTORY
+    "./image/Icons/Item_Bar.png",  // ICON_BAR_DIRECTORY
+    "./image/Icons/Shovel.png",    // SHOVEL_BAR_DIRECTORY
+    "./image/Icons/Shovel2.png",   // SHOVEL_DIRECTORY
+    "./image/Icons/menu_icon.png", // MENU_ICON_DIRECTORY
+    "./image/Icons/menu.png",      // MENU_DIRECTORY
+    "./image/Icons/continue.png",  // CONTINUE_DIRECTORY
+
+    "./image/Zombie/Zombie_healthy.png",      // ZOMBIE_HEALTHY_DIRECTORY
+    "./image/Zombie/ZOMBIEWALK1.png",         // ZOMBIE_SHEET_DIRECTORY
+    "./image/Zombie/ZOMBIEWALK1_blink.png",   // ZOMBIE_BLINK_SHEET_DIRECTORY
+    "./image/Zombie/Zombie_Injured.png",      // ZOMBIE_INJURED_DIRECTORY
+    "./image/Zombie/Zombie_die.png",          // ZOMBIE_DIE_DIRECTORY
+    "./image/Zombie/Zombie_head.png",         // ZOMBIE_HEAD_DIRECTORY
+    "./image/Zombie/Zombie_eating.png",       // ZOMBIE_EATING_DIRECTORY
+    "./image/Zombie/Zombie_eating_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
+
+    "./image/Annoucement/StartReady.png", // START_READY_DIRECTORY
+    "./image/Annoucement/StartSet.png",   // START_SET_DIRECTORY
+    "./image/Annoucement/StartPlant.png", // START_PLANT_DIRECTORY
+    "./image/Black_Screen.png",           // BLACK_SCREEN_DIRECTORY
 
 };
