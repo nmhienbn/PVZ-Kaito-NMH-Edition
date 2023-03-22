@@ -87,9 +87,9 @@ void read_level(Level &level)
     getline(myfile, zombie_seq);
     getline(myfile, wave_dur);
 
-    save_wave_cnt_str_as_int(level, wave_cnt);
-    save_zombie_seq_str_as_int_vect(level, zombie_seq);
-    save_wave_dur_str_as_int_vect(level, wave_dur);
+    convert_wave_cnt_str_into_int(level, wave_cnt);
+    convert_zombie_seq_str_into_int_vect(level, zombie_seq);
+    convert_wave_dur_str_into_int_vect(level, wave_dur);
     level.cur_wave = 0;
     level.cur_sec = 0;
     level.waves_finished = false;
@@ -98,7 +98,7 @@ void read_level(Level &level)
 /*
 Get information of number of waves in file.
 */
-void save_wave_cnt_str_as_int(Level &level, string wave_cnt)
+void convert_wave_cnt_str_into_int(Level &level, string wave_cnt)
 {
     string temp;
     int num_ind = wave_cnt.find(":") + 2;
@@ -109,7 +109,7 @@ void save_wave_cnt_str_as_int(Level &level, string wave_cnt)
 /*
 Get information of number of zombie in each wave in file.
 */
-void save_zombie_seq_str_as_int_vect(Level &level, string zombie_seq)
+void convert_zombie_seq_str_into_int_vect(Level &level, string zombie_seq)
 {
     string temp;
     int num_ind = zombie_seq.find(":") + 2;
@@ -126,7 +126,7 @@ void save_zombie_seq_str_as_int_vect(Level &level, string zombie_seq)
 /*
 Get information of duration of wave in file.
 */
-void save_wave_dur_str_as_int_vect(Level &level, string wave_dur)
+void convert_wave_dur_str_into_int_vect(Level &level, string wave_dur)
 {
     string temp;
     int num_ind = wave_dur.find(":") + 2;
@@ -149,11 +149,11 @@ Initialize game:
     Create block on frontyard (playground)
     Init player's sun
 */
-void init_game(window &win, Level &level, Player &player, Map &map)
+void init_game(window &win, Level &level, Player &player, Map &cells)
 {
     display_starting_screen(win);
     read_savedata(player, level);
-    map = create_a_collection_of_blocks();
+    cells = create_a_collection_of_blocks();
 }
 
 /*
@@ -161,7 +161,6 @@ Random number of zombie appear in each second of the wave.
 */
 void decide_zombie_cnt_for_each_sec(Level &level)
 {
-    srand(time(NULL));
     bool enough_zombies = false;
     int z_cnt, sum;
 
@@ -173,7 +172,7 @@ void decide_zombie_cnt_for_each_sec(Level &level)
         sum = 0;
         for (int sec = 0; sec < level.wave_duration[wave]; sec++)
         {
-            z_cnt = (rand() % 5) + 1;
+            z_cnt = rand(1, 5);
 
             if (enough_zombies)
                 temp[sec] = 0;
@@ -308,7 +307,7 @@ void display_choosing_level_screen(window &win, Level &level, const int &unlocke
 /*New function (Need update):
 Reset all things after a level finished.
 */
-void reset_level(Elements &elements)
+void reset_level(Elements &elements, Map &cells)
 {
     elements.dead_zombies.clear();
     elements.peas.clear();
@@ -317,4 +316,12 @@ void reset_level(Elements &elements)
     elements.suns.clear();
     elements.walnuts.clear();
     elements.zombies.clear();
+
+    for (int y = 0; y < VERT_BLOCK_COUNT; y++)
+    {
+        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
+        {
+            cells[y][x].is_planted = false;
+        }
+    }
 }

@@ -30,6 +30,11 @@ void Zombie::change_zombie_eating_status()
     }
 }
 
+bool Zombie::operator<(const Zombie &other) const
+{
+    return (row == other.row ? x_location < other.x_location : row > other.row);
+}
+
 Button::Button()
 {
 }
@@ -53,10 +58,13 @@ bool Button::is_mouse_in(int mouse_x, int mouse_y) const
         return true;
     return false;
 }
-
 int rand(int L, int R)
 {
     if (L > R)
         exit(-10);
-    return rand() % (R - L + 1) + L;
+    return rd() % (R - L + 1) + L;
+}
+
+Icons::Icons()
+{
 }

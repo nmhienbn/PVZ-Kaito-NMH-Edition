@@ -11,25 +11,25 @@ Handles all the changes to the game:
     + Generate suns from sunflowers.
 Updated: Suns from sunflowers not at the same time.
 */
-void handle_changes(Icons &icons, Elements &elements, Map &map, Level &level, int clk)
+void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, int clk)
 {
-    update_moving_status_for_zombies(elements, map);
+    update_moving_status_for_zombies(elements, cells);
 
-    handle_pea_zombie_encounter(elements, map);
+    handle_pea_zombie_encounter(elements, cells);
     if (level.waves_finished == false && clk % ZOMBIE_CREATE_CLK_COUNT == 0)
         create_new_zombies(elements, level);
     if (clk % BITE_CLK_COUNT == 0)
     {
-        handle_zombie_plant_encounter(elements.zombies, elements.walnuts, map, WALNUT_BITE_LIMIT);
-        handle_zombie_plant_encounter(elements.zombies, elements.peashooters, map, PEASHOOTER_BITE_LIMIT);
-        handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, map, SUNFLOWER_BITE_LIMIT);
+        handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
+        handle_zombie_plant_encounter(elements.zombies, elements.peashooters, cells, PEASHOOTER_BITE_LIMIT);
+        handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
     }
-    fire_peas(elements, map);
+    fire_peas(elements, cells);
 
     if (clk % SUN_GEN_SKY_CLK_COUNT == 0)
         gen_random_sun_from_sky(elements);
 
-    gen_sun_from_all_sunflowers(elements, map);
+    gen_sun_from_all_sunflowers(elements, cells);
     remove_suns(elements);
     update_remaining_time(icons);
 }
@@ -39,38 +39,49 @@ void handle_changes(Icons &icons, Elements &elements, Map &map, Level &level, in
 - If the level has not finished:
     + Generate zombies for current wave and current second.
     + Then move to the next second and maybe next wave.
+- Fixed: The row is not ramdom.
+- Updated: Reduce the empty time between waves of zombies when all current zombies died.
 */
 void create_new_zombies(Elements &elements, Level &level)
 {
-    srand(time(NULL));
     Zombie temp;
     temp.health = ZOMBIE_NORMAL_HEALTH_LIMIT;
     temp.is_moving = true;
 
     if (level.waves_finished == false)
     {
-        // Generate zombies for current wave and current second.
-        int zombie_cnt = level.zombie_distr_for_wave[level.cur_wave][level.cur_sec];
-        temp.row = rand(0, 4);
-        if (level.level_num == 1)
-            temp.row = 2;
-        else if (level.level_num == 2)
-            temp.row = rand(1, 3);
-        for (int i = 0; i < zombie_cnt; i++)
+        // This loop is to reduce the empty time between waves of zombies when all current zombies died.
+        while (elements.zombies.empty())
         {
-            temp.x_location = ZOMBIE_INIT_X + rand() % 100 + 200;
-            elements.zombies.push_back(temp);
+            // Generate zombies for current wave and current second.
+            int zombie_cnt = level.zombie_distr_for_wave[level.cur_wave][level.cur_sec];
+            for (int i = 0; i < zombie_cnt; i++)
+            {
+                // Random appear row
+                temp.row = rand(0, 4);
+                temp.frame = rand(0, ZOMBIE_FRAME * ZOMBIE_N_SHEET - 1);
+                if (level.level_num == 1)
+                    temp.row = 2;
+                else if (level.level_num == 2)
+                    temp.row = rand(1, 3);
+                // Random delay time to appear
+                temp.x_location = WINDOW_WIDTH + rand(0, 100);
+                elements.zombies.push_back(temp);
+            }
+            // Move to the next second and maybe next wave
+            if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])
+                level.cur_sec++;
+            else if (level.cur_wave + 1 < level.wave_count)
+            {
+                level.cur_sec = 0;
+                level.cur_wave++;
+            }
+            else
+            {
+                level.waves_finished = true;
+                break;
+            }
         }
-        // Move to the next second and maybe next wave
-        if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])
-            level.cur_sec++;
-        else if (level.cur_wave + 1 < level.wave_count)
-        {
-            level.cur_sec = 0;
-            level.cur_wave++;
-        }
-        else
-            level.waves_finished = true;
     }
 }
 
@@ -78,14 +89,14 @@ void create_new_zombies(Elements &elements, Level &level)
 Handle all movement is happening: zombies, suns, peas.
 @param clk: the clock of game
 */
-void handle_movements(Elements &elements, Map &map, int clk)
+void handle_movements(Elements &elements, Map &cells, int clk)
 {
     if (clk % ZOMBIE_CLK_COUNT == 0)
-        move_zombies(elements.zombies, elements, map);
+        move_zombies(elements.zombies, elements, cells);
     if (clk % SUN_CLK_COUNT == 0)
-        move_suns(elements.suns, map);
+        move_suns(elements.suns, cells);
     if (clk % PEA_CLK_COUNT == 0)
-        move_peas(elements.peas, elements, map);
+        move_peas(elements.peas, elements, cells);
 }
 
 /*

@@ -3,6 +3,10 @@ This file include game elements
 */
 #pragma once
 #include "gameInfo.h"
+#include <random>
+#include <chrono>
+#include <ctime>
+static mt19937 rd(chrono::high_resolution_clock::now().time_since_epoch().count());
 
 int rand(int L, int R);
 
@@ -57,12 +61,19 @@ struct Pea
     int explode = PEA_EXPLODE_TIME;
 };
 
+struct CherryBomb
+{
+};
+
 /*
 @param row(int): The row of the zombie
 @param x_location(int): The begin column of zombie
-
 @param health(int): remaining health of zombie.
-@param is_moving(bool): true if zombie is moving, otherwise false
+@param is_moving(bool): true if zombie is moving, otherwise false.
+@param directory_num: order of string that is the path to image.
+@param blinkdirectory_num: order of string that is the path to blink image.
+@param n_sheet: number of sprites.
+@param c_sheet: number of column in sprite sheet
 @param directory(string): decide what image to be render.
 */
 struct Zombie
@@ -79,6 +90,7 @@ struct Zombie
     int is_attacked = 0;
 
     void change_zombie_eating_status();
+    bool operator<(const Zombie &other) const;
 };
 struct DeadZombie
 {
@@ -140,9 +152,7 @@ struct Icons
     int sunflower_remaining_time = 0;
     int walnut_remaining_time = 0;
 
-    string sunflower_icon_directory;
-    string peashooter_icon_directory;
-    string walnut_icon_directory;
+    Icons();
 };
 
 /*
@@ -183,8 +193,20 @@ struct Button
     bool is_mouse_in(int mouse_x, int mouse_y) const;
 };
 
-const Button Shovel(SHOVEL_X1, SHOVEL_X2, SHOVEL_Y1, SHOVEL_Y2);
-const Button TAP_TO_START(TAP_TO_START_X1, TAP_TO_START_X2, TAP_TO_START_Y1, TAP_TO_START_Y2);
-const Button LEVEL_1 = Button(15, 240, 40, 205);
-const Button LEVEL_2 = Button(260, 485, 40, 205);
-const Button LEVEL_3 = Button(505, 730, 40, 205);
+const Button Shovel(140, 215, 500, 575);
+const Button TAP_TO_START(230, 796, 520, 585);
+const Button LEVEL_1(15, 240, 40, 205);
+const Button LEVEL_2(260, 485, 40, 205);
+const Button LEVEL_3(505, 730, 40, 205);
+const Button ICON_BAR(20, 125, 100, 310);
+const Button ICON_BAR_LV1(20, 125, 100, 165);
+const Button ICON_BAR_LV2(20, 125, 100, 235);
+const Button MENU_ICON(850, 975, 0, 35);
+#define MENU_X1 325
+#define MENU_X2 725
+#define MENU_Y1 66
+#define MENU_Y2 534
+const Button MENU(MENU_X1, MENU_X2, MENU_Y1, MENU_Y2);
+const Button BACK_TO_GAME(MENU_X1 + 40, MENU_X1 + 360, MENU_Y1 + 380, MENU_Y1 + 450);
+const Button MAIN_MENU(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 317, MENU_Y1 + 355);
+const Button RESTART(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 220, MENU_Y1 + 312);

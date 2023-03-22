@@ -85,6 +85,18 @@ Not in code:
 	Add sunflower animation when it gives us sun.
 	Change normal sunflower animation.
 
+21/03/2023:
+	Fixed: The row is not ramdom.
+	Reduce the empty time between waves of zombies when all current zombies died.
+
+22/03/2023:
+	Using mt19937 for random.
+	Fix pause animation.
+	Change plants can be used for each level (lv1: just peashooter, lv2: peashooter, sunflower).
+	Add peashooter blink.
+	Random zombies' first frame.
+	
+
 
 NEED TO ADD COMMENT
 

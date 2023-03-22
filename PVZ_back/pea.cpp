@@ -16,7 +16,7 @@ For all pea and all zombie to check their collision.
 Old version: one pea hit many zombies at a time.
 Updated: one pea hit only one zombies at a time.
 */
-void handle_pea_zombie_encounter(Elements &elements, Map &map)
+void handle_pea_zombie_encounter(Elements &elements, Map &cells)
 {
     for (int i = 0; i < elements.peas.size(); i++)
     {
@@ -69,11 +69,11 @@ bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
 Move the pea: For all pea:
     + If pea can move, its location += their speed.
 */
-void move_peas(vector<Pea> &peas, Elements &elements, Map &map)
+void move_peas(vector<Pea> &peas, Elements &elements, Map &cells)
 {
     for (int i = 0; i < peas.size(); i++)
     {
-        if (can_pea_move(peas[i], elements, map))
+        if (can_pea_move(peas[i], elements, cells))
             peas[i].x_location += PEA_DX;
         else
         {
@@ -88,7 +88,7 @@ Return true if pea can move
     + If pea reach any zombie: false
     + Else: true
 */
-bool can_pea_move(Pea &pea, Elements &elements, Map &map)
+bool can_pea_move(Pea &pea, Elements &elements, Map &cells)
 {
     int right_bound = WINDOW_WIDTH;
     if (pea.x_location > right_bound)

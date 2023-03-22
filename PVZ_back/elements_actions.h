@@ -8,7 +8,7 @@
 #include "sunflower.h"
 #include "zombie.h"
 
-void handle_changes(Icons &icons, Elements &elements, Map &map, Level &level, int clk);
-void handle_movements(Elements &elements, Map &map, int clk);
+void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, int clk);
+void handle_movements(Elements &elements, Map &cells, int clk);
 void create_new_zombies(Elements &elements, Level &level);
 void update_remaining_time(Icons &icons);

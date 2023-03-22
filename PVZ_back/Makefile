@@ -18,12 +18,13 @@ flags = \
 	-lSDL2 \
 	-lSDL2_image \
 	-lSDL2_ttf \
-	-lSDL2_mixer \
-	-mwindows
+	-lSDL2_mixer
 
 game:
+	g++ -I $(SDL2_include) -L $(SDL2_lib)  *.cpp -o pvz main.res $(flags) -mwindows & pvz.exe
+debug:
 	g++ -I $(SDL2_include) -L $(SDL2_lib)  *.cpp -o pvz main.res $(flags) & pvz.exe
 SDL2:
-	g++ -I $(SDL2_include) -L $(SDL2_lib)  main.cpp $(cpps) -o main main.res $(flags) & main
+	g++ -std=c++11 -I $(SDL2_include) -L $(SDL2_lib)  main.cpp $(cpps) -o main main.res $(flags) & main
 run:
 	./pvz.exe

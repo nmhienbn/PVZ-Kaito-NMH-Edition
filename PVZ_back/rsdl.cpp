@@ -7,16 +7,16 @@ using namespace std;
 void window::init()
 {
     if (SDL_Init(0) < 0)
-        throw "SDL Init Fail";
+        printf("SDL Init Fail\n");
     int flags = (SDL_INIT_VIDEO | SDL_INIT_EVENTS);
     if (SDL_WasInit(flags) != 0)
-        throw string("SDL_WasInit Failed ") + SDL_GetError();
+        printf("SDL_WasInit Failed! Error: %s\n", SDL_GetError());
     if (SDL_InitSubSystem(flags) < 0)
-        throw string("SDL_InitSubSystem Failed ") + SDL_GetError();
+        printf("SDL_InitSubSystem Failed Error: %s\n", SDL_GetError());
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-        throw "IMG_Init Fail";
+        printf("IMG_Init Fail\n");
     if (TTF_Init() == -1)
-        throw "TTF_Init Fail";
+        printf("TTF_Init Fail\n");
 }
 
 window::window(int width, int height, string title)
@@ -24,10 +24,10 @@ window::window(int width, int height, string title)
     init();
     win = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
     if (win == NULL)
-        throw string("Window could not be created! SDL_Error: ") + SDL_GetError();
+        printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
     renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == NULL)
-        throw string("Renderer could not be created! SDL_Error: ") + SDL_GetError();
+        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     SDL_SetWindowTitle(win, title.c_str());
     // set_color(BLACK);
@@ -135,16 +135,6 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
     SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
 }
 
-/// @brief
-/// @param file_num
-/// @param sx
-/// @param sy
-/// @param sw
-/// @param sh
-/// @param dx
-/// @param dy
-/// @param dw
-/// @param dh
 void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
     SDL_Texture *res = texture_cache[file_num];
@@ -178,23 +168,6 @@ void window::draw_bg(int file_num, int x, int y)
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        // SDL_Surface *loadedSurface = IMG_Load(image_directory[file_num].c_str());
-        // if (loadedSurface == NULL)
-        // {
-        //     printf("Unable to load image %s! SDL_image Error: %s\n", image_directory[file_num].c_str(), IMG_GetError());
-        // }
-        // else
-        // {
-        //     // Color key image
-        //     SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-
-        //     // Create texture from surface pixels
-        //     res = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-        //     if (res == NULL)
-        //     {
-        //         printf("Unable to create texture from %s! SDL Error: %s\n", image_directory[file_num].c_str(), SDL_GetError());
-        //     }
-        // }
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
         if (file_num == BLACK_SCREEN_DIRECTORY)
@@ -251,7 +224,7 @@ void print_error(SDL_Texture *res)
 {
     if (res == NULL)
     {
-        throw string("SDL_WasInit Failed ") + SDL_GetError();
+        printf("SDL_WasInit Failed! Error: %s\n", SDL_GetError());
         exit(-1);
     }
 }

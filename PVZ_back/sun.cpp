@@ -6,10 +6,9 @@ Then add it into vector<Sun>
 */
 void gen_random_sun_from_sky(Elements &elements)
 {
-    srand(time(NULL));
     Sun temp;
-    temp.final_row = rand() % 5;
-    temp.final_col = rand() % 9;
+    temp.final_row = rand(0, 4);
+    temp.final_col = rand(0, 8);
     temp.y_location = INIT_SUN_Y;
     temp.wait_seconds = 0;
     elements.suns.push_back(temp);
@@ -30,7 +29,7 @@ For all the sun:
     + If the sun has not reached the ground: move it.
     + Else increase sun-wait time.
 */
-void move_suns(vector<Sun> &suns, Map &map)
+void move_suns(vector<Sun> &suns, Map &cells)
 {
     for (int i = 0; i < suns.size(); i++)
     {
@@ -46,7 +45,7 @@ void move_suns(vector<Sun> &suns, Map &map)
         }
         int row = suns[i].final_row;
         int col = suns[i].final_col;
-        int lower_limit = map[row][col].y1 + 30;
+        int lower_limit = cells[row][col].y1 + 30;
         if (suns[i].y_location + SUN_DY < lower_limit)
             suns[i].y_location += SUN_DY;
         else

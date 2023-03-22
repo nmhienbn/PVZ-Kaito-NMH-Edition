@@ -6,7 +6,7 @@ Generate a new pea at that peashooter's position.
 Old version: all peas are generated at a time.
 Updated: all peas are generated not at a time.
 */
-void fire_peas(Elements &elements, Map &map)
+void fire_peas(Elements &elements, Map &cells)
 {
     for (Peashooter &peashooter : elements.peashooters)
     {
@@ -26,7 +26,7 @@ void fire_peas(Elements &elements, Map &map)
             {
                 Pea temp;
                 temp.row = row;
-                temp.x_location = map[row][col].x2 - 10;
+                temp.x_location = cells[row][col].x2 - 10;
                 elements.peas.push_back(temp);
             }
         }
