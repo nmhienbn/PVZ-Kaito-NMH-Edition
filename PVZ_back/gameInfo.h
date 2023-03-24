@@ -25,6 +25,7 @@ using namespace std;
 #define ZOMBIE_CLK_COUNT 11              // Zombie moving frequency
 #define SUN_CLK_COUNT 4                  // Sun moving frequency
 #define PEA_CLK_COUNT 2                  // Pea moving frequency
+#define ANNOUNCER_CLK_COUNT 180
 
 #define PEASHOOTER_LOADING 400 // Peashooter loading
 #define SUNFLOWER_LOADING 350  // Sunflower loading
@@ -145,6 +146,8 @@ Moving speed of some elements
 #define TILE_WIDTH 75
 #define READY_WIDTH 300
 #define READY_HEIGHT 133
+#define HUGE_WAVE_WIDTH 720
+#define HUGE_WAVE_HEIGHT 94
 
 #define SHOVEL_WIDTH 139
 #define SHOVEL_HEIGHT 141
@@ -158,7 +161,10 @@ Moving speed of some elements
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 enum
-{ // Plant seed
+{
+    NULL_DIRECTORY = -1,
+
+    // Plant seed
     PEASHOOTER_DIRECTORY,
     PEASHOOTER_SHEET_DIRECTORY,
     PEASHOOTER_SHEET_BLINK_DIRECTORY,
@@ -221,6 +227,7 @@ enum
     START_SET_DIRECTORY,
     START_PLANT_DIRECTORY,
     BLACK_SCREEN_DIRECTORY,
+    HUGE_WAVE_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -285,9 +292,10 @@ const string image_directory[] = {
     "./image/Zombie/Zombie_eating.png",       // ZOMBIE_EATING_DIRECTORY
     "./image/Zombie/Zombie_eating_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
 
-    "./image/Annoucement/StartReady.png", // START_READY_DIRECTORY
-    "./image/Annoucement/StartSet.png",   // START_SET_DIRECTORY
-    "./image/Annoucement/StartPlant.png", // START_PLANT_DIRECTORY
-    "./image/Black_Screen.png",           // BLACK_SCREEN_DIRECTORY
+    "./image/Announcement/StartReady.png", // START_READY_DIRECTORY
+    "./image/Announcement/StartSet.png",   // START_SET_DIRECTORY
+    "./image/Announcement/StartPlant.png", // START_PLANT_DIRECTORY
+    "./image/Black_Screen.png",            // BLACK_SCREEN_DIRECTORY
+    "./image/Announcement/NextWave.png",   // HUGE_WAVE_DIRECTORY
 
 };

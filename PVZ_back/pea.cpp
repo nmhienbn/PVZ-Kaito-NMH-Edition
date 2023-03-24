@@ -30,7 +30,10 @@ void handle_pea_zombie_encounter(Elements &elements, Map &cells)
         }
         for (int j = 0; j < elements.zombies.size(); j++)
             if (apply_pea_hitting_zombie(elements, i, j))
+            {
+                play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
                 break;
+            }
     }
 }
 

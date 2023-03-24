@@ -24,6 +24,7 @@ void fire_peas(Elements &elements, Map &cells)
             }
             else if (peashooter.frame == 32)
             {
+                play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
                 Pea temp;
                 temp.row = row;
                 temp.x_location = cells[row][col].x2 - 10;
@@ -48,7 +49,7 @@ void fire_peas(Elements &elements, Map &cells)
 Check if a peashooter need to attack or not.
 Peashooter is attack only if there are some zombies in the row.
 */
-bool are_there_zombies_in_peashooter_row(Peashooter peashooter, Elements &elements)
+bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, Elements &elements)
 {
     for (Zombie zombie : elements.zombies)
         if (peashooter.row == zombie.row && zombie.x_location < ZOMBIE_INIT_X)

@@ -19,6 +19,14 @@ void display_game_layout(window &win, Player player, Icons icons, Level &level)
     win.show_text(std::to_string(player.sun_count), 85, 33, BLACK);
 }
 
+void display_game_announce(window &win, Level &level)
+{
+    if (level.announce_directory != NULL_DIRECTORY)
+    {
+        win.draw_png(level.announce_directory, (WINDOW_WIDTH - HUGE_WAVE_WIDTH) >> 1, (WINDOW_HEIGHT - HUGE_WAVE_HEIGHT) >> 1, HUGE_WAVE_WIDTH, HUGE_WAVE_HEIGHT);
+    }
+}
+
 /*
 Display the plants' seed:
     + Dim if player doesn't have enough sun or it is chosen. - Updated
@@ -64,8 +72,8 @@ void display_game_elements(window &win, Elements &elements, Map &cells)
     display_sunflowers(win, elements.sunflowers, cells);
     display_walnuts(win, elements.walnuts, cells);
 
-    display_zombies(win, elements.zombies, cells);
     display_dead_zombies(win, elements.dead_zombies, cells);
+    display_zombies(win, elements.zombies, cells);
 
     display_peas(win, elements.peas, cells);
     display_suns(win, elements.suns, cells);
@@ -214,7 +222,7 @@ void display_peashooters(window &win, vector<Peashooter> &peashooters, Map &cell
         win.draw_png(peashooters[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
         if (peashooters[i].is_attacked)
         {
-            win.draw_png(peashooters[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(peashooters[i].blink_directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
             peashooters[i].is_attacked--;
         }
         if (is_pause == false)

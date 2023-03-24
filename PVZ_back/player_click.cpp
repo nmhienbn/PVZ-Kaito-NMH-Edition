@@ -8,16 +8,23 @@ If player is choosing a plant and click on a tile: create a new plant there.
 void handle_user_click(Player &player, Level &level, Icons &icons, Elements &elements, Map &cells, const int &mouse_x, const int &mouse_y)
 {
     if (pick_sun_if_clicked_on(elements, cells, mouse_x, mouse_y, player))
+    {
+        play_sound_effect(SUN_CLICK_MUSIC_DIRECTORY);
         return;
+    }
     if (player.is_shoveling)
     {
         if (click_is_in_frontyard(cells, level, mouse_x, mouse_y))
+        {
+            play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
             remove_element_if_clicked_on(cells, elements, mouse_x, mouse_y);
+        }
         player.is_shoveling = false;
         return;
     }
     if (is_shovel_clicked(mouse_x, mouse_y))
     {
+        play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
         player.is_shoveling = true;
         player.is_choosing_a_plant = false;
         return;
@@ -29,8 +36,10 @@ void handle_user_click(Player &player, Level &level, Icons &icons, Elements &ele
     }
     if (player.is_choosing_a_plant == true)
     {
+        play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
         if (click_is_in_frontyard(cells, level, mouse_x, mouse_y))
         {
+            play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
             create_new_plant(player, cells, elements, icons, mouse_x, mouse_y);
             player.is_choosing_a_plant = false;
             return;

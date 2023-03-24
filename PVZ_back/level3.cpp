@@ -7,7 +7,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
     int start_time = SDL_GetTicks();
     if (!is_game_started)
     {
-        win.clear_renderer();
+        play_music(R_S_P_MUSIC_DIRECTORY);
         if (clk < 30)
         {
             display_ready_set_plant(win, START_READY_DIRECTORY, level);
@@ -16,7 +16,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         {
             display_ready_set_plant(win, START_SET_DIRECTORY, level);
         }
-        else if (clk < 90)
+        else if (clk < 180)
         {
             display_ready_set_plant(win, START_PLANT_DIRECTORY, level);
         }
@@ -31,6 +31,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         if (has_player_lost(game_characters))
         {
             display_losing_message(win, game_characters, cells, level);
+            play_music(LOSE_MUSIC_DIRECTORY, 0);
             win.update_screen();
             HANDLE(
                 QUIT(quit = true);
@@ -40,7 +41,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                     {
                         level.waves_finished = false;
                         is_level_chosen = false;
-                        Mix_HaltMusic();
+                        play_music(OPENING_MUSIC_DIRECTORY);
                         reset_level(game_characters, cells);
                     }
                 });
@@ -51,6 +52,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         if (has_player_won(level, game_characters))
         {
             display_winning_message(win, game_characters, cells, level);
+            play_music(WIN_MUSIC_DIRECTORY, 0);
             win.update_screen();
             HANDLE(
                 QUIT(quit = true);
@@ -62,7 +64,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                         level.waves_finished = false;
                         is_level_chosen = false;
                         reset_level(game_characters, cells);
-                        Mix_HaltMusic();
+                        play_music(OPENING_MUSIC_DIRECTORY);
                     }
                 });
 
@@ -75,13 +77,13 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         }
         else
         {
-            win.clear_renderer();
             display_game_layout(win, player, icons, level);
             display_game_elements(win, game_characters, cells);
+            display_game_announce(win, level);
             display_chosen_plant(win, player, icons);
             handle_movements(game_characters, cells, clk);
             handle_changes(icons, game_characters, cells, level, clk);
-            play_in_game_music();
+            play_music(BACKGROUND_MUSIC_DIRECTORY);
         }
     }
     HANDLE(

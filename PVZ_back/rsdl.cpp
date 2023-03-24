@@ -154,7 +154,7 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
             file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
             file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
         {
-            SDL_SetTextureAlphaMod(res, 50);
+            SDL_SetTextureAlphaMod(res, 70);
         }
         texture_cache[file_num] = res;
     }
@@ -219,6 +219,13 @@ void window::draw_rect(int x, int y, int width, int height, RGB color)
 void window::clear_renderer()
 {
     SDL_RenderClear(renderer);
+}
+void window::set_texture_alpha(int file_num, int a)
+{
+    if (texture_cache[file_num] != NULL)
+    {
+        SDL_SetTextureAlphaMod(texture_cache[file_num], a);
+    }
 }
 void print_error(SDL_Texture *res)
 {

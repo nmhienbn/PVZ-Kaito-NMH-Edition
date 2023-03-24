@@ -176,6 +176,7 @@ struct Level
     bool waves_finished;
 
     int background_directory = BACKGROUND_DIRECTORY;
+    int announce_directory = NULL_DIRECTORY;
 
     vector<vector<int>> zombie_distr_for_wave;
     vector<int> wave_zombie_count;
@@ -198,10 +199,12 @@ const Button TAP_TO_START(230, 796, 520, 585);
 const Button LEVEL_1(15, 240, 40, 205);
 const Button LEVEL_2(260, 485, 40, 205);
 const Button LEVEL_3(505, 730, 40, 205);
+const Button LEVEL_4(750, 975, 40, 205);
 const Button ICON_BAR(20, 125, 100, 310);
 const Button ICON_BAR_LV1(20, 125, 100, 165);
 const Button ICON_BAR_LV2(20, 125, 100, 235);
 const Button MENU_ICON(850, 975, 0, 35);
+const Button MY_GAME(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
 #define MENU_X1 325
 #define MENU_X2 725
 #define MENU_Y1 66

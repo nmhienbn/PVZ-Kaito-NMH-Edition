@@ -51,6 +51,7 @@ public:
 	void draw_point(int x, int y, RGB color = WHITE);
 	void draw_rect(int x, int y, int width, int height, RGB color = WHITE);
 	void clear_renderer();
+	void set_texture_alpha(int file_num, int a);
 
 private:
 	SDL_Window *win;

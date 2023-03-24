@@ -152,6 +152,7 @@ Initialize game:
 void init_game(window &win, Level &level, Player &player, Map &cells)
 {
     display_starting_screen(win);
+    play_music(OPENING_MUSIC_DIRECTORY);
     read_savedata(player, level);
     cells = create_a_collection_of_blocks();
 }
@@ -199,7 +200,7 @@ bool has_player_lost(Elements &elements)
 {
     for (int i = 0; i < elements.zombies.size(); i++)
     {
-        if (elements.zombies[i].x_location < X_UPPER_LEFT + 5)
+        if (elements.zombies[i].x_location < X_UPPER_LEFT - 30)
             return true;
     }
     return false;
@@ -243,7 +244,7 @@ void display_starting_screen(window &win)
         win.update_screen();
         DELAY(10);
     }
-    win.clear_renderer();
+    // win.clear_renderer();
 }
 
 void load_level(Player &player, Level &level)
@@ -260,7 +261,7 @@ Display choosing level screen.
 */
 void display_choosing_level_screen(window &win, Level &level, const int &unlocked_level, bool &level_chosen, bool &quit)
 {
-    win.clear_renderer();
+    // win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     win.show_text("Level 1", 75, 170);
     if (unlocked_level >= 2)
@@ -276,6 +277,13 @@ void display_choosing_level_screen(window &win, Level &level, const int &unlocke
     {
         win.show_text("Level 3", 565, 170, BLACK);
         display_level_is_locked(win, LEVEL_3);
+    }
+    if (unlocked_level >= 4)
+        win.show_text("Level 4", 810, 170);
+    else
+    {
+        win.show_text("Level 4", 810, 170, BLACK);
+        display_level_is_locked(win, LEVEL_4);
     }
     HANDLE(
         QUIT(quit = true; exit(0););
@@ -296,6 +304,12 @@ void display_choosing_level_screen(window &win, Level &level, const int &unlocke
             else if (unlocked_level >= 3 && LEVEL_3.is_mouse_in(mouse_x, mouse_y))
             {
                 level.level_num = 3;
+                level.background_directory = BACKGROUND_DIRECTORY;
+                level_chosen = true;
+            }
+            else if (unlocked_level >= 4 && LEVEL_4.is_mouse_in(mouse_x, mouse_y))
+            {
+                level.level_num = 4;
                 level.background_directory = BACKGROUND_DIRECTORY;
                 level_chosen = true;
             }

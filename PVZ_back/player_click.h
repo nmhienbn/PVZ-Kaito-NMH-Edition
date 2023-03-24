@@ -2,6 +2,7 @@
 #include "rsdl.hpp"
 #include "gameInfo.h"
 #include "elements.h"
+#include "music.h"
 
 void handle_user_click(Player &player, Level &level, Icons &icons, Elements &elements, Map &cells, const int &mouse_x, const int &mouse_y);
 void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mouse_x, const int &mouse_y);

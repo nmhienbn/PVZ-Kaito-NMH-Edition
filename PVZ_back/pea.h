@@ -1,5 +1,6 @@
 #pragma once
 #include "elements.h"
+#include "music.h"
 
 void handle_pea_zombie_encounter(Elements &elements, Map &cells);
 bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind);

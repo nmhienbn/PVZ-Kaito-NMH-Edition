@@ -1,5 +1,6 @@
 #pragma once
 #include "draw_elements.h"
+#include "music.h"
 
 #define SAVED_DATA_DIRECTORY "savedata.txt"
 

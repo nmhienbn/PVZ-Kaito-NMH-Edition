@@ -1,4 +1,5 @@
 #include "elements_actions.h"
+static bool zombie_has_coming = false;
 
 /*Updated
 Handles all the changes to the game:
@@ -17,7 +18,13 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
 
     handle_pea_zombie_encounter(elements, cells);
     if (level.waves_finished == false && clk % ZOMBIE_CREATE_CLK_COUNT == 0)
+    {
         create_new_zombies(elements, level);
+    }
+    else if (clk % ZOMBIE_CREATE_CLK_COUNT == ANNOUNCER_CLK_COUNT)
+    {
+        level.announce_directory = NULL_DIRECTORY;
+    }
     if (clk % BITE_CLK_COUNT == 0)
     {
         handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
@@ -55,6 +62,20 @@ void create_new_zombies(Elements &elements, Level &level)
         {
             // Generate zombies for current wave and current second.
             int zombie_cnt = level.zombie_distr_for_wave[level.cur_wave][level.cur_sec];
+            if (level.cur_wave == 0 && level.cur_sec == 0)
+                zombie_has_coming = false;
+            if (zombie_has_coming == false)
+            {
+                if (zombie_cnt > 0)
+                {
+                    play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
+                    zombie_has_coming = true;
+                }
+            }
+            else if (zombie_cnt > 0)
+            {
+                play_sound_effect(rand(GROAN1_MUSIC_DIRECTORY, GROAN5_MUSIC_DIRECTORY));
+            }
             for (int i = 0; i < zombie_cnt; i++)
             {
                 // Random appear row
@@ -70,11 +91,15 @@ void create_new_zombies(Elements &elements, Level &level)
             }
             // Move to the next second and maybe next wave
             if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])
+            {
                 level.cur_sec++;
+            }
             else if (level.cur_wave + 1 < level.wave_count)
             {
                 level.cur_sec = 0;
                 level.cur_wave++;
+                play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
+                level.announce_directory = HUGE_WAVE_DIRECTORY;
             }
             else
             {

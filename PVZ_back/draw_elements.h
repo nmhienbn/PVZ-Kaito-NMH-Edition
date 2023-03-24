@@ -5,6 +5,7 @@
 
 void display_game_elements(window &win, Elements &elements, Map &cells);
 void display_game_layout(window &win, Player player, Icons icons, Level &level);
+void display_game_announce(window &win, Level &level);
 void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &level);
 void display_game_paused_elements(window &win, Elements &elements, Map &cells, Level &level);
 void display_winning_message(window &win, Elements &elements, Map &cells, Level &level);
