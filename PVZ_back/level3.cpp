@@ -77,6 +77,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         }
         else
         {
+            win.clear_renderer();
             display_game_layout(win, player, icons, level);
             display_game_elements(win, game_characters, cells);
             display_game_announce(win, level);

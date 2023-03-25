@@ -32,7 +32,7 @@ int main(int argv, char **args)
                 load_level(player, level);
                 clk = 0;
                 is_game_started = false;
-                SDL_Delay(3500);
+                win.fade_out();
             }
         }
         else

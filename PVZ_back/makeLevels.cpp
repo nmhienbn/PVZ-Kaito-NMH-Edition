@@ -152,7 +152,6 @@ Initialize game:
 void init_game(window &win, Level &level, Player &player, Map &cells)
 {
     display_starting_screen(win);
-    play_music(OPENING_MUSIC_DIRECTORY);
     read_savedata(player, level);
     cells = create_a_collection_of_blocks();
 }
@@ -229,6 +228,7 @@ void display_starting_screen(window &win)
     bool game_started = false;
     bool quit = false;
     win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    play_music(OPENING_MUSIC_DIRECTORY);
     while (!quit && !game_started)
     {
         HANDLE(
@@ -244,6 +244,7 @@ void display_starting_screen(window &win)
         win.update_screen();
         DELAY(10);
     }
+    win.fade_out();
     // win.clear_renderer();
 }
 

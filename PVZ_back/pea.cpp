@@ -6,7 +6,7 @@
 bool has_pea_reached_zombie(Pea pea, Zombie zombie)
 {
     if (zombie.row == pea.row &&
-        pea.x_location + PEA_DX > zombie.x_location + 50)
+        pea.x_location > zombie.x_location + 70)
         return true;
     return false;
 }
@@ -55,13 +55,21 @@ bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
             elements.peas[p_ind].directory_num = PEA_EXPLODE_DIRECTORY;
         }
         // determine_zombie_appearanc(elements.zombies[z_ind]);
+
         if (elements.zombies[z_ind].health == 0)
         {
-            DeadZombie tmp;
-            tmp.row = elements.zombies[z_ind].row;
-            tmp.x_location = elements.zombies[z_ind].x_location - DEAD_ZOMBIE_WIDTH + ZOMBIE_G_WIDTH / 2;
-            elements.dead_zombies.push_back(tmp);
-            elements.zombies.erase(elements.zombies.begin() + z_ind);
+            if (elements.zombies[z_ind].type >= 2)
+            {
+                elements.zombies[z_ind] = Zombie(NORMAL_TYPE, elements.zombies[z_ind].row, elements.zombies[z_ind].x_location);
+            }
+            else
+            {
+                DeadZombie tmp;
+                tmp.row = elements.zombies[z_ind].row;
+                tmp.x_location = elements.zombies[z_ind].x_location;
+                elements.dead_zombies.push_back(tmp);
+                elements.zombies.erase(elements.zombies.begin() + z_ind);
+            }
         }
         return true;
     }

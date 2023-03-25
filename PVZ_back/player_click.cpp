@@ -220,8 +220,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
     {
         if (is_click_made_in_element_block(elements.sunflowers[i].row, elements.sunflowers[i].col, mouse_x, mouse_y, cells))
         {
-            elements.sunflowers.erase(elements.sunflowers.begin() + i);
-            cells[elements.sunflowers[i].row][elements.sunflowers[i].col].is_planted = false;
+            remove_plant(cells, elements.sunflowers, i);
             return;
         }
     }
@@ -229,8 +228,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
     {
         if (is_click_made_in_element_block(elements.peashooters[i].row, elements.peashooters[i].col, mouse_x, mouse_y, cells))
         {
-            elements.peashooters.erase(elements.peashooters.begin() + i);
-            cells[elements.peashooters[i].row][elements.peashooters[i].col].is_planted = false;
+            remove_plant(cells, elements.peashooters, i);
             return;
         }
     }
@@ -238,8 +236,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
     {
         if (is_click_made_in_element_block(elements.walnuts[i].row, elements.walnuts[i].col, mouse_x, mouse_y, cells))
         {
-            elements.walnuts.erase(elements.walnuts.begin() + i);
-            cells[elements.walnuts[i].row][elements.walnuts[i].col].is_planted = false;
+            remove_plant(cells, elements.walnuts, i);
             return;
         }
     }

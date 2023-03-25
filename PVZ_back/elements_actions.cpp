@@ -52,8 +52,6 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
 void create_new_zombies(Elements &elements, Level &level)
 {
     Zombie temp;
-    temp.health = ZOMBIE_NORMAL_HEALTH_LIMIT;
-    temp.is_moving = true;
 
     if (level.waves_finished == false)
     {
@@ -74,19 +72,15 @@ void create_new_zombies(Elements &elements, Level &level)
             }
             else if (zombie_cnt > 0)
             {
-                play_sound_effect(rand(GROAN1_MUSIC_DIRECTORY, GROAN5_MUSIC_DIRECTORY));
+                play_sound_effect(GROAN_MUSIC_DIRECTORY);
             }
             for (int i = 0; i < zombie_cnt; i++)
             {
-                // Random appear row
-                temp.row = rand(0, 4);
-                temp.frame = rand(0, ZOMBIE_FRAME * ZOMBIE_N_SHEET - 1);
+                temp = Zombie(NORMAL_TYPE);
                 if (level.level_num == 1)
                     temp.row = 2;
                 else if (level.level_num == 2)
                     temp.row = rand(1, 3);
-                // Random delay time to appear
-                temp.x_location = WINDOW_WIDTH + rand(0, 100);
                 elements.zombies.push_back(temp);
             }
             // Move to the next second and maybe next wave
@@ -98,8 +92,11 @@ void create_new_zombies(Elements &elements, Level &level)
             {
                 level.cur_sec = 0;
                 level.cur_wave++;
-                play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
-                level.announce_directory = HUGE_WAVE_DIRECTORY;
+                if (level.is_huge_wave())
+                {
+                    play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
+                    level.announce_directory = HUGE_WAVE_DIRECTORY;
+                }
             }
             else
             {

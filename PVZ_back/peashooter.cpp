@@ -25,9 +25,7 @@ void fire_peas(Elements &elements, Map &cells)
             else if (peashooter.frame == 32)
             {
                 play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-                Pea temp;
-                temp.row = row;
-                temp.x_location = cells[row][col].x2 - 10;
+                Pea temp(1, row, cells[row][col].x2 - 10);
                 elements.peas.push_back(temp);
             }
         }

@@ -30,6 +30,7 @@ using namespace std;
 #define PEASHOOTER_LOADING 400 // Peashooter loading
 #define SUNFLOWER_LOADING 350  // Sunflower loading
 #define WALNUT_LOADING 1300    // Walnut loading
+#define SNOWPEA_LOADING 400    // Peashooter loading
 #define MAX_TIME_BLINK 5
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
@@ -40,6 +41,7 @@ using namespace std;
 #define PEASHOOTER_PRICE 100
 #define SUNFLOWER_PRICE 50
 #define WALNUT_PRICE 50
+#define SNOWPEA_PRICE 150
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 /*
@@ -55,6 +57,7 @@ Moving speed of some elements
 #define WALNUT_BITE_LIMIT 72
 #define SUNFLOWER_BITE_LIMIT 20
 #define PEASHOOTER_BITE_LIMIT 20
+#define SNOWPEA_BITE_LIMIT 20
 #define ZOMBIE_NORMAL_HEALTH_LIMIT 10
 
 /*Playground elements size*/
@@ -74,6 +77,7 @@ Moving speed of some elements
 #define PEASHOOTER_ICON_Y1 100
 #define SUNFLOWER_ICON_Y1 170
 #define WALNUT_ICON_Y1 240
+#define SNOWPEA_ICON_Y1 310
 #define SUN_BAR_WIDTH 180
 #define SUN_BAR_HEIGHT 360
 
@@ -94,18 +98,12 @@ Moving speed of some elements
 #define PEASHOOTER_HEIGHT 177
 #define PEASHOOTER_G_WIDTH 200
 #define PEASHOOTER_G_HEIGHT 157 //**
-#define PEASHOOTER_N_SHEET 60
-#define PEASHOOTER_C_SHEET 8
 
 #define SUNFLOWER_WIDTH 215
 #define SUNFLOWER_HEIGHT 251
-#define SUNFLOWER_N_SHEET 60
-#define SUNFLOWER_C_SHEET 8
 
 #define SUNFLOWER_H_WIDTH 215
 #define SUNFLOWER_H_HEIGHT 251
-#define SUNFLOWER_H_N_SHEET 15
-#define SUNFLOWER_H_C_SHEET 8
 #define SUNFLOWER_F_SHEET 6
 
 #define WALNUT_WIDTH 185
@@ -113,31 +111,19 @@ Moving speed of some elements
 #define WALNUT_G_WIDTH 200
 #define WALNUT_G_HEIGHT 200
 
-#define ZOMBIE_WIDTH 92
-#define ZOMBIE_HEIGHT 126
-
 #define ZOMBIE_FRAME 3
-#define ZOMBIE_C_SHEET 6
-#define ZOMBIE_N_SHEET 22
+#define ZOMBIE_WIDTH 166
+#define ZOMBIE_HEIGHT 144
+#define ZOMBIE_G_WIDTH 166
+#define ZOMBIE_G_HEIGHT 144
 
-#define ZOMBIE_G_WIDTH 92
-#define ZOMBIE_G_HEIGHT 126
-
-#define ZOMBIE_EATING_FRAME 5
-#define ZOMBIE_EATING_C_SHEET 7
-#define ZOMBIE_EATING_N_SHEET 21
+#define ZOMBIE_EATING_FRAME 10
 
 #define ZOMBIE_DIE_FRAME 10
 #define DEAD_ZOMBIE_FRAMES 12
-#define DEAD_ZOMBIE_WIDTH 166
-#define DEAD_ZOMBIE_HEIGHT 144
-#define DEAD_ZOMBIE_C_SHEET 3
-#define DEAD_ZOMBIE_N_SHEET 10
 
 #define HEAD_ZOMBIE_WIDTH 150
 #define HEAD_ZOMBIE_HEIGHT 187
-#define HEAD_ZOMBIE_C_SHEET 12
-#define HEAD_ZOMBIE_N_SHEET 12
 #define HEAD_ZOMBIE_G_WIDTH 125
 #define HEAD_ZOMBIE_G_HEIGHT 155
 
@@ -160,7 +146,10 @@ Moving speed of some elements
 // Directories
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-enum
+#define ZOMBIE_SHEET_DIRECTORY rand(ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK2_DIRECTORY)
+#define NUMBER_OF_ZOMBIE_MOVING_SHEET 2
+
+enum ImageType
 {
     NULL_DIRECTORY = -1,
 
@@ -187,15 +176,23 @@ enum
     WALNUT_3_BLINK_DIRECTORY,
     WALNUT_4_BLINK_DIRECTORY,
 
+    SNOWPEA_DIRECTORY,
+    SNOWPEA_SHEET_DIRECTORY,
+    SNOWPEA_ATTACK_DIRECTORY,
+
     PEASHOOTER_ICON_BRIGHT_DIRECTORY,
     PEASHOOTER_ICON_DIM_DIRECTORY,
     SUNFLOWER_ICON_BRIGHT_DIRECTORY,
     SUNFLOWER_ICON_DIM_DIRECTORY,
     WALNUT_ICON_BRIGHT_DIRECTORY,
     WALNUT_ICON_DIM_DIRECTORY,
+    SNOWPEA_ICON_BRIGHT_DIRECTORY,
+    SNOWPEA_ICON_DIM_DIRECTORY,
 
     PEA_DIRECTORY,
     PEA_EXPLODE_DIRECTORY,
+    SNOWZ_PEA_DIRECTORY,
+    SNOWZ_PEA_EXPLODE_DIRECTORY,
 
     STARTING_SCREEN_DIRECTORY,
     CHOOSE_LEVELS_DIRECTORY,
@@ -214,14 +211,24 @@ enum
     MENU_DIRECTORY,
     CONTINUE_DIRECTORY,
 
-    ZOMBIE_HEALTHY_DIRECTORY,
-    ZOMBIE_SHEET_DIRECTORY,
-    ZOMBIE_BLINK_SHEET_DIRECTORY,
-    ZOMBIE_INJURED_DIRECTORY,
+    ZOMBIE_WALK1_DIRECTORY,
+    ZOMBIE_WALK2_DIRECTORY,
+    ZOMBIE_WALK1_BLINK_DIRECTORY,
+    ZOMBIE_WALK2_BLINK_DIRECTORY,
     ZOMBIE_DIE_DIRECTORY,
     ZOMBIE_HEAD_DIRECTORY,
     ZOMBIE_EATING_DIRECTORY,
     ZOMBIE_EATING_BLINK_DIRECTORY,
+
+    CONE_ZOMBIE_WALK_DIRECTORY,
+    CONE_ZOMBIE_WALK_BLINK_DIRECTORY,
+    CONE_ZOMBIE_EATING_DIRECTORY,
+    CONE_ZOMBIE_EATING_BLINK_DIRECTORY,
+
+    BUCKET_ZOMBIE_WALK_DIRECTORY,
+    BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY,
+    BUCKET_ZOMBIE_EATING_DIRECTORY,
+    BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY,
 
     START_READY_DIRECTORY,
     START_SET_DIRECTORY,
@@ -256,15 +263,23 @@ const string image_directory[] = {
     "./image/Plant_sheet/Walnut-sheet-3_blink.png", // WALNUT_3_BLINK_DIRECTORY
     "./image/Plant_sheet/Walnut-sheet-4_blink.png", // WALNUT_4_BLINK_DIRECTORY
 
+    "./image/Plant_sheet/SnowPea.png",        // SNOWPEA_DIRECTORY
+    "./image/Plant_sheet/snowpea_sheet.png",  // SNOWPEA_SHEET_DIRECTORY
+    "./image/Plant_sheet/snowpea_attack.png", // SNOWPEA_ATTACK_DIRECTORY
+
     "./image/Plant_seed/icon_peashooter_100.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/icon_peashooter_100_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
     "./image/Plant_seed/icon_sunflower.png",          // SUNFLOWER_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/icon_sunflower_dim.png",      // SUNFLOWER_ICON_DIM_DIRECTORY
     "./image/Plant_seed/icon_walnut.png",             // WALNUT_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/icon_walnut_dim.png",         // WALNUT_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/icon_snowpea.png",            // SNOWPEA_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/icon_snowpea_dim.png",        // SNOWPEA_ICON_DIM_DIRECTORY
 
-    "./image/Bullets/Pea/pea.png",         // PEA_DIRECTORY
-    "./image/Bullets/Pea/pea_explode.png", // PEA_EXPLODE_DIRECTORY
+    "./image/Bullets/Pea/pea.png",               // PEA_DIRECTORY
+    "./image/Bullets/Pea/pea_explode.png",       // PEA_EXPLODE_DIRECTORY
+    "./image/Bullets/Pea/snowz_pea.png",         // SNOWZ_PEA_DIRECTORY
+    "./image/Bullets/Pea/snowz_pea_explode.png", // SNOWZ_PEA_EXPLODE_DIRECTORY
 
     "./image/Background/Starting_Screen.png", // STARTING_SCREEN_DIRECTORY
     "./image/Background/Choose_levels.png",   // CHOOSE_LEVELS_DIRECTORY
@@ -283,19 +298,201 @@ const string image_directory[] = {
     "./image/Icons/menu.png",      // MENU_DIRECTORY
     "./image/Icons/continue.png",  // CONTINUE_DIRECTORY
 
-    "./image/Zombie/Zombie_healthy.png",      // ZOMBIE_HEALTHY_DIRECTORY
-    "./image/Zombie/ZOMBIEWALK1.png",         // ZOMBIE_SHEET_DIRECTORY
-    "./image/Zombie/ZOMBIEWALK1_blink.png",   // ZOMBIE_BLINK_SHEET_DIRECTORY
-    "./image/Zombie/Zombie_Injured.png",      // ZOMBIE_INJURED_DIRECTORY
-    "./image/Zombie/Zombie_die.png",          // ZOMBIE_DIE_DIRECTORY
-    "./image/Zombie/Zombie_head.png",         // ZOMBIE_HEAD_DIRECTORY
-    "./image/Zombie/Zombie_eating.png",       // ZOMBIE_EATING_DIRECTORY
-    "./image/Zombie/Zombie_eating_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk1.png",        // ZOMBIE_WALK1_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk2.png",        // ZOMBIE_WALK2_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk1_blink.png",  // ZOMBIE_WALK1_BLINK_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk2_blink.png",  // ZOMBIE_WALK2_BLINK_DIRECTORY
+    "./image/Zombie/Normal/Zombie_die.png",         // ZOMBIE_DIE_DIRECTORY
+    "./image/Zombie/Normal/Zombie_head.png",        // ZOMBIE_HEAD_DIRECTORY
+    "./image/Zombie/Normal/ZombieAttack.png",       // ZOMBIE_EATING_DIRECTORY
+    "./image/Zombie/Normal/ZombieAttack_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
+
+    "./image/Zombie/Cone/ConeZombieWalk.png",         // CONE_ZOMBIE_WALK_DIRECTORY
+    "./image/Zombie/Cone/ConeZombieWalk_blink.png",   // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
+    "./image/Zombie/Cone/ConeZombieAttack.png",       // CONE_ZOMBIE_EATING_DIRECTORY
+    "./image/Zombie/Cone/ConeZombieAttack_blink.png", // CONE_ZOMBIE_EATING_BLINK_DIRECTORY
+
+    "./image/Zombie/Bucket/BucketZombieWalk.png",         // BUCKET_ZOMBIE_WALK_DIRECTORY
+    "./image/Zombie/Bucket/BucketZombieWalk_blink.png",   // BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY
+    "./image/Zombie/Bucket/BucketZombieAttack.png",       // BUCKET_ZOMBIE_EATING_DIRECTORY
+    "./image/Zombie/Bucket/BucketZombieAttack_blink.png", // BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY
 
     "./image/Announcement/StartReady.png", // START_READY_DIRECTORY
     "./image/Announcement/StartSet.png",   // START_SET_DIRECTORY
     "./image/Announcement/StartPlant.png", // START_PLANT_DIRECTORY
     "./image/Black_Screen.png",            // BLACK_SCREEN_DIRECTORY
     "./image/Announcement/NextWave.png",   // HUGE_WAVE_DIRECTORY
+
+};
+
+const int N_SHEET[] = {
+    // Plant sheet
+    0,  // PEASHOOTER_DIRECTORY
+    60, // PEASHOOTER_SHEET_DIRECTORY
+    60, // PEASHOOTER_SHEET_BLINK_DIRECTORY
+    60, // PEASHOOTER_ATTACK_DIRECTORY
+    60, // PEASHOOTER_ATTACK_BLINK_DIRECTORY
+
+    0,  // SUNFLOWER_DIRECTORY
+    60, // SUNFLOWER_SHEET_DIRECTORY
+    60, // SUNFLOWER_SHEET_BLINK_DIRECTORY
+    15, // SUNFLOWER_HAPPY_DIRECTORY
+    15, // SUNFLOWER_HAPPY_BLINK_DIRECTORY
+
+    0, // WALNUT_DIRECTORY
+    3, // WALNUT_1_DIRECTORY
+    2, // WALNUT_2_DIRECTORY
+    2, // WALNUT_3_DIRECTORY
+    2, // WALNUT_4_DIRECTORY
+    3, // WALNUT_1_BLINK_DIRECTORY
+    2, // WALNUT_2_BLINK_DIRECTORY
+    2, // WALNUT_3_BLINK_DIRECTORY
+    2, // WALNUT_4_BLINK_DIRECTORY
+
+    0,  // SNOWPEA_DIRECTORY
+    60, // SNOWPEA_SHEET_DIRECTORY
+    60, // SNOWPEA_ATTACK_DIRECTORY
+
+    0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
+    0, // PEASHOOTER_ICON_DIM_DIRECTORY
+    0, // SUNFLOWER_ICON_BRIGHT_DIRECTORY
+    0, // SUNFLOWER_ICON_DIM_DIRECTORY
+    0, // WALNUT_ICON_BRIGHT_DIRECTORY
+    0, // WALNUT_ICON_DIM_DIRECTORY
+    0, // SNOWPEA_ICON_BRIGHT_DIRECTORY
+    0, // SNOWPEA_ICON_DIM_DIRECTORY
+
+    0, // PEA_DIRECTORY
+    0, // PEA_EXPLODE_DIRECTORY
+    0, // SNOWZ_PEA_DIRECTORY
+    0, // SNOWZ_PEA_EXPLODE_DIRECTORY
+
+    0, // STARTING_SCREEN_DIRECTORY
+    0, // CHOOSE_LEVELS_DIRECTORY
+    0, // BACKGROUND_DIRECTORY
+    0, // BACKGROUND_LV1_DIRECTORY
+    0, // BACKGROUND_LV2_DIRECTORY
+    0, // LOSING_MESSAGE_DIRECTORY
+    0, // WINNING_MESSAGE_DIRECTORY
+
+    0, // SUN_DIRECTORY
+    0, // SUN_BAR_DIRECTORY
+    0, // ICON_BAR_DIRECTORY
+    0, // SHOVEL_BAR_DIRECTORY
+    0, // SHOVEL_DIRECTORY
+    0, // MENU_ICON_DIRECTORY
+    0, // MENU_DIRECTORY
+    0, // CONTINUE_DIRECTORY
+
+    22, // ZOMBIE_WALK1_DIRECTORY
+    31, // ZOMBIE_WALK2_DIRECTORY
+    22, // ZOMBIE_WALK1_BLINK_DIRECTORY,
+    31, // ZOMBIE_WALK2_BLINK_DIRECTORY
+    10, // ZOMBIE_DIE_DIRECTORY
+    12, // ZOMBIE_HEAD_DIRECTORY
+    11, // ZOMBIE_EATING_DIRECTORY
+    11, // ZOMBIE_EATING_BLINK_DIRECTORY
+
+    21, // CONE_ZOMBIE_WALK_DIRECTORY
+    21, // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
+    11, // CONE_ZOMBIE_EATING_DIRECTORY
+    11, // CONE_ZOMBIE_EATING_BLINK_DIRECTORY
+
+    15, // BUCKET_ZOMBIE_WALK_DIRECTORY
+    15, // BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY
+    11, // BUCKET_ZOMBIE_EATING_DIRECTORY
+    11, // BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY
+
+    0, // START_READY_DIRECTORY
+    0, // START_SET_DIRECTORY
+    0, // START_PLANT_DIRECTORY
+    0, // BLACK_SCREEN_DIRECTORY
+    0, // HUGE_WAVE_DIRECTORY
+
+};
+
+const int C_SHEET[] = {
+    // Plant sheet
+    0, // PEASHOOTER_DIRECTORY
+    8, // PEASHOOTER_SHEET_DIRECTORY
+    8, // PEASHOOTER_SHEET_BLINK_DIRECTORY
+    8, // PEASHOOTER_ATTACK_DIRECTORY
+    8, // PEASHOOTER_ATTACK_BLINK_DIRECTORY
+
+    0, // SUNFLOWER_DIRECTORY
+    8, // SUNFLOWER_SHEET_DIRECTORY
+    8, // SUNFLOWER_SHEET_BLINK_DIRECTORY
+    8, // SUNFLOWER_HAPPY_DIRECTORY
+    8, // SUNFLOWER_HAPPY_BLINK_DIRECTORY
+
+    0, // WALNUT_DIRECTORY
+    3, // WALNUT_1_DIRECTORY
+    2, // WALNUT_2_DIRECTORY
+    2, // WALNUT_3_DIRECTORY
+    2, // WALNUT_4_DIRECTORY
+    3, // WALNUT_1_BLINK_DIRECTORY
+    2, // WALNUT_2_BLINK_DIRECTORY
+    2, // WALNUT_3_BLINK_DIRECTORY
+    2, // WALNUT_4_BLINK_DIRECTORY
+
+    0, // SNOWPEA_DIRECTORY
+    8, // SNOWPEA_SHEET_DIRECTORY
+    8, // SNOWPEA_ATTACK_DIRECTORY
+
+    0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
+    0, // PEASHOOTER_ICON_DIM_DIRECTORY
+    0, // SUNFLOWER_ICON_BRIGHT_DIRECTORY
+    0, // SUNFLOWER_ICON_DIM_DIRECTORY
+    0, // WALNUT_ICON_BRIGHT_DIRECTORY
+    0, // WALNUT_ICON_DIM_DIRECTORY
+    0, // SNOWPEA_ICON_BRIGHT_DIRECTORY
+    0, // SNOWPEA_ICON_DIM_DIRECTORY
+
+    0, // PEA_DIRECTORY
+    0, // PEA_EXPLODE_DIRECTORY
+    0, // SNOWZ_PEA_DIRECTORY
+    0, // SNOWZ_PEA_EXPLODE_DIRECTORY
+
+    0, // STARTING_SCREEN_DIRECTORY
+    0, // CHOOSE_LEVELS_DIRECTORY
+    0, // BACKGROUND_DIRECTORY
+    0, // BACKGROUND_LV1_DIRECTORY
+    0, // BACKGROUND_LV2_DIRECTORY
+    0, // LOSING_MESSAGE_DIRECTORY
+    0, // WINNING_MESSAGE_DIRECTORY
+
+    0, // SUN_DIRECTORY
+    0, // SUN_BAR_DIRECTORY
+    0, // ICON_BAR_DIRECTORY
+    0, // SHOVEL_BAR_DIRECTORY
+    0, // SHOVEL_DIRECTORY
+    0, // MENU_ICON_DIRECTORY
+    0, // MENU_DIRECTORY
+    0, // CONTINUE_DIRECTORY
+
+    8,  // ZOMBIE_WALK1_DIRECTORY
+    8,  // ZOMBIE_WALK2_DIRECTORY
+    8,  // ZOMBIE_WALK1_BLINK_DIRECTORY,
+    8,  // ZOMBIE_WALK2_BLINK_DIRECTORY
+    3,  // ZOMBIE_DIE_DIRECTORY
+    12, // ZOMBIE_HEAD_DIRECTORY
+    8,  // ZOMBIE_EATING_DIRECTORY
+    8,  // ZOMBIE_EATING_BLINK_DIRECTORY
+
+    8, // CONE_ZOMBIE_WALK_DIRECTORY
+    8, // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
+    8, // CONE_ZOMBIE_EATING_DIRECTORY
+    8, // CONE_ZOMBIE_EATING_BLINK_DIRECTORY
+
+    8, // BUCKET_ZOMBIE_WALK_DIRECTORY
+    8, // BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY
+    8, // BUCKET_ZOMBIE_EATING_DIRECTORY
+    8, // BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY
+
+    0, // START_READY_DIRECTORY
+    0, // START_SET_DIRECTORY
+    0, // START_PLANT_DIRECTORY
+    0, // BLACK_SCREEN_DIRECTORY
+    0, // HUGE_WAVE_DIRECTORY
 
 };

@@ -4,6 +4,35 @@
 
 using namespace std;
 
+void set_default_alpha(int file_num, SDL_Texture *res)
+{
+    if (file_num == PEASHOOTER_DIRECTORY ||
+        file_num == SUNFLOWER_DIRECTORY ||
+        file_num == WALNUT_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 150);
+    }
+    else if (file_num == BLACK_SCREEN_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 150);
+    }
+    else if (file_num == ZOMBIE_WALK1_BLINK_DIRECTORY ||
+             file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_WALK_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY ||
+             file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
+             file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == WALNUT_1_BLINK_DIRECTORY ||
+             file_num == WALNUT_2_BLINK_DIRECTORY ||
+             file_num == WALNUT_3_BLINK_DIRECTORY ||
+             file_num == WALNUT_4_BLINK_DIRECTORY ||
+             file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
+             file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 70);
+    }
+}
+
 void window::init()
 {
     if (SDL_Init(0) < 0)
@@ -41,6 +70,20 @@ window::~window()
     if (TTF_WasInit())
         TTF_Quit();
     SDL_Quit();
+}
+
+TTF_Font *window::get_font(string font_addr, RGB color, int size)
+{
+    SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
+    stringstream ss;
+    ss << size;
+    TTF_Font *font = fonts_cache[font_addr + ":" + ss.str()];
+    if (font == NULL)
+    {
+        font = TTF_OpenFont(font_addr.c_str(), size);
+        fonts_cache[font_addr + ":" + ss.str()] = font;
+    }
+    return font;
 }
 
 /*
@@ -92,16 +135,7 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
-        if (file_num == PEASHOOTER_DIRECTORY ||
-            file_num == SUNFLOWER_DIRECTORY ||
-            file_num == WALNUT_DIRECTORY)
-        {
-            SDL_SetTextureAlphaMod(res, 150);
-        }
-        else if (file_num == BLACK_SCREEN_DIRECTORY)
-        {
-            SDL_SetTextureAlphaMod(res, 150);
-        }
+        set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
@@ -116,6 +150,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
+        set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
@@ -142,20 +177,7 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
-        // Color key image
-        // SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-        if (file_num == ZOMBIE_BLINK_SHEET_DIRECTORY ||
-            file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
-            file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
-            file_num == WALNUT_1_BLINK_DIRECTORY ||
-            file_num == WALNUT_2_BLINK_DIRECTORY ||
-            file_num == WALNUT_3_BLINK_DIRECTORY ||
-            file_num == WALNUT_4_BLINK_DIRECTORY ||
-            file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
-            file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
-        {
-            SDL_SetTextureAlphaMod(res, 70);
-        }
+        set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
     SDL_Rect src = {sx, sy, sw, sh};
@@ -170,10 +192,7 @@ void window::draw_bg(int file_num, int x, int y)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
         print_error(res);
-        if (file_num == BLACK_SCREEN_DIRECTORY)
-        {
-            SDL_SetTextureAlphaMod(res, 150);
-        }
+        set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
     SDL_Rect src = {x, y, WINDOW_WIDTH, WINDOW_HEIGHT};
@@ -234,4 +253,15 @@ void print_error(SDL_Texture *res)
         printf("SDL_WasInit Failed! Error: %s\n", SDL_GetError());
         exit(-1);
     }
+}
+void window::fade_out()
+{
+    for (int i = 0; i <= 255; i++)
+    {
+        draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        set_texture_alpha(BLACK_SCREEN_DIRECTORY, i);
+        update_screen();
+    }
+    set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
+    clear_renderer();
 }

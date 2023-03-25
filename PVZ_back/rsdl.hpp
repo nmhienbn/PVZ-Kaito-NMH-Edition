@@ -43,6 +43,7 @@ public:
 	void draw_png_scale(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
+	TTF_Font *get_font(string font_addr, RGB color, int size);
 	void show_text(string input, int x = 0, int y = 0, RGB color = WHITE, string font_addr = "FreeSans.ttf", int size = 24);
 	void draw_bg(int file_num, int x = 0, int y = 0);
 	void update_screen();
@@ -52,6 +53,8 @@ public:
 	void draw_rect(int x, int y, int width, int height, RGB color = WHITE);
 	void clear_renderer();
 	void set_texture_alpha(int file_num, int a);
+
+	void fade_out();
 
 private:
 	SDL_Window *win;

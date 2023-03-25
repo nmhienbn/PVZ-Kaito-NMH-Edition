@@ -1,5 +1,6 @@
 #pragma once
 #include "elements.h"
+#include "music.h"
 
 bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &cells);
 template <class vector_plant>
@@ -29,12 +30,13 @@ void apply_zombie_bite_on_plant(vector<Zombie> &zombies, vector<plant_type> &pla
 {
     if (has_zombie_reached_element(zombies[z_ind], plants[p_ind].row, plants[p_ind].col, cells))
     {
+        play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
         plants[p_ind].bite++;
         plants[p_ind].is_attacked = MAX_TIME_BLINK;
         if (plants[p_ind].bite == bite_limit)
         {
             zombies[z_ind].is_moving = true;
-            cells[plants[p_ind].row][plants[p_ind].col].is_planted = 0;
+            cells[plants[p_ind].row][plants[p_ind].col].is_planted = false;
             plants.erase(plants.begin() + p_ind);
         }
     }

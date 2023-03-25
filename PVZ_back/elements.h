@@ -53,18 +53,41 @@ struct Peashooter
     int is_attacked = 0;
 };
 
+struct SnowPea
+{
+    int row, col;
+    int bite;
+    int sec_for_another_pea = 1;
+    int directory_num = SNOWPEA_SHEET_DIRECTORY;
+    int blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
+    int frame = 0;
+    int is_attacked = 0;
+};
+
 struct Pea
 {
+    int type;
     int row;
     int x_location;
-    int directory_num = PEA_DIRECTORY;
-    int explode = PEA_EXPLODE_TIME;
+    int directory_num;
+    int explode;
+
+    Pea();
+    Pea(int _type, int _row, int _x);
 };
 
 struct CherryBomb
 {
 };
 
+enum ZombieType
+{
+    NORMAL_TYPE,
+    CONE_TYPE,
+    BUCKET_TYPE,
+
+    COUNT_TYPE,
+};
 /*
 @param row(int): The row of the zombie
 @param x_location(int): The begin column of zombie
@@ -78,17 +101,22 @@ struct CherryBomb
 */
 struct Zombie
 {
+    ZombieType type;
+
     int row;
     int x_location;
     int health;
     bool is_moving;
-    int directory_num = ZOMBIE_SHEET_DIRECTORY;
-    int blink_directory_num = ZOMBIE_BLINK_SHEET_DIRECTORY;
-    int n_sheet = ZOMBIE_N_SHEET;
-    int c_sheet = ZOMBIE_C_SHEET;
-    int frame = 0;
-    int is_attacked = 0;
+    int directory_num;
+    int blink_directory_num;
+    int n_sheet;
+    int c_sheet;
+    int frame;
+    int is_attacked;
 
+    Zombie();
+    Zombie(ZombieType _type);
+    Zombie(ZombieType _type, int _row, int _x);
     void change_zombie_eating_status();
     bool operator<(const Zombie &other) const;
 };
@@ -123,6 +151,7 @@ struct Elements
     vector<Pea> peas;
     vector<Sunflower> sunflowers;
     vector<Walnut> walnuts;
+    vector<SnowPea> snowpeas;
 };
 
 // Limited by x1-x2 and y1-y2
@@ -147,10 +176,12 @@ struct Icons
     bool is_sunflower_chosen = 0;
     bool is_peashooter_chosen = 0;
     bool is_walnut_chosen = 0;
+    bool is_snowpea_chosen = 0;
 
     int peashooter_remaining_time = 0;
     int sunflower_remaining_time = 0;
     int walnut_remaining_time = 0;
+    int snowpea_remaining_time = 0;
 
     Icons();
 };
@@ -181,6 +212,8 @@ struct Level
     vector<vector<int>> zombie_distr_for_wave;
     vector<int> wave_zombie_count;
     vector<int> wave_duration;
+
+    bool is_huge_wave();
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;

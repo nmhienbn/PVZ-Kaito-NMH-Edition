@@ -9,8 +9,8 @@ Check if Zombie is in query tile or not.
 */
 bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &cells)
 {
-    int right_limit = cells[row][col].x2 - TILE_WIDTH / 2;
-    int left_limit = cells[row][col].x1 - TILE_WIDTH / 2;
+    int right_limit = cells[row][col].x2 - TILE_WIDTH;
+    int left_limit = cells[row][col].x1 - TILE_WIDTH;
     int zombie_new_location = zombie.x_location - ZOMBIE_DX;
     if (zombie.row == row &&
         left_limit < zombie_new_location && zombie_new_location < right_limit)

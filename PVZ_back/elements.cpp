@@ -1,33 +1,181 @@
 #include "elements.h"
 
+Zombie::Zombie()
+{
+}
+
 /*
 If is_moving is false, then the zombie must be eating.
 Else the zombie can't be eating.
 */
+Zombie::Zombie(ZombieType _type)
+{
+    type = _type;
+    if (type == NORMAL_TYPE)
+    {
+        // Random appear row
+        row = rand(0, 4);
+        // Random delay time to appear
+        x_location = WINDOW_WIDTH + rand(0, 100);
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        is_moving = true;
+        directory_num = ZOMBIE_SHEET_DIRECTORY;
+        blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+    else if (type == CONE_TYPE)
+    {
+        // Random appear row
+        row = rand(0, 4);
+        // Random delay time to appear
+        x_location = WINDOW_WIDTH + rand(0, 100);
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        is_moving = true;
+        directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+        blink_directory_num = CONE_ZOMBIE_WALK_BLINK_DIRECTORY;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+    else if (type == BUCKET_TYPE)
+    {
+        // Random appear row
+        row = rand(0, 4);
+        // Random delay time to appear
+        x_location = WINDOW_WIDTH + rand(0, 100);
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        is_moving = true;
+        directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+        blink_directory_num = BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+}
+
+/*
+If is_moving is false, then the zombie must be eating.
+Else the zombie can't be eating.
+*/
+Zombie::Zombie(ZombieType _type, int _row, int _x)
+{
+    type = _type;
+    if (type == NORMAL_TYPE)
+    {
+        // Random appear row
+        row = _row;
+        // Random delay time to appear
+        x_location = _x;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        is_moving = true;
+        directory_num = ZOMBIE_SHEET_DIRECTORY;
+        blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+    else if (type == CONE_TYPE)
+    {
+        // Random appear row
+        row = _row;
+        // Random delay time to appear
+        x_location = _x;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        is_moving = true;
+        directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+        blink_directory_num = CONE_ZOMBIE_WALK_BLINK_DIRECTORY;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+    else if (type == BUCKET_TYPE)
+    {
+        // Random appear row
+        row = _row;
+        // Random delay time to appear
+        x_location = _x;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        is_moving = true;
+        directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+        blink_directory_num = BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY;
+        n_sheet = N_SHEET[directory_num];
+        c_sheet = C_SHEET[directory_num];
+        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
+        is_attacked = false;
+    }
+}
+
 void Zombie::change_zombie_eating_status()
 {
     if (is_moving == false)
     {
-        if (directory_num == ZOMBIE_SHEET_DIRECTORY)
+        if (type == NORMAL_TYPE)
         {
-            frame = 0;
-            directory_num = ZOMBIE_EATING_DIRECTORY;
-            blink_directory_num = ZOMBIE_EATING_BLINK_DIRECTORY;
-            n_sheet = ZOMBIE_EATING_N_SHEET;
-            c_sheet = ZOMBIE_EATING_C_SHEET;
+            if (directory_num != ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = ZOMBIE_EATING_DIRECTORY;
+                blink_directory_num = ZOMBIE_EATING_BLINK_DIRECTORY;
+            }
+        }
+        else if (type == CONE_TYPE)
+        {
+            if (directory_num != CONE_ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = CONE_ZOMBIE_EATING_DIRECTORY;
+                blink_directory_num = CONE_ZOMBIE_EATING_BLINK_DIRECTORY;
+            }
+        }
+        else if (type == BUCKET_TYPE)
+        {
+            if (directory_num != BUCKET_ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = BUCKET_ZOMBIE_EATING_DIRECTORY;
+                blink_directory_num = BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY;
+            }
         }
     }
     else
     {
-        if (directory_num == ZOMBIE_EATING_DIRECTORY)
+        if (type == NORMAL_TYPE)
         {
-            frame = 0;
-            directory_num = ZOMBIE_SHEET_DIRECTORY;
-            blink_directory_num = ZOMBIE_BLINK_SHEET_DIRECTORY;
-            n_sheet = ZOMBIE_N_SHEET;
-            c_sheet = ZOMBIE_C_SHEET;
+            if (directory_num == ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = ZOMBIE_SHEET_DIRECTORY;
+                blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
+            }
+        }
+        else if (type == CONE_TYPE)
+        {
+            if (directory_num == CONE_ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+                blink_directory_num = directory_num + 1;
+            }
+        }
+        else if (type == BUCKET_TYPE)
+        {
+            if (directory_num == BUCKET_ZOMBIE_EATING_DIRECTORY)
+            {
+                frame = 0;
+                directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+                blink_directory_num = directory_num + 1;
+            }
         }
     }
+    n_sheet = N_SHEET[directory_num];
+    c_sheet = C_SHEET[directory_num];
 }
 
 bool Zombie::operator<(const Zombie &other) const
@@ -67,4 +215,29 @@ int rand(int L, int R)
 
 Icons::Icons()
 {
+}
+
+Pea::Pea()
+{
+}
+Pea::Pea(int _type, int _row, int _x)
+{
+    type = _type;
+    row = _row;
+    x_location = _x;
+    if (type == 1)
+    {
+        directory_num = PEA_DIRECTORY;
+        explode = PEA_EXPLODE_TIME;
+    }
+    // else if (type == 2)
+    // {
+    //     directory_num = SNOWZ_PEA_DIRECTORY;
+    //     explode = PEA_EXPLODE_TIME;
+    // }
+}
+
+bool Level::is_huge_wave()
+{
+    return wave_zombie_count[cur_wave] >= 5;
 }

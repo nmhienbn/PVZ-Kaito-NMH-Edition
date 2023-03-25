@@ -98,6 +98,16 @@ Not in code:
 
 24/03/2023:
 	Add musics and sound effects.
+
+25/03/2023:
+	Add Cone-head Zombie (2 normal health) and Bucket-head Zombie (3 normal health).
+	Add player's Trip to game.
+	Add snowpea animation (but cannot plant it).
+	Add zombie walking 1, 2 animation.
+	Fix bug: delete plant before reset is_planted tile.
+	Add snowz_pea (snowpea's bullet).
+	Add fade out animation when change screen.
+	Clear renderer to fix lag.
 	
 
 

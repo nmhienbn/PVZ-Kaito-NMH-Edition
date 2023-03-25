@@ -16,7 +16,7 @@ void display_game_layout(window &win, Player player, Icons icons, Level &level)
     display_icons_in_icon_bar(icons, player, win, level);
     display_menu_icon(win);
 
-    win.show_text(std::to_string(player.sun_count), 85, 33, BLACK);
+    win.show_text(std::to_string(player.sun_count), 90, 33, BLACK, "contm.ttf");
 }
 
 void display_game_announce(window &win, Level &level)
@@ -38,6 +38,7 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
     int peashooter_icon = PEASHOOTER_ICON_BRIGHT_DIRECTORY;
     int sunflower_icon = SUNFLOWER_ICON_BRIGHT_DIRECTORY;
     int walnut_icon = WALNUT_ICON_BRIGHT_DIRECTORY;
+    int snowpea_icon = SNOWPEA_ICON_BRIGHT_DIRECTORY;
 
     if (player.sun_count < 100 || icons.is_peashooter_chosen)
         peashooter_icon = PEASHOOTER_ICON_DIM_DIRECTORY;
@@ -45,6 +46,8 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
         sunflower_icon = SUNFLOWER_ICON_DIM_DIRECTORY;
     if (player.sun_count < 50 || icons.is_walnut_chosen)
         walnut_icon = WALNUT_ICON_DIM_DIRECTORY;
+    if (player.sun_count < 150 || icons.is_snowpea_chosen)
+        snowpea_icon = SNOWPEA_ICON_DIM_DIRECTORY;
 
     win.draw_png_scale(peashooter_icon, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
     win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, icons.peashooter_remaining_time * ICON_HEIGHT / PEASHOOTER_LOADING);
@@ -59,6 +62,12 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
     {
         win.draw_png_scale(walnut_icon, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
         win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, icons.walnut_remaining_time * ICON_HEIGHT / WALNUT_LOADING);
+    }
+
+    if (level.level_num >= 4)
+    {
+        win.draw_png_scale(snowpea_icon, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
+        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, icons.snowpea_remaining_time * ICON_HEIGHT / SNOWPEA_LOADING);
     }
 }
 
@@ -153,7 +162,7 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
     for (int i = (int)zombies.size() - 1; i >= 0; i--)
     {
         int row = zombies[i].row;
-        int y_location = cells[row][0].y1 - 25;
+        int y_location = cells[row][0].y1 - 45;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
         int zframe = ZOMBIE_FRAME;
@@ -186,20 +195,20 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
     for (int i = 0; i < dead_zombies.size(); i++)
     {
         int row = dead_zombies[i].row;
-        int y_location = cells[row][0].y1 - 35;
+        int y_location = cells[row][0].y1 - 45;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
         int frame = dead_zombies[i].frame / ZOMBIE_DIE_FRAME;
-        if (frame <= DEAD_ZOMBIE_N_SHEET)
+        if (frame <= N_SHEET[ZOMBIE_DIE_DIRECTORY])
         {
-            int scol = frame % DEAD_ZOMBIE_C_SHEET;
-            int srow = frame / DEAD_ZOMBIE_C_SHEET;
-            win.draw_png(ZOMBIE_DIE_DIRECTORY, DEAD_ZOMBIE_WIDTH * scol, DEAD_ZOMBIE_HEIGHT * srow, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, DEAD_ZOMBIE_WIDTH, DEAD_ZOMBIE_HEIGHT);
+            int scol = frame % C_SHEET[ZOMBIE_DIE_DIRECTORY];
+            int srow = frame / C_SHEET[ZOMBIE_DIE_DIRECTORY];
+            win.draw_png(ZOMBIE_DIE_DIRECTORY, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
         }
-        int scol = frame % HEAD_ZOMBIE_C_SHEET;
-        int srow = frame / HEAD_ZOMBIE_C_SHEET;
+        int scol = frame % C_SHEET[ZOMBIE_HEAD_DIRECTORY];
+        int srow = frame / C_SHEET[ZOMBIE_HEAD_DIRECTORY];
         win.draw_png(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
         if (is_pause == false)
-            if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * HEAD_ZOMBIE_N_SHEET)
+            if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[ZOMBIE_HEAD_DIRECTORY])
             {
 
                 dead_zombies.erase(dead_zombies.begin() + i);
@@ -217,8 +226,8 @@ void display_peashooters(window &win, vector<Peashooter> &peashooters, Map &cell
         int col = peashooters[i].col;
         int row = peashooters[i].row;
         int frame = peashooters[i].frame;
-        int scol = frame % PEASHOOTER_C_SHEET;
-        int srow = frame / PEASHOOTER_C_SHEET;
+        int scol = frame % C_SHEET[peashooters[i].directory_num];
+        int srow = frame / C_SHEET[peashooters[i].directory_num];
         win.draw_png(peashooters[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
         if (peashooters[i].is_attacked)
         {
@@ -226,7 +235,7 @@ void display_peashooters(window &win, vector<Peashooter> &peashooters, Map &cell
             peashooters[i].is_attacked--;
         }
         if (is_pause == false)
-            if (++peashooters[i].frame >= PEASHOOTER_N_SHEET)
+            if (++peashooters[i].frame >= N_SHEET[peashooters[i].directory_num])
             {
                 peashooters[i].frame = 0;
             }
@@ -261,12 +270,12 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &cells, 
             // win.draw_png_scale(SUNFLOWER_DIRECTORY, cells[row][col].x1 + 9, cells[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             int frame = sunflower.frame;
-            int scol = frame % SUNFLOWER_C_SHEET;
-            int srow = frame / SUNFLOWER_C_SHEET;
+            int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+            int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
             win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             if (is_pause == false)
-                if (++sunflower.frame >= SUNFLOWER_N_SHEET)
+                if (++sunflower.frame >= N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
                 {
                     sunflower.frame = 0;
                 }
@@ -283,12 +292,12 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &cells, 
             // win.draw_png_scale(SUNFLOWER_DIRECTORY, cells[row][col].x1 + 9, cells[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             int frame = sunflower.frame / SUNFLOWER_F_SHEET;
-            int scol = frame % SUNFLOWER_H_C_SHEET;
-            int srow = frame / SUNFLOWER_H_C_SHEET;
+            int scol = frame % C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
+            int srow = frame / C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
             win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             if (is_pause == false)
-                if (++sunflower.frame >= SUNFLOWER_F_SHEET * SUNFLOWER_H_N_SHEET)
+                if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
                 {
                     sunflower.frame = 0;
                 }
@@ -396,8 +405,14 @@ void display_chosen_plant(window &win, Player player, Icons icons)
 
 void display_ready_set_plant(window &win, int image_num, Level &level)
 {
+    win.clear_renderer();
     win.draw_bg(level.background_directory);
     win.draw_png(image_num, (WINDOW_WIDTH - READY_WIDTH) >> 1, (WINDOW_HEIGHT - READY_HEIGHT) >> 1, READY_WIDTH, READY_HEIGHT);
+
+    win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
+    int w = 0, h = 0;
+    TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), "Hien\'s Trip to PVZ", &w, &h);
+    win.show_text("Hien\'s Trip to PVZ", (WINDOW_WIDTH - w) / 2, 535);
 }
 void display_shovel(window &win, const Button &button)
 {

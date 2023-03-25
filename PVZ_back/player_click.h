@@ -20,3 +20,10 @@ bool is_click_made_in_element_block(int row, int col, const int &mouse_x, const 
 void determine_row_and_col_chosen_by_second_click(Map &cells, const int &mouse_x, const int &mouse_y, int &row, int &col);
 void remove_chosen_plant(Player &player, Icons &icons);
 void create_new_plant(Player &player, Map &cells, Elements &elements, Icons &icons, const int &mouse_x, const int &mouse_y);
+
+template <class VectorPlant>
+void remove_plant(Map &cells, VectorPlant &plants, int p_ind)
+{
+    cells[plants[p_ind].row][plants[p_ind].col].is_planted = false;
+    plants.erase(plants.begin() + p_ind);
+}
