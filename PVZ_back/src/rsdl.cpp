@@ -74,6 +74,7 @@ window::~window()
 
 TTF_Font *window::get_font(string font_addr, RGB color, int size)
 {
+    font_addr = FONTS_DIRECTORY + font_addr;
     SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
     stringstream ss;
     ss << size;
@@ -91,6 +92,7 @@ Fixed: cannot show many texts.
 */
 void window::show_text(string input, int x, int y, RGB color, string font_addr, int size)
 {
+    font_addr = FONTS_DIRECTORY + font_addr;
     SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
     stringstream ss;
     ss << size;
@@ -259,7 +261,7 @@ void window::fade_out()
     for (int i = 0; i <= 255; i++)
     {
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        set_texture_alpha(BLACK_SCREEN_DIRECTORY, i);
+        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 3));
         update_screen();
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);

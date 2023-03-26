@@ -1,5 +1,6 @@
 #pragma once
-#include "draw_elements.h"
+#include "render_elements.h"
+#include "render_message.h"
 #include "player_click.h"
 #include "elements_actions.h"
 #include "makeLevels.h"

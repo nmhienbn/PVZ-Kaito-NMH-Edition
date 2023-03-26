@@ -22,6 +22,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         }
         else
         {
+            display_ready_set_plant(win, START_PLANT_DIRECTORY, level);
             clk = 0;
             is_game_started = true;
         }

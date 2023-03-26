@@ -52,3 +52,16 @@ void move_suns(vector<Sun> &suns, Map &cells)
             suns[i].wait_seconds++;
     }
 }
+
+void display_suns(window &win, vector<Sun> suns, Map &cells)
+{
+    for (auto &sun : suns)
+    {
+        if (!sun.is_clicked)
+        {
+            int col = sun.final_col;
+            sun.x_location = cells[0][col].x1;
+        }
+        win.draw_png_scale(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+    }
+}

@@ -1,6 +1,7 @@
 #pragma once
 #include "elements.h"
 #include "music.h"
+#include "rsdl.hpp"
 
 bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &cells);
 template <class vector_plant>
@@ -9,6 +10,8 @@ bool has_zombie_reached_any_plant(Elements &elements, Zombie &zombie, Map &cells
 bool can_zombie_move(Zombie &zombie, Elements &elements, Map &cells);
 void update_moving_status_for_zombies(Elements &elements, Map &cells);
 void move_zombies(vector<Zombie> &zombies, Elements &elements, Map &cells);
+void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_pause = false);
+void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &cells, bool is_pause = false);
 
 //------------------------------Zombie bite--------------------------------------
 template <class plant_type>

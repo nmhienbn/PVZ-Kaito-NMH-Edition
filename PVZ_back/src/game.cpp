@@ -37,6 +37,7 @@ int main(int argv, char **args)
         }
         else
         {
+            win.clear_renderer();
             start_level_3(win, player, icons, cells, level, game_characters, clk, quit, is_game_started, level_chosen, is_paused);
         }
     }

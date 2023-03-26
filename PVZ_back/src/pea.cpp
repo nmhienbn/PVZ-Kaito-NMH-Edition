@@ -109,3 +109,19 @@ bool can_pea_move(Pea &pea, Elements &elements, Map &cells)
             return false;
     return true;
 }
+
+/*
+Display the peas
+*/
+void display_peas(window &win, vector<Pea> &peas, Map &cells)
+{
+    for (int i = 0; i < peas.size(); i++)
+    {
+        int row = peas[i].row;
+        int y_location = cells[row][0].y1 + 20;
+        int more_px = 0;
+        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY)
+            more_px += 25;
+        win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
+    }
+}

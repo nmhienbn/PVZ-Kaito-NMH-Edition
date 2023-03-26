@@ -1,8 +1,9 @@
 #pragma once
-#include "draw_elements.h"
+#include "render_elements.h"
 #include "music.h"
 
-#define SAVED_DATA_DIRECTORY "savedata.txt"
+#define SAVED_DATA_DIRECTORY "./userdata/savedata.txt"
+#define LEVELS_DIRECTORY "./levels/"
 
 Map create_a_collection_of_blocks();
 void read_savedata(Player &player, Level &level);

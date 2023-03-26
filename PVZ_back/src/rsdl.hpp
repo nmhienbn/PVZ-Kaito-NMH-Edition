@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <map>
 #include "gameInfo.h"
+#define FONTS_DIRECTORY "./fonts/"
 
 class RGB
 {

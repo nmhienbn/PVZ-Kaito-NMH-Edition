@@ -43,7 +43,7 @@ void read_savedata(Player &player, Level &level)
         myfile.close();
     }
     else
-        std::cout << "Unable to open saved data file";
+        std::cout << "Unable to open saved data file!\n";
 }
 
 void update_unlocked_level(Player &player, Level &level)
@@ -51,7 +51,7 @@ void update_unlocked_level(Player &player, Level &level)
     std::ifstream infile(SAVED_DATA_DIRECTORY);
     if (!infile)
     {
-        std::cerr << "Unable to open saved data file!";
+        std::cerr << "Unable to open saved data file!\n";
     }
     string player_name;
     infile >> player_name >> player.unlocked_level;
@@ -59,7 +59,7 @@ void update_unlocked_level(Player &player, Level &level)
     std::ofstream outfile(SAVED_DATA_DIRECTORY);
     if (!outfile)
     {
-        std::cerr << "Unable to open saved data file!";
+        std::cerr << "Unable to open saved data file!\n";
     }
     int num_level = std::max(1, player.unlocked_level - 1);
     if (num_level < level.level_num)
@@ -79,8 +79,9 @@ Read level's information from level files:
 void read_level(Level &level)
 {
     string wave_cnt, zombie_seq, wave_dur, temp;
-    string file_name = std::to_string(level.level_num);
-    file_name += ".level.txt";
+    string file_name = LEVELS_DIRECTORY;          // levels folder
+    file_name += std::to_string(level.level_num); // level num
+    file_name += ".level.txt";                    // level extension
     std::ifstream myfile(file_name);
     int num_ind = 0;
     getline(myfile, wave_cnt);
@@ -245,7 +246,7 @@ void display_starting_screen(window &win)
         DELAY(10);
     }
     win.fade_out();
-    // win.clear_renderer();
+    win.clear_renderer();
 }
 
 void load_level(Player &player, Level &level)
@@ -262,7 +263,7 @@ Display choosing level screen.
 */
 void display_choosing_level_screen(window &win, Level &level, const int &unlocked_level, bool &level_chosen, bool &quit)
 {
-    // win.clear_renderer();
+    win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     win.show_text("Level 1", 75, 170);
     if (unlocked_level >= 2)

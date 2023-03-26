@@ -12,7 +12,7 @@ void fire_peas(Elements &elements, Map &cells)
     {
         int row = peashooter.row;
         int col = peashooter.col;
-        if (are_there_zombies_in_peashooter_row(peashooter, elements))
+        if (are_there_zombies_in_peashooter_row(peashooter, elements, cells))
         {
             if (peashooter.directory_num == PEASHOOTER_SHEET_DIRECTORY)
             {
@@ -46,11 +46,40 @@ void fire_peas(Elements &elements, Map &cells)
 /*
 Check if a peashooter need to attack or not.
 Peashooter is attack only if there are some zombies in the row.
+Updated: Zombie position > peashooter position
 */
-bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, Elements &elements)
+bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, Elements &elements, Map &cells)
 {
     for (Zombie zombie : elements.zombies)
-        if (peashooter.row == zombie.row && zombie.x_location < ZOMBIE_INIT_X)
+        if (peashooter.row == zombie.row &&
+            zombie.x_location < ZOMBIE_INIT_X &&
+            zombie.x_location > cells[0][peashooter.col].x2 - 160)
             return true;
     return false;
+}
+
+/*Updated
+Change to sprite sheet
+*/
+void display_peashooters(window &win, vector<Peashooter> &peashooters, Map &cells, bool is_pause)
+{
+    for (int i = 0; i < peashooters.size(); i++)
+    {
+        int col = peashooters[i].col;
+        int row = peashooters[i].row;
+        int frame = peashooters[i].frame;
+        int scol = frame % C_SHEET[peashooters[i].directory_num];
+        int srow = frame / C_SHEET[peashooters[i].directory_num];
+        win.draw_png(peashooters[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (peashooters[i].is_attacked)
+        {
+            win.draw_png(peashooters[i].blink_directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            peashooters[i].is_attacked--;
+        }
+        if (is_pause == false)
+            if (++peashooters[i].frame >= N_SHEET[peashooters[i].directory_num])
+            {
+                peashooters[i].frame = 0;
+            }
+    }
 }
