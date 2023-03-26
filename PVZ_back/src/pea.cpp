@@ -20,7 +20,8 @@ void handle_pea_zombie_encounter(Elements &elements, Map &cells)
 {
     for (int i = 0; i < elements.peas.size(); i++)
     {
-        if (elements.peas[i].directory_num == PEA_EXPLODE_DIRECTORY)
+        if (elements.peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
+            elements.peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
         {
             if (--elements.peas[i].explode == 0)
             {
@@ -50,9 +51,14 @@ bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
     {
         elements.zombies[z_ind].health--;
         elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
-        if (elements.peas[p_ind].directory_num == PEA_DIRECTORY)
+        if (elements.peas[p_ind].type == 2)
         {
-            elements.peas[p_ind].directory_num = PEA_EXPLODE_DIRECTORY;
+            elements.zombies[z_ind].cold_time = MAX_COLD_TIME;
+        }
+        if (elements.peas[p_ind].directory_num == PEA_DIRECTORY ||
+            elements.peas[p_ind].directory_num == SNOWZ_PEA_DIRECTORY)
+        {
+            elements.peas[p_ind].directory_num++;
         }
         // determine_zombie_appearanc(elements.zombies[z_ind]);
 
@@ -120,7 +126,8 @@ void display_peas(window &win, vector<Pea> &peas, Map &cells)
         int row = peas[i].row;
         int y_location = cells[row][0].y1 + 20;
         int more_px = 0;
-        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY)
+        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
+            peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
             more_px += 25;
         win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
     }

@@ -53,7 +53,7 @@ struct Peashooter
     int is_attacked = 0;
 };
 
-struct SnowPea
+struct Snowpea
 {
     int row, col;
     int bite;
@@ -103,16 +103,12 @@ struct Zombie
 {
     ZombieType type;
 
-    int row;
-    int x_location;
+    int row, x_location;
     int health;
     bool is_moving;
-    int directory_num;
-    int blink_directory_num;
-    int n_sheet;
-    int c_sheet;
+    int directory_num, blink_directory_num;
     int frame;
-    int is_attacked;
+    int is_attacked, cold_time;
 
     Zombie();
     Zombie(ZombieType _type);
@@ -151,7 +147,7 @@ struct Elements
     vector<Pea> peas;
     vector<Sunflower> sunflowers;
     vector<Walnut> walnuts;
-    vector<SnowPea> snowpeas;
+    vector<Snowpea> snowpeas;
 };
 
 // Limited by x1-x2 and y1-y2
@@ -233,9 +229,10 @@ const Button LEVEL_1(15, 240, 40, 205);
 const Button LEVEL_2(260, 485, 40, 205);
 const Button LEVEL_3(505, 730, 40, 205);
 const Button LEVEL_4(750, 975, 40, 205);
-const Button ICON_BAR(20, 125, 100, 310);
-const Button ICON_BAR_LV1(20, 125, 100, 165);
-const Button ICON_BAR_LV2(20, 125, 100, 235);
+const Button ICON_BAR_LV1(20, 125, 100, 170);
+const Button ICON_BAR_LV2(20, 125, 100, 240);
+const Button ICON_BAR_LV3(20, 125, 100, 310);
+const Button ICON_BAR_LV4(20, 125, 100, 380);
 const Button MENU_ICON(850, 975, 0, 35);
 const Button MY_GAME(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
 #define MENU_X1 325

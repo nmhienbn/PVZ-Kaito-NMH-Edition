@@ -8,7 +8,8 @@ void set_default_alpha(int file_num, SDL_Texture *res)
 {
     if (file_num == PEASHOOTER_DIRECTORY ||
         file_num == SUNFLOWER_DIRECTORY ||
-        file_num == WALNUT_DIRECTORY)
+        file_num == WALNUT_DIRECTORY ||
+        file_num == SNOWPEA_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 150);
     }
@@ -18,6 +19,7 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     }
     else if (file_num == ZOMBIE_WALK1_BLINK_DIRECTORY ||
              file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
+             file_num == ZOMBIE_WALK3_BLINK_DIRECTORY ||
              file_num == CONE_ZOMBIE_WALK_BLINK_DIRECTORY ||
              file_num == BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY ||
              file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
@@ -30,6 +32,14 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 70);
+    }
+    else if (
+        file_num == ZOMBIE_WALK1_COLD_DIRECTORY ||
+        file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
+        file_num == ZOMBIE_WALK3_COLD_DIRECTORY ||
+        file_num == ZOMBIE_EATING_COLD_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 120);
     }
 }
 
@@ -261,7 +271,7 @@ void window::fade_out()
     for (int i = 0; i <= 255; i++)
     {
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 3));
+        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 4));
         update_screen();
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);

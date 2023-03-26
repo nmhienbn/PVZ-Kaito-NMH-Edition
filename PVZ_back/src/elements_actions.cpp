@@ -27,11 +27,13 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     }
     if (clk % BITE_CLK_COUNT == 0)
     {
-        handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
         handle_zombie_plant_encounter(elements.zombies, elements.peashooters, cells, PEASHOOTER_BITE_LIMIT);
         handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
+        handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
+        handle_zombie_plant_encounter(elements.zombies, elements.snowpeas, cells, SNOWPEA_BITE_LIMIT);
     }
     fire_peas(elements, cells);
+    fire_snowz_peas(elements, cells);
 
     if (clk % SUN_GEN_SKY_CLK_COUNT == 0)
         gen_random_sun_from_sky(elements);
@@ -132,4 +134,6 @@ void update_remaining_time(Icons &icons)
         icons.sunflower_remaining_time--;
     if (icons.walnut_remaining_time)
         icons.walnut_remaining_time--;
+    if (icons.snowpea_remaining_time)
+        icons.snowpea_remaining_time--;
 }

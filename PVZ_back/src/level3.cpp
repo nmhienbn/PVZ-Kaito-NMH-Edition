@@ -1,5 +1,21 @@
 #include "level3.h"
 
+/*
+If game has not started:
+    0.5s: display ready.
+    0.5s: display set.
+    2s: display plant.
+Else: (game has started)
+    Check if player lose/win: display lose/win message. Reset level.
+    Else check if game is paused or not.
+    Else display gameplay.
+
+Handle user click:
+    Quit event.
+    Key to win. //For developer.
+    Menu icon and menu click.
+    Player click on game.
+*/
 void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                    Level &level, Elements &game_characters, int &clk, bool &quit,
                    bool &is_game_started, bool &is_level_chosen, bool &is_paused)
@@ -86,6 +102,10 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
             handle_movements(game_characters, cells, clk);
             handle_changes(icons, game_characters, cells, level, clk);
             play_music(BACKGROUND_MUSIC_DIRECTORY);
+            if (game_characters.zombies.size() && !rand(0, 500))
+            {
+                play_sound_effect(GROAN_MUSIC_DIRECTORY);
+            }
         }
     }
     HANDLE(

@@ -4,6 +4,7 @@
 #include "elements.h"
 #include "pea.h"
 #include "peashooter.h"
+#include "snowpea.h"
 #include "sun.h"
 #include "sunflower.h"
 #include "zombie.h"

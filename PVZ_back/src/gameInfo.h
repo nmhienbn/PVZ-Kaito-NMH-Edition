@@ -19,7 +19,7 @@ using namespace std;
 #define ticks_per_frame 1000 / FPS
 
 #define SUN_GEN_SKY_CLK_COUNT 1000       // Sun from sky frequency
-#define SUN_GEN_SUNFLOWER_CLK_COUNT 1500 // Sun from sunflower frequency
+#define SUN_GEN_SUNFLOWER_CLK_COUNT 2000 // Sun from sunflower frequency
 #define ZOMBIE_CREATE_CLK_COUNT 600      // Time between zombies' different groups
 #define FIRE_PEA_CLK_COUNT 100           // Fire pea refresh frequency
 #define BITE_CLK_COUNT 50                // Zombie bite plant frequency
@@ -32,12 +32,13 @@ using namespace std;
 #define SUNFLOWER_LOADING 350  // Sunflower loading
 #define WALNUT_LOADING 1300    // Walnut loading
 #define SNOWPEA_LOADING 400    // Peashooter loading
-#define MAX_TIME_BLINK 5
+#define MAX_TIME_BLINK 5       // time blink when attack
+#define MAX_COLD_TIME 180      // time being cold
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Alter the 4 define values bellow to increase or decrease the price of plants and the initial sun count
-#define INIT_SUN_COUNT 100
+#define INIT_SUN_COUNT 1000
 #define NORMAL_SUN_VALUE 50
 #define PEASHOOTER_PRICE 100
 #define SUNFLOWER_PRICE 50
@@ -53,6 +54,7 @@ Moving speed of some elements
 #define PEA_DX 15
 #define SUN_DY 3
 #define CLICKED_SUN_D 100
+#define FREEZE_ZOMBIE_SLOW_TIMES 3
 
 /*Health of plants and zombies*/
 #define WALNUT_BITE_LIMIT 72

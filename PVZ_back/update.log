@@ -112,6 +112,8 @@ Not in code:
 26/03/2023:	
 	Rearrange files.
 	Fix bug: peashooter still fire peas if zombie go after it!!!
+	0.20% to play zombie groan sound effect.
+	Add snowpea effect: slow the zombie.
 
 
 NEED TO ADD COMMENT

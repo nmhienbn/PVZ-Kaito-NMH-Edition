@@ -20,11 +20,10 @@ Zombie::Zombie(ZombieType _type)
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
         is_moving = true;
         directory_num = ZOMBIE_SHEET_DIRECTORY;
-        blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+        blink_directory_num = blink_of[directory_num];
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
     else if (type == CONE_TYPE)
     {
@@ -36,10 +35,9 @@ Zombie::Zombie(ZombieType _type)
         is_moving = true;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
         blink_directory_num = CONE_ZOMBIE_WALK_BLINK_DIRECTORY;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
     else if (type == BUCKET_TYPE)
     {
@@ -51,10 +49,9 @@ Zombie::Zombie(ZombieType _type)
         is_moving = true;
         directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
         blink_directory_num = BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
 }
 
@@ -74,11 +71,10 @@ Zombie::Zombie(ZombieType _type, int _row, int _x)
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
         is_moving = true;
         directory_num = ZOMBIE_SHEET_DIRECTORY;
-        blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+        blink_directory_num = blink_of[directory_num];
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
     else if (type == CONE_TYPE)
     {
@@ -90,10 +86,9 @@ Zombie::Zombie(ZombieType _type, int _row, int _x)
         is_moving = true;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
         blink_directory_num = CONE_ZOMBIE_WALK_BLINK_DIRECTORY;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
     else if (type == BUCKET_TYPE)
     {
@@ -105,10 +100,9 @@ Zombie::Zombie(ZombieType _type, int _row, int _x)
         is_moving = true;
         directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
         blink_directory_num = BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY;
-        n_sheet = N_SHEET[directory_num];
-        c_sheet = C_SHEET[directory_num];
-        frame = rand(0, ZOMBIE_FRAME * n_sheet - 1);
-        is_attacked = false;
+
+        frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+        is_attacked = 0;
     }
 }
 
@@ -152,7 +146,7 @@ void Zombie::change_zombie_eating_status()
             {
                 frame = 0;
                 directory_num = ZOMBIE_SHEET_DIRECTORY;
-                blink_directory_num = directory_num + NUMBER_OF_ZOMBIE_MOVING_SHEET;
+                blink_directory_num = blink_of[directory_num];
             }
         }
         else if (type == CONE_TYPE)
@@ -174,8 +168,6 @@ void Zombie::change_zombie_eating_status()
             }
         }
     }
-    n_sheet = N_SHEET[directory_num];
-    c_sheet = C_SHEET[directory_num];
 }
 
 bool Zombie::operator<(const Zombie &other) const
@@ -230,11 +222,11 @@ Pea::Pea(int _type, int _row, int _x)
         directory_num = PEA_DIRECTORY;
         explode = PEA_EXPLODE_TIME;
     }
-    // else if (type == 2)
-    // {
-    //     directory_num = SNOWZ_PEA_DIRECTORY;
-    //     explode = PEA_EXPLODE_TIME;
-    // }
+    else if (type == 2)
+    {
+        directory_num = SNOWZ_PEA_DIRECTORY;
+        explode = PEA_EXPLODE_TIME;
+    }
 }
 
 bool Level::is_huge_wave()

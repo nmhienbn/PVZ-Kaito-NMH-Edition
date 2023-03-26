@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
+#include <map>
 using namespace std;
 
-#define ZOMBIE_SHEET_DIRECTORY rand(ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK2_DIRECTORY)
-#define NUMBER_OF_ZOMBIE_MOVING_SHEET 2
+#define ZOMBIE_SHEET_DIRECTORY rand(ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK3_DIRECTORY)
 
 enum ImageType
 {
@@ -69,12 +69,18 @@ enum ImageType
 
     ZOMBIE_WALK1_DIRECTORY,
     ZOMBIE_WALK2_DIRECTORY,
+    ZOMBIE_WALK3_DIRECTORY,
     ZOMBIE_WALK1_BLINK_DIRECTORY,
     ZOMBIE_WALK2_BLINK_DIRECTORY,
+    ZOMBIE_WALK3_BLINK_DIRECTORY,
+    ZOMBIE_WALK1_COLD_DIRECTORY,
+    ZOMBIE_WALK2_COLD_DIRECTORY,
+    ZOMBIE_WALK3_COLD_DIRECTORY,
     ZOMBIE_DIE_DIRECTORY,
     ZOMBIE_HEAD_DIRECTORY,
     ZOMBIE_EATING_DIRECTORY,
     ZOMBIE_EATING_BLINK_DIRECTORY,
+    ZOMBIE_EATING_COLD_DIRECTORY,
 
     CONE_ZOMBIE_WALK_DIRECTORY,
     CONE_ZOMBIE_WALK_BLINK_DIRECTORY,
@@ -132,10 +138,10 @@ const string image_directory[] = {
     "./image/Plant_seed/icon_snowpea.png",            // SNOWPEA_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/icon_snowpea_dim.png",        // SNOWPEA_ICON_DIM_DIRECTORY
 
-    "./image/Bullets/Pea/pea.png",               // PEA_DIRECTORY
-    "./image/Bullets/Pea/pea_explode.png",       // PEA_EXPLODE_DIRECTORY
-    "./image/Bullets/Pea/snowz_pea.png",         // SNOWZ_PEA_DIRECTORY
-    "./image/Bullets/Pea/snowz_pea_explode.png", // SNOWZ_PEA_EXPLODE_DIRECTORY
+    "./image/Bullets/Pea/pea.png",                     // PEA_DIRECTORY
+    "./image/Bullets/Pea/pea_explode.png",             // PEA_EXPLODE_DIRECTORY
+    "./image/Bullets/Snowz_pea/snowz_pea.png",         // SNOWZ_PEA_DIRECTORY
+    "./image/Bullets/Snowz_pea/snowz_pea_explode.png", // SNOWZ_PEA_EXPLODE_DIRECTORY
 
     "./image/Background/Starting_Screen.png", // STARTING_SCREEN_DIRECTORY
     "./image/Background/Choose_levels.png",   // CHOOSE_LEVELS_DIRECTORY
@@ -156,12 +162,18 @@ const string image_directory[] = {
 
     "./image/Zombie/Normal/ZombieWalk1.png",        // ZOMBIE_WALK1_DIRECTORY
     "./image/Zombie/Normal/ZombieWalk2.png",        // ZOMBIE_WALK2_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk3.png",        // ZOMBIE_WALK3_DIRECTORY
     "./image/Zombie/Normal/ZombieWalk1_blink.png",  // ZOMBIE_WALK1_BLINK_DIRECTORY
     "./image/Zombie/Normal/ZombieWalk2_blink.png",  // ZOMBIE_WALK2_BLINK_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk3_blink.png",  // ZOMBIE_WALK3_BLINK_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk1_cold.png",   // ZOMBIE_WALK1_COLD_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk2_cold.png",   // ZOMBIE_WALK2_COLD_DIRECTORY
+    "./image/Zombie/Normal/ZombieWalk3_cold.png",   // ZOMBIE_WALK3_COLD_DIRECTORY
     "./image/Zombie/Normal/Zombie_die.png",         // ZOMBIE_DIE_DIRECTORY
     "./image/Zombie/Normal/Zombie_head.png",        // ZOMBIE_HEAD_DIRECTORY
     "./image/Zombie/Normal/ZombieAttack.png",       // ZOMBIE_EATING_DIRECTORY
     "./image/Zombie/Normal/ZombieAttack_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
+    "./image/Zombie/Normal/ZombieAttack_cold.png",  // ZOMBIE_EATING_COLD_DIRECTORY
 
     "./image/Zombie/Cone/ConeZombieWalk.png",         // CONE_ZOMBIE_WALK_DIRECTORY
     "./image/Zombie/Cone/ConeZombieWalk_blink.png",   // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
@@ -242,12 +254,18 @@ const int N_SHEET[] = {
 
     22, // ZOMBIE_WALK1_DIRECTORY
     31, // ZOMBIE_WALK2_DIRECTORY
-    22, // ZOMBIE_WALK1_BLINK_DIRECTORY,
+    50, // ZOMBIE_WALK3_DIRECTORY
+    22, // ZOMBIE_WALK1_BLINK_DIRECTORY
     31, // ZOMBIE_WALK2_BLINK_DIRECTORY
+    50, // ZOMBIE_WALK3_BLINK_DIRECTORY
+    22, // ZOMBIE_WALK1_COLD_DIRECTORY
+    31, // ZOMBIE_WALK2_COLD_DIRECTORY
+    50, // ZOMBIE_WALK3_COLD_DIRECTORY
     10, // ZOMBIE_DIE_DIRECTORY
     12, // ZOMBIE_HEAD_DIRECTORY
     11, // ZOMBIE_EATING_DIRECTORY
     11, // ZOMBIE_EATING_BLINK_DIRECTORY
+    11, // ZOMBIE_EATING_COLD_DIRECTORY
 
     21, // CONE_ZOMBIE_WALK_DIRECTORY
     21, // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
@@ -328,12 +346,18 @@ const int C_SHEET[] = {
 
     8,  // ZOMBIE_WALK1_DIRECTORY
     8,  // ZOMBIE_WALK2_DIRECTORY
-    8,  // ZOMBIE_WALK1_BLINK_DIRECTORY,
+    8,  // ZOMBIE_WALK3_DIRECTORY
+    8,  // ZOMBIE_WALK1_BLINK_DIRECTORY
     8,  // ZOMBIE_WALK2_BLINK_DIRECTORY
+    8,  // ZOMBIE_WALK3_BLINK_DIRECTORY
+    8,  // ZOMBIE_WALK1_COLD_DIRECTORY
+    8,  // ZOMBIE_WALK2_COLD_DIRECTORY
+    8,  // ZOMBIE_WALK3_COLD_DIRECTORY
     3,  // ZOMBIE_DIE_DIRECTORY
     12, // ZOMBIE_HEAD_DIRECTORY
     8,  // ZOMBIE_EATING_DIRECTORY
     8,  // ZOMBIE_EATING_BLINK_DIRECTORY
+    8,  // ZOMBIE_EATING_COLD_DIRECTORY
 
     8, // CONE_ZOMBIE_WALK_DIRECTORY
     8, // CONE_ZOMBIE_WALK_BLINK_DIRECTORY
@@ -351,4 +375,16 @@ const int C_SHEET[] = {
     0, // BLACK_SCREEN_DIRECTORY
     0, // HUGE_WAVE_DIRECTORY
 
+};
+
+static map<int, int> blink_of = {
+    {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK1_BLINK_DIRECTORY},
+    {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_WALK2_BLINK_DIRECTORY},
+    {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_WALK3_BLINK_DIRECTORY},
+};
+
+static map<int, int> cold_of = {
+    {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK1_COLD_DIRECTORY},
+    {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_WALK2_COLD_DIRECTORY},
+    {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_WALK3_COLD_DIRECTORY},
 };

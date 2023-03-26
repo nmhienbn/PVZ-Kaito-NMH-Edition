@@ -2,6 +2,7 @@
 #include "peashooter.h"
 #include "sunflower.h"
 #include "walnut.h"
+#include "snowpea.h"
 #include "zombie.h"
 #include "pea.h"
 #include "sun.h"

@@ -71,6 +71,7 @@ void display_game_elements(window &win, Elements &elements, Map &cells)
     display_peashooters(win, elements.peashooters, cells);
     display_sunflowers(win, elements.sunflowers, cells);
     display_walnuts(win, elements.walnuts, cells);
+    display_snowpeas(win, elements.snowpeas, cells);
 
     display_dead_zombies(win, elements.dead_zombies, cells);
     display_zombies(win, elements.zombies, cells);
@@ -89,6 +90,7 @@ void display_game_paused_elements(window &win, Elements &elements, Map &cells, L
     display_peashooters(win, elements.peashooters, cells, true);
     display_sunflowers(win, elements.sunflowers, cells, true);
     display_walnuts(win, elements.walnuts, cells, true);
+    display_snowpeas(win, elements.snowpeas, cells, true);
     display_peas(win, elements.peas, cells);
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
 }
@@ -125,6 +127,10 @@ void display_chosen_plant(window &win, Player player, Icons icons)
     else if (icons.is_walnut_chosen)
     {
         win.draw_png_scale(WALNUT_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+    }
+    else if (icons.is_snowpea_chosen)
+    {
+        win.draw_png_scale(SNOWPEA_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }
 

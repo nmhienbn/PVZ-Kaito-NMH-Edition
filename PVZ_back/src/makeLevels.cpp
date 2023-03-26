@@ -325,13 +325,17 @@ Reset all things after a level finished.
 */
 void reset_level(Elements &elements, Map &cells)
 {
-    elements.dead_zombies.clear();
-    elements.peas.clear();
+
     elements.peashooters.clear();
     elements.sunflowers.clear();
-    elements.suns.clear();
     elements.walnuts.clear();
+    elements.snowpeas.clear();
+
+    elements.suns.clear();
+    elements.peas.clear();
+
     elements.zombies.clear();
+    elements.dead_zombies.clear();
 
     for (int y = 0; y < VERT_BLOCK_COUNT; y++)
     {
