@@ -108,7 +108,10 @@ Not in code:
 	Add snowz_pea (snowpea's bullet).
 	Add fade out animation when change screen.
 	Clear renderer to fix lag.
-	
+
+26/03/2023:	
+	Rearrange files.
+	Fix bug: peashooter still fire peas if zombie go after it!!!
 
 
 NEED TO ADD COMMENT
