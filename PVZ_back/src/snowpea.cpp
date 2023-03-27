@@ -12,6 +12,12 @@ void fire_snowz_peas(Elements &elements, Map &cells)
     {
         int row = snowpea.row;
         int col = snowpea.col;
+        if (snowpea.directory_num == SNOWPEA_ATTACK_DIRECTORY && snowpea.frame == 32 * SNOWPEA_FRAME)
+        {
+            play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
+            Pea temp(2, row, cells[row][col].x2 - 10);
+            elements.peas.push_back(temp);
+        }
         if (are_there_zombies_in_snowpea_row(snowpea, elements, cells))
         {
             if (snowpea.directory_num == SNOWPEA_SHEET_DIRECTORY)
@@ -19,15 +25,7 @@ void fire_snowz_peas(Elements &elements, Map &cells)
                 if (snowpea.frame == 0)
                 {
                     snowpea.directory_num = SNOWPEA_ATTACK_DIRECTORY;
-                    snowpea.blink_directory_num = PEASHOOTER_ATTACK_BLINK_DIRECTORY;
                 }
-            }
-            else if (snowpea.frame == 32)
-            {
-                play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-                Pea temp(2, row, cells[row][col].x2 - 10);
-                elements.peas.push_back(temp);
-                // cout << elements.peas.size() << '\n';
             }
         }
         else
@@ -37,7 +35,6 @@ void fire_snowz_peas(Elements &elements, Map &cells)
                 if (snowpea.frame == 0)
                 {
                     snowpea.directory_num = SNOWPEA_SHEET_DIRECTORY;
-                    snowpea.blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
                 }
             }
         }
@@ -64,23 +61,23 @@ Change to sprite sheet
 */
 void display_snowpeas(window &win, vector<Snowpea> &snowpeas, Map &cells, bool is_pause)
 {
-    for (int i = 0; i < snowpeas.size(); i++)
+    for (auto &snowpea : snowpeas)
     {
-        int col = snowpeas[i].col;
-        int row = snowpeas[i].row;
-        int frame = snowpeas[i].frame;
-        int scol = frame % C_SHEET[snowpeas[i].directory_num];
-        int srow = frame / C_SHEET[snowpeas[i].directory_num];
-        win.draw_png(snowpeas[i].directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        if (snowpeas[i].is_attacked)
+        int col = snowpea.col;
+        int row = snowpea.row;
+        int frame = snowpea.frame / SNOWPEA_FRAME;
+        int scol = frame % C_SHEET[snowpea.directory_num];
+        int srow = frame / C_SHEET[snowpea.directory_num];
+        win.draw_png(snowpea.directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (snowpea.is_attacked)
         {
-            win.draw_png(snowpeas[i].blink_directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-            snowpeas[i].is_attacked--;
+            win.draw_png(blink_of[snowpea.directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            snowpea.is_attacked--;
         }
         if (is_pause == false)
-            if (++snowpeas[i].frame >= N_SHEET[snowpeas[i].directory_num])
+            if (++snowpea.frame >= SNOWPEA_FRAME * N_SHEET[snowpea.directory_num])
             {
-                snowpeas[i].frame = 0;
+                snowpea.frame = 0;
             }
     }
 }

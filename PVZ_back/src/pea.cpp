@@ -18,7 +18,7 @@ Updated: one pea hit only one zombies at a time.
 */
 void handle_pea_zombie_encounter(Elements &elements, Map &cells)
 {
-    for (int i = 0; i < elements.peas.size(); i++)
+    for (int i = 0; i < (int)elements.peas.size(); i++)
     {
         if (elements.peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
             elements.peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
@@ -29,8 +29,8 @@ void handle_pea_zombie_encounter(Elements &elements, Map &cells)
             }
             continue;
         }
-        for (int j = 0; j < elements.zombies.size(); j++)
-            if (apply_pea_hitting_zombie(elements, i, j))
+        for (int j = 0; j < (int)elements.zombies.size(); j++)
+            if (apply_pea_hitting_zombie(elements, elements.peas[i], j))
             {
                 play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
                 break;
@@ -45,34 +45,38 @@ Updated:
     Remove zombie's 2 appearances.
     Add zombies' death struct.
 */
-bool apply_pea_hitting_zombie(Elements &elements, int p_ind, int z_ind)
+bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
 {
-    if (has_pea_reached_zombie(elements.peas[p_ind], elements.zombies[z_ind]))
+    if (has_pea_reached_zombie(pea, elements.zombies[z_ind]))
     {
         elements.zombies[z_ind].health--;
         elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
-        if (elements.peas[p_ind].type == 2)
+        if (pea.type == 2)
         {
             elements.zombies[z_ind].cold_time = MAX_COLD_TIME;
         }
-        if (elements.peas[p_ind].directory_num == PEA_DIRECTORY ||
-            elements.peas[p_ind].directory_num == SNOWZ_PEA_DIRECTORY)
+        if (pea.directory_num == PEA_DIRECTORY ||
+            pea.directory_num == SNOWZ_PEA_DIRECTORY)
         {
-            elements.peas[p_ind].directory_num++;
+            pea.directory_num++; // Make the pea explode
         }
-        // determine_zombie_appearanc(elements.zombies[z_ind]);
 
         if (elements.zombies[z_ind].health == 0)
         {
-            if (elements.zombies[z_ind].type >= 2)
+            if (elements.zombies[z_ind].type >= CONE_TYPE)
             {
+                // Keep cold time after lost their armor
+                int tmp = elements.zombies[z_ind].cold_time;
                 elements.zombies[z_ind] = Zombie(NORMAL_TYPE, elements.zombies[z_ind].row, elements.zombies[z_ind].x_location);
+                elements.zombies[z_ind].cold_time = tmp;
             }
             else
             {
                 DeadZombie tmp;
                 tmp.row = elements.zombies[z_ind].row;
                 tmp.x_location = elements.zombies[z_ind].x_location;
+                if (elements.zombies[z_ind].cold_time)
+                    tmp.is_cold = true;
                 elements.dead_zombies.push_back(tmp);
                 elements.zombies.erase(elements.zombies.begin() + z_ind);
             }
@@ -88,7 +92,7 @@ Move the pea: For all pea:
 */
 void move_peas(vector<Pea> &peas, Elements &elements, Map &cells)
 {
-    for (int i = 0; i < peas.size(); i++)
+    for (int i = 0; i < (int)peas.size(); i++)
     {
         if (can_pea_move(peas[i], elements, cells))
             peas[i].x_location += PEA_DX;
@@ -110,8 +114,8 @@ bool can_pea_move(Pea &pea, Elements &elements, Map &cells)
     int right_bound = WINDOW_WIDTH;
     if (pea.x_location > right_bound)
         return false;
-    for (int i = 0; i < elements.zombies.size(); i++)
-        if (has_pea_reached_zombie(pea, elements.zombies[i]))
+    for (auto &zombie : elements.zombies)
+        if (has_pea_reached_zombie(pea, zombie))
             return false;
     return true;
 }
@@ -121,14 +125,14 @@ Display the peas
 */
 void display_peas(window &win, vector<Pea> &peas, Map &cells)
 {
-    for (int i = 0; i < peas.size(); i++)
+    for (auto &pea : peas)
     {
-        int row = peas[i].row;
+        int row = pea.row;
         int y_location = cells[row][0].y1 + 20;
         int more_px = 0;
-        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
-            peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
+        if (pea.directory_num == PEA_EXPLODE_DIRECTORY ||
+            pea.directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
             more_px += 25;
-        win.draw_png_scale(peas[i].directory_num, peas[i].x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
+        win.draw_png_scale(pea.directory_num, pea.x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
     }
 }

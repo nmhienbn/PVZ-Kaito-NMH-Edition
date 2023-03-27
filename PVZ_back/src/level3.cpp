@@ -20,7 +20,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                    Level &level, Elements &game_characters, int &clk, bool &quit,
                    bool &is_game_started, bool &is_level_chosen, bool &is_paused)
 {
-    int start_time = SDL_GetTicks();
+    // int start_time = SDL_GetTicks();
     if (!is_game_started)
     {
         play_music(R_S_P_MUSIC_DIRECTORY);
@@ -59,7 +59,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                         level.waves_finished = false;
                         is_level_chosen = false;
                         play_music(OPENING_MUSIC_DIRECTORY);
-                        reset_level(game_characters, cells);
+                        reset_level(game_characters, cells, icons);
                     }
                 });
 
@@ -80,7 +80,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
                         update_unlocked_level(player, level);
                         level.waves_finished = false;
                         is_level_chosen = false;
-                        reset_level(game_characters, cells);
+                        reset_level(game_characters, cells, icons);
                         play_music(OPENING_MUSIC_DIRECTORY);
                     }
                 });
@@ -132,7 +132,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         clk++;
     win.update_screen();
 
-    int now_time = SDL_GetTicks() - start_time;
-    int delay_time = std::max(5, ticks_per_frame - now_time);
+    // int now_time = SDL_GetTicks() - start_time;
+    // int delay_time = std::max(5, ticks_per_frame - now_time);
     // DELAY(delay_time);
 }

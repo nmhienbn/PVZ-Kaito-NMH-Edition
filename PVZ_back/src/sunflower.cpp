@@ -14,7 +14,6 @@ void gen_sun_from_all_sunflowers(Elements &elements, Map &cells)
                 if (sunflower.frame == 0)
                 {
                     sunflower.directory_num = SUNFLOWER_HAPPY_DIRECTORY;
-                    sunflower.blink_directory_num = SUNFLOWER_HAPPY_BLINK_DIRECTORY;
                 }
             }
             else if (sunflower.frame == 13 * SUNFLOWER_F_SHEET)
@@ -29,7 +28,6 @@ void gen_sun_from_all_sunflowers(Elements &elements, Map &cells)
                 if (sunflower.frame == 0)
                 {
                     sunflower.directory_num = SUNFLOWER_SHEET_DIRECTORY;
-                    sunflower.blink_directory_num = SUNFLOWER_SHEET_BLINK_DIRECTORY;
                 }
             }
         }
@@ -76,7 +74,7 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &cells, 
                 }
             if (sunflower.is_attacked)
             {
-                win.draw_png(sunflower.blink_directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
                 sunflower.is_attacked--;
             }
         }
@@ -98,7 +96,7 @@ void display_sunflowers(window &win, vector<Sunflower> &sunflowers, Map &cells, 
                 }
             if (sunflower.is_attacked)
             {
-                win.draw_png(sunflower.blink_directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 20, ELEMENT_WIDTH, ELEMENT_HEIGHT);
                 sunflower.is_attacked--;
             }
         }

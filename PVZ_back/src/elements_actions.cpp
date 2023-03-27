@@ -35,7 +35,7 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     fire_peas(elements, cells);
     fire_snowz_peas(elements, cells);
 
-    if (clk % SUN_GEN_SKY_CLK_COUNT == 0)
+    if (level.is_night == false && clk % SUN_GEN_SKY_CLK_COUNT == 0)
         gen_random_sun_from_sky(elements);
 
     gen_sun_from_all_sunflowers(elements, cells);
@@ -61,29 +61,32 @@ void create_new_zombies(Elements &elements, Level &level)
         while (elements.zombies.empty())
         {
             // Generate zombies for current wave and current second.
-            int zombie_cnt = level.zombie_distr_for_wave[level.cur_wave][level.cur_sec];
-            if (level.cur_wave == 0 && level.cur_sec == 0)
-                zombie_has_coming = false;
-            if (zombie_has_coming == false)
+            for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
             {
-                if (zombie_cnt > 0)
+                int zombie_cnt = level.zombie_distr_for_wave[typ][level.cur_wave][level.cur_sec];
+                if (level.cur_wave == 0 && level.cur_sec == 0)
+                    zombie_has_coming = false;
+                if (zombie_has_coming == false)
                 {
-                    play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
-                    zombie_has_coming = true;
+                    if (zombie_cnt > 0)
+                    {
+                        play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
+                        zombie_has_coming = true;
+                    }
                 }
-            }
-            else if (zombie_cnt > 0)
-            {
-                play_sound_effect(GROAN_MUSIC_DIRECTORY);
-            }
-            for (int i = 0; i < zombie_cnt; i++)
-            {
-                temp = Zombie(NORMAL_TYPE);
-                if (level.level_num == 1)
-                    temp.row = 2;
-                else if (level.level_num == 2)
-                    temp.row = rand(1, 3);
-                elements.zombies.push_back(temp);
+                else if (zombie_cnt > 0)
+                {
+                    play_sound_effect(GROAN_MUSIC_DIRECTORY);
+                }
+                for (int i = 0; i < zombie_cnt; i++)
+                {
+                    temp = Zombie(typ);
+                    if (level.level_num == 1)
+                        temp.row = 2;
+                    else if (level.level_num == 2)
+                        temp.row = rand(1, 3);
+                    elements.zombies.push_back(temp);
+                }
             }
             // Move to the next second and maybe next wave
             if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])

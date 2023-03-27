@@ -15,22 +15,20 @@ void handle_menu_click(Player &player, Elements &elements, Level &level, Icons &
         is_paused = false;
         is_game_started = false;
         is_level_chosen = false;
-        reset_level(elements, cells);
+        reset_level(elements, cells, icons);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         play_music(OPENING_MUSIC_DIRECTORY);
-        icons = Icons();
         return;
     }
     if (RESTART.is_mouse_in(mouse_x, mouse_y))
     {
         is_paused = false;
         is_game_started = false;
-        reset_level(elements, cells);
+        reset_level(elements, cells, icons);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         load_level(player, level);
         clk = 0;
         is_game_started = false;
-        icons = Icons();
         return;
     }
 }

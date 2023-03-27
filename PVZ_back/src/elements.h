@@ -27,7 +27,6 @@ struct Sunflower
     int bite;
     int sec_for_another_sun = SUN_GEN_SUNFLOWER_CLK_COUNT;
     int directory_num = SUNFLOWER_SHEET_DIRECTORY;
-    int blink_directory_num = SUNFLOWER_SHEET_BLINK_DIRECTORY;
     int frame = 0;
     int is_attacked = 0;
 };
@@ -37,7 +36,6 @@ struct Walnut
     int row, col;
     int bite;
     int directory_num = WALNUT_1_DIRECTORY;
-    int blink_directory_num = WALNUT_1_BLINK_DIRECTORY;
     int frame = 0;
     int is_attacked = 0;
 };
@@ -48,7 +46,6 @@ struct Peashooter
     int bite;
     int sec_for_another_pea = 1;
     int directory_num = PEASHOOTER_SHEET_DIRECTORY;
-    int blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
     int frame = 0;
     int is_attacked = 0;
 };
@@ -59,7 +56,6 @@ struct Snowpea
     int bite;
     int sec_for_another_pea = 1;
     int directory_num = SNOWPEA_SHEET_DIRECTORY;
-    int blink_directory_num = PEASHOOTER_SHEET_BLINK_DIRECTORY;
     int frame = 0;
     int is_attacked = 0;
 };
@@ -86,7 +82,7 @@ enum ZombieType
     CONE_TYPE,
     BUCKET_TYPE,
 
-    COUNT_TYPE,
+    COUNT_ZOMBIE_TYPE,
 };
 /*
 @param row(int): The row of the zombie
@@ -101,18 +97,18 @@ enum ZombieType
 */
 struct Zombie
 {
-    ZombieType type;
+    int type;
 
     int row, x_location;
     int health;
     bool is_moving;
-    int directory_num, blink_directory_num;
+    int directory_num;
     int frame;
     int is_attacked, cold_time;
 
     Zombie();
-    Zombie(ZombieType _type);
-    Zombie(ZombieType _type, int _row, int _x);
+    Zombie(int _type);
+    Zombie(int _type, int _row, int _x);
     void change_zombie_eating_status();
     bool operator<(const Zombie &other) const;
 };
@@ -123,6 +119,7 @@ struct DeadZombie
     int body = ZOMBIE_DIE_DIRECTORY;
     int head = ZOMBIE_HEAD_DIRECTORY;
     int frame = 0;
+    bool is_cold = false;
 };
 /*--------------------------------------------------------------------
 Player and others
@@ -201,12 +198,14 @@ struct Level
     int cur_wave;
     int cur_sec;
     bool waves_finished;
+    int map_type;
+    bool is_night;
 
     int background_directory = BACKGROUND_DIRECTORY;
     int announce_directory = NULL_DIRECTORY;
 
-    vector<vector<int>> zombie_distr_for_wave;
-    vector<int> wave_zombie_count;
+    vector<vector<int>> zombie_distr_for_wave[COUNT_ZOMBIE_TYPE];
+    vector<int> wave_zombie_count[COUNT_ZOMBIE_TYPE];
     vector<int> wave_duration;
 
     bool is_huge_wave();
@@ -222,13 +221,23 @@ struct Button
     ~Button();
     bool is_mouse_in(int mouse_x, int mouse_y) const;
 };
-
 const Button Shovel(140, 215, 500, 575);
 const Button TAP_TO_START(230, 796, 520, 585);
-const Button LEVEL_1(15, 240, 40, 205);
-const Button LEVEL_2(260, 485, 40, 205);
-const Button LEVEL_3(505, 730, 40, 205);
-const Button LEVEL_4(750, 975, 40, 205);
+
+#define LEVEL_COUNT 8
+const Button LEVEL_BUTTON[] = {
+    {0, 0, 0, 0},         // LV NULL
+    {15, 240, 40, 205},   // LV 1
+    {260, 485, 40, 205},  // LV 2
+    {505, 730, 40, 205},  // LV 3
+    {750, 975, 40, 205},  // LV 4
+    {15, 240, 230, 395},  // LV 5
+    {260, 485, 230, 395}, // LV 6
+    {505, 730, 230, 395}, // LV 7
+    {750, 975, 230, 395}  // LV 8
+
+};
+
 const Button ICON_BAR_LV1(20, 125, 100, 170);
 const Button ICON_BAR_LV2(20, 125, 100, 240);
 const Button ICON_BAR_LV3(20, 125, 100, 310);

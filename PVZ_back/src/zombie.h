@@ -3,7 +3,7 @@
 #include "music.h"
 #include "rsdl.hpp"
 
-bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &cells);
+bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int &col, Map &cells);
 template <class vector_plant>
 bool has_zombie_reached_plant(Zombie &zombie, vector_plant &plants, Map &cells);
 bool has_zombie_reached_any_plant(Elements &elements, Zombie &zombie, Map &cells);
@@ -15,7 +15,7 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
 
 //------------------------------Zombie bite--------------------------------------
 template <class plant_type>
-void apply_zombie_bite_on_plant(vector<Zombie> &zombies, vector<plant_type> &plants, int &z_ind, int &p_ind, Map &cells, const int bite_limit);
+void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, Map &cells, const int bite_limit);
 
 template <class plant_type>
 void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<plant_type> &plants, Map &cells, const int bite_limit);
@@ -29,16 +29,16 @@ If the zombie reached plant_type, apply its bites on the plant_type:
     + if plant_type's bite == LIMIT: reset zombie moving and delete that plant_type
 */
 template <class plant_type>
-void apply_zombie_bite_on_plant(vector<Zombie> &zombies, vector<plant_type> &plants, int &z_ind, int &p_ind, Map &cells, const int bite_limit)
+void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, Map &cells, const int bite_limit)
 {
-    if (has_zombie_reached_element(zombies[z_ind], plants[p_ind].row, plants[p_ind].col, cells))
+    if (has_zombie_reached_element(zombie, plants[p_ind].row, plants[p_ind].col, cells))
     {
         play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
         plants[p_ind].bite++;
         plants[p_ind].is_attacked = MAX_TIME_BLINK;
         if (plants[p_ind].bite == bite_limit)
         {
-            zombies[z_ind].is_moving = true;
+            zombie.is_moving = true;
             cells[plants[p_ind].row][plants[p_ind].col].is_planted = false;
             plants.erase(plants.begin() + p_ind);
         }
@@ -51,9 +51,9 @@ For all zombie and all plant_type: apply zombie's bite
 template <class plant_type>
 void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<plant_type> &plants, Map &cells, const int bite_limit)
 {
-    for (int i = 0; i < plants.size(); i++)
-        for (int j = 0; j < zombies.size(); j++)
-            apply_zombie_bite_on_plant(zombies, plants, j, i, cells, bite_limit);
+    for (int i = 0; i < (int)plants.size(); i++)
+        for (auto &zombie : zombies)
+            apply_zombie_bite_on_plant(zombie, plants, i, cells, bite_limit);
 }
 
 template <class vector_plant>

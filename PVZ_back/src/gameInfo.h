@@ -33,7 +33,7 @@ using namespace std;
 #define WALNUT_LOADING 1300    // Walnut loading
 #define SNOWPEA_LOADING 400    // Peashooter loading
 #define MAX_TIME_BLINK 5       // time blink when attack
-#define MAX_COLD_TIME 180      // time being cold
+#define MAX_COLD_TIME 300      // time being cold
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -97,10 +97,13 @@ Moving speed of some elements
 #define PEA_HEIGHT 25
 #define PEA_EXPLODE_TIME 35
 
+#define PEASHOOTER_FRAME 2
 #define PEASHOOTER_WIDTH 185
 #define PEASHOOTER_HEIGHT 177
 #define PEASHOOTER_G_WIDTH 200
 #define PEASHOOTER_G_HEIGHT 157 //**
+
+#define SNOWPEA_FRAME 2
 
 #define SUNFLOWER_WIDTH 215
 #define SUNFLOWER_HEIGHT 251

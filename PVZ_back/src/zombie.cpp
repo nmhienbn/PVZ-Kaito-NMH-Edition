@@ -8,7 +8,7 @@ Check if Zombie is in query tile or not.
 @param col: query column
 @return true if zombie is not in query tile.
 */
-bool has_zombie_reached_element(Zombie zombie, int row, int col, Map &cells)
+bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int &col, Map &cells)
 {
     int right_limit = cells[row][col].x2 - TILE_WIDTH;
     int left_limit = cells[row][col].x1 - TILE_WIDTH;
@@ -63,9 +63,9 @@ Update all zombies' moving status.
 */
 void update_moving_status_for_zombies(Elements &elements, Map &cells)
 {
-    for (int i = 0; i < elements.zombies.size(); i++)
+    for (auto &zombie : elements.zombies)
     {
-        has_zombie_reached_any_plant(elements, elements.zombies[i], cells);
+        has_zombie_reached_any_plant(elements, zombie, cells);
     }
 }
 
@@ -75,13 +75,15 @@ Move the zombie: For all zombie:
 */
 void move_zombies(vector<Zombie> &zombies, Elements &elements, Map &cells)
 {
-    for (int i = 0; i < zombies.size(); i++)
+    for (int i = 0; i < (int)zombies.size(); i++)
     {
         if (can_zombie_move(zombies[i], elements, cells))
+        {
             if (zombies[i].cold_time)
                 zombies[i].x_location -= ZOMBIE_DX / FREEZE_ZOMBIE_SLOW_TIMES;
             else
                 zombies[i].x_location -= ZOMBIE_DX;
+        }
     }
 }
 
@@ -118,7 +120,7 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
         }
         if (zombies[i].is_attacked)
         {
-            win.draw_png(zombies[i].blink_directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+            win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
             zombies[i].is_attacked--;
         }
         if (is_pause == false)
@@ -138,7 +140,7 @@ Display zombie dead independently.
 */
 void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &cells, bool is_pause)
 {
-    for (int i = 0; i < dead_zombies.size(); i++)
+    for (int i = 0; i < (int)dead_zombies.size(); i++)
     {
         int row = dead_zombies[i].row;
         int y_location = cells[row][0].y1 - 45;
@@ -149,10 +151,14 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
             int scol = frame % C_SHEET[ZOMBIE_DIE_DIRECTORY];
             int srow = frame / C_SHEET[ZOMBIE_DIE_DIRECTORY];
             win.draw_png(ZOMBIE_DIE_DIRECTORY, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+            if (dead_zombies[i].is_cold)
+                win.draw_png(cold_of[ZOMBIE_DIE_DIRECTORY], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
         }
         int scol = frame % C_SHEET[ZOMBIE_HEAD_DIRECTORY];
         int srow = frame / C_SHEET[ZOMBIE_HEAD_DIRECTORY];
         win.draw_png(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
+        if (dead_zombies[i].is_cold)
+            win.draw_png(cold_of[ZOMBIE_HEAD_DIRECTORY], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
         if (is_pause == false)
             if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[ZOMBIE_HEAD_DIRECTORY])
             {

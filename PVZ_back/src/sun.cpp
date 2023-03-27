@@ -19,7 +19,7 @@ Remove the suns that are exist a long time.
 */
 void remove_suns(Elements &elements)
 {
-    for (int i = 0; i < elements.suns.size(); i++)
+    for (int i = 0; i < (int)elements.suns.size(); i++)
         if (elements.suns[i].wait_seconds >= 100)
             elements.suns.erase(elements.suns.begin() + i);
 }
@@ -31,7 +31,7 @@ For all the sun:
 */
 void move_suns(vector<Sun> &suns, Map &cells)
 {
-    for (int i = 0; i < suns.size(); i++)
+    for (int i = 0; i < (int)suns.size(); i++)
     {
         if (suns[i].is_clicked)
         {

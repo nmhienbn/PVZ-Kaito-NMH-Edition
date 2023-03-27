@@ -37,7 +37,13 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ZOMBIE_WALK1_COLD_DIRECTORY ||
         file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
         file_num == ZOMBIE_WALK3_COLD_DIRECTORY ||
-        file_num == ZOMBIE_EATING_COLD_DIRECTORY)
+        file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
+        file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
+        file_num == ZOMBIE_DIE_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_COLD_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 120);
     }
@@ -85,7 +91,6 @@ window::~window()
 TTF_Font *window::get_font(string font_addr, RGB color, int size)
 {
     font_addr = FONTS_DIRECTORY + font_addr;
-    SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
     stringstream ss;
     ss << size;
     TTF_Font *font = fonts_cache[font_addr + ":" + ss.str()];
@@ -271,7 +276,7 @@ void window::fade_out()
     for (int i = 0; i <= 255; i++)
     {
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 4));
+        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 3));
         update_screen();
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);

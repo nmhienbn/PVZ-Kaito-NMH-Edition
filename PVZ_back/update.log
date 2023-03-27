@@ -115,6 +115,17 @@ Not in code:
 	0.20% to play zombie groan sound effect.
 	Add snowpea effect: slow the zombie.
 
+27/03/2023:
+	New makefile: just compile the modified .cpp(s) (depend on last write time from system) --> faster compile
+	Snowpea's leaf: -100 Hue and -20 Saturation, colorize
+	Snowpea's other = Peashooter +180 hue and +100 saturation, colorize.
+	Peashooter and Snowpea still fire if they are in attack status and reach 32th frame (although there is no alive zombie).
+	Change level files struct: add number of conehead zombie and buckethead zombie each wave.
+	Keep zombies' cold time after they lost their armor.
+	Add levels: 5, 6, 7, 8
+	**Level 8 is night: No more suns from sky.**
+
+TOTAL now: 4 plants and 3 zombies available.
 
 NEED TO ADD COMMENT
 

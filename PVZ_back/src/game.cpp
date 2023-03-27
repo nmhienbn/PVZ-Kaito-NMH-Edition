@@ -24,12 +24,11 @@ int main(int argv, char **args)
         if (!level_chosen)
         {
             // win.clear_renderer();
-            display_choosing_level_screen(win, level, player.unlocked_level, level_chosen, quit);
+            display_choosing_level_screen(win, level, player, level_chosen, quit);
             if (level_chosen)
             {
                 Mix_HaltMusic();
                 play_sound_effect(EVIL_LAUGH_MUSIC_DIRECTORY);
-                load_level(player, level);
                 clk = 0;
                 is_game_started = false;
                 win.fade_out();

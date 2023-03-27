@@ -98,12 +98,6 @@ private:
 	{                                                             \
 		Code;                                                     \
 	}
-// #define KEY_TO_WIN(Code)                                                                                                                                                   \
-// 	if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_LCTRL || e.key.keysym.sym == SDLK_RCTRL) && (e.key.keysym.sym == SDLK_LALT || e.key.keysym.sym == SDLK_RALT) && \
-// 		(e.key.keysym.sym == SDLK_LSHIFT || e.key.keysym.sym == SDLK_RSHIFT) && (e.key.keysym.sym == SDLK_w))                                                              \
-// 	{                                                                                                                                                                      \
-// 		Code;                                                                                                                                                              \
-// 	}
 
 #define KEY_TO_WIN(Code)                                     \
 	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_w) \

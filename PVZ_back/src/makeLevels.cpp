@@ -78,19 +78,30 @@ Read level's information from level files:
 */
 void read_level(Level &level)
 {
-    string wave_cnt, zombie_seq, wave_dur, temp;
+    string map_typ, wave_cnt, zombie_seq, wave_dur, temp;
     string file_name = LEVELS_DIRECTORY;          // levels folder
     file_name += std::to_string(level.level_num); // level num
     file_name += ".level.txt";                    // level extension
     std::ifstream myfile(file_name);
-    int num_ind = 0;
+
+    getline(myfile, map_typ);
+    level.map_type = map_typ.back() - '1';
+    if (level.map_type == 3)
+        level.is_night = true;
+    else
+        level.is_night = false;
+
     getline(myfile, wave_cnt);
-    getline(myfile, zombie_seq);
     getline(myfile, wave_dur);
 
     convert_wave_cnt_str_into_int(level, wave_cnt);
-    convert_zombie_seq_str_into_int_vect(level, zombie_seq);
     convert_wave_dur_str_into_int_vect(level, wave_dur);
+    for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
+    {
+        zombie_seq = "";
+        getline(myfile, zombie_seq);
+        convert_zombie_seq_str_into_int_vect(level, zombie_seq, typ);
+    }
     level.cur_wave = 0;
     level.cur_sec = 0;
     level.waves_finished = false;
@@ -99,7 +110,7 @@ void read_level(Level &level)
 /*
 Get information of number of waves in file.
 */
-void convert_wave_cnt_str_into_int(Level &level, string wave_cnt)
+void convert_wave_cnt_str_into_int(Level &level, const string &wave_cnt)
 {
     string temp;
     int num_ind = wave_cnt.find(":") + 2;
@@ -108,26 +119,9 @@ void convert_wave_cnt_str_into_int(Level &level, string wave_cnt)
 }
 
 /*
-Get information of number of zombie in each wave in file.
-*/
-void convert_zombie_seq_str_into_int_vect(Level &level, string zombie_seq)
-{
-    string temp;
-    int num_ind = zombie_seq.find(":") + 2;
-    int space_ind = zombie_seq.find(" ", num_ind);
-    for (int i = 0; i < level.wave_count; i++)
-    {
-        temp = zombie_seq.substr(num_ind, space_ind - num_ind);
-        level.wave_zombie_count.push_back(stoi(temp));
-        num_ind = space_ind + 1;
-        space_ind = zombie_seq.find(" ", num_ind);
-    }
-}
-
-/*
 Get information of duration of wave in file.
 */
-void convert_wave_dur_str_into_int_vect(Level &level, string wave_dur)
+void convert_wave_dur_str_into_int_vect(Level &level, const string &wave_dur)
 {
     string temp;
     int num_ind = wave_dur.find(":") + 2;
@@ -138,6 +132,23 @@ void convert_wave_dur_str_into_int_vect(Level &level, string wave_dur)
         level.wave_duration.push_back(stoi(temp));
         num_ind = space_ind + 1;
         space_ind = wave_dur.find(" ", num_ind);
+    }
+}
+
+/*
+Get information of number of zombie in each wave in file.
+*/
+void convert_zombie_seq_str_into_int_vect(Level &level, const string &zombie_seq, const int &typ)
+{
+    string temp;
+    int num_ind = zombie_seq.find(":") + 2;
+    int space_ind = zombie_seq.find(" ", num_ind);
+    for (int i = 0; i < level.wave_count; i++)
+    {
+        temp = zombie_seq.substr(num_ind, space_ind - num_ind);
+        level.wave_zombie_count[typ].push_back(stoi(temp));
+        num_ind = space_ind + 1;
+        space_ind = zombie_seq.find(" ", num_ind);
     }
 }
 
@@ -164,32 +175,34 @@ void decide_zombie_cnt_for_each_sec(Level &level)
 {
     bool enough_zombies = false;
     int z_cnt, sum;
-
-    for (int wave = 0; wave < level.wave_count; wave++)
+    for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
     {
-        vector<int> temp(level.wave_duration[wave], 0);
-        enough_zombies = false;
-
-        sum = 0;
-        for (int sec = 0; sec < level.wave_duration[wave]; sec++)
+        for (int wave = 0; wave < level.wave_count; wave++)
         {
-            z_cnt = rand(1, 5);
+            vector<int> temp(level.wave_duration[wave], 0);
+            enough_zombies = false;
 
-            if (enough_zombies)
-                temp[sec] = 0;
-            else
+            sum = 0;
+            for (int sec = 0; sec < level.wave_duration[wave]; sec++)
             {
-                if (z_cnt + sum <= level.wave_zombie_count[wave])
-                    temp[sec] = z_cnt;
+                z_cnt = rand(1, 5);
+
+                if (enough_zombies)
+                    temp[sec] = 0;
                 else
                 {
-                    temp[sec] = level.wave_zombie_count[wave] - sum;
-                    enough_zombies = true;
+                    if (z_cnt + sum <= level.wave_zombie_count[typ][wave])
+                        temp[sec] = z_cnt;
+                    else
+                    {
+                        temp[sec] = level.wave_zombie_count[typ][wave] - sum;
+                        enough_zombies = true;
+                    }
                 }
+                sum += temp[sec];
             }
-            sum += temp[sec];
+            level.zombie_distr_for_wave[typ].push_back(temp);
         }
-        level.zombie_distr_for_wave.push_back(temp);
     }
 }
 
@@ -198,9 +211,9 @@ Check if player has lost: Any zombie go to the house
 */
 bool has_player_lost(Elements &elements)
 {
-    for (int i = 0; i < elements.zombies.size(); i++)
+    for (auto &zombie : elements.zombies)
     {
-        if (elements.zombies[i].x_location < X_UPPER_LEFT - 30)
+        if (zombie.x_location < X_UPPER_LEFT - 30)
             return true;
     }
     return false;
@@ -261,60 +274,35 @@ void load_level(Player &player, Level &level)
 /*New function: Display choosing level
 Display choosing level screen.
 */
-void display_choosing_level_screen(window &win, Level &level, const int &unlocked_level, bool &level_chosen, bool &quit)
+void display_choosing_level_screen(window &win, Level &level, Player &player, bool &level_chosen, bool &quit)
 {
     win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    win.show_text("Level 1", 75, 170);
-    if (unlocked_level >= 2)
-        win.show_text("Level 2", 320, 170);
-    else
+    for (int i = 1; i <= LEVEL_COUNT; i++)
     {
-        win.show_text("Level 2", 320, 170, BLACK);
-        display_level_is_locked(win, LEVEL_2);
-    }
-    if (unlocked_level >= 3)
-        win.show_text("Level 3", 565, 170);
-    else
-    {
-        win.show_text("Level 3", 565, 170, BLACK);
-        display_level_is_locked(win, LEVEL_3);
-    }
-    if (unlocked_level >= 4)
-        win.show_text("Level 4", 810, 170);
-    else
-    {
-        win.show_text("Level 4", 810, 170, BLACK);
-        display_level_is_locked(win, LEVEL_4);
+        if (player.unlocked_level >= i)
+        {
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130);
+        }
+        else
+        {
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, BLACK);
+
+            display_level_is_locked(win, LEVEL_BUTTON[i]);
+        }
     }
     HANDLE(
         QUIT(quit = true; exit(0););
         // KEY_PRESS(q, quit = true);
         LCLICK({
-            if (LEVEL_1.is_mouse_in(mouse_x, mouse_y))
-            {
-                level.level_num = 1;
-                level.background_directory = BACKGROUND_LV1_DIRECTORY;
-                level_chosen = true;
-            }
-            else if (unlocked_level >= 2 && LEVEL_2.is_mouse_in(mouse_x, mouse_y))
-            {
-                level.level_num = 2;
-                level.background_directory = BACKGROUND_LV2_DIRECTORY;
-                level_chosen = true;
-            }
-            else if (unlocked_level >= 3 && LEVEL_3.is_mouse_in(mouse_x, mouse_y))
-            {
-                level.level_num = 3;
-                level.background_directory = BACKGROUND_DIRECTORY;
-                level_chosen = true;
-            }
-            else if (unlocked_level >= 4 && LEVEL_4.is_mouse_in(mouse_x, mouse_y))
-            {
-                level.level_num = 4;
-                level.background_directory = BACKGROUND_DIRECTORY;
-                level_chosen = true;
-            }
+            for (int i = 1; i <= LEVEL_COUNT; i++)
+                if (player.unlocked_level >= i && LEVEL_BUTTON[i].is_mouse_in(mouse_x, mouse_y))
+                {
+                    level.level_num = i;
+                    load_level(player, level);
+                    level.background_directory = BACKGROUND_LV1_DIRECTORY + level.map_type;
+                    level_chosen = true;
+                }
         });
 
     );
@@ -323,7 +311,7 @@ void display_choosing_level_screen(window &win, Level &level, const int &unlocke
 /*New function (Need update):
 Reset all things after a level finished.
 */
-void reset_level(Elements &elements, Map &cells)
+void reset_level(Elements &elements, Map &cells, Icons &icons)
 {
 
     elements.peashooters.clear();
@@ -344,4 +332,5 @@ void reset_level(Elements &elements, Map &cells)
             cells[y][x].is_planted = false;
         }
     }
+    icons = Icons();
 }

@@ -1,3 +1,6 @@
+level map: 1
 waves: 5
-zombies sequence : 1 1 1 8 12
-wave length: 2 2 2 7 7
+wave length: 2 2 2 6 5
+normal zombies: 1 1 1 4 4
+conehead zombies: 0 0 0 0 0
+buckethead zombies: 0 0 0 0 0

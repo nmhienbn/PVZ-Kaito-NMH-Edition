@@ -244,7 +244,7 @@ Remove plant if click on its tile
 */
 void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mouse_x, const int &mouse_y)
 {
-    for (int i = 0; i < elements.sunflowers.size(); i++)
+    for (int i = 0; i < (int)elements.sunflowers.size(); i++)
     {
         if (is_click_made_in_element_block(elements.sunflowers[i].row, elements.sunflowers[i].col, mouse_x, mouse_y, cells))
         {
@@ -252,7 +252,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
             return;
         }
     }
-    for (int i = 0; i < elements.peashooters.size(); i++)
+    for (int i = 0; i < (int)elements.peashooters.size(); i++)
     {
         if (is_click_made_in_element_block(elements.peashooters[i].row, elements.peashooters[i].col, mouse_x, mouse_y, cells))
         {
@@ -260,7 +260,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
             return;
         }
     }
-    for (int i = 0; i < elements.walnuts.size(); i++)
+    for (int i = 0; i < (int)elements.walnuts.size(); i++)
     {
         if (is_click_made_in_element_block(elements.walnuts[i].row, elements.walnuts[i].col, mouse_x, mouse_y, cells))
         {
@@ -268,7 +268,7 @@ void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mou
             return;
         }
     }
-    for (int i = 0; i < elements.snowpeas.size(); i++)
+    for (int i = 0; i < (int)elements.snowpeas.size(); i++)
     {
         if (is_click_made_in_element_block(elements.snowpeas[i].row, elements.snowpeas[i].col, mouse_x, mouse_y, cells))
         {
