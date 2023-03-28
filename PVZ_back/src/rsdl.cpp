@@ -20,10 +20,12 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     else if (file_num == ZOMBIE_WALK1_BLINK_DIRECTORY ||
              file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
              file_num == ZOMBIE_WALK3_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_WALK_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY ||
-             file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
              file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_WALK_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
              file_num == WALNUT_1_BLINK_DIRECTORY ||
              file_num == WALNUT_2_BLINK_DIRECTORY ||
              file_num == WALNUT_3_BLINK_DIRECTORY ||

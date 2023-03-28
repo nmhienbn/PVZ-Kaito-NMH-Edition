@@ -37,6 +37,7 @@ enum music_type
     HUGE_WAVE_MUSIC_DIRECTORY,
     ZOMBIE_EATING1_MUSIC_DIRECTORY,
     ZOMBIE_EATING2_MUSIC_DIRECTORY,
+    SHIELD_HIT_MUSIC_DIRECTORY, // buckethead
 
     COUNT_MUSIC_DIRECTORY
 };
@@ -64,5 +65,6 @@ const string music_directory[] = {
     "./audio/hugewave.mp3",        // HUGE_WAVE_MUSIC_DIRECTORY
     "./audio/zombie_eating1.mp3",  // ZOMBIE_EATING1_MUSIC_DIRECTORY
     "./audio/zombie_eating2.mp3",  // ZOMBIE_EATING2_MUSIC_DIRECTORY
+    "./audio/shieldhit.mp3",       // SHIELD_HIT_MUSIC_DIRECTORY
 
 };

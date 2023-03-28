@@ -12,7 +12,7 @@ bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int 
 {
     int right_limit = cells[row][col].x2 - TILE_WIDTH;
     int left_limit = cells[row][col].x1 - TILE_WIDTH;
-    int zombie_new_location = zombie.x_location - ZOMBIE_DX / (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
+    int zombie_new_location = zombie.x_location - ZOMBIE_DX * (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
     if (zombie.row == row &&
         left_limit < zombie_new_location && zombie_new_location < right_limit)
         return true;
@@ -48,7 +48,7 @@ Check if zombie can move or not:
 bool can_zombie_move(Zombie &zombie, Elements &elements, Map &cells)
 {
     int left_bound = cells[0][0].x1 - TILE_WIDTH;
-    int zombie_new_location = zombie.x_location - ZOMBIE_DX / (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
+    int zombie_new_location = zombie.x_location - ZOMBIE_DX * (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
     if (zombie_new_location < left_bound)
         return false;
     if (!zombie.is_moving)
@@ -80,7 +80,7 @@ void move_zombies(vector<Zombie> &zombies, Elements &elements, Map &cells)
         if (can_zombie_move(zombies[i], elements, cells))
         {
             if (zombies[i].cold_time)
-                zombies[i].x_location -= ZOMBIE_DX / FREEZE_ZOMBIE_SLOW_TIMES;
+                zombies[i].x_location -= ZOMBIE_DX * FREEZE_ZOMBIE_SLOW_TIMES;
             else
                 zombies[i].x_location -= ZOMBIE_DX;
         }
@@ -100,16 +100,7 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
         int y_location = cells[row][0].y1 - 45;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
-        int zframe = ZOMBIE_FRAME;
-        if (zombies[i].directory_num == ZOMBIE_EATING_DIRECTORY)
-        {
-            zframe = ZOMBIE_EATING_FRAME;
-        }
-        else if (zombies[i].directory_num == ZOMBIE_WALK3_DIRECTORY)
-        {
-            zframe = 1;
-        }
-        int frame = zombies[i].frame / zframe;
+        int frame = zombies[i].frame / zombies[i].zombie_sheet;
         int scol = frame % C_SHEET[zombies[i].directory_num];
         int srow = frame / C_SHEET[zombies[i].directory_num];
         win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
@@ -125,9 +116,9 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
         }
         if (is_pause == false)
         {
-            if (zombies[i].cold_time % FREEZE_ZOMBIE_SLOW_TIMES == 0)
+            if (zombies[i].cold_time % 3 == 0)
                 zombies[i].frame++;
-            if (zombies[i].frame >= zframe * N_SHEET[zombies[i].directory_num])
+            if (zombies[i].frame >= zombies[i].zombie_sheet * N_SHEET[zombies[i].directory_num])
             {
                 zombies[i].frame = 0;
             }

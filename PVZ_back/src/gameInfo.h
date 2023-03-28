@@ -33,7 +33,7 @@ using namespace std;
 #define WALNUT_LOADING 1300    // Walnut loading
 #define SNOWPEA_LOADING 400    // Peashooter loading
 #define MAX_TIME_BLINK 5       // time blink when attack
-#define MAX_COLD_TIME 300      // time being cold
+#define MAX_COLD_TIME 600      // time being cold = 10s
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -54,7 +54,7 @@ Moving speed of some elements
 #define PEA_DX 15
 #define SUN_DY 3
 #define CLICKED_SUN_D 100
-#define FREEZE_ZOMBIE_SLOW_TIMES 3
+#define FREEZE_ZOMBIE_SLOW_TIMES 2 / 3
 
 /*Health of plants and zombies*/
 #define WALNUT_BITE_LIMIT 72

@@ -32,7 +32,6 @@ void handle_pea_zombie_encounter(Elements &elements, Map &cells)
         for (int j = 0; j < (int)elements.zombies.size(); j++)
             if (apply_pea_hitting_zombie(elements, elements.peas[i], j))
             {
-                play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
                 break;
             }
     }
@@ -49,6 +48,14 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
 {
     if (has_pea_reached_zombie(pea, elements.zombies[z_ind]))
     {
+        if (elements.zombies[z_ind].type == BUCKET_TYPE)
+        {
+            play_sound_effect(SHIELD_HIT_MUSIC_DIRECTORY);
+        }
+        else
+        {
+            play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
+        }
         elements.zombies[z_ind].health--;
         elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
         if (pea.type == 2)

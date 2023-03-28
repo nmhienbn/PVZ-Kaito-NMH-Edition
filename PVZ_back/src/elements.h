@@ -103,6 +103,7 @@ struct Zombie
     int health;
     bool is_moving;
     int directory_num;
+    int zombie_sheet;
     int frame;
     int is_attacked, cold_time;
 

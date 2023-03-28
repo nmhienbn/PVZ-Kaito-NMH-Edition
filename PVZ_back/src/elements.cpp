@@ -27,15 +27,16 @@ Zombie::Zombie(int _type)
     }
     else if (type == CONE_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 5;
         directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
     }
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+    zombie_sheet = 90 / N_SHEET[directory_num];
 }
 
 /*
@@ -61,15 +62,16 @@ Zombie::Zombie(int _type, int _row, int _x)
     }
     else if (type == CONE_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 5;
         directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
     }
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+    zombie_sheet = 90 / N_SHEET[directory_num];
 }
 
 void Zombie::change_zombie_eating_status()
@@ -128,6 +130,7 @@ void Zombie::change_zombie_eating_status()
             }
         }
     }
+    zombie_sheet = 90 / N_SHEET[directory_num];
 }
 
 bool Zombie::operator<(const Zombie &other) const

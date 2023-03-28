@@ -31,12 +31,12 @@ void handle_user_click(Player &player, Level &level, Icons &icons, Elements &ele
     }
     if (is_a_plant_seed_clicked_on(level, mouse_x, mouse_y))
     {
+        play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
         which_plant_is_chosen(player, icons, mouse_y, player.is_choosing_a_plant);
         return;
     }
     if (player.is_choosing_a_plant == true)
     {
-        play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
         if (click_is_in_frontyard(cells, level, mouse_x, mouse_y))
         {
             play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
