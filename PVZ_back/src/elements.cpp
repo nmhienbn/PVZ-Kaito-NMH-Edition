@@ -1,5 +1,7 @@
 #include "elements.h"
 
+extern Elements game_characters;
+
 Zombie::Zombie()
 {
 }
@@ -28,7 +30,7 @@ Zombie::Zombie(int _type)
     else if (type == CONE_TYPE)
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT * 3;
-        directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+        directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
@@ -62,7 +64,7 @@ Zombie::Zombie(int _type, int _row, int _x)
     else if (type == CONE_TYPE)
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT * 3;
-        directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+        directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
@@ -86,10 +88,11 @@ void Zombie::change_zombie_eating_status()
         }
         else if (type == CONE_TYPE)
         {
-            if (directory_num != CONE_ZOMBIE_EATING_DIRECTORY)
+            auto it = eat_of.find(directory_num);
+            if (it != eat_of.end())
             {
                 frame = 0;
-                directory_num = CONE_ZOMBIE_EATING_DIRECTORY;
+                directory_num = it->second;
             }
         }
         else if (type == BUCKET_TYPE)
@@ -114,10 +117,10 @@ void Zombie::change_zombie_eating_status()
         }
         else if (type == CONE_TYPE)
         {
-            if (directory_num == CONE_ZOMBIE_EATING_DIRECTORY)
+            if (directory_num == CONE_ZOMBIE_EATING_1_DIRECTORY)
             {
                 frame = 0;
-                directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
+                directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
             }
         }
         else if (type == BUCKET_TYPE)
@@ -153,6 +156,8 @@ void Zombie::determine_appearance()
         else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
         {
             type = NORMAL_TYPE;
+            DeadZombie tmp(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY);
+            game_characters.dead_zombies.push_back(tmp);
             if (is_moving)
                 directory_num = ZOMBIE_WALK1_DIRECTORY;
             else
@@ -161,9 +166,25 @@ void Zombie::determine_appearance()
     }
     if (type == CONE_TYPE)
     {
-        if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        if (health == ZOMBIE_NORMAL_HEALTH_LIMIT * 7 / 3)
+        {
+            if (is_moving)
+                directory_num = CONE_ZOMBIE_WALK_2_DIRECTORY;
+            else
+                directory_num = CONE_ZOMBIE_EATING_2_DIRECTORY;
+        }
+        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT * 5 / 3)
+        {
+            if (is_moving)
+                directory_num = CONE_ZOMBIE_WALK_3_DIRECTORY;
+            else
+                directory_num = CONE_ZOMBIE_EATING_3_DIRECTORY;
+        }
+        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
         {
             type = NORMAL_TYPE;
+            DeadZombie tmp(row, x_location, NULL_DIRECTORY, CONE_DROP_DIRECTORY);
+            game_characters.dead_zombies.push_back(tmp);
             if (is_moving)
                 directory_num = ZOMBIE_WALK1_DIRECTORY;
             else
@@ -251,4 +272,19 @@ bool Level::is_huge_wave()
         z_cnt += wave_zombie_count[i][cur_wave];
     }
     return z_cnt >= 5;
+}
+
+DeadZombie::DeadZombie(int _r, int _x, bool _cold)
+{
+    row = _r;
+    x_location = _x;
+    is_cold = _cold;
+}
+
+DeadZombie::DeadZombie(int _r, int _x, int _body, int _head)
+{
+    row = _r;
+    x_location = _x;
+    body = _body;
+    head = _head;
 }

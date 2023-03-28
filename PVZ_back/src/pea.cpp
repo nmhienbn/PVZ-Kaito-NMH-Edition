@@ -67,11 +67,7 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
         }
         if (elements.zombies[z_ind].decrease_health())
         {
-            DeadZombie tmp;
-            tmp.row = elements.zombies[z_ind].row;
-            tmp.x_location = elements.zombies[z_ind].x_location;
-            if (elements.zombies[z_ind].cold_time)
-                tmp.is_cold = true;
+            DeadZombie tmp(elements.zombies[z_ind].row, elements.zombies[z_ind].x_location, elements.zombies[z_ind].cold_time > 0);
             elements.dead_zombies.push_back(tmp);
             elements.zombies.erase(elements.zombies.begin() + z_ind);
         }

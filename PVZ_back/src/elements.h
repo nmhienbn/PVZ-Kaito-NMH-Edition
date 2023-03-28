@@ -122,6 +122,9 @@ struct DeadZombie
     int head = ZOMBIE_HEAD_DIRECTORY;
     int frame = 0;
     bool is_cold = false;
+
+    DeadZombie(int _r, int _x, bool _cold);
+    DeadZombie(int _r, int _x, int _body, int _head);
 };
 /*--------------------------------------------------------------------
 Player and others
