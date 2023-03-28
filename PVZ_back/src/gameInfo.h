@@ -21,7 +21,6 @@ using namespace std;
 #define SUN_GEN_SKY_CLK_COUNT 1000       // Sun from sky frequency
 #define SUN_GEN_SUNFLOWER_CLK_COUNT 2000 // Sun from sunflower frequency
 #define ZOMBIE_CREATE_CLK_COUNT 600      // Time between zombies' different groups
-#define FIRE_PEA_CLK_COUNT 100           // Fire pea refresh frequency
 #define BITE_CLK_COUNT 50                // Zombie bite plant frequency
 #define ZOMBIE_CLK_COUNT 11              // Zombie moving frequency
 #define SUN_CLK_COUNT 4                  // Sun moving frequency

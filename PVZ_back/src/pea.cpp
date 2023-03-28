@@ -56,8 +56,6 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
         {
             play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
         }
-        elements.zombies[z_ind].health--;
-        elements.zombies[z_ind].is_attacked = MAX_TIME_BLINK;
         if (pea.type == 2)
         {
             elements.zombies[z_ind].cold_time = MAX_COLD_TIME;
@@ -67,26 +65,15 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
         {
             pea.directory_num++; // Make the pea explode
         }
-
-        if (elements.zombies[z_ind].health == 0)
+        if (elements.zombies[z_ind].decrease_health())
         {
-            if (elements.zombies[z_ind].type >= CONE_TYPE)
-            {
-                // Keep cold time after lost their armor
-                int tmp = elements.zombies[z_ind].cold_time;
-                elements.zombies[z_ind] = Zombie(NORMAL_TYPE, elements.zombies[z_ind].row, elements.zombies[z_ind].x_location);
-                elements.zombies[z_ind].cold_time = tmp;
-            }
-            else
-            {
-                DeadZombie tmp;
-                tmp.row = elements.zombies[z_ind].row;
-                tmp.x_location = elements.zombies[z_ind].x_location;
-                if (elements.zombies[z_ind].cold_time)
-                    tmp.is_cold = true;
-                elements.dead_zombies.push_back(tmp);
-                elements.zombies.erase(elements.zombies.begin() + z_ind);
-            }
+            DeadZombie tmp;
+            tmp.row = elements.zombies[z_ind].row;
+            tmp.x_location = elements.zombies[z_ind].x_location;
+            if (elements.zombies[z_ind].cold_time)
+                tmp.is_cold = true;
+            elements.dead_zombies.push_back(tmp);
+            elements.zombies.erase(elements.zombies.begin() + z_ind);
         }
         return true;
     }

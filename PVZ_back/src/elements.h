@@ -103,7 +103,6 @@ struct Zombie
     int health;
     bool is_moving;
     int directory_num;
-    int zombie_sheet;
     int frame;
     int is_attacked, cold_time;
 
@@ -111,6 +110,8 @@ struct Zombie
     Zombie(int _type);
     Zombie(int _type, int _row, int _x);
     void change_zombie_eating_status();
+    void determine_appearance();
+    bool decrease_health();
     bool operator<(const Zombie &other) const;
 };
 struct DeadZombie
@@ -225,7 +226,7 @@ struct Button
 const Button Shovel(140, 215, 500, 575);
 const Button TAP_TO_START(230, 796, 520, 585);
 
-#define LEVEL_COUNT 8
+#define LEVEL_COUNT 12
 const Button LEVEL_BUTTON[] = {
     {0, 0, 0, 0},         // LV NULL
     {15, 240, 40, 205},   // LV 1
@@ -235,7 +236,11 @@ const Button LEVEL_BUTTON[] = {
     {15, 240, 230, 395},  // LV 5
     {260, 485, 230, 395}, // LV 6
     {505, 730, 230, 395}, // LV 7
-    {750, 975, 230, 395}  // LV 8
+    {750, 975, 230, 395}, // LV 8
+    {15, 240, 420, 585},  // LV 9
+    {260, 485, 420, 585}, // LV 10
+    {505, 730, 420, 585}, // LV 11
+    {750, 975, 420, 585}  // LV 12
 
 };
 

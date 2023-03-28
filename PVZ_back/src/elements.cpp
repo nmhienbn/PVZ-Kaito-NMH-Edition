@@ -27,16 +27,15 @@ Zombie::Zombie(int _type)
     }
     else if (type == CONE_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 3;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 5;
-        directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 6;
+        directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
     }
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
-    zombie_sheet = 90 / N_SHEET[directory_num];
 }
 
 /*
@@ -62,16 +61,15 @@ Zombie::Zombie(int _type, int _row, int _x)
     }
     else if (type == CONE_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 2;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 3;
         directory_num = CONE_ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == BUCKET_TYPE)
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 5;
-        directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+        health = ZOMBIE_NORMAL_HEALTH_LIMIT * 6;
+        directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
     }
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
-    zombie_sheet = 90 / N_SHEET[directory_num];
 }
 
 void Zombie::change_zombie_eating_status()
@@ -96,10 +94,11 @@ void Zombie::change_zombie_eating_status()
         }
         else if (type == BUCKET_TYPE)
         {
-            if (directory_num != BUCKET_ZOMBIE_EATING_DIRECTORY)
+            auto it = eat_of.find(directory_num);
+            if (it != eat_of.end())
             {
                 frame = 0;
-                directory_num = BUCKET_ZOMBIE_EATING_DIRECTORY;
+                directory_num = it->second;
             }
         }
     }
@@ -123,14 +122,66 @@ void Zombie::change_zombie_eating_status()
         }
         else if (type == BUCKET_TYPE)
         {
-            if (directory_num == BUCKET_ZOMBIE_EATING_DIRECTORY)
+            auto it = walk_of.find(directory_num);
+            if (it != walk_of.end())
             {
                 frame = 0;
-                directory_num = BUCKET_ZOMBIE_WALK_DIRECTORY;
+                directory_num = it->second;
             }
         }
     }
-    zombie_sheet = 90 / N_SHEET[directory_num];
+}
+
+void Zombie::determine_appearance()
+{
+    if (type == BUCKET_TYPE)
+    {
+        if (health == ZOMBIE_NORMAL_HEALTH_LIMIT * 4)
+        {
+            if (is_moving)
+                directory_num = BUCKET_ZOMBIE_WALK_2_DIRECTORY;
+            else
+                directory_num = BUCKET_ZOMBIE_EATING_2_DIRECTORY;
+        }
+        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT * 2)
+        {
+            if (is_moving)
+                directory_num = BUCKET_ZOMBIE_WALK_3_DIRECTORY;
+            else
+                directory_num = BUCKET_ZOMBIE_EATING_3_DIRECTORY;
+        }
+        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        {
+            type = NORMAL_TYPE;
+            if (is_moving)
+                directory_num = ZOMBIE_WALK1_DIRECTORY;
+            else
+                directory_num = ZOMBIE_EATING_DIRECTORY;
+        }
+    }
+    if (type == CONE_TYPE)
+    {
+        if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        {
+            type = NORMAL_TYPE;
+            if (is_moving)
+                directory_num = ZOMBIE_WALK1_DIRECTORY;
+            else
+                directory_num = ZOMBIE_EATING_DIRECTORY;
+        }
+    }
+}
+
+bool Zombie::decrease_health()
+{
+    health--;
+    is_attacked = MAX_TIME_BLINK;
+    determine_appearance();
+    if (health == 0)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool Zombie::operator<(const Zombie &other) const

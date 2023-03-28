@@ -99,8 +99,8 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
         int row = zombies[i].row;
         int y_location = cells[row][0].y1 - 45;
         // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-
-        int frame = zombies[i].frame / zombies[i].zombie_sheet;
+        int z_frame = 120 / N_SHEET[zombies[i].directory_num];
+        int frame = zombies[i].frame / z_frame;
         int scol = frame % C_SHEET[zombies[i].directory_num];
         int srow = frame / C_SHEET[zombies[i].directory_num];
         win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
@@ -118,7 +118,7 @@ void display_zombies(window &win, vector<Zombie> &zombies, Map &cells, bool is_p
         {
             if (zombies[i].cold_time % 3 == 0)
                 zombies[i].frame++;
-            if (zombies[i].frame >= zombies[i].zombie_sheet * N_SHEET[zombies[i].directory_num])
+            if (zombies[i].frame >= z_frame * N_SHEET[zombies[i].directory_num])
             {
                 zombies[i].frame = 0;
             }
