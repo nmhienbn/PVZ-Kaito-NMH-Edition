@@ -19,7 +19,5 @@ void display_chosen_plant(window &win, Player player, Icons icons);
 // Display Game Buttons
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-void display_shovel(window &win, const Button &button = Shovel);
-void display_menu_icon(window &win, const Button &button = MENU_ICON);
-void display_menu(window &win, const Button &button = MENU);
+void display_button(window &win, const Button &button, const int &button_directory);
 void display_level_is_locked(window &win, const Button &button);

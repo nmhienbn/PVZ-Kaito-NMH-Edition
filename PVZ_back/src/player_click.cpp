@@ -58,11 +58,11 @@ Check if the mouse is in ICON BAR (the bar that contains plant seed)
 */
 bool is_a_plant_seed_clicked_on(Level &level, const int &mouse_x, const int &mouse_y)
 {
-    if (level.level_num == 1)
+    if (level.level_num <= 1)
         return ICON_BAR_LV1.is_mouse_in(mouse_x, mouse_y);
-    if (level.level_num == 2)
+    if (level.level_num <= 3)
         return ICON_BAR_LV2.is_mouse_in(mouse_x, mouse_y);
-    if (level.level_num == 3)
+    if (level.level_num <= 5)
         return ICON_BAR_LV3.is_mouse_in(mouse_x, mouse_y);
     return ICON_BAR_LV4.is_mouse_in(mouse_x, mouse_y);
 }

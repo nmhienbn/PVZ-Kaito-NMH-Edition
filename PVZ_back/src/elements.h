@@ -167,7 +167,7 @@ struct Player
     int sun_count;
     int level;
     bool is_choosing_a_plant, is_shoveling;
-    int unlocked_level;
+    int unlocked_level = 0;
 };
 
 struct Icons
@@ -265,3 +265,7 @@ const Button RESTART(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 220, MENU_Y1 + 312)
 #define CONTINUE_WIDTH 187
 #define CONTINUE_HEIGHT 44
 const Button CONTINUE((WINDOW_WIDTH - CONTINUE_WIDTH) / 2, (WINDOW_WIDTH + CONTINUE_WIDTH) / 2, 500, 500 + CONTINUE_HEIGHT);
+
+const Button RENAME_BUTTON(0, 91, 0, 37);
+const Button RESET_LEVEL_BUTTON(WINDOW_WIDTH - 162, WINDOW_WIDTH, 0, 37);
+const Button QUIT_BUTTON((WINDOW_WIDTH - 140) / 2, (WINDOW_WIDTH + 140) / 2, 0, 37);

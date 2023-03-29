@@ -11,9 +11,9 @@ void display_game_layout(window &win, Player player, Icons icons, Level &level)
     win.draw_bg(level.background_directory);
     win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
-    display_shovel(win);
+    display_button(win, Shovel, SHOVEL_DIRECTORY);
     display_icons_in_icon_bar(icons, player, win, level);
-    display_menu_icon(win);
+    display_button(win, MENU_ICON, MENU_ICON_DIRECTORY);
 
     win.show_text(std::to_string(player.sun_count), 90, 33, BLACK, "contm.ttf");
 }
@@ -49,13 +49,13 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
         win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SUNFLOWER_ICON_Y1, ICON_WIDTH, icons.sunflower_remaining_time * ICON_HEIGHT / SUNFLOWER_LOADING);
     }
 
-    if (level.level_num >= 3)
+    if (level.level_num >= 4)
     {
         win.draw_png_scale(walnut_icon, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
         win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, icons.walnut_remaining_time * ICON_HEIGHT / WALNUT_LOADING);
     }
 
-    if (level.level_num >= 4)
+    if (level.level_num >= 6)
     {
         win.draw_png_scale(snowpea_icon, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
         win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, icons.snowpea_remaining_time * ICON_HEIGHT / SNOWPEA_LOADING);
@@ -99,7 +99,7 @@ void display_game_pause(window &win, Elements &elements, Map &cells, Level &leve
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements(win, elements, cells, level);
-    display_menu(win);
+    display_button(win, MENU, MENU_DIRECTORY);
 }
 
 /* New function:
@@ -138,28 +138,9 @@ void display_chosen_plant(window &win, Player player, Icons icons)
 // Display Game Buttons
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-/*
-Display Shovel bar
-*/
-void display_shovel(window &win, const Button &button)
+void display_button(window &win, const Button &button, const int &button_directory)
 {
-    win.draw_png(SHOVEL_BAR_DIRECTORY, 0, 0, SHOVEL_WIDTH, SHOVEL_HEIGHT, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
-}
-
-/*
-Display in-game Menu Icon
-*/
-void display_menu_icon(window &win, const Button &button)
-{
-    win.draw_png(MENU_ICON_DIRECTORY, 0, 0, button.x2 - button.x1, button.y2 - button.y1, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
-}
-
-/*
-Display paused in-game Menu
-*/
-void display_menu(window &win, const Button &button)
-{
-    win.draw_png(MENU_DIRECTORY, 0, 0, button.x2 - button.x1, button.y2 - button.y1, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+    win.draw_png(button_directory, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
 }
 
 /*

@@ -146,3 +146,6 @@ Moving speed of some elements
 #define WINNING_MESSAGE_HEIGHT 407
 #define LOSING_MESSAGE_WIDTH 564
 #define LOSING_MESSAGE_HEIGHT 468
+
+#define SAVED_DATA_DIRECTORY "./userdata/savedata.txt"
+#define LEVELS_DIRECTORY "./levels/"

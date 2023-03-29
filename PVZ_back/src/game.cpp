@@ -19,6 +19,7 @@ int main(int argv, char **args)
 {
     init_music();
     init_game(win, level, player, cells);
+    display_new_player_name(win, player, quit);
     while (!quit)
     {
         if (!level_chosen)

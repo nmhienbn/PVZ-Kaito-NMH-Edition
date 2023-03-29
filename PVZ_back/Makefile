@@ -2,7 +2,7 @@ SHELL := pwsh.exe
 
 TARGET = pvz
 
-SDL2_path = D:\Game_programming\SDL2
+SDL2_path = .
 
 CC = g++
 CFLAGS = -std=c++17 -Wall -pedantic -MMD -MP 

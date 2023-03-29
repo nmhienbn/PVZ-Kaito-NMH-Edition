@@ -48,26 +48,63 @@ void read_savedata(Player &player, Level &level)
 
 void update_unlocked_level(Player &player, Level &level)
 {
-    std::ifstream infile(SAVED_DATA_DIRECTORY);
-    if (!infile)
+    // Read data
+    string line;
+    ifstream infile(SAVED_DATA_DIRECTORY);
+    if (infile.is_open())
     {
-        std::cerr << "Unable to open saved data file!\n";
+        getline(infile, line);
+        player.name = line;
+        getline(infile, line);
+        player.unlocked_level = stoi(line);
+        infile.close();
     }
-    string player_name;
-    infile >> player_name >> player.unlocked_level;
-    infile.close();
-    std::ofstream outfile(SAVED_DATA_DIRECTORY);
-    if (!outfile)
+    else
+        cout << "Unable to open saved data file!\n";
+
+    // Write data
+    ofstream outfile(SAVED_DATA_DIRECTORY);
+    if (outfile.is_open())
     {
-        std::cerr << "Unable to open saved data file!\n";
+        int num_level = std::max(1, player.unlocked_level - 1);
+        if (num_level < level.level_num)
+            num_level = level.level_num;
+        player.unlocked_level = num_level + 1;
+        outfile << player.name << '\n'
+                << player.unlocked_level;
+        outfile.close();
     }
-    int num_level = std::max(1, player.unlocked_level - 1);
-    if (num_level < level.level_num)
-        num_level = level.level_num;
-    player.unlocked_level = num_level + 1;
-    outfile << player_name << '\n'
-            << player.unlocked_level;
-    outfile.close();
+    else
+        cout << "Unable to open saved data file!\n";
+}
+
+void reset_unlocked_level(Player &player)
+{
+    // Read data
+    string line;
+    ifstream infile(SAVED_DATA_DIRECTORY);
+    if (infile.is_open())
+    {
+        getline(infile, line);
+        player.name = line;
+        getline(infile, line);
+        player.unlocked_level = stoi(line);
+        infile.close();
+    }
+    else
+        cout << "Unable to open saved data file!\n";
+
+    // Write data
+    ofstream outfile(SAVED_DATA_DIRECTORY);
+    if (outfile.is_open())
+    {
+        player.unlocked_level = 1;
+        outfile << player.name << '\n'
+                << player.unlocked_level;
+        outfile.close();
+    }
+    else
+        cout << "Unable to open saved data file!\n";
 }
 
 /*Need update: number and type of zombie each wave.
@@ -278,6 +315,9 @@ void display_choosing_level_screen(window &win, Level &level, Player &player, bo
 {
     win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    display_button(win, RENAME_BUTTON, RENAME_DIRECTORY);
+    display_button(win, RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
+    display_button(win, QUIT_BUTTON, QUIT_DIRECTORY);
     for (int i = 1; i <= LEVEL_COUNT; i++)
     {
         if (player.unlocked_level >= i)
@@ -295,6 +335,19 @@ void display_choosing_level_screen(window &win, Level &level, Player &player, bo
         QUIT(quit = true; exit(0););
         // KEY_PRESS(q, quit = true);
         LCLICK({
+            if (RESET_LEVEL_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                reset_unlocked_level(player);
+            }
+            if (RENAME_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                display_rename_player(win, player, quit);
+            }
+            if (QUIT_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                quit = true;
+                exit(0);
+            }
             for (int i = 1; i <= LEVEL_COUNT; i++)
                 if (player.unlocked_level >= i && LEVEL_BUTTON[i].is_mouse_in(mouse_x, mouse_y))
                 {

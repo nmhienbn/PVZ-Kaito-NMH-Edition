@@ -26,19 +26,19 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         play_music(R_S_P_MUSIC_DIRECTORY);
         if (clk < 30)
         {
-            display_ready_set_plant(win, START_READY_DIRECTORY, level);
+            display_ready_set_plant(win, player, START_READY_DIRECTORY, level);
         }
         else if (clk < 60)
         {
-            display_ready_set_plant(win, START_SET_DIRECTORY, level);
+            display_ready_set_plant(win, player, START_SET_DIRECTORY, level);
         }
         else if (clk < 180)
         {
-            display_ready_set_plant(win, START_PLANT_DIRECTORY, level);
+            display_ready_set_plant(win, player, START_PLANT_DIRECTORY, level);
         }
         else
         {
-            display_ready_set_plant(win, START_PLANT_DIRECTORY, level);
+            display_ready_set_plant(win, player, START_PLANT_DIRECTORY, level);
             clk = 0;
             is_game_started = true;
         }

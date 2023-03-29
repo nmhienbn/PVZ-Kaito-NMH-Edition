@@ -1,13 +1,12 @@
 #pragma once
 #include "render_elements.h"
+#include "player_name.h"
 #include "music.h"
-
-#define SAVED_DATA_DIRECTORY "./userdata/savedata.txt"
-#define LEVELS_DIRECTORY "./levels/"
 
 Map create_a_collection_of_blocks();
 void read_savedata(Player &player, Level &level);
 void update_unlocked_level(Player &player, Level &level);
+void reset_unlocked_level(Player &player);
 
 void read_level(Level &level);
 void convert_wave_cnt_str_into_int(Level &level, const string &wave_cnt);

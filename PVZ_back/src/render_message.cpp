@@ -1,9 +1,10 @@
 #include "render_message.h"
 
 /*
-Display announcement: Ready - Set - Plant
+Display announcement: Ready - Set - Plant.
+Player_name's trip to Plants vs. Zombies
 */
-void display_ready_set_plant(window &win, int image_num, Level &level)
+void display_ready_set_plant(window &win, Player &player, int image_num, Level &level)
 {
     win.clear_renderer();
     win.draw_bg(level.background_directory);
@@ -11,8 +12,9 @@ void display_ready_set_plant(window &win, int image_num, Level &level)
 
     win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
     int w = 0, h = 0;
-    TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), "Hien\'s Trip to PVZ", &w, &h);
-    win.show_text("Hien\'s Trip to PVZ", (WINDOW_WIDTH - w) / 2, 535);
+    string announcement = player.name + "\'s trip to Plants vs. Zombies";
+    TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), announcement.c_str(), &w, &h);
+    win.show_text(announcement, (WINDOW_WIDTH - w) / 2, 535);
 }
 /*
 Display announcement: huge wave
