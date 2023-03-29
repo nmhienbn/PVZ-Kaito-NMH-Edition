@@ -105,6 +105,7 @@ struct Zombie
     int directory_num;
     int frame;
     int is_attacked, cold_time;
+    int bite_time;
 
     Zombie();
     Zombie(int _type);

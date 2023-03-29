@@ -224,7 +224,7 @@ Check if player won: no wave or zombie left.
 */
 bool has_player_won(Level &level, Elements &elements)
 {
-    if (level.waves_finished && elements.zombies.size() == 0)
+    if (level.waves_finished && elements.zombies.empty() && elements.dead_zombies.empty())
         return true;
     return false;
 }

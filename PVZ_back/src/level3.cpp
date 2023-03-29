@@ -111,7 +111,7 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
     HANDLE(
         QUIT(quit = true);
         KEY_PRESS(q, quit = true);
-        KEY_TO_WIN(level.waves_finished = 1; game_characters.zombies.clear());
+        KEY_TO_WIN(level.waves_finished = 1; game_characters.zombies.clear(); game_characters.dead_zombies.clear(););
         LCLICK({
             if (is_paused)
             {

@@ -25,13 +25,16 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     {
         level.announce_directory = NULL_DIRECTORY;
     }
-    if (clk % BITE_CLK_COUNT == 0)
-    {
-        handle_zombie_plant_encounter(elements.zombies, elements.peashooters, cells, PEASHOOTER_BITE_LIMIT);
-        handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
-        handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
-        handle_zombie_plant_encounter(elements.zombies, elements.snowpeas, cells, SNOWPEA_BITE_LIMIT);
-    }
+
+    // Zombie bite plant
+    handle_zombie_plant_encounter(elements.zombies, elements.peashooters, cells, PEASHOOTER_BITE_LIMIT);
+    handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
+    handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
+    handle_zombie_plant_encounter(elements.zombies, elements.snowpeas, cells, SNOWPEA_BITE_LIMIT);
+
+    update_zombie_next_bite(elements.zombies);
+
+    // Fire pea, snowpea
     fire_peas(elements, cells);
     fire_snowz_peas(elements, cells);
 

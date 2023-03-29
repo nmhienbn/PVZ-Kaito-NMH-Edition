@@ -19,8 +19,7 @@ Zombie::Zombie(int _type)
     x_location = WINDOW_WIDTH + rand(0, 100);
 
     is_moving = true;
-    is_attacked = 0;
-    cold_time = 0;
+    is_attacked = cold_time = bite_time = 0;
 
     if (type == NORMAL_TYPE)
     {
@@ -53,8 +52,7 @@ Zombie::Zombie(int _type, int _row, int _x)
     x_location = _x;
 
     is_moving = true;
-    is_attacked = 0;
-    cold_time = 0;
+    is_attacked = cold_time = bite_time = 0;
 
     if (type == NORMAL_TYPE)
     {

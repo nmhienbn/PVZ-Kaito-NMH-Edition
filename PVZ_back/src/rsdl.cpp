@@ -21,10 +21,18 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
              file_num == ZOMBIE_WALK3_BLINK_DIRECTORY ||
              file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_WALK_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_EATING_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_WALK_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_WALK_1_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_WALK_2_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_WALK_3_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
+             file_num == CONE_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_WALK_1_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_WALK_2_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_WALK_3_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
+             file_num == BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
              file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
              file_num == WALNUT_1_BLINK_DIRECTORY ||
              file_num == WALNUT_2_BLINK_DIRECTORY ||
@@ -42,10 +50,18 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
         file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
         file_num == ZOMBIE_DIE_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_EATING_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_EATING_COLD_DIRECTORY)
+        file_num == CONE_ZOMBIE_WALK_1_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK_2_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK_3_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_1_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_2_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_3_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK_1_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK_2_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK_3_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_1_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_2_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 120);
     }

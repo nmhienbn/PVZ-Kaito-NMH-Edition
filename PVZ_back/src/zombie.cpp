@@ -179,3 +179,10 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
             }
     }
 }
+
+void update_zombie_next_bite(vector<Zombie> &zombies)
+{
+    for (auto &zombie : zombies)
+        if (zombie.bite_time)
+            zombie.bite_time--;
+}
