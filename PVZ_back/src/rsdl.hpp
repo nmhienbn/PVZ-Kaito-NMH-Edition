@@ -100,10 +100,10 @@ private:
 		Code;                                                     \
 	}
 
-#define KEY_TO_WIN(Code)                                     \
-	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_w) \
-	{                                                        \
-		Code;                                                \
+#define KEY_TO_WIN(Code)                                                                                                                                        \
+	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_w && SDL_GetModState() & KMOD_CTRL && SDL_GetModState() & KMOD_ALT && SDL_GetModState() & KMOD_SHIFT) \
+	{                                                                                                                                                           \
+		Code;                                                                                                                                                   \
 	}
 #define LRELEASE(Code)                                                     \
 	if (e.type == SDL_MOUSEBUTTONUP && e.button.button == SDL_BUTTON_LEFT) \

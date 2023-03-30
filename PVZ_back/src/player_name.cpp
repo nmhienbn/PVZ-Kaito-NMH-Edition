@@ -106,6 +106,14 @@ void display_rename_player(window &win, Player &player, bool &quit)
                 {
                     inputText = SDL_GetClipboardText();
                 }
+                // Handle Enter
+                else if (e.key.keysym.sym == SDLK_RETURN)
+                {
+                    update_player_name(player, inputText);
+                    SDL_StopTextInput();
+                    win.clear_renderer();
+                    return;
+                }
             }
             // Special text input event
             else if (e.type == SDL_TEXTINPUT)
@@ -203,6 +211,14 @@ void display_new_player_name(window &win, Player &player, bool &quit)
                 else if (e.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL)
                 {
                     inputText = SDL_GetClipboardText();
+                }
+                // Handle Enter
+                else if (e.key.keysym.sym == SDLK_RETURN)
+                {
+                    update_player_name(player, inputText);
+                    SDL_StopTextInput();
+                    win.clear_renderer();
+                    return;
                 }
             }
             // Special text input event

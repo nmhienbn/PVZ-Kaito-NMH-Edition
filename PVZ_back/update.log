@@ -142,6 +142,8 @@ TOTAL now: 4 plants and 3 zombies available.
 	Add Final Wave message.
 	Sun will be more transparent if it has waited too long.
 	Level will blink if we move the mouse over. "LEVEL X" will turn green too.
+	Enter to OK the name.
+	Change key-to-win: CTRL + SHIFT + ALT + W
 
 NEED TO ADD COMMENT
 
