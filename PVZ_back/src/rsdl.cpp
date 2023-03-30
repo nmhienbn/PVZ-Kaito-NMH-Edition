@@ -39,7 +39,8 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == WALNUT_3_BLINK_DIRECTORY ||
              file_num == WALNUT_4_BLINK_DIRECTORY ||
              file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
-             file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY)
+             file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY ||
+             file_num == LEVEL_BLINK_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 70);
     }
@@ -179,6 +180,24 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {x, y, width, width * mHeight / mWidth};
+    SDL_RenderCopy(renderer, res, NULL, &r);
+}
+
+void window::draw_png_center(int file_num)
+{
+    if (file_num == NULL_DIRECTORY)
+        return;
+    SDL_Texture *res = texture_cache[file_num];
+    int mWidth = 0, mHeight = 0;
+    if (res == NULL)
+    {
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res);
+        set_default_alpha(file_num, res);
+        texture_cache[file_num] = res;
+    }
+    SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
+    SDL_Rect r = {(WINDOW_WIDTH - mWidth) >> 1, (WINDOW_HEIGHT - mHeight) >> 1, mWidth, mHeight};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
 

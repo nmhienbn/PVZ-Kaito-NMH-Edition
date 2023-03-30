@@ -11,7 +11,7 @@ void display_game_layout(window &win, Player player, Icons icons, Level &level)
     win.draw_bg(level.background_directory);
     win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
-    display_button(win, Shovel, SHOVEL_DIRECTORY);
+    display_button(win, Shovel, SHOVEL_BAR_DIRECTORY);
     display_icons_in_icon_bar(icons, player, win, level);
     display_button(win, MENU_ICON, MENU_ICON_DIRECTORY);
 

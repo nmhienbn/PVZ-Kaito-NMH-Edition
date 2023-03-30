@@ -318,11 +318,20 @@ void display_choosing_level_screen(window &win, Level &level, Player &player, bo
     display_button(win, RENAME_BUTTON, RENAME_DIRECTORY);
     display_button(win, RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
     display_button(win, QUIT_BUTTON, QUIT_DIRECTORY);
+
+    int _x = 0, _y = 0;
+    SDL_GetMouseState(&_x, &_y);
     for (int i = 1; i <= LEVEL_COUNT; i++)
     {
         if (player.unlocked_level >= i)
         {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130);
+            if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
+            {
+                win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, GREEN);
+                win.draw_png(LEVEL_BLINK_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1, LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
+            }
+            else
+                win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130);
         }
         else
         {

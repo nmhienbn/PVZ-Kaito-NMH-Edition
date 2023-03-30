@@ -138,6 +138,11 @@ TOTAL now: 4 plants and 3 zombies available.
 	Player can change their name, reset their progression, quit game on choose-levels screen.
 	Total code length: 5k2 lines =))
 
+30/03/2023:
+	Add Final Wave message.
+	Sun will be more transparent if it has waited too long.
+	Level will blink if we move the mouse over. "LEVEL X" will turn green too.
+
 NEED TO ADD COMMENT
 
 	

@@ -33,6 +33,7 @@ using namespace std;
 #define SNOWPEA_LOADING 400    // Peashooter loading
 #define MAX_TIME_BLINK 5       // time blink when attack
 #define MAX_COLD_TIME 600      // time being cold = 10s
+#define SUN_APPEAR_LIMIT 300   // Max time that a sun can appear.
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -135,17 +136,9 @@ Moving speed of some elements
 #define ELEMENT_WIDTH 90
 #define ELEMENT_HEIGHT 90
 #define TILE_WIDTH 75
-#define READY_WIDTH 300
-#define READY_HEIGHT 133
-#define HUGE_WAVE_WIDTH 720
-#define HUGE_WAVE_HEIGHT 94
 
 #define SHOVEL_WIDTH 139
 #define SHOVEL_HEIGHT 141
-#define WINNING_MESSAGE_WIDTH 400
-#define WINNING_MESSAGE_HEIGHT 407
-#define LOSING_MESSAGE_WIDTH 564
-#define LOSING_MESSAGE_HEIGHT 468
 
 #define SAVED_DATA_DIRECTORY "./userdata/savedata.txt"
 #define LEVELS_DIRECTORY "./levels/"

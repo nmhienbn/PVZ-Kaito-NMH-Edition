@@ -2,13 +2,16 @@
 
 extern Elements game_characters;
 
+/*Zombie constructor.
+ */
 Zombie::Zombie()
 {
 }
 
-/*
-If is_moving is false, then the zombie must be eating.
-Else the zombie can't be eating.
+/*Zombie constructor.
+Random row and delay time appear.
+Set init status, heath and image to render.
+Random first frame.
 */
 Zombie::Zombie(int _type)
 {
@@ -17,7 +20,7 @@ Zombie::Zombie(int _type)
     row = rand(0, 4);
     // Random delay time to appear
     x_location = WINDOW_WIDTH + rand(0, 100);
-
+    // Set init status
     is_moving = true;
     is_attacked = cold_time = bite_time = 0;
 
@@ -36,12 +39,13 @@ Zombie::Zombie(int _type)
         health = ZOMBIE_NORMAL_HEALTH_LIMIT * 6;
         directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
     }
+    // Random first frame.
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
 }
 
-/*
-If is_moving is false, then the zombie must be eating.
-Else the zombie can't be eating.
+/*Zombie constructor with fixed _row and _x.
+Set init status, heath and image to render.
+Random first frame.
 */
 Zombie::Zombie(int _type, int _row, int _x)
 {
@@ -51,6 +55,7 @@ Zombie::Zombie(int _type, int _row, int _x)
     // Random delay time to appear
     x_location = _x;
 
+    // Set init status
     is_moving = true;
     is_attacked = cold_time = bite_time = 0;
 
@@ -69,9 +74,14 @@ Zombie::Zombie(int _type, int _row, int _x)
         health = ZOMBIE_NORMAL_HEALTH_LIMIT * 6;
         directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
     }
+    // Random first frame.
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
 }
 
+/*Change zombie eating status
+If is_moving is false, then the zombie must be eating.
+Else the zombie can't be eating.
+*/
 void Zombie::change_zombie_eating_status()
 {
     if (is_moving == false)
@@ -115,10 +125,11 @@ void Zombie::change_zombie_eating_status()
         }
         else if (type == CONE_TYPE)
         {
-            if (directory_num == CONE_ZOMBIE_EATING_1_DIRECTORY)
+            auto it = walk_of.find(directory_num);
+            if (it != walk_of.end())
             {
                 frame = 0;
-                directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
+                directory_num = it->second;
             }
         }
         else if (type == BUCKET_TYPE)
@@ -133,6 +144,19 @@ void Zombie::change_zombie_eating_status()
     }
 }
 
+/*Determine zombies's appearance depend on their health:
+Let x = normal zombie's health limit.
+Bucket-head:
+    + 6x: degrade 1.
+    + 4x: degrade 2.
+    + 2x: degrade 3.
+    + x: turn into normal.
+Cone-head:
+    + 3x: degrade 1.
+    + 7/3 x: degrade 2.
+    + 5/3 x: degrade 3.
+    + x: turn into normal.
+*/
 void Zombie::determine_appearance()
 {
     if (type == BUCKET_TYPE)
@@ -191,6 +215,10 @@ void Zombie::determine_appearance()
     }
 }
 
+/*
+Decrease zombie health and change their appearance if necessary.
+@return true if zombie die (health = 0).
+*/
 bool Zombie::decrease_health()
 {
     health--;
@@ -203,15 +231,22 @@ bool Zombie::decrease_health()
     return false;
 }
 
+/*
+Compare zombie < zombie:
+    row > row
+    x < x;
+*/
 bool Zombie::operator<(const Zombie &other) const
 {
     return (row == other.row ? x_location < other.x_location : row > other.row);
 }
 
+/*Button constructor*/
 Button::Button()
 {
 }
 
+/*Button constructor with rectangle coordination.*/
 Button::Button(int _x1, int _x2, int _y1, int _y2)
 {
     x1 = _x1;
@@ -220,10 +255,14 @@ Button::Button(int _x1, int _x2, int _y1, int _y2)
     y2 = _y2;
 }
 
+/*Button destructor*/
 Button::~Button()
 {
 }
 
+/*
+@return true if current mouse is over the button
+*/
 bool Button::is_mouse_in(int mouse_x, int mouse_y) const
 {
     if (x1 < mouse_x && mouse_x < x2 &&
@@ -231,6 +270,10 @@ bool Button::is_mouse_in(int mouse_x, int mouse_y) const
         return true;
     return false;
 }
+
+/*
+random int in [L;R]
+*/
 int rand(int L, int R)
 {
     if (L > R)
@@ -245,6 +288,7 @@ Icons::Icons()
 Pea::Pea()
 {
 }
+/*Generate new pea*/
 Pea::Pea(int _type, int _row, int _x)
 {
     type = _type;
@@ -262,6 +306,7 @@ Pea::Pea(int _type, int _row, int _x)
     }
 }
 
+/*Check if this wave is huge*/
 bool Level::is_huge_wave()
 {
     int z_cnt = 0;
@@ -272,6 +317,7 @@ bool Level::is_huge_wave()
     return z_cnt >= 5;
 }
 
+/*Dead destructor*/
 DeadZombie::DeadZombie(int _r, int _x, bool _cold)
 {
     row = _r;
@@ -279,6 +325,7 @@ DeadZombie::DeadZombie(int _r, int _x, bool _cold)
     is_cold = _cold;
 }
 
+/*Dead destructor with other body and head*/
 DeadZombie::DeadZombie(int _r, int _x, int _body, int _head)
 {
     row = _r;

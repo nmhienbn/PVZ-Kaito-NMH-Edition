@@ -42,6 +42,7 @@ public:
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);
 	void draw_png_scale(int file_num, int x, int y, int width, int height);
+	void draw_png_center(int file_num);
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 	TTF_Font *get_font(string font_addr, RGB color, int size);

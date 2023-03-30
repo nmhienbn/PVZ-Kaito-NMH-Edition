@@ -8,7 +8,7 @@ void display_ready_set_plant(window &win, Player &player, int image_num, Level &
 {
     win.clear_renderer();
     win.draw_bg(level.background_directory);
-    win.draw_png(image_num, (WINDOW_WIDTH - READY_WIDTH) >> 1, (WINDOW_HEIGHT - READY_HEIGHT) >> 1, READY_WIDTH, READY_HEIGHT);
+    win.draw_png_center(image_num);
 
     win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
     int w = 0, h = 0;
@@ -21,10 +21,7 @@ Display announcement: huge wave
 */
 void display_game_announce(window &win, Level &level)
 {
-    if (level.announce_directory != NULL_DIRECTORY)
-    {
-        win.draw_png(level.announce_directory, (WINDOW_WIDTH - HUGE_WAVE_WIDTH) >> 1, (WINDOW_HEIGHT - HUGE_WAVE_HEIGHT) >> 1, HUGE_WAVE_WIDTH, HUGE_WAVE_HEIGHT);
-    }
+    win.draw_png_center(level.announce_directory);
 }
 
 /*
@@ -34,9 +31,7 @@ void display_winning_message(window &win, Elements &elements, Map &cells, Level 
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements(win, elements, cells, level);
-    win.draw_png_scale(WINNING_MESSAGE_DIRECTORY,
-                       (WINDOW_WIDTH - WINNING_MESSAGE_WIDTH) / 2, (WINDOW_HEIGHT - WINNING_MESSAGE_HEIGHT) / 2,
-                       WINNING_MESSAGE_WIDTH, WINNING_MESSAGE_HEIGHT);
+    win.draw_png_center(WINNING_MESSAGE_DIRECTORY);
     win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
 
@@ -47,8 +42,6 @@ void display_losing_message(window &win, Elements &elements, Map &cells, Level &
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements(win, elements, cells, level);
-    win.draw_png_scale(LOSING_MESSAGE_DIRECTORY,
-                       (WINDOW_WIDTH - LOSING_MESSAGE_WIDTH) / 2, (WINDOW_HEIGHT - LOSING_MESSAGE_HEIGHT) / 2,
-                       LOSING_MESSAGE_WIDTH, LOSING_MESSAGE_HEIGHT);
+    win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
     win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }

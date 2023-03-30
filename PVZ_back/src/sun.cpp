@@ -20,7 +20,7 @@ Remove the suns that are exist a long time.
 void remove_suns(Elements &elements)
 {
     for (int i = 0; i < (int)elements.suns.size(); i++)
-        if (elements.suns[i].wait_seconds >= 100)
+        if (elements.suns[i].wait_seconds >= SUN_APPEAR_LIMIT)
             elements.suns.erase(elements.suns.begin() + i);
 }
 
@@ -53,6 +53,9 @@ void move_suns(vector<Sun> &suns, Map &cells)
     }
 }
 
+/*
+Updated: If sun's waited seconds >= SUN_APPEAR_LIMIT * 3 / 4, then change its transparency.
+*/
 void display_suns(window &win, vector<Sun> suns, Map &cells)
 {
     for (auto &sun : suns)
@@ -62,6 +65,9 @@ void display_suns(window &win, vector<Sun> suns, Map &cells)
             int col = sun.final_col;
             sun.x_location = cells[0][col].x1;
         }
-        win.draw_png_scale(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (sun.wait_seconds >= SUN_APPEAR_LIMIT * 3 / 4)
+            win.draw_png_scale(SUN2_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        else
+            win.draw_png_scale(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }

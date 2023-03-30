@@ -52,6 +52,7 @@ enum ImageType
 
     STARTING_SCREEN_DIRECTORY,
     CHOOSE_LEVELS_DIRECTORY,
+    LEVEL_BLINK_DIRECTORY,
     BACKGROUND_LV1_DIRECTORY,
     BACKGROUND_LV2_DIRECTORY,
     BACKGROUND_DIRECTORY,
@@ -60,6 +61,7 @@ enum ImageType
     WINNING_MESSAGE_DIRECTORY,
 
     SUN_DIRECTORY,
+    SUN2_DIRECTORY,
     SUN_BAR_DIRECTORY,
     ICON_BAR_DIRECTORY,
     SHOVEL_BAR_DIRECTORY,
@@ -157,6 +159,7 @@ enum ImageType
     START_PLANT_DIRECTORY,
     BLACK_SCREEN_DIRECTORY,
     HUGE_WAVE_DIRECTORY,
+    FINAL_WAVE_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -205,6 +208,7 @@ const string image_directory[] = {
 
     "./image/Background/Starting_Screen.png", // STARTING_SCREEN_DIRECTORY
     "./image/Background/Choose_levels.png",   // CHOOSE_LEVELS_DIRECTORY
+    "./image/Background/level_blink.png",     // LEVEL_BLINK_DIRECTORY
     "./image/Background/Frontyard_LV1.png",   // BACKGROUND_LV1_DIRECTORY
     "./image/Background/Frontyard_LV2.png",   // BACKGROUND_LV2_DIRECTORY
     "./image/Background/Frontyard.png",       // BACKGROUND_DIRECTORY
@@ -213,6 +217,7 @@ const string image_directory[] = {
     "./image/Background/Winning_Pic.png",     // WINNING_MESSAGE_DIRECTORY
 
     "./image/Icons/sun.png",         // SUN_DIRECTORY
+    "./image/Icons/sun2.png",        // SUN2_DIRECTORY
     "./image/Icons/sun_bar.png",     // SUN_BAR_DIRECTORY
     "./image/Icons/Item_Bar.png",    // ICON_BAR_DIRECTORY
     "./image/Icons/Shovel.png",      // SHOVEL_BAR_DIRECTORY
@@ -310,6 +315,7 @@ const string image_directory[] = {
     "./image/Announcement/StartPlant.png", // START_PLANT_DIRECTORY
     "./image/Black_Screen.png",            // BLACK_SCREEN_DIRECTORY
     "./image/Announcement/NextWave.png",   // HUGE_WAVE_DIRECTORY
+    "./image/Announcement/FinalWave.png",  // FINAL_WAVE_DIRECTORY
 
 };
 
@@ -357,6 +363,7 @@ const int N_SHEET[] = {
 
     0, // STARTING_SCREEN_DIRECTORY
     0, // CHOOSE_LEVELS_DIRECTORY
+    0, // LEVEL_BLINK_DIRECTORY
     0, // BACKGROUND_LV1_DIRECTORY
     0, // BACKGROUND_LV2_DIRECTORY
     0, // BACKGROUND_DIRECTORY
@@ -365,6 +372,7 @@ const int N_SHEET[] = {
     0, // WINNING_MESSAGE_DIRECTORY
 
     0, // SUN_DIRECTORY
+    0, // SUN2_DIRECTORY
     0, // SUN_BAR_DIRECTORY
     0, // ICON_BAR_DIRECTORY
     0, // SHOVEL_BAR_DIRECTORY
@@ -462,6 +470,7 @@ const int N_SHEET[] = {
     0, // START_PLANT_DIRECTORY
     0, // BLACK_SCREEN_DIRECTORY
     0, // HUGE_WAVE_DIRECTORY
+    0, // FINAL_WAVE_DIRECTORY
 
 };
 
@@ -509,6 +518,7 @@ const int C_SHEET[] = {
 
     0, // STARTING_SCREEN_DIRECTORY
     0, // CHOOSE_LEVELS_DIRECTORY
+    0, // LEVEL_BLINK_DIRECTORY
     0, // BACKGROUND_LV1_DIRECTORY
     0, // BACKGROUND_LV2_DIRECTORY
     0, // BACKGROUND_DIRECTORY
@@ -517,6 +527,7 @@ const int C_SHEET[] = {
     0, // WINNING_MESSAGE_DIRECTORY
 
     0, // SUN_DIRECTORY
+    0, // SUN2_DIRECTORY
     0, // SUN_BAR_DIRECTORY
     0, // ICON_BAR_DIRECTORY
     0, // SHOVEL_BAR_DIRECTORY
@@ -614,6 +625,7 @@ const int C_SHEET[] = {
     0, // START_PLANT_DIRECTORY
     0, // BLACK_SCREEN_DIRECTORY
     0, // HUGE_WAVE_DIRECTORY
+    0, // FINAL_WAVE_DIRECTORY
 
 };
 
