@@ -8,6 +8,7 @@
 #include "sun.h"
 #include "sunflower.h"
 #include "zombie.h"
+#include "cherrybomb.h"
 
 void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, int clk);
 void handle_movements(Elements &elements, Map &cells, int clk);

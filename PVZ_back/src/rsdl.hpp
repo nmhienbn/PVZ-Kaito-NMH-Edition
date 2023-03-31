@@ -58,6 +58,8 @@ public:
 
 	void fade_out();
 
+	int previous_time = 0;
+
 private:
 	SDL_Window *win;
 	SDL_Renderer *renderer;

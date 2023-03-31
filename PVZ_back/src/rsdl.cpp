@@ -9,7 +9,8 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     if (file_num == PEASHOOTER_DIRECTORY ||
         file_num == SUNFLOWER_DIRECTORY ||
         file_num == WALNUT_DIRECTORY ||
-        file_num == SNOWPEA_DIRECTORY)
+        file_num == SNOWPEA_DIRECTORY ||
+        file_num == CHERRYBOMB_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 150);
     }
@@ -21,6 +22,8 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
              file_num == ZOMBIE_WALK3_BLINK_DIRECTORY ||
              file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
+             file_num == FLAG_ZOMBIE_WALK_BLINK_DIRECTORY ||
+             file_num == FLAG_ZOMBIE_EATING_BLINK_DIRECTORY ||
              file_num == CONE_ZOMBIE_WALK_1_BLINK_DIRECTORY ||
              file_num == CONE_ZOMBIE_WALK_2_BLINK_DIRECTORY ||
              file_num == CONE_ZOMBIE_WALK_3_BLINK_DIRECTORY ||
@@ -49,6 +52,8 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
         file_num == ZOMBIE_WALK3_COLD_DIRECTORY ||
         file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_COLD_DIRECTORY ||
         file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
         file_num == ZOMBIE_DIE_COLD_DIRECTORY ||
         file_num == CONE_ZOMBIE_WALK_1_COLD_DIRECTORY ||
@@ -65,6 +70,10 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 120);
+    }
+    else if (file_num == SUN2_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 200);
     }
 }
 
@@ -269,6 +278,10 @@ void window::draw_bg(int file_num, int x, int y)
 void window::update_screen()
 {
     SDL_RenderPresent(renderer);
+    int now_time = SDL_GetTicks() - previous_time;
+    int delay_time = std::max(5, ticks_per_frame - now_time);
+    DELAY(delay_time);
+    previous_time = SDL_GetTicks();
 }
 
 void window::fill_rect(int x, int y, int width, int height, RGB color)

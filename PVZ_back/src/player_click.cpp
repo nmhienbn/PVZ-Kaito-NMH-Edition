@@ -53,7 +53,7 @@ void handle_user_click(Player &player, Level &level, Icons &icons, Elements &ele
     // remove a plant
 }
 
-/*
+/*Need update:
 Check if the mouse is in ICON BAR (the bar that contains plant seed)
 */
 bool is_a_plant_seed_clicked_on(Level &level, const int &mouse_x, const int &mouse_y)
@@ -64,7 +64,9 @@ bool is_a_plant_seed_clicked_on(Level &level, const int &mouse_x, const int &mou
         return ICON_BAR_LV2.is_mouse_in(mouse_x, mouse_y);
     if (level.level_num <= 5)
         return ICON_BAR_LV3.is_mouse_in(mouse_x, mouse_y);
-    return ICON_BAR_LV4.is_mouse_in(mouse_x, mouse_y);
+    if (level.level_num <= 8)
+        return ICON_BAR_LV4.is_mouse_in(mouse_x, mouse_y);
+    return ICON_BAR_LV5.is_mouse_in(mouse_x, mouse_y);
 }
 
 /*
@@ -83,6 +85,7 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
         icons.is_peashooter_chosen = false;
         icons.is_walnut_chosen = false;
         icons.is_snowpea_chosen = false;
+        icons.is_cherrybomb_chosen = false;
     }
     else if (mouse_y > PEASHOOTER_ICON_Y1 && mouse_y < PEASHOOTER_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 100 && !icons.peashooter_remaining_time)
     {
@@ -93,6 +96,7 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
         icons.is_walnut_chosen = false;
         icons.is_sunflower_chosen = false;
         icons.is_snowpea_chosen = false;
+        icons.is_cherrybomb_chosen = false;
     }
     else if (mouse_y > WALNUT_ICON_Y1 && mouse_y < WALNUT_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 50 && !icons.walnut_remaining_time)
     {
@@ -103,6 +107,7 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
         icons.is_peashooter_chosen = false;
         icons.is_sunflower_chosen = false;
         icons.is_snowpea_chosen = false;
+        icons.is_cherrybomb_chosen = false;
     }
     else if (mouse_y > SNOWPEA_ICON_Y1 && mouse_y < SNOWPEA_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 150 && !icons.snowpea_remaining_time)
     {
@@ -113,6 +118,18 @@ void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a
         icons.is_peashooter_chosen = false;
         icons.is_sunflower_chosen = false;
         icons.is_walnut_chosen = false;
+        icons.is_cherrybomb_chosen = false;
+    }
+    else if (mouse_y > CHERRYBOMB_ICON_Y1 && mouse_y < CHERRYBOMB_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 150 && !icons.cherrybomb_remaining_time)
+    {
+        icons.is_cherrybomb_chosen ^= 1;
+        if (icons.is_cherrybomb_chosen)
+            is_a_plant_chosen = true;
+
+        icons.is_peashooter_chosen = false;
+        icons.is_sunflower_chosen = false;
+        icons.is_walnut_chosen = false;
+        icons.is_snowpea_chosen = false;
     }
 }
 
@@ -172,6 +189,7 @@ void remove_chosen_plant(Player &player, Icons &icons)
     icons.is_peashooter_chosen = false;
     icons.is_walnut_chosen = false;
     icons.is_snowpea_chosen = false;
+    icons.is_cherrybomb_chosen = false;
 }
 
 /*Need update: Show notification if the tile has planted
@@ -235,6 +253,18 @@ void create_new_plant(Player &player, Map &cells, Elements &elements, Icons &ico
         temp.bite = 0;
         elements.snowpeas.push_back(temp);
         player.sun_count -= SNOWPEA_PRICE;
+        cells[row][col].is_planted = 1;
+    }
+    else if (icons.is_cherrybomb_chosen)
+    {
+        icons.is_cherrybomb_chosen = false;
+        icons.cherrybomb_remaining_time = CHERRYBOMB_LOADING;
+        CherryBomb temp;
+        temp.row = row;
+        temp.col = col;
+        temp.bite = 0;
+        elements.cherrybombs.push_back(temp);
+        player.sun_count -= CHERRYBOMB_PRICE;
         cells[row][col].is_planted = 1;
     }
 }

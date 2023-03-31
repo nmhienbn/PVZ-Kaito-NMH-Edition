@@ -27,8 +27,9 @@ obj/src/game_pause.o: src/game_pause.cpp src/game_pause.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/music.h include\SDL2/SDL_mixer.h \
- src/sunflower.h src/walnut.h src/snowpea.h src/pea.h src/zombie.h \
- src/sun.h src/player_name.h src/elements_actions.h src/player_click.h
+ src/sunflower.h src/walnut.h src/snowpea.h src/pea.h src/cherrybomb.h \
+ src/zombie.h src/sun.h src/player_name.h src/elements_actions.h \
+ src/player_click.h
 
 src/game_pause.h:
 
@@ -163,6 +164,8 @@ src/walnut.h:
 src/snowpea.h:
 
 src/pea.h:
+
+src/cherrybomb.h:
 
 src/zombie.h:
 

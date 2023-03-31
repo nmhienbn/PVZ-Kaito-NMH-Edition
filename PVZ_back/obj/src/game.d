@@ -27,9 +27,9 @@ obj/src/game.o: src/game.cpp src/game.h src/render_elements.h \
  include\SDL2/SDL_locale.h include\SDL2/SDL_misc.h \
  include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h \
  src/music.h include\SDL2/SDL_mixer.h src/sunflower.h src/walnut.h \
- src/snowpea.h src/pea.h src/zombie.h src/sun.h src/render_message.h \
- src/player_click.h src/elements_actions.h src/makeLevels.h \
- src/player_name.h src/level3.h src/game_pause.h
+ src/snowpea.h src/pea.h src/cherrybomb.h src/zombie.h src/sun.h \
+ src/render_message.h src/player_click.h src/elements_actions.h \
+ src/makeLevels.h src/player_name.h src/level3.h src/game_pause.h
 
 src/game.h:
 
@@ -162,6 +162,8 @@ src/walnut.h:
 src/snowpea.h:
 
 src/pea.h:
+
+src/cherrybomb.h:
 
 src/zombie.h:
 

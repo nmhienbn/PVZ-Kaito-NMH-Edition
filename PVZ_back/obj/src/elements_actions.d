@@ -27,7 +27,8 @@ obj/src/elements_actions.o: src/elements_actions.cpp \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h \
  src/elements.h src/pea.h src/music.h include\SDL2/SDL_mixer.h \
- src/peashooter.h src/snowpea.h src/sun.h src/sunflower.h src/zombie.h
+ src/peashooter.h src/snowpea.h src/sun.h src/sunflower.h src/zombie.h \
+ src/cherrybomb.h
 
 src/elements_actions.h:
 
@@ -160,3 +161,5 @@ src/sun.h:
 src/sunflower.h:
 
 src/zombie.h:
+
+src/cherrybomb.h:

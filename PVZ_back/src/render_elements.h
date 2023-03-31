@@ -3,6 +3,7 @@
 #include "sunflower.h"
 #include "walnut.h"
 #include "snowpea.h"
+#include "cherrybomb.h"
 #include "zombie.h"
 #include "pea.h"
 #include "sun.h"

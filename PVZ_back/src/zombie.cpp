@@ -34,6 +34,8 @@ bool has_zombie_reached_any_plant(Elements &elements, Zombie &zombie, Map &cells
         return true;
     if (has_zombie_reached_plant(zombie, elements.snowpeas, cells))
         return true;
+    if (has_zombie_reached_plant(zombie, elements.cherrybombs, cells))
+        return true;
     zombie.is_moving = true;
     zombie.change_zombie_eating_status();
     return false;
@@ -140,6 +142,19 @@ void display_armor_drop(window &win, DeadZombie &dead_zombie, Map &cells)
     win.draw_png(dead_zombie.head, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombie.x_location + 80, y_location - 40, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT);
 }
 
+void display_burnt_zombie(window &win, DeadZombie &dead_zombie, Map &cells)
+{
+    int row = dead_zombie.row;
+    int y_location = cells[row][0].y1 - 45;
+    int frame = dead_zombie.frame / ZOMBIE_BURNT_FRAME;
+    if (frame <= N_SHEET[dead_zombie.body])
+    {
+        int scol = frame % C_SHEET[dead_zombie.body];
+        int srow = frame / C_SHEET[dead_zombie.body];
+        win.draw_png(dead_zombie.body, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombie.x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+    }
+}
+
 /*New function:
 Display zombie dead independently.
 */
@@ -150,6 +165,21 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
         if (dead_zombies[i].body < 0)
         {
             display_armor_drop(win, dead_zombies[i], cells);
+            if (is_pause == false)
+                if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                {
+
+                    dead_zombies.erase(dead_zombies.begin() + i);
+                }
+        }
+        else if (dead_zombies[i].head < 0)
+        {
+            display_burnt_zombie(win, dead_zombies[i], cells);
+            if (is_pause == false)
+                if (++dead_zombies[i].frame >= ZOMBIE_BURNT_FRAME * N_SHEET[dead_zombies[i].body])
+                {
+                    dead_zombies.erase(dead_zombies.begin() + i);
+                }
         }
         else
         {
@@ -157,7 +187,7 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
             int y_location = cells[row][0].y1 - 45;
             // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
             int frame = dead_zombies[i].frame / ZOMBIE_DIE_FRAME;
-            if (dead_zombies[i].body >= 0 && frame <= N_SHEET[dead_zombies[i].body])
+            if (frame <= N_SHEET[dead_zombies[i].body])
             {
                 int scol = frame % C_SHEET[dead_zombies[i].body];
                 int srow = frame / C_SHEET[dead_zombies[i].body];
@@ -170,13 +200,14 @@ void display_dead_zombies(window &win, vector<DeadZombie> &dead_zombies, Map &ce
             win.draw_png(dead_zombies[i].head, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
             if (dead_zombies[i].is_cold)
                 win.draw_png(cold_of[dead_zombies[i].head], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
-        }
-        if (is_pause == false)
-            if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
-            {
 
-                dead_zombies.erase(dead_zombies.begin() + i);
-            }
+            if (is_pause == false)
+                if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                {
+
+                    dead_zombies.erase(dead_zombies.begin() + i);
+                }
+        }
     }
 }
 

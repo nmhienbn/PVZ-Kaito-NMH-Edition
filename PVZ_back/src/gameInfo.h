@@ -15,7 +15,7 @@ using namespace std;
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Speed properties: increase or decrease the following 9 define values to speed up or speed down entities in the game
 // CLK meaning : clock
-#define FPS 40
+#define FPS 60
 #define ticks_per_frame 1000 / FPS
 
 #define SUN_GEN_SKY_CLK_COUNT 1000       // Sun from sky frequency
@@ -27,13 +27,14 @@ using namespace std;
 #define PEA_CLK_COUNT 2                  // Pea moving frequency
 #define ANNOUNCER_CLK_COUNT 180
 
-#define PEASHOOTER_LOADING 400 // Peashooter loading
-#define SUNFLOWER_LOADING 350  // Sunflower loading
-#define WALNUT_LOADING 1300    // Walnut loading
-#define SNOWPEA_LOADING 400    // Peashooter loading
-#define MAX_TIME_BLINK 5       // time blink when attack
-#define MAX_COLD_TIME 600      // time being cold = 10s
-#define SUN_APPEAR_LIMIT 300   // Max time that a sun can appear.
+#define PEASHOOTER_LOADING 400  // Peashooter loading
+#define SUNFLOWER_LOADING 350   // Sunflower loading
+#define WALNUT_LOADING 1300     // Walnut loading
+#define SNOWPEA_LOADING 400     // SnowPea loading
+#define CHERRYBOMB_LOADING 2000 // Cherrybomb loading
+#define MAX_TIME_BLINK 5        // time blink when attack
+#define MAX_COLD_TIME 600       // time being cold = 10s
+#define SUN_APPEAR_LIMIT 300    // Max time that a sun can appear.
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -44,6 +45,7 @@ using namespace std;
 #define SUNFLOWER_PRICE 50
 #define WALNUT_PRICE 50
 #define SNOWPEA_PRICE 150
+#define CHERRYBOMB_PRICE 150
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 /*
@@ -61,6 +63,7 @@ Moving speed of some elements
 #define SUNFLOWER_BITE_LIMIT 20
 #define PEASHOOTER_BITE_LIMIT 20
 #define SNOWPEA_BITE_LIMIT 20
+#define CHERRYBOMB_BITE_LIMIT 20
 #define ZOMBIE_NORMAL_HEALTH_LIMIT 10
 
 /*Playground elements size*/
@@ -81,6 +84,7 @@ Moving speed of some elements
 #define SUNFLOWER_ICON_Y1 170
 #define WALNUT_ICON_Y1 240
 #define SNOWPEA_ICON_Y1 310
+#define CHERRYBOMB_ICON_Y1 380
 #define SUN_BAR_WIDTH 180
 #define SUN_BAR_HEIGHT 360
 
@@ -117,15 +121,21 @@ Moving speed of some elements
 #define WALNUT_G_WIDTH 200
 #define WALNUT_G_HEIGHT 200
 
+#define CHERRYBOMB_FRAME 5
+#define CHERRYBOMB_WIDTH 136
+#define CHERRYBOMB_HEIGHT 123
+
 #define ZOMBIE_FRAME 3
 #define ZOMBIE_WIDTH 166
 #define ZOMBIE_HEIGHT 144
+#define ZOMBIE_EXACT_LOCATION 70
 #define ZOMBIE_G_WIDTH 166
 #define ZOMBIE_G_HEIGHT 144
 
 #define ZOMBIE_EATING_FRAME 10
 
 #define ZOMBIE_DIE_FRAME 10
+#define ZOMBIE_BURNT_FRAME 10
 #define DEAD_ZOMBIE_FRAMES 12
 
 #define HEAD_ZOMBIE_WIDTH 150

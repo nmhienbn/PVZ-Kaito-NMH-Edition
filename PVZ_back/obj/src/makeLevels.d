@@ -27,8 +27,8 @@ obj/src/makeLevels.o: src/makeLevels.cpp src/makeLevels.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/music.h include\SDL2/SDL_mixer.h \
- src/sunflower.h src/walnut.h src/snowpea.h src/pea.h src/zombie.h \
- src/sun.h src/player_name.h
+ src/sunflower.h src/walnut.h src/snowpea.h src/pea.h src/cherrybomb.h \
+ src/zombie.h src/sun.h src/player_name.h
 
 src/makeLevels.h:
 
@@ -161,6 +161,8 @@ src/walnut.h:
 src/snowpea.h:
 
 src/pea.h:
+
+src/cherrybomb.h:
 
 src/zombie.h:
 

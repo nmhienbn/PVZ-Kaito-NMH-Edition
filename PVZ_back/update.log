@@ -144,6 +144,12 @@ TOTAL now: 4 plants and 3 zombies available.
 	Level will blink if we move the mouse over. "LEVEL X" will turn green too.
 	Enter to OK the name.
 	Change key-to-win: CTRL + SHIFT + ALT + W
+	Add FPS cap if FPS > 60: win.update_screen();
+
+31/03/2023:
+	Add cherry bomb and flag zombie.
+	Add some sound effects: snowz peas effect, zombie die effect, cherry bomb effect...
+	
 
 NEED TO ADD COMMENT
 

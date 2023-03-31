@@ -20,6 +20,9 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     // Check all bullets' moving status
     handle_pea_zombie_encounter(elements, cells);
 
+    // Check all cherrybombs' status
+    handle_cherrybomb_zombie_encounter(elements, cells);
+
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
     if (level.waves_finished == false && clk % ZOMBIE_CREATE_CLK_COUNT == 0)
         create_new_zombies(elements, level);
@@ -31,6 +34,7 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
     handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
     handle_zombie_plant_encounter(elements.zombies, elements.snowpeas, cells, SNOWPEA_BITE_LIMIT);
+    handle_zombie_plant_encounter(elements.zombies, elements.cherrybombs, cells, CHERRYBOMB_BITE_LIMIT);
 
     // Update next time for each zombie to bite plant
     update_zombie_next_bite(elements.zombies);
@@ -85,7 +89,7 @@ void create_new_zombies(Elements &elements, Level &level)
                         zombie_has_coming = true;
                     }
                 }
-                // Sometimes: sound effect "The zombies are coming".
+                // Sometimes: sound effect "Zombie groan".
                 else if (zombie_cnt > 0)
                 {
                     play_sound_effect(GROAN_MUSIC_DIRECTORY);
@@ -115,11 +119,25 @@ void create_new_zombies(Elements &elements, Level &level)
                 {
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = FINAL_WAVE_DIRECTORY;
+                    // Make flag zombies
+                    temp = Zombie(NORMAL_TYPE, FLAG_ZOMBIE_WALK_DIRECTORY);
+                    if (level.level_num == 1)
+                        temp.row = 2;
+                    else if (level.level_num == 2)
+                        temp.row = rand(1, 3);
+                    elements.zombies.push_back(temp);
                 }
                 else if (level.is_huge_wave())
                 {
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = HUGE_WAVE_DIRECTORY;
+                    // Make flag zombies
+                    temp = Zombie(NORMAL_TYPE, FLAG_ZOMBIE_WALK_DIRECTORY);
+                    if (level.level_num == 1)
+                        temp.row = 2;
+                    else if (level.level_num == 2)
+                        temp.row = rand(1, 3);
+                    elements.zombies.push_back(temp);
                 }
             }
             else
@@ -158,4 +176,6 @@ void update_remaining_time(Icons &icons)
         icons.walnut_remaining_time--;
     if (icons.snowpea_remaining_time)
         icons.snowpea_remaining_time--;
+    if (icons.cherrybomb_remaining_time)
+        icons.cherrybomb_remaining_time--;
 }

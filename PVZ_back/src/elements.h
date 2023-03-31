@@ -9,6 +9,7 @@ This file include game elements
 static mt19937 rd(chrono::high_resolution_clock::now().time_since_epoch().count());
 
 int rand(int L, int R);
+bool is_in(const int &L, const int &x, const int &R);
 
 /*--------------------------------------------------------------------
 Plants and zombies
@@ -74,6 +75,11 @@ struct Pea
 
 struct CherryBomb
 {
+    int row, col;
+    int bite;
+    int directory_num = CHERRYBOMB_SHEET_DIRECTORY;
+    int frame = 0;
+    int is_attacked = 0;
 };
 
 enum ZombieType
@@ -109,6 +115,7 @@ struct Zombie
 
     Zombie();
     Zombie(int _type);
+    Zombie(int _type, int _directory_num);
     Zombie(int _type, int _row, int _x);
     void change_zombie_eating_status();
     void determine_appearance();
@@ -143,14 +150,17 @@ Contain vector of all plants and zombies:
 */
 struct Elements
 {
-    vector<Sun> suns;
-    vector<Zombie> zombies;
-    vector<DeadZombie> dead_zombies;
     vector<Peashooter> peashooters;
-    vector<Pea> peas;
     vector<Sunflower> sunflowers;
     vector<Walnut> walnuts;
     vector<Snowpea> snowpeas;
+    vector<CherryBomb> cherrybombs;
+
+    vector<Zombie> zombies;
+    vector<DeadZombie> dead_zombies;
+
+    vector<Sun> suns;
+    vector<Pea> peas;
 };
 
 // Limited by x1-x2 and y1-y2
@@ -176,11 +186,13 @@ struct Icons
     bool is_peashooter_chosen = 0;
     bool is_walnut_chosen = 0;
     bool is_snowpea_chosen = 0;
+    bool is_cherrybomb_chosen = 0;
 
     int peashooter_remaining_time = 0;
     int sunflower_remaining_time = 0;
     int walnut_remaining_time = 0;
     int snowpea_remaining_time = 0;
+    int cherrybomb_remaining_time = 0;
 
     Icons();
 };
@@ -252,6 +264,7 @@ const Button ICON_BAR_LV1(20, 125, 100, 170);
 const Button ICON_BAR_LV2(20, 125, 100, 240);
 const Button ICON_BAR_LV3(20, 125, 100, 310);
 const Button ICON_BAR_LV4(20, 125, 100, 380);
+const Button ICON_BAR_LV5(20, 125, 100, 450);
 const Button MENU_ICON(850, 975, 0, 35);
 const Button MY_GAME(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
 #define MENU_X1 325

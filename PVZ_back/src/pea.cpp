@@ -3,7 +3,7 @@
 /*
 @return 'true' if pea reach the zombie
 */
-bool has_pea_reached_zombie(Pea pea, Zombie zombie)
+bool has_pea_reached_zombie(Pea &pea, Zombie &zombie)
 {
     if (zombie.row == pea.row &&
         pea.x_location > zombie.x_location + 70)
@@ -48,6 +48,10 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
 {
     if (has_pea_reached_zombie(pea, elements.zombies[z_ind]))
     {
+        if (pea.type == 2)
+        {
+            play_sound_effect(SNOW_PEA_SPARKLES_DIRECTORY);
+        }
         if (elements.zombies[z_ind].type == BUCKET_TYPE)
         {
             play_sound_effect(SHIELD_HIT_MUSIC_DIRECTORY);
@@ -67,6 +71,7 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
         }
         if (elements.zombies[z_ind].decrease_health())
         {
+            play_sound_effect(ZOMBIE_FALLING_MUSIC_DIRECTORY);
             DeadZombie tmp(elements.zombies[z_ind].row, elements.zombies[z_ind].x_location, elements.zombies[z_ind].cold_time > 0);
             elements.dead_zombies.push_back(tmp);
             elements.zombies.erase(elements.zombies.begin() + z_ind);

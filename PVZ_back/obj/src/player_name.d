@@ -27,7 +27,7 @@ obj/src/player_name.o: src/player_name.cpp src/player_name.h src/rsdl.hpp \
  include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h \
  src/render_elements.h src/peashooter.h src/elements.h src/music.h \
  include\SDL2/SDL_mixer.h src/sunflower.h src/walnut.h src/snowpea.h \
- src/pea.h src/zombie.h src/sun.h
+ src/pea.h src/cherrybomb.h src/zombie.h src/sun.h
 
 src/player_name.h:
 
@@ -160,6 +160,8 @@ src/walnut.h:
 src/snowpea.h:
 
 src/pea.h:
+
+src/cherrybomb.h:
 
 src/zombie.h:
 

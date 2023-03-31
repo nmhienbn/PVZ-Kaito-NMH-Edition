@@ -36,6 +36,9 @@ enum ImageType
     SNOWPEA_SHEET_DIRECTORY,
     SNOWPEA_ATTACK_DIRECTORY,
 
+    CHERRYBOMB_DIRECTORY,
+    CHERRYBOMB_SHEET_DIRECTORY,
+
     PEASHOOTER_ICON_BRIGHT_DIRECTORY,
     PEASHOOTER_ICON_DIM_DIRECTORY,
     SUNFLOWER_ICON_BRIGHT_DIRECTORY,
@@ -44,6 +47,8 @@ enum ImageType
     WALNUT_ICON_DIM_DIRECTORY,
     SNOWPEA_ICON_BRIGHT_DIRECTORY,
     SNOWPEA_ICON_DIM_DIRECTORY,
+    CHERRYBOMB_ICON_BRIGHT_DIRECTORY,
+    CHERRYBOMB_ICON_DIM_DIRECTORY,
 
     PEA_DIRECTORY,
     PEA_EXPLODE_DIRECTORY,
@@ -94,10 +99,20 @@ enum ImageType
     ZOMBIE_DIE_COLD_DIRECTORY,
     ZOMBIE_HEAD_DIRECTORY,
     ZOMBIE_HEAD_COLD_DIRECTORY,
+    ZOMBIE_BURNT_DIRECTORY,
 
     ZOMBIE_EATING_DIRECTORY,
     ZOMBIE_EATING_BLINK_DIRECTORY,
     ZOMBIE_EATING_COLD_DIRECTORY,
+
+    // FLAG ZOMBIE--------------------------------------------------------
+    FLAG_ZOMBIE_WALK_DIRECTORY,
+    FLAG_ZOMBIE_WALK_BLINK_DIRECTORY,
+    FLAG_ZOMBIE_WALK_COLD_DIRECTORY,
+
+    FLAG_ZOMBIE_EATING_DIRECTORY,
+    FLAG_ZOMBIE_EATING_BLINK_DIRECTORY,
+    FLAG_ZOMBIE_EATING_COLD_DIRECTORY,
 
     // CONEHEAD ZOMBIE--------------------------------------------------------
     CONE_DROP_DIRECTORY,
@@ -192,14 +207,19 @@ const string image_directory[] = {
     "./image/Plant_sheet/snowpea/snowpea_sheet.png",  // SNOWPEA_SHEET_DIRECTORY
     "./image/Plant_sheet/snowpea/snowpea_attack.png", // SNOWPEA_ATTACK_DIRECTORY
 
-    "./image/Plant_seed/icon_peashooter.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_peashooter_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
-    "./image/Plant_seed/icon_sunflower.png",      // SUNFLOWER_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_sunflower_dim.png",  // SUNFLOWER_ICON_DIM_DIRECTORY
-    "./image/Plant_seed/icon_walnut.png",         // WALNUT_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_walnut_dim.png",     // WALNUT_ICON_DIM_DIRECTORY
-    "./image/Plant_seed/icon_snowpea.png",        // SNOWPEA_ICON_BRIGHT_DIRECTORY
-    "./image/Plant_seed/icon_snowpea_dim.png",    // SNOWPEA_ICON_DIM_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/Cherrybomb.png",       // CHERRYBOMB_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", // CHERRYBOMB_SHEET_DIRECTORY
+
+    "./image/Plant_seed/Peashooter_Seed_Packet.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/Peashooter_Seed_Packet_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/Sunflower_Seed_Packet.png",      // SUNFLOWER_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/Sunflower_Seed_Packet_dim.png",  // SUNFLOWER_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/Walnut_Seed_Packet.png",         // WALNUT_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/Walnut_Seed_Packet_dim.png",     // WALNUT_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/Snowpea_Seed_Packet.png",        // SNOWPEA_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/Snowpea_Seed_Packet_dim.png",    // SNOWPEA_ICON_DIM_DIRECTORY
+    "./image/Plant_seed/Cherrybomb_Seed_Packet.png",     // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
+    "./image/Plant_seed/Cherrybomb_Seed_Packet_dim.png", // CHERRYBOMB_ICON_DIM_DIRECTORY
 
     "./image/Bullets/Pea/pea.png",                     // PEA_DIRECTORY
     "./image/Bullets/Pea/pea_explode.png",             // PEA_EXPLODE_DIRECTORY
@@ -250,10 +270,20 @@ const string image_directory[] = {
     "./image/Zombie/Normal/Zombie_die_cold.png",  // ZOMBIE_DIE_COLD_DIRECTORY
     "./image/Zombie/Normal/Zombie_head.png",      // ZOMBIE_HEAD_DIRECTORY
     "./image/Zombie/Normal/Zombie_head_cold.png", // ZOMBIE_HEAD_COLD_DIRECTORY
+    "./image/Zombie/Zombie_burnt.png",            // ZOMBIE_BURNT_DIRECTORY
 
     "./image/Zombie/Normal/ZombieAttack.png",       // ZOMBIE_EATING_DIRECTORY
     "./image/Zombie/Normal/ZombieAttack_blink.png", // ZOMBIE_EATING_BLINK_DIRECTORY
     "./image/Zombie/Normal/ZombieAttack_cold.png",  // ZOMBIE_EATING_COLD_DIRECTORY
+
+    // FLAG ZOMBIE--------------------------------------------------------
+    "./image/Zombie/Flag/FlagWalk.png",       // FLAG_ZOMBIE_WALK_DIRECTORY
+    "./image/Zombie/Flag/FlagWalk_blink.png", // FLAG_ZOMBIE_WALK_BLINK_DIRECTORY
+    "./image/Zombie/Flag/FlagWalk_cold.png",  // FLAG_ZOMBIE_WALK_COLD_DIRECTORY
+
+    "./image/Zombie/Flag/FlagAttack.png",       // FLAG_ZOMBIE_EATING_DIRECTORY
+    "./image/Zombie/Flag/FlagAttack_blink.png", // FLAG_ZOMBIE_EATING_BLINK_DIRECTORY
+    "./image/Zombie/Flag/FlagAttack_cold.png",  // FLAG_ZOMBIE_EATING_COLD_DIRECTORY
 
     // CONEHEAD ZOMBIE------------------------------------------------------------------------
     "./image/Zombie/Cone/cone_drop.png", // CONE_DROP_DIRECTORY
@@ -347,6 +377,9 @@ const int N_SHEET[] = {
     60, // SNOWPEA_SHEET_DIRECTORY
     60, // SNOWPEA_ATTACK_DIRECTORY
 
+    0,  // CHERRYBOMB_DIRECTORY
+    24, // CHERRYBOMB_SHEET_DIRECTORY
+
     0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     0, // PEASHOOTER_ICON_DIM_DIRECTORY
     0, // SUNFLOWER_ICON_BRIGHT_DIRECTORY
@@ -355,6 +388,8 @@ const int N_SHEET[] = {
     0, // WALNUT_ICON_DIM_DIRECTORY
     0, // SNOWPEA_ICON_BRIGHT_DIRECTORY
     0, // SNOWPEA_ICON_DIM_DIRECTORY
+    0, // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
+    0, // CHERRYBOMB_ICON_DIM_DIRECTORY
 
     0, // PEA_DIRECTORY
     0, // PEA_EXPLODE_DIRECTORY
@@ -405,10 +440,20 @@ const int N_SHEET[] = {
     10, // ZOMBIE_DIE_COLD_DIRECTORY
     12, // ZOMBIE_HEAD_DIRECTORY
     12, // ZOMBIE_HEAD_COLD_DIRECTORY
+    20, // ZOMBIE_BURNT_DIRECTORY
 
     11, // ZOMBIE_EATING_DIRECTORY
     11, // ZOMBIE_EATING_BLINK_DIRECTORY
     11, // ZOMBIE_EATING_COLD_DIRECTORY
+
+    // FLAG ZOMBIE--------------------------------------------------------
+    12, // FLAG_ZOMBIE_WALK_DIRECTORY
+    12, // FLAG_ZOMBIE_WALK_BLINK_DIRECTORY
+    12, // FLAG_ZOMBIE_WALK_COLD_DIRECTORY
+
+    11, // FLAG_ZOMBIE_EATING_DIRECTORY
+    11, // FLAG_ZOMBIE_EATING_BLINK_DIRECTORY
+    11, // FLAG_ZOMBIE_EATING_COLD_DIRECTORY
 
     // CONEHEAD ZOMBIE-------------------------------------------------
     12, // CONE_DROP_DIRECTORY
@@ -502,6 +547,9 @@ const int C_SHEET[] = {
     8, // SNOWPEA_SHEET_DIRECTORY
     8, // SNOWPEA_ATTACK_DIRECTORY
 
+    0, // CHERRYBOMB_DIRECTORY
+    8, // CHERRYBOMB_SHEET_DIRECTORY
+
     0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     0, // PEASHOOTER_ICON_DIM_DIRECTORY
     0, // SUNFLOWER_ICON_BRIGHT_DIRECTORY
@@ -510,6 +558,8 @@ const int C_SHEET[] = {
     0, // WALNUT_ICON_DIM_DIRECTORY
     0, // SNOWPEA_ICON_BRIGHT_DIRECTORY
     0, // SNOWPEA_ICON_DIM_DIRECTORY
+    0, // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
+    0, // CHERRYBOMB_ICON_DIM_DIRECTORY
 
     0, // PEA_DIRECTORY
     0, // PEA_EXPLODE_DIRECTORY
@@ -560,10 +610,20 @@ const int C_SHEET[] = {
     3,  // ZOMBIE_DIE_COLD_DIRECTORY
     12, // ZOMBIE_HEAD_DIRECTORY
     12, // ZOMBIE_HEAD_COLD_DIRECTORY
+    8,  // ZOMBIE_BURNT_DIRECTORY
 
     8, // ZOMBIE_EATING_DIRECTORY
     8, // ZOMBIE_EATING_BLINK_DIRECTORY
     8, // ZOMBIE_EATING_COLD_DIRECTORY
+
+    // FLAG ZOMBIE--------------------------------------------------------
+    8, // FLAG_ZOMBIE_WALK_DIRECTORY
+    8, // FLAG_ZOMBIE_WALK_BLINK_DIRECTORY
+    8, // FLAG_ZOMBIE_WALK_COLD_DIRECTORY
+
+    8, // FLAG_ZOMBIE_EATING_DIRECTORY
+    8, // FLAG_ZOMBIE_EATING_BLINK_DIRECTORY
+    8, // FLAG_ZOMBIE_EATING_COLD_DIRECTORY
 
     // CONEHEAD ZOMBIE------------------------------------------------------------
     12, // CONE_DROP_DIRECTORY
@@ -649,6 +709,9 @@ static map<int, int> blink_of = {
     {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_WALK3_BLINK_DIRECTORY},
     {ZOMBIE_EATING_DIRECTORY, ZOMBIE_EATING_BLINK_DIRECTORY},
 
+    {FLAG_ZOMBIE_WALK_DIRECTORY, FLAG_ZOMBIE_WALK_BLINK_DIRECTORY},
+    {FLAG_ZOMBIE_EATING_DIRECTORY, FLAG_ZOMBIE_EATING_BLINK_DIRECTORY},
+
     {CONE_ZOMBIE_WALK_1_DIRECTORY, CONE_ZOMBIE_WALK_1_BLINK_DIRECTORY},
     {CONE_ZOMBIE_WALK_2_DIRECTORY, CONE_ZOMBIE_WALK_2_BLINK_DIRECTORY},
     {CONE_ZOMBIE_WALK_3_DIRECTORY, CONE_ZOMBIE_WALK_3_BLINK_DIRECTORY},
@@ -671,6 +734,9 @@ static map<int, int> cold_of = {
     {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_WALK2_COLD_DIRECTORY},
     {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_WALK3_COLD_DIRECTORY},
     {ZOMBIE_EATING_DIRECTORY, ZOMBIE_EATING_COLD_DIRECTORY},
+
+    {FLAG_ZOMBIE_WALK_DIRECTORY, FLAG_ZOMBIE_WALK_COLD_DIRECTORY},
+    {FLAG_ZOMBIE_EATING_DIRECTORY, FLAG_ZOMBIE_EATING_COLD_DIRECTORY},
 
     {ZOMBIE_HEAD_DIRECTORY, ZOMBIE_HEAD_COLD_DIRECTORY},
     {ZOMBIE_DIE_DIRECTORY, ZOMBIE_DIE_COLD_DIRECTORY},
@@ -697,6 +763,8 @@ static map<int, int> eat_of = {
     {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
     {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
 
+    {FLAG_ZOMBIE_WALK_DIRECTORY, FLAG_ZOMBIE_EATING_DIRECTORY},
+
     {CONE_ZOMBIE_WALK_1_DIRECTORY, CONE_ZOMBIE_EATING_1_DIRECTORY},
     {CONE_ZOMBIE_WALK_2_DIRECTORY, CONE_ZOMBIE_EATING_2_DIRECTORY},
     {CONE_ZOMBIE_WALK_3_DIRECTORY, CONE_ZOMBIE_EATING_3_DIRECTORY},
@@ -712,6 +780,8 @@ static map<int, int> walk_of = {
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
     {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
     {ZOMBIE_WALK3_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
+
+    {FLAG_ZOMBIE_EATING_DIRECTORY, FLAG_ZOMBIE_WALK_DIRECTORY},
 
     {CONE_ZOMBIE_EATING_1_DIRECTORY, CONE_ZOMBIE_WALK_1_DIRECTORY},
     {CONE_ZOMBIE_EATING_2_DIRECTORY, CONE_ZOMBIE_WALK_2_DIRECTORY},

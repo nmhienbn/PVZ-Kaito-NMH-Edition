@@ -43,6 +43,25 @@ Zombie::Zombie(int _type)
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
 }
 
+/*
+Zombie construction: Special type of zombie
+*/
+Zombie::Zombie(int _type, int _directory_num)
+{
+    type = _type;
+    // Random appear row
+    row = rand(0, 4);
+    // Fix delay time to appear
+    x_location = WINDOW_WIDTH;
+    // Set init status
+    is_moving = true;
+    is_attacked = cold_time = bite_time = 0;
+    health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+    directory_num = _directory_num;
+    // Random first frame.
+    frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+}
+
 /*Zombie constructor with fixed _row and _x.
 Set init status, heath and image to render.
 Random first frame.
@@ -88,7 +107,11 @@ void Zombie::change_zombie_eating_status()
     {
         if (type == NORMAL_TYPE)
         {
-            if (directory_num != ZOMBIE_EATING_DIRECTORY)
+            if (directory_num == FLAG_ZOMBIE_WALK_DIRECTORY)
+            {
+                directory_num = FLAG_ZOMBIE_EATING_DIRECTORY;
+            }
+            else if (directory_num != ZOMBIE_EATING_DIRECTORY)
             {
                 frame = 0;
                 directory_num = ZOMBIE_EATING_DIRECTORY;
@@ -121,6 +144,10 @@ void Zombie::change_zombie_eating_status()
             {
                 frame = 0;
                 directory_num = ZOMBIE_SHEET_DIRECTORY;
+            }
+            else if (directory_num == FLAG_ZOMBIE_EATING_DIRECTORY)
+            {
+                directory_num = FLAG_ZOMBIE_WALK_DIRECTORY;
             }
         }
         else if (type == CONE_TYPE)
@@ -279,6 +306,11 @@ int rand(int L, int R)
     if (L > R)
         exit(-10);
     return rd() % (R - L + 1) + L;
+}
+
+bool is_in(const int &L, const int &x, const int &R)
+{
+    return L <= x && x <= R;
 }
 
 Icons::Icons()

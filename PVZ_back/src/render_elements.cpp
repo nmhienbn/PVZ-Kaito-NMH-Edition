@@ -30,6 +30,7 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
     int sunflower_icon = SUNFLOWER_ICON_BRIGHT_DIRECTORY;
     int walnut_icon = WALNUT_ICON_BRIGHT_DIRECTORY;
     int snowpea_icon = SNOWPEA_ICON_BRIGHT_DIRECTORY;
+    int cherrybomb_icon = CHERRYBOMB_ICON_BRIGHT_DIRECTORY;
 
     if (player.sun_count < 100 || icons.is_peashooter_chosen)
         peashooter_icon = PEASHOOTER_ICON_DIM_DIRECTORY;
@@ -39,6 +40,8 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
         walnut_icon = WALNUT_ICON_DIM_DIRECTORY;
     if (player.sun_count < 150 || icons.is_snowpea_chosen)
         snowpea_icon = SNOWPEA_ICON_DIM_DIRECTORY;
+    if (player.sun_count < 150 || icons.is_cherrybomb_chosen)
+        cherrybomb_icon = CHERRYBOMB_ICON_DIM_DIRECTORY;
 
     win.draw_png_scale(peashooter_icon, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
     win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, icons.peashooter_remaining_time * ICON_HEIGHT / PEASHOOTER_LOADING);
@@ -60,6 +63,12 @@ void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &l
         win.draw_png_scale(snowpea_icon, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
         win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, icons.snowpea_remaining_time * ICON_HEIGHT / SNOWPEA_LOADING);
     }
+
+    if (level.level_num >= 9)
+    {
+        win.draw_png_scale(cherrybomb_icon, ICON_BAR_X1 + 3, CHERRYBOMB_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
+        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, CHERRYBOMB_ICON_Y1, ICON_WIDTH, icons.cherrybomb_remaining_time * ICON_HEIGHT / CHERRYBOMB_LOADING);
+    }
 }
 
 /*
@@ -72,6 +81,7 @@ void display_game_elements(window &win, Elements &elements, Map &cells)
     display_sunflowers(win, elements.sunflowers, cells);
     display_walnuts(win, elements.walnuts, cells);
     display_snowpeas(win, elements.snowpeas, cells);
+    display_cherrybombs(win, elements.cherrybombs, cells);
 
     display_dead_zombies(win, elements.dead_zombies, cells);
     display_zombies(win, elements.zombies, cells);
@@ -91,6 +101,7 @@ void display_game_paused_elements(window &win, Elements &elements, Map &cells, L
     display_sunflowers(win, elements.sunflowers, cells, true);
     display_walnuts(win, elements.walnuts, cells, true);
     display_snowpeas(win, elements.snowpeas, cells, true);
+    display_cherrybombs(win, elements.cherrybombs, cells, true);
     display_peas(win, elements.peas, cells);
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
 }
@@ -131,6 +142,10 @@ void display_chosen_plant(window &win, Player player, Icons icons)
     else if (icons.is_snowpea_chosen)
     {
         win.draw_png_scale(SNOWPEA_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+    }
+    else if (icons.is_cherrybomb_chosen)
+    {
+        win.draw_png_scale(CHERRYBOMB_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }
 
