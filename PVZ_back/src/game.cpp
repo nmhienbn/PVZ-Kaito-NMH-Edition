@@ -7,6 +7,7 @@ bool level_chosen = false;
 bool quit = false;
 bool is_game_started = false;
 bool is_paused = false;
+bool is_unlocking_plant = false;
 int clk = 0;
 Level level;
 Elements game_characters;
@@ -15,24 +16,50 @@ Player player;
 Map cells;
 window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 
+bool is_leave, is_quit, is_reset, is_restart;
+
 int main(int argv, char **args)
 {
     init_music();
     init_game(win, level, player, cells);
-    display_new_player_name(win, player, quit);
+    display_get_name_player(win, player, quit, NEW_USER_DIRECTORY);
+    if (player.unlocked_level == 0)
+    {
+        is_unlocking_plant = true;
+        while (!quit && is_unlocking_plant)
+        {
+            unlock_plant(win, quit, PEASHOOTER);
+        }
+        update_unlocked_level(player, level);
+    }
+    // Main loop
     while (!quit)
     {
-        if (!level_chosen)
+        if (level_chosen == false)
         {
-            // win.clear_renderer();
-            display_choosing_level_screen(win, level, player, level_chosen, quit);
-            if (level_chosen)
+            if (is_unlocking_plant)
             {
-                Mix_HaltMusic();
-                play_sound_effect(EVIL_LAUGH_MUSIC_DIRECTORY);
-                clk = 0;
-                is_game_started = false;
-                win.fade_out();
+                for (int i = 0; i < PLANT_COUNT; i++)
+                {
+                    if (level.level_num == level_unlock_new_plant[i] - 1)
+                    {
+                        unlock_plant(win, quit, i);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // win.clear_renderer();
+                handle_choosing_level_screen();
+                if (level_chosen)
+                {
+                    Mix_HaltMusic();
+                    play_sound_effect(EVIL_LAUGH_MUSIC_DIRECTORY);
+                    clk = 0;
+                    is_game_started = false;
+                    win.fade_out();
+                }
             }
         }
         else

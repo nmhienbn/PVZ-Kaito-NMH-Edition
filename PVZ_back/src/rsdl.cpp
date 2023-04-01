@@ -6,13 +6,14 @@ using namespace std;
 
 void set_default_alpha(int file_num, SDL_Texture *res)
 {
-    if (file_num == PEASHOOTER_DIRECTORY ||
+    if (file_num == SHOVEL_DIRECTORY ||
+        file_num == PEASHOOTER_DIRECTORY ||
         file_num == SUNFLOWER_DIRECTORY ||
         file_num == WALNUT_DIRECTORY ||
         file_num == SNOWPEA_DIRECTORY ||
         file_num == CHERRYBOMB_DIRECTORY)
     {
-        SDL_SetTextureAlphaMod(res, 150);
+        SDL_SetTextureAlphaMod(res, 200);
     }
     else if (file_num == BLACK_SCREEN_DIRECTORY)
     {
@@ -36,6 +37,7 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == BUCKET_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
              file_num == BUCKET_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
              file_num == BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
+
              file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
              file_num == WALNUT_1_BLINK_DIRECTORY ||
              file_num == WALNUT_2_BLINK_DIRECTORY ||
@@ -43,7 +45,7 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == WALNUT_4_BLINK_DIRECTORY ||
              file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
              file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY ||
-             file_num == LEVEL_BLINK_DIRECTORY)
+             file_num == CHERRYBOMB_SHEET_BLINK_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 70);
     }
@@ -74,6 +76,11 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     else if (file_num == SUN2_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 200);
+    }
+    else if (file_num == LEVEL_BLINK_DIRECTORY ||
+             file_num == WHITE_SCREEN_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 50);
     }
 }
 

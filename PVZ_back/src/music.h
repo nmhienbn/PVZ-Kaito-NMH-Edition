@@ -50,6 +50,8 @@ enum music_type
     SHIELD_HIT1_MUSIC_DIRECTORY, // buckethead
     SHIELD_HIT2_MUSIC_DIRECTORY, // buckethead
     CHERRYBOMB_MUSIC_DIRECTORY,
+    NEW_PLANT_MUSIC_DIRECTORY,
+    PAUSE_MUSIC_DIRECTORY,
 
     COUNT_MUSIC_DIRECTORY
 };
@@ -60,7 +62,7 @@ const string music_directory[] = {
     "./audio/button_click.mp3",      // BUTTON_CLICK_MUSIC_DIRECTORY
     "./audio/evil_laugh.mp3",        // EVIL_LAUGH_MUSIC_DIRECTORY
     "./audio/readysetplant.mp3",     // R_S_P_MUSIC_DIRECTORY
-    "./audio/winmusic.mp3",          // WIN_MUSIC_DIRECTORY
+    "./audio/victory.mp3",           // WIN_MUSIC_DIRECTORY
     "./audio/zombie_won.mp3",        // LOSE_MUSIC_DIRECTORY
     "./audio/sun_click.mp3",         // SUN_CLICK_MUSIC_DIRECTORY
     "./audio/shovel.mp3",            // SHOVEL_MUSIC_DIRECTORY
@@ -86,5 +88,7 @@ const string music_directory[] = {
     "./audio/shieldhit1.mp3",        // SHIELD_HIT1_MUSIC_DIRECTORY
     "./audio/shieldhit2.mp3",        // SHIELD_HIT2_MUSIC_DIRECTORY
     "./audio/cherrybomb.mp3",        // CHERRYBOMB_MUSIC_DIRECTORY
+    "./audio/new_plant.mp3",         // NEW_PLANT_MUSIC_DIRECTORY
+    "./audio/pause.mp3",             // PAUSE_MUSIC_DIRECTORY
 
 };

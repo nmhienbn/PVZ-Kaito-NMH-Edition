@@ -58,15 +58,14 @@ Check if the mouse is in ICON BAR (the bar that contains plant seed)
 */
 bool is_a_plant_seed_clicked_on(Level &level, const int &mouse_x, const int &mouse_y)
 {
-    if (level.level_num <= 1)
-        return ICON_BAR_LV1.is_mouse_in(mouse_x, mouse_y);
-    if (level.level_num <= 3)
-        return ICON_BAR_LV2.is_mouse_in(mouse_x, mouse_y);
-    if (level.level_num <= 5)
-        return ICON_BAR_LV3.is_mouse_in(mouse_x, mouse_y);
-    if (level.level_num <= 8)
-        return ICON_BAR_LV4.is_mouse_in(mouse_x, mouse_y);
-    return ICON_BAR_LV5.is_mouse_in(mouse_x, mouse_y);
+    for (int i = PLANT_COUNT - 1; i >= 0; i--)
+    {
+        if (level.level_num >= level_unlock_new_plant[i])
+        {
+            return ICON_BAR_LV[i].is_mouse_in(mouse_x, mouse_y);
+        }
+    }
+    return false;
 }
 
 /*
@@ -76,60 +75,21 @@ Updated: Double click on a plant seed will cancel the selection.
 void which_plant_is_chosen(Player &player, Icons &icons, int mouse_y, bool &is_a_plant_chosen)
 {
     is_a_plant_chosen = false;
-    if (mouse_y > SUNFLOWER_ICON_Y1 && mouse_y < SUNFLOWER_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 50 && !icons.sunflower_remaining_time)
+    for (int i = 0; i < PLANT_COUNT; i++)
     {
-        icons.is_sunflower_chosen ^= 1;
-        if (icons.is_sunflower_chosen)
-            is_a_plant_chosen = true;
-
-        icons.is_peashooter_chosen = false;
-        icons.is_walnut_chosen = false;
-        icons.is_snowpea_chosen = false;
-        icons.is_cherrybomb_chosen = false;
-    }
-    else if (mouse_y > PEASHOOTER_ICON_Y1 && mouse_y < PEASHOOTER_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 100 && !icons.peashooter_remaining_time)
-    {
-        icons.is_peashooter_chosen ^= 1;
-        if (icons.is_peashooter_chosen)
-            is_a_plant_chosen = true;
-
-        icons.is_walnut_chosen = false;
-        icons.is_sunflower_chosen = false;
-        icons.is_snowpea_chosen = false;
-        icons.is_cherrybomb_chosen = false;
-    }
-    else if (mouse_y > WALNUT_ICON_Y1 && mouse_y < WALNUT_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 50 && !icons.walnut_remaining_time)
-    {
-        icons.is_walnut_chosen ^= 1;
-        if (icons.is_walnut_chosen)
-            is_a_plant_chosen = true;
-
-        icons.is_peashooter_chosen = false;
-        icons.is_sunflower_chosen = false;
-        icons.is_snowpea_chosen = false;
-        icons.is_cherrybomb_chosen = false;
-    }
-    else if (mouse_y > SNOWPEA_ICON_Y1 && mouse_y < SNOWPEA_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 150 && !icons.snowpea_remaining_time)
-    {
-        icons.is_snowpea_chosen ^= 1;
-        if (icons.is_snowpea_chosen)
-            is_a_plant_chosen = true;
-
-        icons.is_peashooter_chosen = false;
-        icons.is_sunflower_chosen = false;
-        icons.is_walnut_chosen = false;
-        icons.is_cherrybomb_chosen = false;
-    }
-    else if (mouse_y > CHERRYBOMB_ICON_Y1 && mouse_y < CHERRYBOMB_ICON_Y1 + ICON_HEIGHT && player.sun_count >= 150 && !icons.cherrybomb_remaining_time)
-    {
-        icons.is_cherrybomb_chosen ^= 1;
-        if (icons.is_cherrybomb_chosen)
-            is_a_plant_chosen = true;
-
-        icons.is_peashooter_chosen = false;
-        icons.is_sunflower_chosen = false;
-        icons.is_walnut_chosen = false;
-        icons.is_snowpea_chosen = false;
+        if (plant_seed[i].y1 < mouse_y && mouse_y < plant_seed[i].y2 &&
+            player.sun_count >= plant_sun_cost[i] && !icons.plant_remaining_time[i])
+        {
+            icons.is_plant_chosen[i] ^= 1;
+            if (icons.is_plant_chosen[i])
+                is_a_plant_chosen = true;
+            for (int j = 0; j < PLANT_COUNT; j++)
+                if (j != i)
+                {
+                    icons.is_plant_chosen[j] = false;
+                }
+            break;
+        }
     }
 }
 
@@ -165,18 +125,24 @@ bool click_is_in_frontyard(Map &cells, Level &level, const int &mouse_x, const i
 
 /*
 Find which row and column is chosen by click
+Optimize to O(m + n) =))
 */
 void determine_row_and_col_chosen_by_second_click(Map &cells, const int &mouse_x, const int &mouse_y, int &row, int &col)
 {
     for (int y = 0; y < VERT_BLOCK_COUNT; y++)
-        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
-            if (mouse_x > cells[y][x].x1 && mouse_x < cells[y][x].x2 &&
-                mouse_y > cells[y][x].y1 && mouse_y < cells[y][x].y2)
-            {
-                row = y;
-                col = x;
-                return;
-            }
+    {
+        if (mouse_y > cells[y][0].y1 && mouse_y < cells[y][0].y2)
+        {
+            row = y;
+            break;
+        }
+    }
+    for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
+        if (mouse_x > cells[0][x].x1 && mouse_x < cells[0][x].x2)
+        {
+            col = x;
+            break;
+        }
 }
 
 /*New function:
@@ -185,11 +151,21 @@ Remove chosen plant.
 void remove_chosen_plant(Player &player, Icons &icons)
 {
     player.is_choosing_a_plant = false;
-    icons.is_sunflower_chosen = false;
-    icons.is_peashooter_chosen = false;
-    icons.is_walnut_chosen = false;
-    icons.is_snowpea_chosen = false;
-    icons.is_cherrybomb_chosen = false;
+    icons.reset_is_chosen();
+}
+
+template <class Plant_type>
+void plant_new_plant(Player &player, Map &cells, Icons &icons, vector<Plant_type> &vec_plant, const int &type, const int &row, const int &col)
+{
+    icons.is_plant_chosen[type] = false;
+    icons.plant_remaining_time[type] = plant_loading_time[type];
+    Plant_type temp;
+    temp.row = row;
+    temp.col = col;
+    temp.bite = 0;
+    vec_plant.push_back(temp);
+    player.sun_count -= plant_sun_cost[type];
+    cells[row][col].is_planted = 1;
 }
 
 /*Need update: Show notification if the tile has planted
@@ -206,72 +182,43 @@ void create_new_plant(Player &player, Map &cells, Elements &elements, Icons &ico
         remove_chosen_plant(player, icons);
         return;
     }
-    if (icons.is_sunflower_chosen)
+    if (icons.is_plant_chosen[PEASHOOTER])
     {
-        icons.is_sunflower_chosen = false;
-        icons.sunflower_remaining_time = SUNFLOWER_LOADING;
-        Sunflower temp;
-        temp.row = row;
-        temp.col = col;
-        temp.bite = 0;
-        elements.sunflowers.push_back(temp);
-        player.sun_count -= SUNFLOWER_PRICE;
-        cells[row][col].is_planted = 1;
+        plant_new_plant<Peashooter>(player, cells, icons, elements.peashooters, PEASHOOTER, row, col);
     }
-    else if (icons.is_peashooter_chosen)
+    else if (icons.is_plant_chosen[SUNFLOWER])
     {
-        icons.is_peashooter_chosen = false;
-        icons.peashooter_remaining_time = PEASHOOTER_LOADING;
-        Peashooter temp;
-        temp.row = row;
-        temp.col = col;
-        temp.bite = 0;
-        elements.peashooters.push_back(temp);
-        player.sun_count -= PEASHOOTER_PRICE;
-        cells[row][col].is_planted = 1;
+        plant_new_plant<Sunflower>(player, cells, icons, elements.sunflowers, SUNFLOWER, row, col);
     }
-    else if (icons.is_walnut_chosen)
+    else if (icons.is_plant_chosen[WALNUT])
     {
-        icons.is_walnut_chosen = false;
-        icons.walnut_remaining_time = WALNUT_LOADING;
-        Walnut temp;
-        temp.row = row;
-        temp.col = col;
-        temp.bite = 0;
-        temp.directory_num = WALNUT_1_DIRECTORY;
-        elements.walnuts.push_back(temp);
-        player.sun_count -= WALNUT_PRICE;
-        cells[row][col].is_planted = 1;
+        plant_new_plant<Walnut>(player, cells, icons, elements.walnuts, WALNUT, row, col);
     }
-    else if (icons.is_snowpea_chosen)
+    else if (icons.is_plant_chosen[SNOWPEA])
     {
-        icons.is_snowpea_chosen = false;
-        icons.snowpea_remaining_time = SNOWPEA_LOADING;
-        Snowpea temp;
-        temp.row = row;
-        temp.col = col;
-        temp.bite = 0;
-        elements.snowpeas.push_back(temp);
-        player.sun_count -= SNOWPEA_PRICE;
-        cells[row][col].is_planted = 1;
+        plant_new_plant<Snowpea>(player, cells, icons, elements.snowpeas, SNOWPEA, row, col);
     }
-    else if (icons.is_cherrybomb_chosen)
+    else if (icons.is_plant_chosen[CHERRYBOMB])
     {
-        icons.is_cherrybomb_chosen = false;
-        icons.cherrybomb_remaining_time = CHERRYBOMB_LOADING;
-        CherryBomb temp;
-        temp.row = row;
-        temp.col = col;
-        temp.bite = 0;
-        elements.cherrybombs.push_back(temp);
-        player.sun_count -= CHERRYBOMB_PRICE;
-        cells[row][col].is_planted = 1;
+        plant_new_plant<CherryBomb>(player, cells, icons, elements.cherrybombs, CHERRYBOMB, row, col);
     }
 }
-
 /*
 Remove plant if click on its tile
 */
+
+template <class Plant_type>
+void remove_plant_if_clicked_on(Map &cells, Elements &elements, const int &mouse_x, const int &mouse_y)
+{
+    for (int i = 0, _ = elements.sunflowers.size(); i < _; i++)
+    {
+        if (is_click_made_in_element_block(elements.sunflowers[i].row, elements.sunflowers[i].col, mouse_x, mouse_y, cells))
+        {
+            remove_plant(cells, elements.sunflowers, i);
+            return;
+        }
+    }
+}
 void remove_element_if_clicked_on(Map &cells, Elements &elements, const int &mouse_x, const int &mouse_y)
 {
     for (int i = 0; i < (int)elements.sunflowers.size(); i++)
@@ -346,5 +293,5 @@ bool pick_sun_if_clicked_on(Elements &elements, Map &cells, const int &mouse_x, 
 
 bool is_shovel_clicked(const int &mouse_x, const int &mouse_y)
 {
-    return Shovel.is_mouse_in(mouse_x, mouse_y);
+    return Shovel_bar.is_mouse_in(mouse_x, mouse_y);
 }

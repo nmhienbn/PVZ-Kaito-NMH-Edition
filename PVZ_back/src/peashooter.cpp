@@ -50,8 +50,7 @@ bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, Elements &eleme
 {
     for (Zombie zombie : elements.zombies)
         if (peashooter.row == zombie.row &&
-            zombie.x_location < ZOMBIE_INIT_X &&
-            zombie.x_location > cells[0][peashooter.col].x2 - 160)
+            is_in(cells[0][peashooter.col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
             return true;
     return false;
 }

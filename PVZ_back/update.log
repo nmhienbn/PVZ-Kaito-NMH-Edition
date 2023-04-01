@@ -149,6 +149,12 @@ TOTAL now: 4 plants and 3 zombies available.
 31/03/2023:
 	Add cherry bomb and flag zombie.
 	Add some sound effects: snowz peas effect, zombie die effect, cherry bomb effect...
+
+01/0a/2023:
+	Add blink when mouse is over any button, any plant seed and shovel.
+	Add blink to the row and column when mouse is over the tile and player is planting or shoveling.
+	Add some prompt (let player ensure their choice one more time): Restart, Main menu, Reset Level, Quit game.
+
 	
 
 NEED TO ADD COMMENT

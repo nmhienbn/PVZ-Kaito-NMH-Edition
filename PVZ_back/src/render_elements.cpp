@@ -1,17 +1,41 @@
 #include "render_elements.h"
+
+void render_choose_level_no_mouse(window &win, Player &player)
+{
+    win.clear_renderer();
+    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    display_button(win, RENAME_BUTTON, RENAME_DIRECTORY);
+    display_button(win, RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
+    display_button(win, QUIT_BUTTON, QUIT_DIRECTORY);
+
+    for (int i = 1; i <= LEVEL_COUNT; i++)
+    {
+        if (player.unlocked_level >= i)
+        {
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130);
+        }
+        else
+        {
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, BLACK);
+
+            display_level_is_locked(win, LEVEL_BUTTON[i]);
+        }
+    }
+}
 /*
 Display game layout:
     + Background (playground)
     + Sun and Player's Sun Count.
     + Plants' seed (Chosen or not).
 */
-void display_game_layout(window &win, Player player, Icons icons, Level &level)
+void display_game_layout(window &win, Player &player, Icons &icons, Level &level)
 {
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
     win.draw_bg(level.background_directory);
     win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
-    display_button(win, Shovel, SHOVEL_BAR_DIRECTORY);
+    display_button(win, Shovel_bar, SHOVEL_BAR_DIRECTORY);
+    Shovel_bar.blink(win);
     display_icons_in_icon_bar(icons, player, win, level);
     display_button(win, MENU_ICON, MENU_ICON_DIRECTORY);
 
@@ -24,50 +48,35 @@ Display the plants' seed:
     + Render a black screen to display remaining time for it to refresh. - Updated
     + Normal if player have enough sun.
 */
-void display_icons_in_icon_bar(Icons icons, Player player, window &win, Level &level)
+void display_icons_in_icon_bar(Icons &icons, Player &player, window &win, Level &level)
 {
-    int peashooter_icon = PEASHOOTER_ICON_BRIGHT_DIRECTORY;
-    int sunflower_icon = SUNFLOWER_ICON_BRIGHT_DIRECTORY;
-    int walnut_icon = WALNUT_ICON_BRIGHT_DIRECTORY;
-    int snowpea_icon = SNOWPEA_ICON_BRIGHT_DIRECTORY;
-    int cherrybomb_icon = CHERRYBOMB_ICON_BRIGHT_DIRECTORY;
-
-    if (player.sun_count < 100 || icons.is_peashooter_chosen)
-        peashooter_icon = PEASHOOTER_ICON_DIM_DIRECTORY;
-    if (player.sun_count < 50 || icons.is_sunflower_chosen)
-        sunflower_icon = SUNFLOWER_ICON_DIM_DIRECTORY;
-    if (player.sun_count < 50 || icons.is_walnut_chosen)
-        walnut_icon = WALNUT_ICON_DIM_DIRECTORY;
-    if (player.sun_count < 150 || icons.is_snowpea_chosen)
-        snowpea_icon = SNOWPEA_ICON_DIM_DIRECTORY;
-    if (player.sun_count < 150 || icons.is_cherrybomb_chosen)
-        cherrybomb_icon = CHERRYBOMB_ICON_DIM_DIRECTORY;
-
-    win.draw_png_scale(peashooter_icon, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
-    win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, PEASHOOTER_ICON_Y1, ICON_WIDTH, icons.peashooter_remaining_time * ICON_HEIGHT / PEASHOOTER_LOADING);
-
-    if (level.level_num >= 2)
+    int plant_seed_dir[] = {
+        PEASHOOTER_ICON_BRIGHT_DIRECTORY,
+        SUNFLOWER_ICON_BRIGHT_DIRECTORY,
+        WALNUT_ICON_BRIGHT_DIRECTORY,
+        SNOWPEA_ICON_BRIGHT_DIRECTORY,
+        CHERRYBOMB_ICON_BRIGHT_DIRECTORY,
+    };
+    for (int i = 0; i < PLANT_COUNT; i++)
     {
-        win.draw_png_scale(sunflower_icon, ICON_BAR_X1 + 3, SUNFLOWER_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
-        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SUNFLOWER_ICON_Y1, ICON_WIDTH, icons.sunflower_remaining_time * ICON_HEIGHT / SUNFLOWER_LOADING);
-    }
-
-    if (level.level_num >= 4)
-    {
-        win.draw_png_scale(walnut_icon, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
-        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, WALNUT_ICON_Y1, ICON_WIDTH, icons.walnut_remaining_time * ICON_HEIGHT / WALNUT_LOADING);
-    }
-
-    if (level.level_num >= 6)
-    {
-        win.draw_png_scale(snowpea_icon, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
-        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, SNOWPEA_ICON_Y1, ICON_WIDTH, icons.snowpea_remaining_time * ICON_HEIGHT / SNOWPEA_LOADING);
-    }
-
-    if (level.level_num >= 9)
-    {
-        win.draw_png_scale(cherrybomb_icon, ICON_BAR_X1 + 3, CHERRYBOMB_ICON_Y1, ICON_WIDTH, ICON_HEIGHT);
-        win.draw_png(BLACK_SCREEN_DIRECTORY, ICON_BAR_X1 + 3, CHERRYBOMB_ICON_Y1, ICON_WIDTH, icons.cherrybomb_remaining_time * ICON_HEIGHT / CHERRYBOMB_LOADING);
+        if (player.sun_count < plant_sun_cost[i] || icons.is_plant_chosen[i])
+        {
+            plant_seed_dir[i]++;
+        }
+        if (level.level_num >= level_unlock_new_plant[i])
+        {
+            win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
+            if (icons.plant_remaining_time[i] == 0)
+            {
+                if (icons.is_plant_chosen[i] == false)
+                    plant_seed[i].blink(win);
+            }
+            else
+            {
+                win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
+                             icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
+            }
+        }
     }
 }
 
@@ -106,17 +115,10 @@ void display_game_paused_elements(window &win, Elements &elements, Map &cells, L
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
 }
 
-void display_game_pause(window &win, Elements &elements, Map &cells, Level &level)
-{
-    win.draw_bg(level.background_directory);
-    display_game_paused_elements(win, elements, cells, level);
-    display_button(win, MENU, MENU_DIRECTORY);
-}
-
 /* New function:
 If any plant seed is chosen: render it at the mouse position.
 */
-void display_chosen_plant(window &win, Player player, Icons icons)
+void display_chosen_plant(window &win, Player &player, Icons &icons)
 {
     int _x = 0, _y = 0;
     SDL_GetMouseState(&_x, &_y);
@@ -127,25 +129,12 @@ void display_chosen_plant(window &win, Player player, Icons icons)
     }
     _x -= ELEMENT_WIDTH >> 1;
     _y -= ELEMENT_HEIGHT >> 1;
-    if (icons.is_peashooter_chosen)
+    for (int i = 0; i < PLANT_COUNT; i++)
     {
-        win.draw_png_scale(PEASHOOTER_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-    }
-    else if (icons.is_sunflower_chosen)
-    {
-        win.draw_png_scale(SUNFLOWER_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-    }
-    else if (icons.is_walnut_chosen)
-    {
-        win.draw_png_scale(WALNUT_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-    }
-    else if (icons.is_snowpea_chosen)
-    {
-        win.draw_png_scale(SNOWPEA_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-    }
-    else if (icons.is_cherrybomb_chosen)
-    {
-        win.draw_png_scale(CHERRYBOMB_DIRECTORY, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        if (icons.is_plant_chosen[i])
+        {
+            win.draw_png_scale(PEASHOOTER_DIRECTORY + i, _x, _y, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        }
     }
 }
 
@@ -164,4 +153,52 @@ Display transparent black when level is locked
 void display_level_is_locked(window &win, const Button &button)
 {
     win.draw_png_scale(BLACK_SCREEN_DIRECTORY, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+}
+
+void blink_row_and_col(window &win, Map &cells, Level &level)
+{
+    int _x, _y;
+    SDL_GetMouseState(&_x, &_y);
+    int right_bound = cells[0][8].x2;
+    int left_bound = cells[0][0].x1;
+    int upper_bound;
+    int lower_bound;
+    if (level.level_num == 1)
+    {
+        upper_bound = cells[2][0].y1;
+        lower_bound = cells[2][0].y2;
+    }
+    else if (level.level_num == 2)
+    {
+        upper_bound = cells[1][0].y1;
+        lower_bound = cells[3][0].y2;
+    }
+    else
+    {
+        upper_bound = cells[0][0].y1;
+        lower_bound = cells[4][0].y2;
+    }
+    if (_x > left_bound && _x < right_bound &&
+        _y > upper_bound && _y < lower_bound)
+    {
+        win.set_texture_alpha(WHITE_SCREEN_DIRECTORY, 120);
+        // Blink row
+        for (int y = 0; y < VERT_BLOCK_COUNT; y++)
+        {
+            if (_y > cells[y][0].y1 && _y < cells[y][0].y2)
+            {
+                win.draw_png(WHITE_SCREEN_DIRECTORY, cells[y][0].x1, cells[y][0].y1, WINDOW_WIDTH - cells[y][0].x1, BLOCK_HEIGHT);
+                break;
+            }
+        }
+        // Blink column
+        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
+            if (_x > cells[0][x].x1 && _x < cells[0][x].x2)
+            {
+                win.draw_png(WHITE_SCREEN_DIRECTORY, cells[0][x].x1, cells[0][x].y1, BLOCK_WIDTH, cells[VERT_BLOCK_COUNT - 1][x].y2 - cells[0][x].y1);
+                break;
+            }
+
+        win.set_texture_alpha(WHITE_SCREEN_DIRECTORY, 50);
+    }
 }

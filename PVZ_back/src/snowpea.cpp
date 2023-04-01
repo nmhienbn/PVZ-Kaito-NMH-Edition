@@ -50,8 +50,7 @@ bool are_there_zombies_in_snowpea_row(Snowpea &snowpea, Elements &elements, Map 
 {
     for (Zombie zombie : elements.zombies)
         if (snowpea.row == zombie.row &&
-            zombie.x_location < ZOMBIE_INIT_X &&
-            zombie.x_location > cells[0][snowpea.col].x2 - 160)
+            is_in(cells[0][snowpea.col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
             return true;
     return false;
 }

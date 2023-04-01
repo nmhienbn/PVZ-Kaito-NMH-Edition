@@ -1,6 +1,6 @@
 #pragma once
 #include "rsdl.hpp"
-#include "gameInfo.h"
+#include "button.h"
 #include "elements.h"
 #include "music.h"
 

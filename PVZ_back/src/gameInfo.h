@@ -51,7 +51,7 @@ using namespace std;
 /*
 Moving speed of some elements
 */
-#define ZOMBIE_INIT_X WINDOW_WIDTH - 75
+#define ZOMBIE_INIT_X WINDOW_WIDTH
 #define ZOMBIE_DX 3
 #define PEA_DX 15
 #define SUN_DY 3
@@ -77,21 +77,15 @@ Moving speed of some elements
 #define X_UPPER_LEFT 250
 #define Y_UPPER_LEFT 70
 
-#define ICON_BAR_X1 20
-
 #define INIT_SUN_Y 5
-#define PEASHOOTER_ICON_Y1 100
-#define SUNFLOWER_ICON_Y1 170
-#define WALNUT_ICON_Y1 240
-#define SNOWPEA_ICON_Y1 310
-#define CHERRYBOMB_ICON_Y1 380
 #define SUN_BAR_WIDTH 180
 #define SUN_BAR_HEIGHT 360
 
+#define ICON_BAR_X1 20
 #define ICON_BAR_WIDTH 120
 #define ICON_BAR_HEIGHT 194
 #define ICON_WIDTH 105
-#define ICON_HEIGHT 70
+#define ICON_HEIGHT 67
 #define SUN_COUNT_WIDTH 70
 #define SUN_COUNT_HEIGHT 30
 #define SUN_WIDTH 80
@@ -145,7 +139,6 @@ Moving speed of some elements
 
 #define ELEMENT_WIDTH 90
 #define ELEMENT_HEIGHT 90
-#define TILE_WIDTH 75
 
 #define SHOVEL_WIDTH 139
 #define SHOVEL_HEIGHT 141

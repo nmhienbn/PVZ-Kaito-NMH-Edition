@@ -9,20 +9,22 @@ enum ImageType
 {
     NULL_DIRECTORY = -1,
 
-    // Plant seed
     PEASHOOTER_DIRECTORY,
+    SUNFLOWER_DIRECTORY,
+    WALNUT_DIRECTORY,
+    SNOWPEA_DIRECTORY,
+    CHERRYBOMB_DIRECTORY,
+
     PEASHOOTER_SHEET_DIRECTORY,
     PEASHOOTER_SHEET_BLINK_DIRECTORY,
     PEASHOOTER_ATTACK_DIRECTORY,
     PEASHOOTER_ATTACK_BLINK_DIRECTORY,
 
-    SUNFLOWER_DIRECTORY,
     SUNFLOWER_SHEET_DIRECTORY,
     SUNFLOWER_SHEET_BLINK_DIRECTORY,
     SUNFLOWER_HAPPY_DIRECTORY,
     SUNFLOWER_HAPPY_BLINK_DIRECTORY,
 
-    WALNUT_DIRECTORY,
     WALNUT_1_DIRECTORY,
     WALNUT_2_DIRECTORY,
     WALNUT_3_DIRECTORY,
@@ -32,12 +34,11 @@ enum ImageType
     WALNUT_3_BLINK_DIRECTORY,
     WALNUT_4_BLINK_DIRECTORY,
 
-    SNOWPEA_DIRECTORY,
     SNOWPEA_SHEET_DIRECTORY,
     SNOWPEA_ATTACK_DIRECTORY,
 
-    CHERRYBOMB_DIRECTORY,
     CHERRYBOMB_SHEET_DIRECTORY,
+    CHERRYBOMB_SHEET_BLINK_DIRECTORY,
 
     PEASHOOTER_ICON_BRIGHT_DIRECTORY,
     PEASHOOTER_ICON_DIM_DIRECTORY,
@@ -49,6 +50,12 @@ enum ImageType
     SNOWPEA_ICON_DIM_DIRECTORY,
     CHERRYBOMB_ICON_BRIGHT_DIRECTORY,
     CHERRYBOMB_ICON_DIM_DIRECTORY,
+
+    NEW_PEASHOOTER_DIRECTORY,
+    NEW_SUNFLOWER_DIRECTORY,
+    NEW_WALNUT_DIRECTORY,
+    NEW_SNOWPEA_DIRECTORY,
+    NEW_CHERRYBOMB_DIRECTORY,
 
     PEA_DIRECTORY,
     PEA_EXPLODE_DIRECTORY,
@@ -71,6 +78,7 @@ enum ImageType
     ICON_BAR_DIRECTORY,
     SHOVEL_BAR_DIRECTORY,
     SHOVEL_DIRECTORY,
+
     MENU_ICON_DIRECTORY,
     MENU_DIRECTORY,
     CONTINUE_DIRECTORY,
@@ -81,6 +89,10 @@ enum ImageType
     CANCEL_DIRECTORY,
     RENAME_MENU_DIRECTORY,
     NEW_USER_DIRECTORY,
+    LEAVE_PROMPT_DIRECTORY,
+    QUIT_PROMPT_DIRECTORY,
+    RESET_PROMPT_DIRECTORY,
+    RESTART_PROMPT_DIRECTORY,
 
     // NORMAL ZOMBIE---------------------------------------------------
     ZOMBIE_WALK1_DIRECTORY,
@@ -172,28 +184,34 @@ enum ImageType
     START_READY_DIRECTORY,
     START_SET_DIRECTORY,
     START_PLANT_DIRECTORY,
-    BLACK_SCREEN_DIRECTORY,
     HUGE_WAVE_DIRECTORY,
     FINAL_WAVE_DIRECTORY,
+
+    BLACK_SCREEN_DIRECTORY,
+    WHITE_SCREEN_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
 
 const string image_directory[] = {
+
+    "./image/Plant_sheet/peashooter/Peashooter.png", // PEASHOOTER_DIRECTORY
+    "./image/Plant_sheet/sunflower/Sunflower.png",   // SUNFLOWER_DIRECTORY
+    "./image/Plant_sheet/walnut/Walnut.png",         // WALNUT_DIRECTORY
+    "./image/Plant_sheet/snowpea/SnowPea.png",       // SNOWPEA_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/Cherrybomb.png", // CHERRYBOMB_DIRECTORY
+
     // Plant sheet
-    "./image/Plant_sheet/peashooter/Peashooter.png",              // PEASHOOTER_DIRECTORY
     "./image/Plant_sheet/peashooter/peashooter_sheet.png",        // PEASHOOTER_SHEET_DIRECTORY
     "./image/Plant_sheet/peashooter/peashooter_sheet_blink.png",  // PEASHOOTER_SHEET_BLINK_DIRECTORY
     "./image/Plant_sheet/peashooter/peashooter_attack.png",       // PEASHOOTER_ATTACK_DIRECTORY
     "./image/Plant_sheet/peashooter/peashooter_attack_blink.png", // PEASHOOTER_ATTACK_BLINK_DIRECTORY
 
-    "./image/Plant_sheet/sunflower/Sunflower.png",             // SUNFLOWER_DIRECTORY
     "./image/Plant_sheet/sunflower/sunflower_sheet.png",       // SUNFLOWER_SHEET_DIRECTORY
     "./image/Plant_sheet/sunflower/sunflower_sheet_blink.png", // SUNFLOWER_SHEET_BLINK_DIRECTORY
     "./image/Plant_sheet/sunflower/sunflower_happy.png",       // SUNFLOWER_HAPPY_DIRECTORY
     "./image/Plant_sheet/sunflower/sunflower_happy_blink.png", // SUNFLOWER_HAPPY_BLINK_DIRECTORY
 
-    "./image/Plant_sheet/walnut/Walnut.png",               // WALNUT_DIRECTORY
     "./image/Plant_sheet/walnut/Walnut-sheet-1.png",       // WALNUT_1_DIRECTORY
     "./image/Plant_sheet/walnut/Walnut-sheet-2.png",       // WALNUT_2_DIRECTORY
     "./image/Plant_sheet/walnut/Walnut-sheet-3.png",       // WALNUT_3_DIRECTORY
@@ -203,12 +221,11 @@ const string image_directory[] = {
     "./image/Plant_sheet/walnut/Walnut-sheet-3_blink.png", // WALNUT_3_BLINK_DIRECTORY
     "./image/Plant_sheet/walnut/Walnut-sheet-4_blink.png", // WALNUT_4_BLINK_DIRECTORY
 
-    "./image/Plant_sheet/snowpea/SnowPea.png",        // SNOWPEA_DIRECTORY
     "./image/Plant_sheet/snowpea/snowpea_sheet.png",  // SNOWPEA_SHEET_DIRECTORY
     "./image/Plant_sheet/snowpea/snowpea_attack.png", // SNOWPEA_ATTACK_DIRECTORY
 
-    "./image/Plant_sheet/cherrybomb/Cherrybomb.png",       // CHERRYBOMB_DIRECTORY
     "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", // CHERRYBOMB_SHEET_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", // CHERRYBOMB_SHEET_BLINK_DIRECTORY
 
     "./image/Plant_seed/Peashooter_Seed_Packet.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/Peashooter_Seed_Packet_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
@@ -220,6 +237,12 @@ const string image_directory[] = {
     "./image/Plant_seed/Snowpea_Seed_Packet_dim.png",    // SNOWPEA_ICON_DIM_DIRECTORY
     "./image/Plant_seed/Cherrybomb_Seed_Packet.png",     // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/Cherrybomb_Seed_Packet_dim.png", // CHERRYBOMB_ICON_DIM_DIRECTORY
+
+    "./image/New_plant/new_peashooter.png", // NEW_PEASHOOTER_DIRECTORY
+    "./image/New_plant/new_sunflower.png",  // NEW_SUNFLOWER_DIRECTORY
+    "./image/New_plant/new_walnut.png",     // NEW_WALNUT_DIRECTORY
+    "./image/New_plant/new_snowpea.png",    // NEW_SNOWPEA_DIRECTORY
+    "./image/New_plant/new_cherrybomb.png", // NEW_CHERRYBOMB_DIRECTORY
 
     "./image/Bullets/Pea/pea.png",                     // PEA_DIRECTORY
     "./image/Bullets/Pea/pea_explode.png",             // PEA_EXPLODE_DIRECTORY
@@ -236,22 +259,27 @@ const string image_directory[] = {
     "./image/Background/ZombiesWon.png",      // LOSING_MESSAGE_DIRECTORY
     "./image/Background/Winning_Pic.png",     // WINNING_MESSAGE_DIRECTORY
 
-    "./image/Icons/sun.png",         // SUN_DIRECTORY
-    "./image/Icons/sun2.png",        // SUN2_DIRECTORY
-    "./image/Icons/sun_bar.png",     // SUN_BAR_DIRECTORY
-    "./image/Icons/Item_Bar.png",    // ICON_BAR_DIRECTORY
-    "./image/Icons/Shovel.png",      // SHOVEL_BAR_DIRECTORY
-    "./image/Icons/Shovel2.png",     // SHOVEL_DIRECTORY
-    "./image/Icons/menu_icon.png",   // MENU_ICON_DIRECTORY
-    "./image/Icons/menu.png",        // MENU_DIRECTORY
-    "./image/Icons/continue.png",    // CONTINUE_DIRECTORY
-    "./image/Icons/rename.png",      // RENAME_DIRECTORY
-    "./image/Icons/reset_level.png", // RESET_LEVEL_DIRECTORY
-    "./image/Icons/quit.png",        // QUIT_DIRECTORY
-    "./image/Icons/ok.png",          // OK_DIRECTORY
-    "./image/Icons/cancel.png",      // CANCEL_DIRECTORY
-    "./image/Icons/rename_menu.png", // RENAME_MENU_DIRECTORY
-    "./image/Icons/new_user.png",    // NEW_USER_DIRECTORY
+    "./image/Icons/sun.png",      // SUN_DIRECTORY
+    "./image/Icons/sun2.png",     // SUN2_DIRECTORY
+    "./image/Icons/sun_bar.png",  // SUN_BAR_DIRECTORY
+    "./image/Icons/Item_Bar.png", // ICON_BAR_DIRECTORY
+    "./image/Icons/Shovel.png",   // SHOVEL_BAR_DIRECTORY
+    "./image/Icons/Shovel2.png",  // SHOVEL_DIRECTORY
+
+    "./image/Icons/menu_icon.png",      // MENU_ICON_DIRECTORY
+    "./image/Icons/menu.png",           // MENU_DIRECTORY
+    "./image/Icons/continue.png",       // CONTINUE_DIRECTORY
+    "./image/Icons/rename.png",         // RENAME_DIRECTORY
+    "./image/Icons/reset_level.png",    // RESET_LEVEL_DIRECTORY
+    "./image/Icons/quit.png",           // QUIT_DIRECTORY
+    "./image/Icons/ok.png",             // OK_DIRECTORY
+    "./image/Icons/cancel.png",         // CANCEL_DIRECTORY
+    "./image/Icons/rename_menu.png",    // RENAME_MENU_DIRECTORY
+    "./image/Icons/new_user.png",       // NEW_USER_DIRECTORY
+    "./image/Icons/leave_prompt.png",   // LEAVE_PROMPT_DIRECTORY
+    "./image/Icons/quit_prompt.png",    // QUIT_PROMPT_DIRECTORY
+    "./image/Icons/reset_prompt.png",   // RESET_PROMPT_DIRECTORY
+    "./image/Icons/restart_prompt.png", // RESTART_PROMPT_DIRECTORY
 
     // NORMAL ZOMBIE------------------------------------------------------------------------
     "./image/Zombie/Normal/ZombieWalk1.png", // ZOMBIE_WALK1_DIRECTORY
@@ -343,27 +371,32 @@ const string image_directory[] = {
     "./image/Announcement/StartReady.png", // START_READY_DIRECTORY
     "./image/Announcement/StartSet.png",   // START_SET_DIRECTORY
     "./image/Announcement/StartPlant.png", // START_PLANT_DIRECTORY
-    "./image/Black_Screen.png",            // BLACK_SCREEN_DIRECTORY
     "./image/Announcement/NextWave.png",   // HUGE_WAVE_DIRECTORY
     "./image/Announcement/FinalWave.png",  // FINAL_WAVE_DIRECTORY
+
+    "./image/Black_Screen.png", // BLACK_SCREEN_DIRECTORY
+    "./image/White_Screen.png", // WHITE_SCREEN_DIRECTORY
 
 };
 
 const int N_SHEET[] = {
+    0, // PEASHOOTER_DIRECTORY
+    0, // SUNFLOWER_DIRECTORY
+    0, // WALNUT_DIRECTORY
+    0, // SNOWPEA_DIRECTORY
+    0, // CHERRYBOMB_DIRECTORY
+
     // Plant sheet
-    0,  // PEASHOOTER_DIRECTORY
     60, // PEASHOOTER_SHEET_DIRECTORY
     60, // PEASHOOTER_SHEET_BLINK_DIRECTORY
     60, // PEASHOOTER_ATTACK_DIRECTORY
     60, // PEASHOOTER_ATTACK_BLINK_DIRECTORY
 
-    0,  // SUNFLOWER_DIRECTORY
     60, // SUNFLOWER_SHEET_DIRECTORY
     60, // SUNFLOWER_SHEET_BLINK_DIRECTORY
     15, // SUNFLOWER_HAPPY_DIRECTORY
     15, // SUNFLOWER_HAPPY_BLINK_DIRECTORY
 
-    0, // WALNUT_DIRECTORY
     3, // WALNUT_1_DIRECTORY
     2, // WALNUT_2_DIRECTORY
     2, // WALNUT_3_DIRECTORY
@@ -373,12 +406,11 @@ const int N_SHEET[] = {
     2, // WALNUT_3_BLINK_DIRECTORY
     2, // WALNUT_4_BLINK_DIRECTORY
 
-    0,  // SNOWPEA_DIRECTORY
     60, // SNOWPEA_SHEET_DIRECTORY
     60, // SNOWPEA_ATTACK_DIRECTORY
 
-    0,  // CHERRYBOMB_DIRECTORY
     24, // CHERRYBOMB_SHEET_DIRECTORY
+    24, // CHERRYBOMB_SHEET_BLINK_DIRECTORY
 
     0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     0, // PEASHOOTER_ICON_DIM_DIRECTORY
@@ -390,6 +422,12 @@ const int N_SHEET[] = {
     0, // SNOWPEA_ICON_DIM_DIRECTORY
     0, // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
     0, // CHERRYBOMB_ICON_DIM_DIRECTORY
+
+    0, // NEW_PEASHOOTER_DIRECTORY
+    0, // NEW_SUNFLOWER_DIRECTORY
+    0, // NEW_WALNUT_DIRECTORY
+    0, // NEW_SNOWPEA_DIRECTORY
+    0, // NEW_CHERRYBOMB_DIRECTORY
 
     0, // PEA_DIRECTORY
     0, // PEA_EXPLODE_DIRECTORY
@@ -422,6 +460,10 @@ const int N_SHEET[] = {
     0, // CANCEL_DIRECTORY
     0, // RENAME_MENU_DIRECTORY
     0, // NEW_USER_DIRECTORY
+    0, // LEAVE_PROMPT_DIRECTORY
+    0, // QUIT_PROMPT_DIRECTORY
+    0, // RESET_PROMPT_DIRECTORY
+    0, // RESTART_PROMPT_DIRECTORY
 
     // NORMAL ZOMBIE----------------------------------------------------
     22, // ZOMBIE_WALK1_DIRECTORY
@@ -513,27 +555,32 @@ const int N_SHEET[] = {
     0, // START_READY_DIRECTORY
     0, // START_SET_DIRECTORY
     0, // START_PLANT_DIRECTORY
-    0, // BLACK_SCREEN_DIRECTORY
     0, // HUGE_WAVE_DIRECTORY
     0, // FINAL_WAVE_DIRECTORY
+
+    0, // BLACK_SCREEN_DIRECTORY
+    0, // WHITE_SCREEN_DIRECTORY
 
 };
 
 const int C_SHEET[] = {
-    // Plant sheet
     0, // PEASHOOTER_DIRECTORY
+    0, // SUNFLOWER_DIRECTORY
+    0, // WALNUT_DIRECTORY
+    0, // SNOWPEA_DIRECTORY
+    0, // CHERRYBOMB_DIRECTORY
+
+    // Plant sheet
     8, // PEASHOOTER_SHEET_DIRECTORY
     8, // PEASHOOTER_SHEET_BLINK_DIRECTORY
     8, // PEASHOOTER_ATTACK_DIRECTORY
     8, // PEASHOOTER_ATTACK_BLINK_DIRECTORY
 
-    0, // SUNFLOWER_DIRECTORY
     8, // SUNFLOWER_SHEET_DIRECTORY
     8, // SUNFLOWER_SHEET_BLINK_DIRECTORY
     8, // SUNFLOWER_HAPPY_DIRECTORY
     8, // SUNFLOWER_HAPPY_BLINK_DIRECTORY
 
-    0, // WALNUT_DIRECTORY
     3, // WALNUT_1_DIRECTORY
     2, // WALNUT_2_DIRECTORY
     2, // WALNUT_3_DIRECTORY
@@ -543,12 +590,11 @@ const int C_SHEET[] = {
     2, // WALNUT_3_BLINK_DIRECTORY
     2, // WALNUT_4_BLINK_DIRECTORY
 
-    0, // SNOWPEA_DIRECTORY
     8, // SNOWPEA_SHEET_DIRECTORY
     8, // SNOWPEA_ATTACK_DIRECTORY
 
-    0, // CHERRYBOMB_DIRECTORY
     8, // CHERRYBOMB_SHEET_DIRECTORY
+    8, // CHERRYBOMB_SHEET_BLINK_DIRECTORY
 
     0, // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     0, // PEASHOOTER_ICON_DIM_DIRECTORY
@@ -560,6 +606,12 @@ const int C_SHEET[] = {
     0, // SNOWPEA_ICON_DIM_DIRECTORY
     0, // CHERRYBOMB_ICON_BRIGHT_DIRECTORY
     0, // CHERRYBOMB_ICON_DIM_DIRECTORY
+
+    0, // NEW_PEASHOOTER_DIRECTORY
+    0, // NEW_SUNFLOWER_DIRECTORY
+    0, // NEW_WALNUT_DIRECTORY
+    0, // NEW_SNOWPEA_DIRECTORY
+    0, // NEW_CHERRYBOMB_DIRECTORY
 
     0, // PEA_DIRECTORY
     0, // PEA_EXPLODE_DIRECTORY
@@ -592,6 +644,10 @@ const int C_SHEET[] = {
     0, // CANCEL_DIRECTORY
     0, // RENAME_MENU_DIRECTORY
     0, // NEW_USER_DIRECTORY
+    0, // LEAVE_PROMPT_DIRECTORY
+    0, // QUIT_PROMPT_DIRECTORY
+    0, // RESET_PROMPT_DIRECTORY
+    0, // RESTART_PROMPT_DIRECTORY
 
     // NORMAL ZOMBIE------------------------------------------------------------
     8, // ZOMBIE_WALK1_DIRECTORY
@@ -683,9 +739,11 @@ const int C_SHEET[] = {
     0, // START_READY_DIRECTORY
     0, // START_SET_DIRECTORY
     0, // START_PLANT_DIRECTORY
-    0, // BLACK_SCREEN_DIRECTORY
     0, // HUGE_WAVE_DIRECTORY
     0, // FINAL_WAVE_DIRECTORY
+
+    0, // BLACK_SCREEN_DIRECTORY
+    0, // WHITE_SCREEN_DIRECTORY
 
 };
 

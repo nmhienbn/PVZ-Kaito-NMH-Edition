@@ -25,9 +25,10 @@ obj/src/player_name.o: src/player_name.cpp src/player_name.h src/rsdl.hpp \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h \
- src/render_elements.h src/peashooter.h src/elements.h src/music.h \
- include\SDL2/SDL_mixer.h src/sunflower.h src/walnut.h src/snowpea.h \
- src/pea.h src/cherrybomb.h src/zombie.h src/sun.h
+ src/render_elements.h src/button.h src/peashooter.h src/elements.h \
+ src/music.h include\SDL2/SDL_mixer.h src/sunflower.h src/walnut.h \
+ src/snowpea.h src/pea.h src/cherrybomb.h src/zombie.h src/sun.h \
+ src/player_data.h src/render_message.h
 
 src/player_name.h:
 
@@ -145,6 +146,8 @@ src/image_directory.h:
 
 src/render_elements.h:
 
+src/button.h:
+
 src/peashooter.h:
 
 src/elements.h:
@@ -166,3 +169,7 @@ src/cherrybomb.h:
 src/zombie.h:
 
 src/sun.h:
+
+src/player_data.h:
+
+src/render_message.h:

@@ -10,11 +10,11 @@ Check if Zombie is in query tile or not.
 */
 bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int &col, Map &cells)
 {
-    int right_limit = cells[row][col].x2 - TILE_WIDTH;
-    int left_limit = cells[row][col].x1 - TILE_WIDTH;
+    int right_limit = cells[row][col].x2 - BLOCK_WIDTH;
+    int left_limit = cells[row][col].x1 - BLOCK_WIDTH;
     int zombie_new_location = zombie.x_location - ZOMBIE_DX * (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
     if (zombie.row == row &&
-        left_limit < zombie_new_location && zombie_new_location < right_limit)
+        is_in(left_limit, zombie_new_location, right_limit))
         return true;
     return false;
 }
@@ -49,7 +49,7 @@ Check if zombie can move or not:
 */
 bool can_zombie_move(Zombie &zombie, Elements &elements, Map &cells)
 {
-    int left_bound = cells[0][0].x1 - TILE_WIDTH;
+    int left_bound = cells[0][0].x1 - BLOCK_WIDTH;
     int zombie_new_location = zombie.x_location - ZOMBIE_DX * (zombie.cold_time ? FREEZE_ZOMBIE_SLOW_TIMES : 1);
     if (zombie_new_location < left_bound)
         return false;

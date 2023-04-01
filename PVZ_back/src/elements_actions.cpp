@@ -168,14 +168,9 @@ Update icons remainning time
 */
 void update_remaining_time(Icons &icons)
 {
-    if (icons.peashooter_remaining_time)
-        icons.peashooter_remaining_time--;
-    if (icons.sunflower_remaining_time)
-        icons.sunflower_remaining_time--;
-    if (icons.walnut_remaining_time)
-        icons.walnut_remaining_time--;
-    if (icons.snowpea_remaining_time)
-        icons.snowpea_remaining_time--;
-    if (icons.cherrybomb_remaining_time)
-        icons.cherrybomb_remaining_time--;
+    for (int i = 0; i < PLANT_COUNT; i++)
+    {
+        if (icons.plant_remaining_time[i])
+            icons.plant_remaining_time[i]--;
+    }
 }

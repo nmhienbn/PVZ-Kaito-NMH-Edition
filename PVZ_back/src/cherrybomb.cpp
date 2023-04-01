@@ -27,8 +27,8 @@ void display_cherrybombs(window &win, vector<CherryBomb> &cherrybombs, Map &cell
 */
 bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie, Map &cells)
 {
-    int right_limit = cells[cherrybomb.row][cherrybomb.col].x2 + TILE_WIDTH + 15;
-    int left_limit = cells[cherrybomb.row][cherrybomb.col].x1 - TILE_WIDTH - 30;
+    int right_limit = cells[cherrybomb.row][cherrybomb.col].x2 + BLOCK_WIDTH + 10;
+    int left_limit = cells[cherrybomb.row][cherrybomb.col].x1 - BLOCK_WIDTH - 25;
     if (is_in(cherrybomb.row - 1, zombie.row, cherrybomb.row + 1) &&
         is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION, right_limit))
         return true;
@@ -41,6 +41,7 @@ void handle_cherrybomb_zombie_encounter(Elements &elements, Map &cells)
     {
         if (elements.cherrybombs[i].frame >= CHERRYBOMB_FRAME * N_SHEET[CHERRYBOMB_SHEET_DIRECTORY])
         {
+            cells[elements.cherrybombs[i].row][elements.cherrybombs[i].col].is_planted = false;
             elements.cherrybombs.erase(elements.cherrybombs.begin() + i);
         }
         if (elements.cherrybombs[i].frame == CHERRYBOMB_FRAME * 22)

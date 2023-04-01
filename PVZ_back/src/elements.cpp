@@ -268,36 +268,6 @@ bool Zombie::operator<(const Zombie &other) const
     return (row == other.row ? x_location < other.x_location : row > other.row);
 }
 
-/*Button constructor*/
-Button::Button()
-{
-}
-
-/*Button constructor with rectangle coordination.*/
-Button::Button(int _x1, int _x2, int _y1, int _y2)
-{
-    x1 = _x1;
-    x2 = _x2;
-    y1 = _y1;
-    y2 = _y2;
-}
-
-/*Button destructor*/
-Button::~Button()
-{
-}
-
-/*
-@return true if current mouse is over the button
-*/
-bool Button::is_mouse_in(int mouse_x, int mouse_y) const
-{
-    if (x1 < mouse_x && mouse_x < x2 &&
-        y1 < mouse_y && mouse_y < y2)
-        return true;
-    return false;
-}
-
 /*
 random int in [L;R]
 */
@@ -315,6 +285,19 @@ bool is_in(const int &L, const int &x, const int &R)
 
 Icons::Icons()
 {
+    for (int i = 0; i < PLANT_COUNT; i++)
+    {
+        is_plant_chosen[i] = 0;
+        plant_remaining_time[i] = 0;
+    }
+}
+
+void Icons::reset_is_chosen()
+{
+    for (int i = 0; i < PLANT_COUNT; i++)
+    {
+        is_plant_chosen[i] = 0;
+    }
 }
 
 Pea::Pea()

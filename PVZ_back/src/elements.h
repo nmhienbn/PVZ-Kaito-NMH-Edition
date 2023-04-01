@@ -180,21 +180,24 @@ struct Player
     int unlocked_level = 0;
 };
 
+enum PlantType
+{
+    PEASHOOTER,
+    SUNFLOWER,
+    WALNUT,
+    SNOWPEA,
+    CHERRYBOMB,
+
+    PLANT_COUNT
+};
+
 struct Icons
 {
-    bool is_sunflower_chosen = 0;
-    bool is_peashooter_chosen = 0;
-    bool is_walnut_chosen = 0;
-    bool is_snowpea_chosen = 0;
-    bool is_cherrybomb_chosen = 0;
-
-    int peashooter_remaining_time = 0;
-    int sunflower_remaining_time = 0;
-    int walnut_remaining_time = 0;
-    int snowpea_remaining_time = 0;
-    int cherrybomb_remaining_time = 0;
+    bool is_plant_chosen[PLANT_COUNT];
+    int plant_remaining_time[PLANT_COUNT];
 
     Icons();
+    void reset_is_chosen();
 };
 
 /*
@@ -230,55 +233,3 @@ struct Level
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;
-
-struct Button
-{
-    int x1, x2, y1, y2;
-    Button();
-    Button(int _x1, int _x2, int _y1, int _y2);
-    ~Button();
-    bool is_mouse_in(int mouse_x, int mouse_y) const;
-};
-const Button Shovel(140, 215, 500, 575);
-const Button TAP_TO_START(230, 796, 520, 585);
-
-#define LEVEL_COUNT 12
-const Button LEVEL_BUTTON[] = {
-    {0, 0, 0, 0},         // LV NULL
-    {15, 240, 40, 205},   // LV 1
-    {260, 485, 40, 205},  // LV 2
-    {505, 730, 40, 205},  // LV 3
-    {750, 975, 40, 205},  // LV 4
-    {15, 240, 230, 395},  // LV 5
-    {260, 485, 230, 395}, // LV 6
-    {505, 730, 230, 395}, // LV 7
-    {750, 975, 230, 395}, // LV 8
-    {15, 240, 420, 585},  // LV 9
-    {260, 485, 420, 585}, // LV 10
-    {505, 730, 420, 585}, // LV 11
-    {750, 975, 420, 585}  // LV 12
-
-};
-
-const Button ICON_BAR_LV1(20, 125, 100, 170);
-const Button ICON_BAR_LV2(20, 125, 100, 240);
-const Button ICON_BAR_LV3(20, 125, 100, 310);
-const Button ICON_BAR_LV4(20, 125, 100, 380);
-const Button ICON_BAR_LV5(20, 125, 100, 450);
-const Button MENU_ICON(850, 975, 0, 35);
-const Button MY_GAME(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
-#define MENU_X1 325
-#define MENU_X2 725
-#define MENU_Y1 66
-#define MENU_Y2 534
-const Button MENU(MENU_X1, MENU_X2, MENU_Y1, MENU_Y2);
-const Button BACK_TO_GAME(MENU_X1 + 40, MENU_X1 + 360, MENU_Y1 + 380, MENU_Y1 + 450);
-const Button MAIN_MENU(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 317, MENU_Y1 + 355);
-const Button RESTART(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 220, MENU_Y1 + 312);
-#define CONTINUE_WIDTH 187
-#define CONTINUE_HEIGHT 44
-const Button CONTINUE((WINDOW_WIDTH - CONTINUE_WIDTH) / 2, (WINDOW_WIDTH + CONTINUE_WIDTH) / 2, 500, 500 + CONTINUE_HEIGHT);
-
-const Button RENAME_BUTTON(0, 91, 0, 37);
-const Button RESET_LEVEL_BUTTON(WINDOW_WIDTH - 162, WINDOW_WIDTH, 0, 37);
-const Button QUIT_BUTTON((WINDOW_WIDTH - 140) / 2, (WINDOW_WIDTH + 140) / 2, 0, 37);
