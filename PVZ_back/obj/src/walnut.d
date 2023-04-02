@@ -1,6 +1,5 @@
-obj/src/walnut.o: src/walnut.cpp src/walnut.h src/elements.h \
- src/gameInfo.h src/image_directory.h src/rsdl.hpp include\SDL2/SDL.h \
- include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
+obj/src/walnut.o: src/walnut.cpp src/walnut.h src/rsdl.hpp \
+ include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
  include\SDL2/SDL_assert.h include\SDL2/SDL_atomic.h \
@@ -25,15 +24,9 @@ obj/src/walnut.o: src/walnut.cpp src/walnut.h src/elements.h \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h
+ include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h src/Map.h
 
 src/walnut.h:
-
-src/elements.h:
-
-src/gameInfo.h:
-
-src/image_directory.h:
 
 src/rsdl.hpp:
 
@@ -142,3 +135,9 @@ include\SDL2/SDL_image.h:
 include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
+
+src/gameInfo.h:
+
+src/image_directory.h:
+
+src/Map.h:

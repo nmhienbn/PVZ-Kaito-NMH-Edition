@@ -1,17 +1,6 @@
 #include "reset_menu.h"
 
-extern bool level_chosen;
-extern bool reset;
-extern bool is_game_started;
-extern bool is_paused;
-extern bool is_unlocking_plant;
-extern int clk;
 extern Level level;
-extern Elements game_characters;
-extern Icons icons;
-extern Player player;
-extern Map cells;
-extern window win;
 extern bool is_reset;
 
 #define RESET_X1 325
@@ -24,10 +13,10 @@ const Button CANCEL_RESET(RESET_X1 + 210, RESET_X1 + 365, RESET_Y1 + 226, RESET_
 
 void display_game_reset()
 {
-    render_choose_level_no_mouse(win, player);
-    display_button(win, RESET_MENU, RESET_PROMPT_DIRECTORY);
-    OK_RESET.blink(win);
-    CANCEL_RESET.blink(win);
+    render_choose_level_no_mouse();
+    display_button(RESET_MENU, RESET_PROMPT_DIRECTORY);
+    OK_RESET.blink();
+    CANCEL_RESET.blink();
 }
 
 void handle_reset_menu_click(const int &mouse_x, const int &mouse_y)
@@ -35,7 +24,7 @@ void handle_reset_menu_click(const int &mouse_x, const int &mouse_y)
     if (OK_RESET.is_mouse_in(mouse_x, mouse_y))
     {
         is_reset = false;
-        reset_unlocked_level(player);
+        reset_unlocked_level();
     }
     if (CANCEL_RESET.is_mouse_in(mouse_x, mouse_y))
     {

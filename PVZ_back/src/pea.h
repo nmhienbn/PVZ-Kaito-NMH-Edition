@@ -1,11 +1,23 @@
 #pragma once
-#include "elements.h"
 #include "music.h"
 #include "rsdl.hpp"
+#include "zombie_struct.h"
 
-void handle_pea_zombie_encounter(Elements &elements, Map &cells);
-bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind);
+struct Pea
+{
+    int type;
+    int row;
+    int x_location;
+    int directory_num;
+    int explode;
+
+    Pea();
+    Pea(int _type, int _row, int _x);
+};
+
 bool has_pea_reached_zombie(Pea &pea, Zombie &zombie);
-void move_peas(vector<Pea> &peas, Elements &elements, Map &cells);
-bool can_pea_move(Pea &pea, Elements &elements, Map &cells);
-void display_peas(window &win, vector<Pea> &peas, Map &cells);
+void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies);
+bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, int z_ind);
+void move_peas(vector<Pea> &peas, vector<Zombie> &zombies);
+bool can_pea_move(Pea &pea, vector<Zombie> &zombies);
+void display_peas(vector<Pea> &peas);

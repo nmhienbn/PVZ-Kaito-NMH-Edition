@@ -25,13 +25,14 @@ obj/src/game.o: src/game.cpp src/game.h src/render_elements.h \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/peashooter.h src/elements.h src/music.h \
- include\SDL2/SDL_mixer.h src/sunflower.h src/walnut.h src/snowpea.h \
- src/pea.h src/cherrybomb.h src/zombie.h src/sun.h src/render_message.h \
- src/player_click.h src/elements_actions.h src/makeLevels.h \
- src/player_name.h src/player_data.h src/level_data.h src/level.h \
- src/game_pause.h src/restart_menu.h src/leave_menu.h src/choose_level.h \
- src/quit_menu.h src/reset_menu.h
+ include\SDL2/SDL_ttf.h src/elements.h src/peashooter.h src/music.h \
+ include\SDL2/SDL_mixer.h src/pea.h src/zombie_struct.h src/Map.h \
+ src/sunflower.h src/sun.h src/walnut.h src/snowpea.h src/cherrybomb.h \
+ src/zombie.h src/render_message.h src/player_click.h \
+ src/elements_actions.h src/makeLevels.h src/player_data.h \
+ src/player_name.h src/level.h src/game_pause.h src/restart_menu.h \
+ src/level_data.h src/leave_menu.h src/choose_level.h src/quit_menu.h \
+ src/reset_menu.h
 
 src/game.h:
 
@@ -151,27 +152,31 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
-src/peashooter.h:
-
 src/elements.h:
+
+src/peashooter.h:
 
 src/music.h:
 
 include\SDL2/SDL_mixer.h:
 
+src/pea.h:
+
+src/zombie_struct.h:
+
+src/Map.h:
+
 src/sunflower.h:
+
+src/sun.h:
 
 src/walnut.h:
 
 src/snowpea.h:
 
-src/pea.h:
-
 src/cherrybomb.h:
 
 src/zombie.h:
-
-src/sun.h:
 
 src/render_message.h:
 
@@ -181,17 +186,17 @@ src/elements_actions.h:
 
 src/makeLevels.h:
 
-src/player_name.h:
-
 src/player_data.h:
 
-src/level_data.h:
+src/player_name.h:
 
 src/level.h:
 
 src/game_pause.h:
 
 src/restart_menu.h:
+
+src/level_data.h:
 
 src/leave_menu.h:
 

@@ -1,5 +1,11 @@
 #include "level_data.h"
 
+extern Level level;
+extern Elements game_characters;
+extern Icons icons;
+extern Player player;
+extern Map cells;
+
 /*
 Read level's information from level files:
     + Number of wave
@@ -7,7 +13,7 @@ Read level's information from level files:
     + Duration of each wave
 Updated: number and type of zombie each wave.
 */
-void read_level(Level &level)
+void read_level()
 {
     string map_typ, wave_cnt, zombie_seq, wave_dur, temp;
     string file_name = LEVELS_DIRECTORY;     // levels folder
@@ -25,13 +31,13 @@ void read_level(Level &level)
     getline(myfile, wave_cnt);
     getline(myfile, wave_dur);
 
-    convert_wave_cnt_str_into_int(level, wave_cnt);
-    convert_wave_dur_str_into_int_vect(level, wave_dur);
+    convert_wave_cnt_str_into_int(wave_cnt);
+    convert_wave_dur_str_into_int_vect(wave_dur);
     for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
     {
         zombie_seq = "";
         getline(myfile, zombie_seq);
-        convert_zombie_seq_str_into_int_vect(level, zombie_seq, typ);
+        convert_zombie_seq_str_into_int_vect(zombie_seq, typ);
     }
     level.cur_wave = 0;
     level.cur_sec = 0;
@@ -41,7 +47,7 @@ void read_level(Level &level)
 /*
 Get information of number of waves in file.
 */
-void convert_wave_cnt_str_into_int(Level &level, const string &wave_cnt)
+void convert_wave_cnt_str_into_int(const string &wave_cnt)
 {
     string temp;
     int num_ind = wave_cnt.find(":") + 2;
@@ -52,7 +58,7 @@ void convert_wave_cnt_str_into_int(Level &level, const string &wave_cnt)
 /*
 Get information of duration of wave in file.
 */
-void convert_wave_dur_str_into_int_vect(Level &level, const string &wave_dur)
+void convert_wave_dur_str_into_int_vect(const string &wave_dur)
 {
     string temp;
     int num_ind = wave_dur.find(":") + 2;
@@ -69,7 +75,7 @@ void convert_wave_dur_str_into_int_vect(Level &level, const string &wave_dur)
 /*
 Get information of number of zombie in each wave in file.
 */
-void convert_zombie_seq_str_into_int_vect(Level &level, const string &zombie_seq, const int &typ)
+void convert_zombie_seq_str_into_int_vect(const string &zombie_seq, const int &typ)
 {
     string temp;
     int num_ind = zombie_seq.find(":") + 2;
@@ -86,7 +92,7 @@ void convert_zombie_seq_str_into_int_vect(Level &level, const string &zombie_seq
 /*
 Random number of zombie appear in each second of the wave.
 */
-void decide_zombie_cnt_for_each_sec(Level &level)
+void decide_zombie_cnt_for_each_sec()
 {
     bool enough_zombies = false;
     int z_cnt, sum;
@@ -121,11 +127,40 @@ void decide_zombie_cnt_for_each_sec(Level &level)
     }
 }
 
-void load_level(Player &player, Level &level)
+/*New function (Need update):
+Reset all things after a level finished.
+*/
+void reset_level()
 {
-    read_level(level);
-    decide_zombie_cnt_for_each_sec(level);
+
+    game_characters.peashooters.clear();
+    game_characters.sunflowers.clear();
+    game_characters.walnuts.clear();
+    game_characters.snowpeas.clear();
+    game_characters.cherrybombs.clear();
+
+    game_characters.suns.clear();
+    game_characters.peas.clear();
+
+    game_characters.zombies.clear();
+    game_characters.dead_zombies.clear();
+
+    for (int y = 0; y < VERT_BLOCK_COUNT; y++)
+    {
+        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
+        {
+            cells[y][x].is_planted = false;
+        }
+    }
+    icons = Icons();
+}
+void load_level()
+{
+    reset_level();
+    read_level();
+    decide_zombie_cnt_for_each_sec();
     player.sun_count = INIT_SUN_COUNT;
     player.is_choosing_a_plant = false;
     player.is_shoveling = false;
+    level.zombie_has_coming = false;
 }

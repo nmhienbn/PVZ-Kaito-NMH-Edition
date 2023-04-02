@@ -11,8 +11,11 @@ struct Button
     Button(int _x1, int _x2, int _y1, int _y2);
     ~Button();
     bool is_mouse_in(int mouse_x, int mouse_y) const;
-    void blink(window &win) const;
+    void blink() const;
 };
+void display_button(const Button &button, const int &button_directory);
+void display_level_is_locked(const Button &button);
+
 const Button Shovel_bar(140, 215, 500, 575);
 const Button TAP_TO_START(230, 796, 520, 585);
 

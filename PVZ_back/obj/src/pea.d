@@ -1,5 +1,4 @@
-obj/src/pea.o: src/pea.cpp src/pea.h src/elements.h src/gameInfo.h \
- src/image_directory.h src/music.h include\SDL2/SDL.h \
+obj/src/pea.o: src/pea.cpp src/pea.h src/music.h include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
@@ -25,15 +24,10 @@ obj/src/pea.o: src/pea.cpp src/pea.h src/elements.h src/gameInfo.h \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_mixer.h src/rsdl.hpp \
- include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h
+ include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h \
+ src/gameInfo.h src/image_directory.h src/zombie_struct.h src/Map.h
 
 src/pea.h:
-
-src/elements.h:
-
-src/gameInfo.h:
-
-src/image_directory.h:
 
 src/music.h:
 
@@ -146,3 +140,11 @@ include\SDL2/SDL_image.h:
 include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
+
+src/gameInfo.h:
+
+src/image_directory.h:
+
+src/zombie_struct.h:
+
+src/Map.h:

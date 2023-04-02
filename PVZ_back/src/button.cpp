@@ -1,5 +1,7 @@
 #include "button.h"
 
+extern window win;
+
 /*Button constructor*/
 Button::Button()
 {
@@ -30,7 +32,7 @@ bool Button::is_mouse_in(int mouse_x, int mouse_y) const
     return false;
 }
 
-void Button::blink(window &win) const
+void Button::blink() const
 {
     int _x, _y;
     SDL_GetMouseState(&_x, &_y);
@@ -38,4 +40,21 @@ void Button::blink(window &win) const
     {
         win.draw_png(WHITE_SCREEN_DIRECTORY, x1, y1, x2 - x1, y2 - y1);
     }
+}
+
+/*
+Display Game Buttons
+*/
+
+void display_button(const Button &button, const int &button_directory)
+{
+    win.draw_png(button_directory, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+}
+
+/*
+Display transparent black when level is locked
+*/
+void display_level_is_locked(const Button &button)
+{
+    win.draw_png_scale(BLACK_SCREEN_DIRECTORY, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
 }

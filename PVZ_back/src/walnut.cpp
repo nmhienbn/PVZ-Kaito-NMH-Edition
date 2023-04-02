@@ -1,5 +1,9 @@
 #include "walnut.h"
 
+extern bool is_paused;
+extern Map cells;
+extern window win;
+
 /*
 bite <= (1/4) * WALNUT_BITE_LIMIT: 1
 bite <= (2/4) * WALNUT_BITE_LIMIT: 2
@@ -30,7 +34,7 @@ void determine_walnut_appearance(Walnut &walnut)
 Change to sprite sheet.
 Render sprite sheet of exactly status.
 */
-void display_walnuts(window &win, vector<Walnut> &walnuts, Map &cells, bool is_pause)
+void display_walnuts(vector<Walnut> &walnuts)
 {
     for (auto &walnut : walnuts)
     {
@@ -56,7 +60,7 @@ void display_walnuts(window &win, vector<Walnut> &walnuts, Map &cells, bool is_p
             walnut.is_attacked--;
         }
 
-        if (is_pause == false)
+        if (is_paused == false)
             ++walnut.frame;
     }
 }

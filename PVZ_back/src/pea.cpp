@@ -1,5 +1,30 @@
 #include "pea.h"
 
+extern Map cells;
+extern window win;
+
+Pea::Pea()
+{
+}
+
+/*Generate new pea*/
+Pea::Pea(int _type, int _row, int _x)
+{
+    type = _type;
+    row = _row;
+    x_location = _x;
+    if (type == 1)
+    {
+        directory_num = PEA_DIRECTORY;
+        explode = PEA_EXPLODE_TIME;
+    }
+    else if (type == 2)
+    {
+        directory_num = SNOWZ_PEA_DIRECTORY;
+        explode = PEA_EXPLODE_TIME;
+    }
+}
+
 /*
 @return 'true' if pea reach the zombie
 */
@@ -16,21 +41,21 @@ For all pea and all zombie to check their collision.
 Old version: one pea hit many zombies at a time.
 Updated: one pea hit only one zombies at a time.
 */
-void handle_pea_zombie_encounter(Elements &elements, Map &cells)
+void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies)
 {
-    for (int i = 0; i < (int)elements.peas.size(); i++)
+    for (int i = 0; i < (int)peas.size(); i++)
     {
-        if (elements.peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
-            elements.peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
+        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
+            peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
         {
-            if (--elements.peas[i].explode == 0)
+            if (--peas[i].explode == 0)
             {
-                elements.peas.erase(elements.peas.begin() + i);
+                peas.erase(peas.begin() + i);
             }
             continue;
         }
-        for (int j = 0; j < (int)elements.zombies.size(); j++)
-            if (apply_pea_hitting_zombie(elements, elements.peas[i], j))
+        for (int j = 0; j < (int)zombies.size(); j++)
+            if (apply_pea_hitting_zombie(zombies, dead_zombies, peas[i], j))
             {
                 break;
             }
@@ -44,15 +69,16 @@ Updated:
     Remove zombie's 2 appearances.
     Add zombies' death struct.
 */
-bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
+bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, int z_ind)
 {
-    if (has_pea_reached_zombie(pea, elements.zombies[z_ind]))
+    if (has_pea_reached_zombie(pea, zombies[z_ind]))
     {
+        // Sound effects
         if (pea.type == 2)
         {
             play_sound_effect(SNOW_PEA_SPARKLES_DIRECTORY);
         }
-        if (elements.zombies[z_ind].type == BUCKET_TYPE)
+        if (zombies[z_ind].type == BUCKET_TYPE)
         {
             play_sound_effect(SHIELD_HIT_MUSIC_DIRECTORY);
         }
@@ -60,21 +86,24 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
         {
             play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
         }
+        // Snowz peas effects
         if (pea.type == 2)
         {
-            elements.zombies[z_ind].cold_time = MAX_COLD_TIME;
+            zombies[z_ind].cold_time = MAX_COLD_TIME;
         }
+        // Pea explode
         if (pea.directory_num == PEA_DIRECTORY ||
             pea.directory_num == SNOWZ_PEA_DIRECTORY)
         {
             pea.directory_num++; // Make the pea explode
         }
-        if (elements.zombies[z_ind].decrease_health())
+        // Attack zombie
+        if (zombies[z_ind].decrease_health(dead_zombies))
         {
             play_sound_effect(ZOMBIE_FALLING_MUSIC_DIRECTORY);
-            DeadZombie tmp(elements.zombies[z_ind].row, elements.zombies[z_ind].x_location, elements.zombies[z_ind].cold_time > 0);
-            elements.dead_zombies.push_back(tmp);
-            elements.zombies.erase(elements.zombies.begin() + z_ind);
+            DeadZombie tmp(zombies[z_ind].row, zombies[z_ind].x_location, zombies[z_ind].cold_time > 0);
+            dead_zombies.push_back(tmp);
+            zombies.erase(zombies.begin() + z_ind);
         }
         return true;
     }
@@ -82,14 +111,31 @@ bool apply_pea_hitting_zombie(Elements &elements, Pea &pea, int z_ind)
 }
 
 /*
+Return true if pea can move
+    + If pea go out the playground: false
+    + If pea reach any zombie: false
+    + Else: true
+*/
+bool can_pea_move(Pea &pea, vector<Zombie> &zombies)
+{
+    int right_bound = WINDOW_WIDTH;
+    if (pea.x_location > right_bound)
+        return false;
+    for (auto &zombie : zombies)
+        if (has_pea_reached_zombie(pea, zombie))
+            return false;
+    return true;
+}
+
+/*
 Move the pea: For all pea:
     + If pea can move, its location += their speed.
 */
-void move_peas(vector<Pea> &peas, Elements &elements, Map &cells)
+void move_peas(vector<Pea> &peas, vector<Zombie> &zombies)
 {
     for (int i = 0; i < (int)peas.size(); i++)
     {
-        if (can_pea_move(peas[i], elements, cells))
+        if (can_pea_move(peas[i], zombies))
             peas[i].x_location += PEA_DX;
         else
         {
@@ -99,26 +145,9 @@ void move_peas(vector<Pea> &peas, Elements &elements, Map &cells)
 }
 
 /*
-Return true if pea can move
-    + If pea go out the playground: false
-    + If pea reach any zombie: false
-    + Else: true
-*/
-bool can_pea_move(Pea &pea, Elements &elements, Map &cells)
-{
-    int right_bound = WINDOW_WIDTH;
-    if (pea.x_location > right_bound)
-        return false;
-    for (auto &zombie : elements.zombies)
-        if (has_pea_reached_zombie(pea, zombie))
-            return false;
-    return true;
-}
-
-/*
 Display the peas
 */
-void display_peas(window &win, vector<Pea> &peas, Map &cells)
+void display_peas(vector<Pea> &peas)
 {
     for (auto &pea : peas)
     {

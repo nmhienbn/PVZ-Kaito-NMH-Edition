@@ -21,16 +21,16 @@ bool is_leave, is_quit, is_reset, is_restart;
 int main(int argv, char **args)
 {
     init_music();
-    init_game(win, level, player, cells);
-    display_get_name_player(win, player, quit, NEW_USER_DIRECTORY);
+    init_game();
+    display_get_name_player(NEW_USER_DIRECTORY);
     if (player.unlocked_level == 0)
     {
         is_unlocking_plant = true;
         while (!quit && is_unlocking_plant)
         {
-            unlock_plant(win, quit, PEASHOOTER);
+            unlock_plant(PEASHOOTER);
         }
-        update_unlocked_level(player, level);
+        update_unlocked_level();
     }
     // Main loop
     while (!quit)
@@ -43,7 +43,7 @@ int main(int argv, char **args)
                 {
                     if (level.level_num == level_unlock_new_plant[i] - 1)
                     {
-                        unlock_plant(win, quit, i);
+                        unlock_plant(i);
                         break;
                     }
                 }
@@ -65,7 +65,7 @@ int main(int argv, char **args)
         else
         {
             win.clear_renderer();
-            start_level_3(win, player, icons, cells, level, game_characters, clk, quit, is_game_started, level_chosen, is_paused);
+            start_level();
         }
     }
     close_music();

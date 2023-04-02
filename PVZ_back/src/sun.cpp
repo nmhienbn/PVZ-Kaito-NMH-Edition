@@ -1,27 +1,30 @@
 #include "sun.h"
 
+extern Map cells;
+extern window win;
+
 /*
 Random final row (0-4) and column (0-8) for sun from the sky
 Then add it into vector<Sun>
 */
-void gen_random_sun_from_sky(Elements &elements)
+void gen_random_sun_from_sky(vector<Sun> &suns)
 {
     Sun temp;
     temp.final_row = rand(0, 4);
     temp.final_col = rand(0, 8);
     temp.y_location = INIT_SUN_Y;
     temp.wait_seconds = 0;
-    elements.suns.push_back(temp);
+    suns.push_back(temp);
 }
 
 /*
 Remove the suns that are exist a long time.
 */
-void remove_suns(Elements &elements)
+void remove_suns(vector<Sun> &suns)
 {
-    for (int i = 0; i < (int)elements.suns.size(); i++)
-        if (elements.suns[i].wait_seconds >= SUN_APPEAR_LIMIT)
-            elements.suns.erase(elements.suns.begin() + i);
+    for (int i = 0; i < (int)suns.size(); i++)
+        if (suns[i].wait_seconds >= SUN_APPEAR_LIMIT)
+            suns.erase(suns.begin() + i);
 }
 
 /*
@@ -29,7 +32,7 @@ For all the sun:
     + If the sun has not reached the ground: move it.
     + Else increase sun-wait time.
 */
-void move_suns(vector<Sun> &suns, Map &cells)
+void move_suns(vector<Sun> &suns)
 {
     for (int i = 0; i < (int)suns.size(); i++)
     {
@@ -56,7 +59,7 @@ void move_suns(vector<Sun> &suns, Map &cells)
 /*
 Updated: If sun's waited seconds >= SUN_APPEAR_LIMIT * 3 / 4, then change its transparency.
 */
-void display_suns(window &win, vector<Sun> suns, Map &cells)
+void display_suns(vector<Sun> &suns)
 {
     for (auto &sun : suns)
     {

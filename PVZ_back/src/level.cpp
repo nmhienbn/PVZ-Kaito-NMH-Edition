@@ -1,7 +1,18 @@
 #include "level.h"
 
-extern bool is_unlocking_plant;
-extern bool is_leave, is_quit, is_reset, is_restart;
+extern bool level_chosen,
+    quit,
+    is_game_started,
+    is_paused,
+    is_unlocking_plant;
+extern int clk;
+extern Level level;
+extern Elements game_characters;
+extern Player player;
+extern window win;
+extern bool is_leave,
+    is_restart;
+
 /*
 If game has not started:
     0.5s: display ready.
@@ -18,25 +29,23 @@ Handle user click:
     Menu icon and menu click.
     Player click on game.
 */
-void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
-                   Level &level, Elements &game_characters, int &clk, bool &quit,
-                   bool &is_game_started, bool &is_level_chosen, bool &is_paused)
+void start_level()
 {
     if (is_game_started == false)
     {
-        display_R_S_P(win, player, level, clk, is_game_started);
+        display_R_S_P();
     }
     else
     {
-        if (has_player_lost(game_characters))
+        if (has_player_lost())
         {
-            display_lose(win, player, icons, cells, level, game_characters, quit, is_level_chosen);
+            display_lose();
             return;
         }
-        if (has_player_won(level, game_characters))
+        if (has_player_won())
         {
             bool is_newest_level = (level.level_num == player.unlocked_level);
-            if (display_win(win, player, icons, cells, level, game_characters, quit, is_level_chosen) && is_newest_level)
+            if (display_win() && is_newest_level)
             {
                 for (int i = 0; i < PLANT_COUNT; i++)
                 {
@@ -50,52 +59,48 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
         }
         if (is_restart)
         {
-            display_game_restart(win, game_characters, cells, level);
+            display_game_restart();
         }
         else if (is_leave)
         {
-            display_game_leave(win, game_characters, cells, level);
+            display_game_leave();
         }
         else if (is_paused)
         {
-            display_game_pause(win, game_characters, cells, level);
-            BACK_TO_GAME.blink(win);
-            MAIN_MENU.blink(win);
-            RESTART.blink(win);
+            display_game_pause();
         }
         else
         {
-            display_all_in_game(win, player, icons, cells, level, game_characters, clk);
-            MENU_ICON.blink(win);
+            display_all_in_game();
+            MENU_ICON.blink();
         }
     }
     HANDLE(
         QUIT(quit = true);
         KEY_PRESS(q, quit = true);
-        KEY_TO_WIN(level.waves_finished = 1; game_characters.zombies.clear(); game_characters.dead_zombies.clear(););
+        KEY_TO_WIN(
+            level.waves_finished = 1;
+            game_characters.zombies.clear();
+            game_characters.dead_zombies.clear();
+
+        );
         LCLICK({
             if (is_restart)
             {
-                handle_restart_menu_click(player, game_characters, level, icons, cells,
-                                          mouse_x, mouse_y, clk,
-                                          is_paused, is_game_started, is_level_chosen);
+                handle_restart_menu_click(mouse_x, mouse_y);
             }
             else if (is_leave)
             {
-                handle_leave_menu_click(player, game_characters, level, icons, cells,
-                                        mouse_x, mouse_y, clk,
-                                        is_paused, is_game_started, is_level_chosen);
+                handle_leave_menu_click(mouse_x, mouse_y);
             }
             else if (is_paused)
             {
-                handle_menu_click(player, game_characters, level, icons, cells,
-                                  mouse_x, mouse_y, clk,
-                                  is_paused, is_game_started, is_level_chosen);
+                handle_menu_click(mouse_x, mouse_y);
             }
             else
             {
-                handle_menu_icon_click(mouse_x, mouse_y, is_paused);
-                handle_user_click(player, level, icons, game_characters, cells, mouse_x, mouse_y);
+                handle_menu_icon_click(mouse_x, mouse_y);
+                handle_user_click(mouse_x, mouse_y);
             }
         });
 
@@ -106,12 +111,11 @@ void start_level_3(window &win, Player &player, Icons &icons, Map &cells,
     win.update_screen();
 }
 
-bool display_win(window &win, Player &player, Icons &icons, Map &cells,
-                 Level &level, Elements &game_characters, bool &quit, bool &is_level_chosen)
+bool display_win()
 {
-    display_winning_message(win, game_characters, cells, level);
+    display_winning_message();
     play_music(WIN_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink(win);
+    CONTINUE.blink();
     win.update_screen();
     HANDLE(
         QUIT(quit = true);
@@ -119,10 +123,9 @@ bool display_win(window &win, Player &player, Icons &icons, Map &cells,
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
-                update_unlocked_level(player, level);
+                update_unlocked_level();
                 level.waves_finished = false;
-                is_level_chosen = false;
-                reset_level(game_characters, cells, icons);
+                level_chosen = false;
                 play_music(OPENING_MUSIC_DIRECTORY);
                 win.fade_out();
                 return true;
@@ -133,12 +136,11 @@ bool display_win(window &win, Player &player, Icons &icons, Map &cells,
     return false;
 }
 
-void display_lose(window &win, Player &player, Icons &icons, Map &cells,
-                  Level &level, Elements &game_characters, bool &quit, bool &is_level_chosen)
+void display_lose()
 {
-    display_losing_message(win, game_characters, cells, level);
+    display_losing_message();
     play_music(LOSE_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink(win);
+    CONTINUE.blink();
     win.update_screen();
     HANDLE(
         QUIT(quit = true);
@@ -147,9 +149,8 @@ void display_lose(window &win, Player &player, Icons &icons, Map &cells,
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
                 level.waves_finished = false;
-                is_level_chosen = false;
+                level_chosen = false;
                 play_music(OPENING_MUSIC_DIRECTORY);
-                reset_level(game_characters, cells, icons);
                 win.fade_out();
             }
         });
@@ -157,44 +158,42 @@ void display_lose(window &win, Player &player, Icons &icons, Map &cells,
     );
 }
 
-void display_R_S_P(window &win, Player &player, Level &level,
-                   int &clk, bool &is_game_started)
+void display_R_S_P()
 {
     play_music(R_S_P_MUSIC_DIRECTORY);
     if (clk < 30)
     {
-        display_ready_set_plant(win, player, START_READY_DIRECTORY, level);
+        display_ready_set_plant(START_READY_DIRECTORY);
     }
     else if (clk < 60)
     {
-        display_ready_set_plant(win, player, START_SET_DIRECTORY, level);
+        display_ready_set_plant(START_SET_DIRECTORY);
     }
     else if (clk < 180)
     {
-        display_ready_set_plant(win, player, START_PLANT_DIRECTORY, level);
+        display_ready_set_plant(START_PLANT_DIRECTORY);
     }
     else
     {
-        display_ready_set_plant(win, player, START_PLANT_DIRECTORY, level);
+        display_ready_set_plant(START_PLANT_DIRECTORY);
         clk = 0;
         is_game_started = true;
     }
 }
 
-void display_all_in_game(window &win, Player &player, Icons &icons, Map &cells,
-                         Level &level, Elements &game_characters, int &clk)
+void display_all_in_game()
 {
     win.clear_renderer();
-    display_game_layout(win, player, icons, level);
+    display_game_layout();
     if (player.is_choosing_a_plant || player.is_shoveling)
     {
-        blink_row_and_col(win, cells, level);
+        blink_row_and_col();
     }
-    display_game_elements(win, game_characters, cells);
-    display_game_announce(win, level);
-    display_chosen_plant(win, player, icons);
-    handle_movements(game_characters, cells, clk);
-    handle_changes(icons, game_characters, cells, level, clk);
+    display_game_elements();
+    display_game_announce();
+    display_chosen_plant();
+    handle_movements();
+    handle_changes();
     play_music(BACKGROUND_MUSIC_DIRECTORY);
     if (game_characters.zombies.size() && !rand(0, 500))
     {
@@ -202,11 +201,11 @@ void display_all_in_game(window &win, Player &player, Icons &icons, Map &cells,
     }
 }
 
-void unlock_plant(window &win, bool &quit, const int &_plant_type)
+void unlock_plant(const int &_plant_type)
 {
-    display_unlock_plant(win, NEW_PEASHOOTER_DIRECTORY + _plant_type);
+    display_unlock_plant(NEW_PEASHOOTER_DIRECTORY + _plant_type);
     play_music(NEW_PLANT_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink(win);
+    CONTINUE.blink();
     win.update_screen();
     HANDLE(
         QUIT(quit = true);

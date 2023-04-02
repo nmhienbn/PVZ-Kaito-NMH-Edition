@@ -26,10 +26,10 @@ obj/src/reset_menu.o: src/reset_menu.cpp src/reset_menu.h \
  include\SDL2/SDL_timer.h include\SDL2/SDL_version.h \
  include\SDL2/SDL_locale.h include\SDL2/SDL_misc.h \
  include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h \
- src/peashooter.h src/elements.h src/music.h include\SDL2/SDL_mixer.h \
- src/sunflower.h src/walnut.h src/snowpea.h src/pea.h src/cherrybomb.h \
- src/zombie.h src/sun.h src/player_data.h src/render_message.h \
- src/player_name.h
+ src/elements.h src/peashooter.h src/music.h include\SDL2/SDL_mixer.h \
+ src/pea.h src/zombie_struct.h src/Map.h src/sunflower.h src/sun.h \
+ src/walnut.h src/snowpea.h src/cherrybomb.h src/zombie.h \
+ src/player_data.h src/player_name.h
 
 src/reset_menu.h:
 
@@ -149,30 +149,32 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
-src/peashooter.h:
-
 src/elements.h:
+
+src/peashooter.h:
 
 src/music.h:
 
 include\SDL2/SDL_mixer.h:
 
+src/pea.h:
+
+src/zombie_struct.h:
+
+src/Map.h:
+
 src/sunflower.h:
+
+src/sun.h:
 
 src/walnut.h:
 
 src/snowpea.h:
 
-src/pea.h:
-
 src/cherrybomb.h:
 
 src/zombie.h:
 
-src/sun.h:
-
 src/player_data.h:
-
-src/render_message.h:
 
 src/player_name.h:

@@ -26,9 +26,9 @@ obj/src/elements_actions.o: src/elements_actions.cpp \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h \
- src/elements.h src/pea.h src/music.h include\SDL2/SDL_mixer.h \
- src/peashooter.h src/snowpea.h src/sun.h src/sunflower.h src/zombie.h \
- src/cherrybomb.h
+ src/elements.h src/peashooter.h src/music.h include\SDL2/SDL_mixer.h \
+ src/pea.h src/zombie_struct.h src/Map.h src/sunflower.h src/sun.h \
+ src/walnut.h src/snowpea.h src/cherrybomb.h src/zombie.h
 
 src/elements_actions.h:
 
@@ -146,20 +146,26 @@ src/image_directory.h:
 
 src/elements.h:
 
-src/pea.h:
+src/peashooter.h:
 
 src/music.h:
 
 include\SDL2/SDL_mixer.h:
 
-src/peashooter.h:
+src/pea.h:
 
-src/snowpea.h:
+src/zombie_struct.h:
 
-src/sun.h:
+src/Map.h:
 
 src/sunflower.h:
 
-src/zombie.h:
+src/sun.h:
+
+src/walnut.h:
+
+src/snowpea.h:
 
 src/cherrybomb.h:
+
+src/zombie.h:

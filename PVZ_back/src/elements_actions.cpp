@@ -1,5 +1,10 @@
 #include "elements_actions.h"
-static bool zombie_has_coming = false;
+
+extern int clk;
+extern Level level;
+extern Elements game_characters;
+extern Icons icons;
+extern Player player;
 
 /*
 Handles all the changes to the game:
@@ -13,48 +18,48 @@ Handles all the changes to the game:
     + Remove the suns that appear for a long time.
     + Update remaining time of each plant seed.
 */
-void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, int clk)
+void handle_changes()
 { // Update all zombies' moving status
-    update_moving_status_for_zombies(elements, cells);
+    update_moving_status_for_zombies(game_characters.zombies);
 
     // Check all bullets' moving status
-    handle_pea_zombie_encounter(elements, cells);
+    handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.dead_zombies);
 
     // Check all cherrybombs' status
-    handle_cherrybomb_zombie_encounter(elements, cells);
+    handle_cherrybomb_zombie_encounter(game_characters.cherrybombs, game_characters.zombies, game_characters.dead_zombies);
 
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
     if (level.waves_finished == false && clk % ZOMBIE_CREATE_CLK_COUNT == 0)
-        create_new_zombies(elements, level);
+        create_new_zombies();
     else if (clk % ZOMBIE_CREATE_CLK_COUNT == ANNOUNCER_CLK_COUNT)
         level.announce_directory = NULL_DIRECTORY;
 
     // Zombie bite plant
-    handle_zombie_plant_encounter(elements.zombies, elements.peashooters, cells, PEASHOOTER_BITE_LIMIT);
-    handle_zombie_plant_encounter(elements.zombies, elements.sunflowers, cells, SUNFLOWER_BITE_LIMIT);
-    handle_zombie_plant_encounter(elements.zombies, elements.walnuts, cells, WALNUT_BITE_LIMIT);
-    handle_zombie_plant_encounter(elements.zombies, elements.snowpeas, cells, SNOWPEA_BITE_LIMIT);
-    handle_zombie_plant_encounter(elements.zombies, elements.cherrybombs, cells, CHERRYBOMB_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters, PEASHOOTER_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers, SUNFLOWER_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts, WALNUT_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas, SNOWPEA_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs, CHERRYBOMB_BITE_LIMIT);
 
     // Update next time for each zombie to bite plant
-    update_zombie_next_bite(elements.zombies);
+    update_zombie_next_bite(game_characters.zombies);
 
     // Fire pea, snowpea
-    fire_peas(elements, cells);
-    fire_snowz_peas(elements, cells);
+    fire_peas(game_characters.peashooters, game_characters.zombies, game_characters.peas);
+    fire_snowz_peas(game_characters.snowpeas, game_characters.zombies, game_characters.peas);
 
     // Generate suns from the sky. No sun at night.
     if (level.is_night == false && clk % SUN_GEN_SKY_CLK_COUNT == 0)
-        gen_random_sun_from_sky(elements);
+        gen_random_sun_from_sky(game_characters.suns);
 
     // Generate suns from sunflowers.
-    gen_sun_from_all_sunflowers(elements, cells);
+    gen_sun_from_all_sunflowers(game_characters.sunflowers, game_characters.suns);
 
     // Remove the suns that appear for a long time
-    remove_suns(elements);
+    remove_suns(game_characters.suns);
 
     // Update remaining time of each plant seed
-    update_remaining_time(icons);
+    update_remaining_time();
 }
 
 /*
@@ -64,13 +69,13 @@ void handle_changes(Icons &icons, Elements &elements, Map &cells, Level &level, 
     + Then move to the next second and maybe next wave.
     + Reduce the empty time between waves of zombies when all current zombies died (while zombies.empty() loop).
 */
-void create_new_zombies(Elements &elements, Level &level)
+void create_new_zombies()
 {
     Zombie temp;
     if (level.waves_finished == false)
     {
         // This loop is to reduce the empty time between waves of zombies when all current zombies died.
-        while (elements.zombies.empty())
+        while (game_characters.zombies.empty())
         {
             // Generate zombies for current wave and current second.
             // For all type of zombies.
@@ -79,30 +84,19 @@ void create_new_zombies(Elements &elements, Level &level)
                 // Number of zombies for this second of waves.
                 int zombie_cnt = level.zombie_distr_for_wave[typ][level.cur_wave][level.cur_sec];
                 // First second of first wave: sound effect "The zombies are coming".
-                if (level.cur_wave == 0 && level.cur_sec == 0)
-                    zombie_has_coming = false;
-                if (zombie_has_coming == false)
+                if (level.zombie_has_coming == false)
                 {
                     if (zombie_cnt > 0)
                     {
                         play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
-                        zombie_has_coming = true;
+                        level.zombie_has_coming = true;
                     }
-                }
-                // Sometimes: sound effect "Zombie groan".
-                else if (zombie_cnt > 0)
-                {
-                    play_sound_effect(GROAN_MUSIC_DIRECTORY);
                 }
                 // Random row of new zombie.
                 for (int i = 0; i < zombie_cnt; i++)
                 {
-                    temp = Zombie(typ);
-                    if (level.level_num == 1)
-                        temp.row = 2;
-                    else if (level.level_num == 2)
-                        temp.row = rand(1, 3);
-                    elements.zombies.push_back(temp);
+                    temp = Zombie(typ, level.level_num);
+                    game_characters.zombies.push_back(temp);
                 }
             }
             // Move to the next second and maybe next wave.
@@ -120,24 +114,16 @@ void create_new_zombies(Elements &elements, Level &level)
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = FINAL_WAVE_DIRECTORY;
                     // Make flag zombies
-                    temp = Zombie(NORMAL_TYPE, FLAG_ZOMBIE_WALK_DIRECTORY);
-                    if (level.level_num == 1)
-                        temp.row = 2;
-                    else if (level.level_num == 2)
-                        temp.row = rand(1, 3);
-                    elements.zombies.push_back(temp);
+                    temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
+                    game_characters.zombies.push_back(temp);
                 }
                 else if (level.is_huge_wave())
                 {
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = HUGE_WAVE_DIRECTORY;
                     // Make flag zombies
-                    temp = Zombie(NORMAL_TYPE, FLAG_ZOMBIE_WALK_DIRECTORY);
-                    if (level.level_num == 1)
-                        temp.row = 2;
-                    else if (level.level_num == 2)
-                        temp.row = rand(1, 3);
-                    elements.zombies.push_back(temp);
+                    temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
+                    game_characters.zombies.push_back(temp);
                 }
             }
             else
@@ -153,24 +139,36 @@ void create_new_zombies(Elements &elements, Level &level)
 Handle all movement is happening: zombies, suns, peas.
 @param clk: the clock of game
 */
-void handle_movements(Elements &elements, Map &cells, int clk)
+void handle_movements()
 {
     if (clk % ZOMBIE_CLK_COUNT == 0)
-        move_zombies(elements.zombies, elements, cells);
+        move_zombies(game_characters.zombies);
     if (clk % SUN_CLK_COUNT == 0)
-        move_suns(elements.suns, cells);
+        move_suns(game_characters.suns);
     if (clk % PEA_CLK_COUNT == 0)
-        move_peas(elements.peas, elements, cells);
+        move_peas(game_characters.peas, game_characters.zombies);
 }
 
 /*
 Update icons remainning time
 */
-void update_remaining_time(Icons &icons)
+void update_remaining_time()
 {
     for (int i = 0; i < PLANT_COUNT; i++)
     {
         if (icons.plant_remaining_time[i])
             icons.plant_remaining_time[i]--;
+    }
+    if (player.sun_count_change_color_times)
+    {
+        if (player.sun_count_change_color_time)
+        {
+            player.sun_count_change_color_time--;
+        }
+        else
+        {
+            player.sun_count_change_color_time = SUN_CHANGE_COLOR_CLK_COUNT;
+            player.sun_count_change_color_times--;
+        }
     }
 }

@@ -1,4 +1,5 @@
 #include "player_name.h"
+
 #define GET_NAME_MENU_WIDTH 677
 #define GET_NAME_MENU_HEIGHT 400
 #define GET_NAME_INPUT_X 75
@@ -10,7 +11,41 @@ const Button OK(GET_NAME_MENU_X + 45, GET_NAME_MENU_X + 325, GET_NAME_MENU_Y + 3
 const Button CANCEL(GET_NAME_MENU_X + 350, GET_NAME_MENU_X + 630, GET_NAME_MENU_Y + 310, GET_NAME_MENU_Y + 370);
 const Button OK2(GET_NAME_MENU_X + 45, GET_NAME_MENU_X + 630, GET_NAME_MENU_Y + 310, GET_NAME_MENU_Y + 370);
 
-void display_get_name_player(window &win, Player &player, bool &quit, const int &get_name_dir)
+extern bool quit;
+extern Player player;
+extern window win;
+
+void update_player_name(const string &new_name)
+{
+    // Read data
+    string line;
+    ifstream infile(SAVED_DATA_DIRECTORY);
+    if (infile.is_open())
+    {
+        getline(infile, line);
+        getline(infile, line);
+        player.unlocked_level = stoi(line);
+        infile.close();
+    }
+    else
+        cout << "Unable to open saved data file!\n";
+
+    // Write data
+    ofstream outfile(SAVED_DATA_DIRECTORY);
+    if (outfile.is_open())
+    {
+        player.name = new_name;
+        if (player.unlocked_level < 0)
+            player.unlocked_level = 0;
+        outfile << player.name << '\n'
+                << player.unlocked_level;
+        outfile.close();
+    }
+    else
+        cout << "Unable to open saved data file!\n";
+}
+
+void display_get_name_player(const int &get_name_dir)
 {
     bool is_new_user = (get_name_dir == NEW_USER_DIRECTORY);
     if (is_new_user && player.name != "")
@@ -60,7 +95,7 @@ void display_get_name_player(window &win, Player &player, bool &quit, const int 
                 // Handle Enter
                 else if (e.key.keysym.sym == SDLK_RETURN)
                 {
-                    update_player_name(player, inputText);
+                    update_player_name(inputText);
                     SDL_StopTextInput();
                     win.clear_renderer();
                     return;
@@ -84,7 +119,7 @@ void display_get_name_player(window &win, Player &player, bool &quit, const int 
                 {
                     if (OK2.is_mouse_in(mouse_x, mouse_y))
                     {
-                        update_player_name(player, inputText);
+                        update_player_name(inputText);
                         SDL_StopTextInput();
                         win.clear_renderer();
                         return;
@@ -94,7 +129,7 @@ void display_get_name_player(window &win, Player &player, bool &quit, const int 
                 {
                     if (OK.is_mouse_in(mouse_x, mouse_y))
                     {
-                        update_player_name(player, inputText);
+                        update_player_name(inputText);
                         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
                         SDL_StopTextInput();
                         win.clear_renderer();
@@ -111,17 +146,17 @@ void display_get_name_player(window &win, Player &player, bool &quit, const int 
             });
         }
 
-        render_choose_level_no_mouse(win, player);
+        render_choose_level_no_mouse();
         win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
         if (is_new_user)
         {
-            OK2.blink(win);
+            OK2.blink();
         }
         else
         {
-            OK.blink(win);
-            CANCEL.blink(win);
+            OK.blink();
+            CANCEL.blink();
         }
 
         // Text is not empty

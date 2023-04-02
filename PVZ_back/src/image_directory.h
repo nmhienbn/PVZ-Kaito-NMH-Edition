@@ -224,8 +224,8 @@ const string image_directory[] = {
     "./image/Plant_sheet/snowpea/snowpea_sheet.png",  // SNOWPEA_SHEET_DIRECTORY
     "./image/Plant_sheet/snowpea/snowpea_attack.png", // SNOWPEA_ATTACK_DIRECTORY
 
-    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", // CHERRYBOMB_SHEET_DIRECTORY
-    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", // CHERRYBOMB_SHEET_BLINK_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png",       // CHERRYBOMB_SHEET_DIRECTORY
+    "./image/Plant_sheet/cherrybomb/cherrybomb_sheet_blink.png", // CHERRYBOMB_SHEET_BLINK_DIRECTORY
 
     "./image/Plant_seed/Peashooter_Seed_Packet.png",     // PEASHOOTER_ICON_BRIGHT_DIRECTORY
     "./image/Plant_seed/Peashooter_Seed_Packet_dim.png", // PEASHOOTER_ICON_DIM_DIRECTORY
@@ -761,6 +761,8 @@ static map<int, int> blink_of = {
 
     {SNOWPEA_SHEET_DIRECTORY, PEASHOOTER_SHEET_BLINK_DIRECTORY},
     {SNOWPEA_ATTACK_DIRECTORY, PEASHOOTER_ATTACK_BLINK_DIRECTORY},
+
+    {CHERRYBOMB_SHEET_DIRECTORY, CHERRYBOMB_SHEET_BLINK_DIRECTORY},
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK1_BLINK_DIRECTORY},
     {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_WALK2_BLINK_DIRECTORY},

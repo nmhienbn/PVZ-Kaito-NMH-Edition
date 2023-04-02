@@ -1,9 +1,22 @@
 #pragma once
-#include "elements.h"
 #include "rsdl.hpp"
 #include "music.h"
+#include "zombie_struct.h"
 
-void display_cherrybombs(window &win, vector<CherryBomb> &cherrybombs, Map &cells, bool is_pause = false);
-bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie, Map &cells);
-void handle_cherrybomb_zombie_encounter(Elements &elements, Map &cells);
-bool apply_cherrybomb_hitting_zombie(Elements &elements, CherryBomb &cherrybomb, int z_ind, Map &cells);
+struct CherryBomb
+{
+    int row, col;
+    int bite;
+    int directory_num = CHERRYBOMB_SHEET_DIRECTORY;
+    int frame = 0;
+    int is_attacked = 0;
+};
+
+void display_cherrybombs(vector<CherryBomb> &cherrybombs);
+bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie);
+void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
+                                        vector<Zombie> &zombies,
+                                        vector<DeadZombie> &dead_zombies);
+bool apply_cherrybomb_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
+                                     CherryBomb &cherrybomb,
+                                     vector<DeadZombie> &dead_zombies);

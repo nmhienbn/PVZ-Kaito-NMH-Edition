@@ -22,10 +22,11 @@ using namespace std;
 #define SUN_GEN_SUNFLOWER_CLK_COUNT 2000 // Sun from sunflower frequency
 #define ZOMBIE_CREATE_CLK_COUNT 600      // Time between zombies' different groups
 #define BITE_CLK_COUNT 50                // Zombie bite plant frequency
-#define ZOMBIE_CLK_COUNT 11              // Zombie moving frequency
+#define ZOMBIE_CLK_COUNT 30              // Zombie moving frequency
 #define SUN_CLK_COUNT 4                  // Sun moving frequency
 #define PEA_CLK_COUNT 2                  // Pea moving frequency
 #define ANNOUNCER_CLK_COUNT 180
+#define SUN_CHANGE_COLOR_CLK_COUNT 10
 
 #define PEASHOOTER_LOADING 400  // Peashooter loading
 #define SUNFLOWER_LOADING 350   // Sunflower loading
@@ -52,11 +53,11 @@ using namespace std;
 Moving speed of some elements
 */
 #define ZOMBIE_INIT_X WINDOW_WIDTH
-#define ZOMBIE_DX 3
+#define ZOMBIE_DX 6
 #define PEA_DX 15
 #define SUN_DY 3
 #define CLICKED_SUN_D 100
-#define FREEZE_ZOMBIE_SLOW_TIMES 2 / 3
+#define FREEZE_ZOMBIE_SLOW_TIMES 1 / 2
 
 /*Health of plants and zombies*/
 #define WALNUT_BITE_LIMIT 72
@@ -85,7 +86,7 @@ Moving speed of some elements
 #define ICON_BAR_WIDTH 120
 #define ICON_BAR_HEIGHT 194
 #define ICON_WIDTH 105
-#define ICON_HEIGHT 67
+#define ICON_HEIGHT 65
 #define SUN_COUNT_WIDTH 70
 #define SUN_COUNT_HEIGHT 30
 #define SUN_WIDTH 80
