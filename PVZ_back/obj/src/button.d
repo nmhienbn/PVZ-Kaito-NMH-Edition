@@ -1,4 +1,4 @@
-obj/src/button.o: src/button.cpp src/button.h src/gameInfo.h \
+obj/src/button.o: src/button.cpp src/button.h src/game_stats.h \
  src/image_directory.h src/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
@@ -29,7 +29,7 @@ obj/src/button.o: src/button.cpp src/button.h src/gameInfo.h \
 
 src/button.h:
 
-src/gameInfo.h:
+src/game_stats.h:
 
 src/image_directory.h:
 

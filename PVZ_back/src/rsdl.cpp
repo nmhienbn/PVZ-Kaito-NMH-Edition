@@ -351,3 +351,21 @@ void window::fade_out()
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
     clear_renderer();
 }
+
+void window::show_announcer_text(const string &announcer)
+{
+    announce = announcer;
+    time_announce = MAX_TIME_ANNOUNCE;
+}
+
+void window::show_announcer_text()
+{
+    if (time_announce > 0)
+    {
+        time_announce--;
+        draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
+        int w = 0, h = 0;
+        TTF_SizeText(get_font("HouseofTerror.ttf", WHITE, 50), announce.c_str(), &w, &h);
+        show_text(announce, (WINDOW_WIDTH - w) / 2, 500 + (100 - h) / 2, WHITE, "HouseofTerror.ttf", 50);
+    }
+}

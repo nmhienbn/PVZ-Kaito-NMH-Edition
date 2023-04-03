@@ -1,7 +1,7 @@
 #pragma once
 #include "music.h"
 #include "rsdl.hpp"
-#include "gameInfo.h"
+#include "game_stats.h"
 #include "Map.h"
 
 enum ZombieType

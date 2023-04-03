@@ -1,5 +1,5 @@
 obj/src/player_data.o: src/player_data.cpp src/player_data.h \
- src/player_name.h src/render_elements.h src/button.h src/gameInfo.h \
+ src/player_name.h src/render_elements.h src/button.h src/game_stats.h \
  src/image_directory.h src/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
@@ -39,7 +39,7 @@ src/render_elements.h:
 
 src/button.h:
 
-src/gameInfo.h:
+src/game_stats.h:
 
 src/image_directory.h:
 

@@ -2,7 +2,7 @@
 This file include game elements
 */
 #pragma once
-#include "gameInfo.h"
+#include "game_stats.h"
 #include "peashooter.h"
 #include "sunflower.h"
 #include "walnut.h"

@@ -6,8 +6,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <map>
-#include "gameInfo.h"
+#include "game_stats.h"
 #define FONTS_DIRECTORY "./fonts/"
+#define MAX_TIME_ANNOUNCE 180
 
 class RGB
 {
@@ -57,6 +58,8 @@ public:
 	void set_texture_alpha(int file_num, int a);
 
 	void fade_out();
+	void show_announcer_text(const string &announcer);
+	void show_announcer_text();
 
 	int previous_time = 0;
 
@@ -69,6 +72,8 @@ private:
 	void set_color(RGB color);
 	void dump_err() { std::cerr << SDL_GetError() << '\n'; }
 	void init();
+	string announce;
+	int time_announce;
 };
 
 #define HANDLE(A)                  \

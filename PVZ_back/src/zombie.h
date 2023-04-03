@@ -1,5 +1,5 @@
 #pragma once
-#include "gameInfo.h"
+#include "game_stats.h"
 #include "music.h"
 #include "rsdl.hpp"
 #include "zombie_struct.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "rsdl.hpp"
-#include "gameInfo.h"
+#include "game_stats.h"
 #include "Map.h"
 
 struct Sun

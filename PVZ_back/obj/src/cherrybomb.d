@@ -24,8 +24,8 @@ obj/src/cherrybomb.o: src/cherrybomb.cpp src/cherrybomb.h src/rsdl.hpp \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/gameInfo.h src/image_directory.h src/music.h \
- include\SDL2/SDL_mixer.h src/zombie_struct.h src/Map.h
+ include\SDL2/SDL_ttf.h src/game_stats.h src/image_directory.h \
+ src/music.h include\SDL2/SDL_mixer.h src/zombie_struct.h src/Map.h
 
 src/cherrybomb.h:
 
@@ -137,7 +137,7 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
-src/gameInfo.h:
+src/game_stats.h:
 
 src/image_directory.h:
 

@@ -13,12 +13,7 @@ void display_ready_set_plant(const int &image_num)
     win.clear_renderer();
     win.draw_bg(level.background_directory);
     win.draw_png_center(image_num);
-
-    win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
-    int w = 0, h = 0;
-    string announcement = player.name + "\'s trip to Plants vs. Zombies";
-    TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), announcement.c_str(), &w, &h);
-    win.show_text(announcement, (WINDOW_WIDTH - w) / 2, 535);
+    win.show_announcer_text();
 }
 /*
 Display announcement: huge wave

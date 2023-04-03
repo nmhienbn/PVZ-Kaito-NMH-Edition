@@ -161,6 +161,7 @@ void display_lose()
 void display_R_S_P()
 {
     play_music(R_S_P_MUSIC_DIRECTORY);
+    win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES");
     if (clk < 30)
     {
         display_ready_set_plant(START_READY_DIRECTORY);
@@ -191,6 +192,7 @@ void display_all_in_game()
     }
     display_game_elements();
     display_game_announce();
+    win.show_announcer_text();
     display_chosen_plant();
     handle_movements();
     handle_changes();

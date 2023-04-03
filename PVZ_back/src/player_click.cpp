@@ -5,6 +5,7 @@ extern Elements game_characters;
 extern Icons icons;
 extern Player player;
 extern Map cells;
+extern window win;
 
 /* Need update: remove a plant
 Handle all user click
@@ -82,26 +83,33 @@ void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
     is_a_plant_chosen = false;
     for (int i = 0; i < PLANT_COUNT; i++)
     {
-        if (plant_seed[i].y1 < mouse_y && mouse_y < plant_seed[i].y2 && !icons.plant_remaining_time[i])
+        if (plant_seed[i].y1 < mouse_y && mouse_y < plant_seed[i].y2)
         {
 
-            if (player.sun_count >= plant_sun_cost[i])
+            if (player.sun_count < plant_sun_cost[i])
             {
-                play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
+                player.sun_count_change_color_times = 4;
+                play_sound_effect(BUZZER_MUSIC_DIRECTORY);
+                win.show_announcer_text("YOU DO NOT HAVE ENOUGH SUNS!");
+            }
+            else if (icons.plant_remaining_time[i])
+            {
+                win.show_announcer_text("YOU MUST WAIT FOR PLANT SEED TO REFRESH!");
+            }
+            else
+            {
                 icons.is_plant_chosen[i] ^= 1;
                 if (icons.is_plant_chosen[i])
+                {
+                    play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
                     is_a_plant_chosen = true;
+                }
                 for (int j = 0; j < PLANT_COUNT; j++)
                     if (j != i)
                     {
                         icons.is_plant_chosen[j] = false;
                     }
                 break;
-            }
-            else
-            {
-                player.sun_count_change_color_times = 4;
-                play_sound_effect(BUZZER_MUSIC_DIRECTORY);
             }
         }
     }
@@ -194,6 +202,7 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
     determine_row_and_col_chosen_by_second_click(mouse_x, mouse_y, row, col);
     if (cells[row][col].is_planted)
     {
+        win.show_announcer_text("YOU CANNOT PLANT ON A PLANTED TILE!");
         remove_chosen_plant();
         return;
     }

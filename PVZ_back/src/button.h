@@ -2,7 +2,7 @@
 This file contain in-game rectangles with their x1,x2,y1,y2
 */
 #pragma once
-#include "gameInfo.h"
+#include "game_stats.h"
 #include "rsdl.hpp"
 struct Button
 {
