@@ -69,7 +69,7 @@ Updated:
     Remove zombie's 2 appearances.
     Add zombies' death struct.
 */
-bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, int z_ind)
+bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, const int &z_ind)
 {
     if (has_pea_reached_zombie(pea, zombies[z_ind]))
     {

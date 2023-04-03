@@ -39,7 +39,6 @@ void display_game_layout()
 {
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
     win.draw_bg(level.background_directory);
-    win.draw_png_scale(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, ICON_BAR_HEIGHT);
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);
     Shovel_bar.blink();
@@ -64,25 +63,35 @@ void display_icons_in_icon_bar()
         SNOWPEA_ICON_BRIGHT_DIRECTORY,
         CHERRYBOMB_ICON_BRIGHT_DIRECTORY,
     };
+    int num_plants = 0;
     for (int i = 0; i < PLANT_COUNT; i++)
+    {
+        if (level.level_num >= level_unlock_new_plant[i])
+        {
+            num_plants = i;
+        }
+        else
+        {
+            break;
+        }
+    }
+    win.draw_png(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, plant_seed[num_plants].y2 - 80);
+    for (int i = 0; i <= num_plants; i++)
     {
         if (player.sun_count < plant_sun_cost[i] || icons.is_plant_chosen[i])
         {
             plant_seed_dir[i]++;
         }
-        if (level.level_num >= level_unlock_new_plant[i])
+        win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
+        if (icons.plant_remaining_time[i] == 0)
         {
-            win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
-            if (icons.plant_remaining_time[i] == 0)
-            {
-                if (icons.is_plant_chosen[i] == false)
-                    plant_seed[i].blink();
-            }
-            else
-            {
-                win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
-                             icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
-            }
+            if (icons.is_plant_chosen[i] == false)
+                plant_seed[i].blink();
+        }
+        else
+        {
+            win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
+                         icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
         }
     }
 }

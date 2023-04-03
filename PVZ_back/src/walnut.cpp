@@ -52,11 +52,11 @@ void display_walnuts(vector<Walnut> &walnuts)
         {
             scol = frame & 1;
         }
-        win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 15, cells[row][col].y1, ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
 
         if (walnut.is_attacked)
         {
-            win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 15, cells[row][col].y1, ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
             walnut.is_attacked--;
         }
 
