@@ -74,7 +74,7 @@ bool can_zombie_move(Zombie &zombie)
 /* I have changed this for better performance
 Update all zombies' moving status.
 */
-void update_moving_status_for_zombies(vector<Zombie> zombies)
+void update_moving_status_for_zombies(vector<Zombie> &zombies)
 {
     for (auto &zombie : zombies)
     {
