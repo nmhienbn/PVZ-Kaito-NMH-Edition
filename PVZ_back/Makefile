@@ -21,7 +21,7 @@ INCS =
 SRC = $(call rwildcard,src,*.cpp)
 #NODIR_SRC = $(notdir $(SRC))
 OBJS = $(addprefix $(DIR_OBJ)/, $(SRC:cpp=o)) # obj/xxx.o obj/folder/xxx .o
-INC_DIRS = -Isrc -I$(SDL2_path)\include\SDL2
+INC_DIRS = -Isrc -I$(SDL2_path)\include\SDL2 -I.\src
 
 LIBS = 
 LIB_DIRS = 

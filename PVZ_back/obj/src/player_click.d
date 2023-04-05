@@ -28,7 +28,7 @@ obj/src/player_click.o: src/player_click.cpp src/player_click.h \
  src/game_stats.h src/image_directory.h src/button.h src/elements.h \
  src/peashooter.h src/music.h include\SDL2/SDL_mixer.h src/pea.h \
  src/zombie_struct.h src/Map.h src/sunflower.h src/sun.h src/walnut.h \
- src/snowpea.h src/cherrybomb.h src/zombie.h
+ src/snowpea.h src/plants/cherrybomb/cherrybomb.h src/zombie.h
 
 src/player_click.h:
 
@@ -168,6 +168,6 @@ src/walnut.h:
 
 src/snowpea.h:
 
-src/cherrybomb.h:
+src/plants/cherrybomb/cherrybomb.h:
 
 src/zombie.h:

@@ -1,6 +1,7 @@
-obj/src/game.o: src/game.cpp src/game.h src/render_elements.h \
- src/button.h src/game_stats.h src/image_directory.h src/rsdl.hpp \
- include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
+obj/src/game.o: src/game.cpp src/game.hpp src/draw/render_elements.hpp \
+ src/elements\button\button.hpp src/game_stats.hpp \
+ src/image_directory.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
+ include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
  include\SDL2/SDL_assert.h include\SDL2/SDL_atomic.h \
@@ -25,26 +26,39 @@ obj/src/game.o: src/game.cpp src/game.h src/render_elements.h \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/elements.h src/peashooter.h src/music.h \
- include\SDL2/SDL_mixer.h src/pea.h src/zombie_struct.h src/Map.h \
- src/sunflower.h src/sun.h src/walnut.h src/snowpea.h src/cherrybomb.h \
- src/zombie.h src/render_message.h src/player_click.h \
- src/elements_actions.h src/makeLevels.h src/player_data.h \
- src/player_name.h src/level.h src/game_pause.h src/restart_menu.h \
- src/level_data.h src/leave_menu.h src/choose_level.h src/quit_menu.h \
- src/reset_menu.h
+ include\SDL2/SDL_ttf.h src/elements\elements.hpp \
+ src/plants/peashooter/peashooter.hpp src/music/music.hpp \
+ include\SDL2/SDL_mixer.h src/elements\bullets\pea\pea.hpp \
+ src/zombies/zombie_struct.hpp src/elements\Map\Map.hpp \
+ src/plants/sunflower/sunflower.hpp src/elements\sun\sun.hpp \
+ src/plants/walnut/walnut.hpp src/plants/snowpea/snowpea.hpp \
+ src/plants/cherrybomb/cherrybomb.hpp src/zombies/zombie.hpp \
+ src/draw/render_message.hpp src/elements/elements_actions.hpp \
+ src/click_handle/out_game/start_game/start_game.hpp \
+ src/player/player_data.hpp src/player\player_name.hpp \
+ src/click_handle/out_game/choose_level/choose_level.hpp \
+ src/level/level_data.hpp \
+ src/click_handle\out_game\quit_menu\quit_menu.hpp \
+ src/click_handle\out_game\reset_level\reset_menu.hpp \
+ src/click_handle/in_game/game/player_click.hpp \
+ src/click_handle/in_game/game/level.hpp \
+ src/click_handle/in_game/game/../pause_menu/game_pause.hpp \
+ src/click_handle/in_game/game/../restart_menu/restart_menu.hpp \
+ src/click_handle/in_game/game/../main_menu/leave_menu.hpp \
+ src/click_handle/in_game/game/../win/win.hpp \
+ src/click_handle/in_game/game/../lose/lose.hpp
 
-src/game.h:
+src/game.hpp:
 
-src/render_elements.h:
+src/draw/render_elements.hpp:
 
-src/button.h:
+src/elements\button\button.hpp:
 
-src/game_stats.h:
+src/game_stats.hpp:
 
-src/image_directory.h:
+src/image_directory.hpp:
 
-src/rsdl.hpp:
+src/draw/rsdl.hpp:
 
 include\SDL2/SDL.h:
 
@@ -152,56 +166,60 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
-src/elements.h:
+src/elements\elements.hpp:
 
-src/peashooter.h:
+src/plants/peashooter/peashooter.hpp:
 
-src/music.h:
+src/music/music.hpp:
 
 include\SDL2/SDL_mixer.h:
 
-src/pea.h:
+src/elements\bullets\pea\pea.hpp:
 
-src/zombie_struct.h:
+src/zombies/zombie_struct.hpp:
 
-src/Map.h:
+src/elements\Map\Map.hpp:
 
-src/sunflower.h:
+src/plants/sunflower/sunflower.hpp:
 
-src/sun.h:
+src/elements\sun\sun.hpp:
 
-src/walnut.h:
+src/plants/walnut/walnut.hpp:
 
-src/snowpea.h:
+src/plants/snowpea/snowpea.hpp:
 
-src/cherrybomb.h:
+src/plants/cherrybomb/cherrybomb.hpp:
 
-src/zombie.h:
+src/zombies/zombie.hpp:
 
-src/render_message.h:
+src/draw/render_message.hpp:
 
-src/player_click.h:
+src/elements/elements_actions.hpp:
 
-src/elements_actions.h:
+src/click_handle/out_game/start_game/start_game.hpp:
 
-src/makeLevels.h:
+src/player/player_data.hpp:
 
-src/player_data.h:
+src/player\player_name.hpp:
 
-src/player_name.h:
+src/click_handle/out_game/choose_level/choose_level.hpp:
 
-src/level.h:
+src/level/level_data.hpp:
 
-src/game_pause.h:
+src/click_handle\out_game\quit_menu\quit_menu.hpp:
 
-src/restart_menu.h:
+src/click_handle\out_game\reset_level\reset_menu.hpp:
 
-src/level_data.h:
+src/click_handle/in_game/game/player_click.hpp:
 
-src/leave_menu.h:
+src/click_handle/in_game/game/level.hpp:
 
-src/choose_level.h:
+src/click_handle/in_game/game/../pause_menu/game_pause.hpp:
 
-src/quit_menu.h:
+src/click_handle/in_game/game/../restart_menu/restart_menu.hpp:
 
-src/reset_menu.h:
+src/click_handle/in_game/game/../main_menu/leave_menu.hpp:
+
+src/click_handle/in_game/game/../win/win.hpp:
+
+src/click_handle/in_game/game/../lose/lose.hpp:

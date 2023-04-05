@@ -166,6 +166,12 @@ TOTAL now: 4 plants and 3 zombies available.
 03/04/2023:
 	Add in-game announcement.
 
+05/04/2023:
+	Fix bug: no change in zombie eating status.
+	Change all .h to .hpp
+	Group .cpps and .hpps into folders.
+	Photoshop: Add black border to zombies' sheets.
+
 NEED TO ADD COMMENT
 
 	

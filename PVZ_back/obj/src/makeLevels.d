@@ -28,8 +28,8 @@ obj/src/makeLevels.o: src/makeLevels.cpp src/makeLevels.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/elements.h src/peashooter.h src/music.h \
  include\SDL2/SDL_mixer.h src/pea.h src/zombie_struct.h src/Map.h \
- src/sunflower.h src/sun.h src/walnut.h src/snowpea.h src/cherrybomb.h \
- src/zombie.h
+ src/sunflower.h src/sun.h src/walnut.h src/snowpea.h \
+ src/plants/cherrybomb/cherrybomb.h src/zombie.h
 
 src/makeLevels.h:
 
@@ -175,6 +175,6 @@ src/walnut.h:
 
 src/snowpea.h:
 
-src/cherrybomb.h:
+src/plants/cherrybomb/cherrybomb.h:
 
 src/zombie.h:

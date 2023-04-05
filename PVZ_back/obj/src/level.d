@@ -27,10 +27,11 @@ obj/src/level.o: src/level.cpp src/level.h src/render_elements.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/elements.h src/peashooter.h src/music.h \
  include\SDL2/SDL_mixer.h src/pea.h src/zombie_struct.h src/Map.h \
- src/sunflower.h src/sun.h src/walnut.h src/snowpea.h src/cherrybomb.h \
- src/zombie.h src/render_message.h src/elements_actions.h \
- src/player_click.h src/game_pause.h src/restart_menu.h src/makeLevels.h \
- src/player_data.h src/player_name.h src/level_data.h src/leave_menu.h
+ src/sunflower.h src/sun.h src/walnut.h src/snowpea.h \
+ src/plants/cherrybomb/cherrybomb.h src/zombie.h src/render_message.h \
+ src/elements_actions.h src/player_click.h src/game_pause.h \
+ src/restart_menu.h src/makeLevels.h src/player_data.h src/player_name.h \
+ src/level_data.h src/leave_menu.h
 
 src/level.h:
 
@@ -172,7 +173,7 @@ src/walnut.h:
 
 src/snowpea.h:
 
-src/cherrybomb.h:
+src/plants/cherrybomb/cherrybomb.h:
 
 src/zombie.h:
 
