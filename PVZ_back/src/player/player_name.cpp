@@ -113,7 +113,6 @@ void display_get_name_player(const int &get_name_dir)
                         inputText.erase(inputText.begin());
                 }
             }
-            KEY_PRESS(q, quit = true);
             LCLICK({
                 if (is_new_user)
                 {

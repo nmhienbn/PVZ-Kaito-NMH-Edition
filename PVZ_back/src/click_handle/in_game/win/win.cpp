@@ -34,7 +34,6 @@ bool display_win()
     win.update_screen();
     HANDLE(
         QUIT(quit = true);
-        KEY_PRESS(q, quit = true);
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {

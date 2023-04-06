@@ -1,5 +1,5 @@
 obj/src/elements/button/button.o: src/elements/button/button.cpp \
- src/elements\button\button.hpp src/game_stats.hpp \
+ src/elements/button/button.hpp src/game_stats.hpp \
  src/image_directory.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
@@ -28,7 +28,7 @@ obj/src/elements/button/button.o: src/elements/button/button.cpp \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h
 
-src/elements\button\button.hpp:
+src/elements/button/button.hpp:
 
 src/game_stats.hpp:
 

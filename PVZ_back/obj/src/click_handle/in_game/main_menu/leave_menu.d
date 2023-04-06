@@ -1,6 +1,6 @@
 obj/src/click_handle/in_game/main_menu/leave_menu.o: \
  src/click_handle/in_game/main_menu/leave_menu.cpp \
- src/click_handle\in_game\main_menu\leave_menu.hpp \
+ src/click_handle/in_game/main_menu/leave_menu.hpp \
  src/draw/render_elements.hpp src/elements\button\button.hpp \
  src/game_stats.hpp src/image_directory.hpp src/draw/rsdl.hpp \
  include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
@@ -36,7 +36,7 @@ obj/src/click_handle/in_game/main_menu/leave_menu.o: \
  src/plants/walnut/walnut.hpp src/plants/snowpea/snowpea.hpp \
  src/plants/cherrybomb/cherrybomb.hpp src/zombies/zombie.hpp
 
-src/click_handle\in_game\main_menu\leave_menu.hpp:
+src/click_handle/in_game/main_menu/leave_menu.hpp:
 
 src/draw/render_elements.hpp:
 

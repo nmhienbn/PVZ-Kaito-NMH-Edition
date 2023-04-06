@@ -15,17 +15,27 @@ extern bool is_leave,
 
 /*
 If game has not started:
-    0.5s: display ready.
-    0.5s: display set.
-    2s: display plant.
+    0.5s: display "Ready"
+    0.5s: display "Set"
+    2s: display "Plant!"
+
 Else: (game has started)
-    Check if player lose/win: display lose/win message. Reset level.
-    Else check if game is paused or not.
+    If player lose: display lose message. Reset level.
+    Else if player win:
+        display win message.
+        check if is a new plant is unlocked or not.
+        reset level.
+    Else if player click restart: handle restart.
+    Else if player click main menu: handle main menu.
+    Else if game is paused: handle pause.
     Else display gameplay.
 
 Handle user click:
     Quit event.
     Key to win. //For developer.
+    If player is_restart: handle_restart_menu_click
+    Else player is_leave: handle_leave_menu_click
+    Else player is_paused: handle_leave_menu
     Menu icon and menu click.
     Player click on game.
 */
@@ -77,7 +87,6 @@ void start_level()
     }
     HANDLE(
         QUIT(quit = true);
-        KEY_PRESS(q, quit = true);
         KEY_TO_WIN(
             level.waves_finished = 1;
             game_characters.zombies.clear();
@@ -111,6 +120,10 @@ void start_level()
     win.update_screen();
 }
 
+/*
+Display welcome player
+Display ready-set-plant
+ */
 void display_R_S_P()
 {
     play_music(R_S_P_MUSIC_DIRECTORY);
@@ -135,6 +148,9 @@ void display_R_S_P()
     }
 }
 
+/*
+Handle all game: graphic, move, value changes
+*/
 void display_all_in_game()
 {
     win.clear_renderer();
@@ -154,25 +170,4 @@ void display_all_in_game()
     {
         play_sound_effect(GROAN_MUSIC_DIRECTORY);
     }
-}
-
-void unlock_plant(const int &_plant_type)
-{
-    display_unlock_plant(NEW_PEASHOOTER_DIRECTORY + _plant_type);
-    play_music(NEW_PLANT_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink();
-    win.update_screen();
-    HANDLE(
-        QUIT(quit = true);
-        KEY_PRESS(q, quit = true);
-        LCLICK({
-            if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
-            {
-                win.fade_out();
-                is_unlocking_plant = false;
-                play_music(OPENING_MUSIC_DIRECTORY);
-            }
-        });
-
-    );
 }

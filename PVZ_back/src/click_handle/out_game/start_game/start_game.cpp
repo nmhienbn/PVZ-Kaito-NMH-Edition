@@ -42,7 +42,6 @@ void display_starting_screen()
         TAP_TO_START.blink();
         HANDLE(
             QUIT(quit = true; exit(0););
-            // KEY_PRESS(q, quit = true);
             LCLICK({
                 if (TAP_TO_START.is_mouse_in(mouse_x, mouse_y))
                     game_started = true;

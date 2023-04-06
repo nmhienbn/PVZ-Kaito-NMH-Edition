@@ -14,9 +14,5 @@
 #include "music/music.hpp"
 
 void start_level();
-
 void display_R_S_P();
-
 void display_all_in_game();
-
-void unlock_plant(const int &_plant_type);

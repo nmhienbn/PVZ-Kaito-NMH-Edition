@@ -1,4 +1,4 @@
-#include <click_handle\in_game\main_menu\leave_menu.hpp>
+#include "leave_menu.hpp"
 
 #define LEAVE_X1 325
 #define LEAVE_X2 725

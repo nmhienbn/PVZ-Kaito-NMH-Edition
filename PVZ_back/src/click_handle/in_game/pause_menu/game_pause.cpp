@@ -1,4 +1,4 @@
-#include <click_handle\in_game\pause_menu\game_pause.hpp>
+#include "game_pause.hpp"
 
 extern bool quit,
     is_paused;

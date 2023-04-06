@@ -40,6 +40,7 @@ obj/src/game.o: src/game.cpp src/game.hpp src/draw/render_elements.hpp \
  src/level/level_data.hpp \
  src/click_handle\out_game\quit_menu\quit_menu.hpp \
  src/click_handle\out_game\reset_level\reset_menu.hpp \
+ src/click_handle/out_game/unlock_plant/unlock_plant.hpp \
  src/click_handle/in_game/game/player_click.hpp \
  src/click_handle/in_game/game/level.hpp \
  src/click_handle/in_game/game/../pause_menu/game_pause.hpp \
@@ -209,6 +210,8 @@ src/level/level_data.hpp:
 src/click_handle\out_game\quit_menu\quit_menu.hpp:
 
 src/click_handle\out_game\reset_level\reset_menu.hpp:
+
+src/click_handle/out_game/unlock_plant/unlock_plant.hpp:
 
 src/click_handle/in_game/game/player_click.hpp:
 

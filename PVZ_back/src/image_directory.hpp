@@ -190,6 +190,21 @@ enum ImageType
     BLACK_SCREEN_DIRECTORY,
     WHITE_SCREEN_DIRECTORY,
 
+    FRONTYARD_C1,
+    FRONTYARD_C2,
+    FRONTYARD_C3,
+    FRONTYARD_C4,
+    FRONTYARD_C5,
+    FRONTYARD_C6,
+    FRONTYARD_C7,
+    FRONTYARD_C8,
+    FRONTYARD_C9,
+    FRONTYARD_R1,
+    FRONTYARD_R2,
+    FRONTYARD_R3,
+    FRONTYARD_R4,
+    FRONTYARD_R5,
+
     COUNT_USED_DIRECTORY
 };
 
@@ -377,6 +392,21 @@ const string image_directory[] = {
     "./image/Black_Screen.png", // BLACK_SCREEN_DIRECTORY
     "./image/White_Screen.png", // WHITE_SCREEN_DIRECTORY
 
+    "./image/Background/yard_blink/Frontyardc1.png", // FRONTYARD_C1
+    "./image/Background/yard_blink/Frontyardc2.png", // FRONTYARD_C2
+    "./image/Background/yard_blink/Frontyardc3.png", // FRONTYARD_C3
+    "./image/Background/yard_blink/Frontyardc4.png", // FRONTYARD_C4
+    "./image/Background/yard_blink/Frontyardc5.png", // FRONTYARD_C5
+    "./image/Background/yard_blink/Frontyardc6.png", // FRONTYARD_C6
+    "./image/Background/yard_blink/Frontyardc7.png", // FRONTYARD_C7
+    "./image/Background/yard_blink/Frontyardc8.png", // FRONTYARD_C8
+    "./image/Background/yard_blink/Frontyardc9.png", // FRONTYARD_C9
+    "./image/Background/yard_blink/Frontyardr1.png", // FRONTYARD_R1
+    "./image/Background/yard_blink/Frontyardr2.png", // FRONTYARD_R2
+    "./image/Background/yard_blink/Frontyardr3.png", // FRONTYARD_R3
+    "./image/Background/yard_blink/Frontyardr4.png", // FRONTYARD_R4
+    "./image/Background/yard_blink/Frontyardr5.png", // FRONTYARD_R5
+
 };
 
 const int N_SHEET[] = {
@@ -560,6 +590,21 @@ const int N_SHEET[] = {
 
     0, // BLACK_SCREEN_DIRECTORY
     0, // WHITE_SCREEN_DIRECTORY
+
+    0, // FRONTYARD_C1
+    0, // FRONTYARD_C2
+    0, // FRONTYARD_C3
+    0, // FRONTYARD_C4
+    0, // FRONTYARD_C5
+    0, // FRONTYARD_C6
+    0, // FRONTYARD_C7
+    0, // FRONTYARD_C8
+    0, // FRONTYARD_C9
+    0, // FRONTYARD_R1
+    0, // FRONTYARD_R2
+    0, // FRONTYARD_R3
+    0, // FRONTYARD_R4
+    0, // FRONTYARD_R5
 
 };
 
@@ -745,6 +790,21 @@ const int C_SHEET[] = {
     0, // BLACK_SCREEN_DIRECTORY
     0, // WHITE_SCREEN_DIRECTORY
 
+    0, // FRONTYARD_C1
+    0, // FRONTYARD_C2
+    0, // FRONTYARD_C3
+    0, // FRONTYARD_C4
+    0, // FRONTYARD_C5
+    0, // FRONTYARD_C6
+    0, // FRONTYARD_C7
+    0, // FRONTYARD_C8
+    0, // FRONTYARD_C9
+    0, // FRONTYARD_R1
+    0, // FRONTYARD_R2
+    0, // FRONTYARD_R3
+    0, // FRONTYARD_R4
+    0, // FRONTYARD_R5
+
 };
 
 static map<int, int> blink_of = {
@@ -852,3 +912,6 @@ static map<int, int> walk_of = {
     {BUCKET_ZOMBIE_EATING_3_DIRECTORY, BUCKET_ZOMBIE_WALK_3_DIRECTORY}
 
 };
+
+const int front_yard_r = FRONTYARD_R1;
+const int front_yard_c = FRONTYARD_C1;

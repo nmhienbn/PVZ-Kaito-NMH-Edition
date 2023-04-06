@@ -1,7 +1,7 @@
 obj/src/click_handle/out_game/choose_level/choose_level.o: \
  src/click_handle/out_game/choose_level/choose_level.cpp \
  src/click_handle/out_game/choose_level/choose_level.hpp \
- src/elements\button\button.hpp src/game_stats.hpp \
+ src/elements/button/button.hpp src/game_stats.hpp \
  src/image_directory.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
@@ -42,7 +42,7 @@ obj/src/click_handle/out_game/choose_level/choose_level.o: \
 
 src/click_handle/out_game/choose_level/choose_level.hpp:
 
-src/elements\button\button.hpp:
+src/elements/button/button.hpp:
 
 src/game_stats.hpp:
 

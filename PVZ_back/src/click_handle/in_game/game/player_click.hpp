@@ -1,13 +1,12 @@
 #pragma once
 #include "draw/rsdl.hpp"
-#include <elements\button\button.hpp>
+#include "elements/button/button.hpp"
 #include "elements/elements.hpp"
 #include "music/music.hpp"
 
 void handle_user_click(const int &mouse_x, const int &mouse_y);
 void remove_element_if_clicked_on(const int &mouse_x, const int &mouse_y);
 bool pick_sun_if_clicked_on(const int &mouse_x, const int &mouse_y);
-bool is_shovel_clicked(const int &mouse_x, const int &mouse_y);
 
 /*
 These functions are used for choose plant seed, and plant it on playground.

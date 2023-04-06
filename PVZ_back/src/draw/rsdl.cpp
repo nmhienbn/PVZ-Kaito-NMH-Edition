@@ -80,7 +80,24 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     else if (file_num == LEVEL_BLINK_DIRECTORY ||
              file_num == WHITE_SCREEN_DIRECTORY)
     {
-        SDL_SetTextureAlphaMod(res, 50);
+        SDL_SetTextureAlphaMod(res, 70);
+    }
+    else if (file_num == FRONTYARD_C1 ||
+             file_num == FRONTYARD_C2 ||
+             file_num == FRONTYARD_C3 ||
+             file_num == FRONTYARD_C4 ||
+             file_num == FRONTYARD_C5 ||
+             file_num == FRONTYARD_C6 ||
+             file_num == FRONTYARD_C7 ||
+             file_num == FRONTYARD_C8 ||
+             file_num == FRONTYARD_C9 ||
+             file_num == FRONTYARD_R1 ||
+             file_num == FRONTYARD_R2 ||
+             file_num == FRONTYARD_R3 ||
+             file_num == FRONTYARD_R4 ||
+             file_num == FRONTYARD_R5)
+    {
+        SDL_SetTextureAlphaMod(res, 120);
     }
 }
 

@@ -61,7 +61,6 @@ void handle_choosing_level_screen()
     win.update_screen();
     HANDLE(
         QUIT(quit = true; exit(0););
-        // KEY_PRESS(q, quit = true);
         LCLICK({
             if (is_quit)
             {

@@ -7,11 +7,12 @@ extern Player player;
 extern Map cells;
 extern window win;
 
-/* Need update: remove a plant
-Handle all user click
-If player click on sun: handle sun click, then return;
-If player click on plant seed: find type of that plant, then return;
-If player is choosing a plant and click on a tile: create a new plant there.
+/*Handle all user click:
+    If player click on sun: handle sun click, then return;
+    Else if player is shoveling: handle remove plant.
+    Else if player click on shovel: player is shoveling.
+    Else if player click on plant seed: find type of that plant, then return;
+    Else if player is choosing a plant and click on a tile: create a new plant there.
 */
 void handle_user_click(const int &mouse_x, const int &mouse_y)
 {
@@ -30,7 +31,7 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
         player.is_shoveling = false;
         return;
     }
-    if (is_shovel_clicked(mouse_x, mouse_y))
+    if (Shovel_bar.is_mouse_in(mouse_x, mouse_y))
     {
         play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
         player.is_shoveling = true;
@@ -59,8 +60,9 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
     // remove a plant
 }
 
-/*Need update:
+/*
 Check if the mouse is in ICON BAR (the bar that contains plant seed)
+Depend on level.
 */
 bool is_a_plant_seed_clicked_on(const int &mouse_x, const int &mouse_y)
 {
@@ -74,9 +76,10 @@ bool is_a_plant_seed_clicked_on(const int &mouse_x, const int &mouse_y)
     return false;
 }
 
-/*
-Find which plant is chosen.
-Updated: Double click on a plant seed will cancel the selection.
+/*Find which plant is chosen.
+    Show announcement when player has not enough sun or plant has not refresh.
+    Otherwise, determine which plant is chosen, play sound.
+        Note that double click on a plant seed will cancel the selection.
 */
 void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
 {
@@ -85,7 +88,6 @@ void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
     {
         if (plant_seed[i].y1 < mouse_y && mouse_y < plant_seed[i].y2)
         {
-
             if (player.sun_count < plant_sun_cost[i])
             {
                 player.sun_count_change_color_times = 4;
@@ -285,9 +287,4 @@ bool pick_sun_if_clicked_on(const int &mouse_x, const int &mouse_y)
         }
     }
     return false;
-}
-
-bool is_shovel_clicked(const int &mouse_x, const int &mouse_y)
-{
-    return Shovel_bar.is_mouse_in(mouse_x, mouse_y);
 }
