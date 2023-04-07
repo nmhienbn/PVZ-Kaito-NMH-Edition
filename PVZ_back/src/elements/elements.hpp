@@ -1,8 +1,7 @@
 /*
-This file include game elements
+This file include game elements: Plants, Zombies, Player, Level, Icons (Plant seeds)
 */
 #pragma once
-#include "game_stats.hpp"
 #include "plants/peashooter/peashooter.hpp"
 #include "plants/sunflower/sunflower.hpp"
 #include "plants/walnut/walnut.hpp"
@@ -55,6 +54,7 @@ struct Player
 
 enum PlantType
 {
+    SUNFLOWER_TROPHY = -1,
     PEASHOOTER,
     SUNFLOWER,
     WALNUT,
@@ -95,6 +95,7 @@ struct Level
     int map_type;
     bool is_night;
     bool zombie_has_coming;
+    int zombie_count, used_zombie_count;
 
     int background_directory = BACKGROUND_DIRECTORY;
     int announce_directory = NULL_DIRECTORY;

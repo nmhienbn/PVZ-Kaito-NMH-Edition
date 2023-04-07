@@ -1,6 +1,6 @@
 obj/src/zombies/zombie.o: src/zombies/zombie.cpp src/zombies/zombie.hpp \
- src/game_stats.hpp src/image_directory.hpp src/music/music.hpp \
- include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
+ src/game_stats.hpp src/music/music.hpp include\SDL2/SDL.h \
+ include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
  include\SDL2/SDL_assert.h include\SDL2/SDL_atomic.h \
@@ -26,13 +26,12 @@ obj/src/zombies/zombie.o: src/zombies/zombie.cpp src/zombies/zombie.hpp \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_mixer.h src/draw/rsdl.hpp \
  include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h \
- src/zombies/zombie_struct.hpp src/elements\Map\Map.hpp
+ src/draw/image_directory.hpp src/zombies/zombie_struct.hpp \
+ src/elements/Map/Map.hpp
 
 src/zombies/zombie.hpp:
 
 src/game_stats.hpp:
-
-src/image_directory.hpp:
 
 src/music/music.hpp:
 
@@ -146,6 +145,8 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
+src/draw/image_directory.hpp:
+
 src/zombies/zombie_struct.hpp:
 
-src/elements\Map\Map.hpp:
+src/elements/Map/Map.hpp:

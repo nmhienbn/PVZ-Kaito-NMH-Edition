@@ -84,6 +84,7 @@ void convert_zombie_seq_str_into_int_vect(const string &zombie_seq, const int &t
     {
         temp = zombie_seq.substr(num_ind, space_ind - num_ind);
         level.wave_zombie_count[typ].push_back(stoi(temp));
+        level.zombie_count += level.wave_zombie_count[typ].back();
         num_ind = space_ind + 1;
         space_ind = zombie_seq.find(" ", num_ind);
     }

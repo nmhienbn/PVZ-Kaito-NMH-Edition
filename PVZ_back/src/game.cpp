@@ -46,6 +46,11 @@ int main(int argv, char **args)
                         unlock_plant(i);
                         break;
                     }
+                    else if (level.level_num == 12)
+                    {
+                        unlock_plant(SUNFLOWER_TROPHY);
+                        break;
+                    }
                 }
             }
             else

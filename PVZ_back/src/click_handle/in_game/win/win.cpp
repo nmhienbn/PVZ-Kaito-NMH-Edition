@@ -1,6 +1,6 @@
 #include "win.hpp"
 
-extern bool level_chosen, quit;
+extern bool level_chosen, quit, is_unlocking_plant;
 extern Level level;
 extern Elements game_characters;
 extern window win;
@@ -26,6 +26,12 @@ bool has_player_won()
     return false;
 }
 
+/*
+Handle when player win the game:
+    Display winning message.
+    Check if player click on 'continue'.
+    Check if player unlocked a new level.
+*/
 bool display_win()
 {
     display_winning_message();
@@ -40,7 +46,8 @@ bool display_win()
                 update_unlocked_level();
                 level.waves_finished = false;
                 level_chosen = false;
-                play_music(OPENING_MUSIC_DIRECTORY);
+                if (is_unlocking_plant == false)
+                    play_music(URF_DIRECTORY);
                 win.fade_out();
                 return true;
             }

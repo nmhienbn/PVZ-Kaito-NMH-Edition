@@ -1,8 +1,7 @@
 obj/src/player/player_name.o: src/player/player_name.cpp \
  src/player\player_name.hpp src/draw/render_elements.hpp \
- src/elements\button\button.hpp src/game_stats.hpp \
- src/image_directory.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
- include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
+ src/elements/button/button.hpp src/game_stats.hpp src/draw/rsdl.hpp \
+ include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
  include\SDL2/SDL_assert.h include\SDL2/SDL_atomic.h \
@@ -27,23 +26,22 @@ obj/src/player/player_name.o: src/player/player_name.cpp \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/elements\elements.hpp \
- src/plants/peashooter/peashooter.hpp src/music/music.hpp \
- include\SDL2/SDL_mixer.h src/elements\bullets\pea\pea.hpp \
- src/zombies/zombie_struct.hpp src/elements\Map\Map.hpp \
- src/plants/sunflower/sunflower.hpp src/elements\sun\sun.hpp \
- src/plants/walnut/walnut.hpp src/plants/snowpea/snowpea.hpp \
- src/plants/cherrybomb/cherrybomb.hpp src/zombies/zombie.hpp
+ include\SDL2/SDL_ttf.h src/draw/image_directory.hpp \
+ src/elements/elements.hpp src/plants/peashooter/peashooter.hpp \
+ src/music/music.hpp include\SDL2/SDL_mixer.h \
+ src/elements\bullets\pea\pea.hpp src/zombies/zombie_struct.hpp \
+ src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
+ src/elements\sun\sun.hpp src/plants/walnut/walnut.hpp \
+ src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
+ src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp
 
 src/player\player_name.hpp:
 
 src/draw/render_elements.hpp:
 
-src/elements\button\button.hpp:
+src/elements/button/button.hpp:
 
 src/game_stats.hpp:
-
-src/image_directory.hpp:
 
 src/draw/rsdl.hpp:
 
@@ -153,7 +151,9 @@ include\SDL2/SDL.h:
 
 include\SDL2/SDL_ttf.h:
 
-src/elements\elements.hpp:
+src/draw/image_directory.hpp:
+
+src/elements/elements.hpp:
 
 src/plants/peashooter/peashooter.hpp:
 
@@ -165,7 +165,7 @@ src/elements\bullets\pea\pea.hpp:
 
 src/zombies/zombie_struct.hpp:
 
-src/elements\Map\Map.hpp:
+src/elements/Map/Map.hpp:
 
 src/plants/sunflower/sunflower.hpp:
 
@@ -178,3 +178,5 @@ src/plants/snowpea/snowpea.hpp:
 src/plants/cherrybomb/cherrybomb.hpp:
 
 src/zombies/zombie.hpp:
+
+src/elements/progress_bar/progress_bar.hpp:

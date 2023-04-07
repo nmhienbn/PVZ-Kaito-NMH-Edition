@@ -1,4 +1,4 @@
-#include <click_handle\in_game\restart_menu\restart_menu.hpp>
+#include "restart_menu.hpp"
 
 #define RESTART_X1 325
 #define RESTART_X2 725
@@ -15,6 +15,9 @@ extern Level level;
 extern window win;
 extern bool is_restart;
 
+/*
+Display all needed elements when player tends to restart.
+*/
 void display_game_restart()
 {
     win.draw_bg(level.background_directory);
@@ -25,6 +28,9 @@ void display_game_restart()
     CANCEL_RESTART.blink();
 }
 
+/*
+Reset some variables to restart game.
+*/
 void restart_game()
 {
     is_paused = false;
@@ -34,6 +40,11 @@ void restart_game()
     clk = 0;
 }
 
+/*
+Handle when player tends to restart game.
+    OK to restart.
+    CANCEL to return back to Pause-Menu
+*/
 void handle_restart_menu_click(const int &mouse_x, const int &mouse_y)
 {
     if (OK_RESTART.is_mouse_in(mouse_x, mouse_y))

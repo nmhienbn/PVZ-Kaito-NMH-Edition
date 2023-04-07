@@ -24,7 +24,7 @@ obj/src/draw/rsdl.o: src/draw/rsdl.cpp src/draw/rsdl.hpp \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/game_stats.hpp src/image_directory.hpp
+ include\SDL2/SDL_ttf.h src/game_stats.hpp src/draw/image_directory.hpp
 
 src/draw/rsdl.hpp:
 
@@ -136,4 +136,4 @@ include\SDL2/SDL_ttf.h:
 
 src/game_stats.hpp:
 
-src/image_directory.hpp:
+src/draw/image_directory.hpp:

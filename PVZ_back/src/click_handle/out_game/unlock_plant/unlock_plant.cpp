@@ -28,7 +28,7 @@ void unlock_plant(const int &_plant_type)
             {
                 win.fade_out();
                 is_unlocking_plant = false;
-                play_music(OPENING_MUSIC_DIRECTORY);
+                play_music(URF_DIRECTORY);
             }
         });
 

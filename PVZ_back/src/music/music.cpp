@@ -34,6 +34,14 @@ void play_music(int num_path, int repeat_times)
     {
         Mix_HaltMusic();
         now_music = num_path;
+        if (num_path == URF_DIRECTORY)
+        {
+            Mix_VolumeMusic(50);
+        }
+        else
+        {
+            Mix_VolumeMusic(128);
+        }
         // Load music
         if (gMusic[num_path] == NULL)
         {
@@ -41,7 +49,7 @@ void play_music(int num_path, int repeat_times)
         }
         if (gMusic[num_path] == NULL)
         {
-            printf("Failed to load %s! SDL_mixer Error: %s\n", music_directory[num_path], Mix_GetError());
+            printf("Failed to load %s! SDL_mixer Error: %s\n", music_directory[num_path].c_str(), Mix_GetError());
         }
         // If there is no music playing
         if (Mix_PlayingMusic() == 0)
@@ -58,7 +66,7 @@ void play_sound_effect(int num_path)
         gChunk[num_path] = Mix_LoadWAV(music_directory[num_path].c_str());
     if (gChunk[num_path] == NULL)
     {
-        printf("Failed to load %s sound effect! SDL_mixer Error: %s\n", music_directory[num_path], Mix_GetError());
+        printf("Failed to load %s sound effect! SDL_mixer Error: %s\n", music_directory[num_path].c_str(), Mix_GetError());
     }
     Mix_PlayChannel(-1, gChunk[num_path], 0);
 }

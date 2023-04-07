@@ -7,6 +7,9 @@ extern window win;
 extern bool is_leave,
     is_restart;
 
+/*
+Display all elements when player paused the game
+*/
 void display_game_pause()
 {
     win.draw_bg(level.background_directory);
@@ -17,6 +20,12 @@ void display_game_pause()
     RESTART.blink();
 }
 
+/*
+Handle when player paused the game:
+    BACK_TO_GAME to unpause
+    MAIN_MENU to leave to main menu
+    RESTART to restart game
+*/
 void handle_menu_click(const int &mouse_x, const int &mouse_y)
 {
     if (BACK_TO_GAME.is_mouse_in(mouse_x, mouse_y))
@@ -38,6 +47,9 @@ void handle_menu_click(const int &mouse_x, const int &mouse_y)
     }
 }
 
+/*
+Handle player click on Menu icon to pause the game
+*/
 void handle_menu_icon_click(const int &mouse_x, const int &mouse_y)
 {
     if (MENU_ICON.is_mouse_in(mouse_x, mouse_y))
@@ -48,6 +60,9 @@ void handle_menu_icon_click(const int &mouse_x, const int &mouse_y)
     }
 }
 
+/*
+Update some variables to resume game.
+*/
 void unpause_game()
 {
     is_paused = false;

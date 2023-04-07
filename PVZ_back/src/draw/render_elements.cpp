@@ -42,6 +42,7 @@ Display game layout:
     + Shovel.
     + Plant seeds (Chosen or not).
     + Menu icon.
+    + Game progress bar
 */
 void display_game_layout()
 {
@@ -62,6 +63,9 @@ void display_game_layout()
 
     // Menu icon (to show pause menu)
     display_button(MENU_ICON, MENU_ICON_DIRECTORY);
+
+    // Progress bar
+    display_progress_bar();
 }
 
 /*

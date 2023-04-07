@@ -7,8 +7,14 @@ extern Player player;
 extern window win;
 extern bool is_quit, is_reset;
 
-/*New function: Display choosing level
-Display choosing level screen.
+/*Display choosing level screen:
+    Rename player
+    Reset level
+    Quit game
+    Levels:
+        Transparent black and black text if is locked.
+        White text if is unlocked.
+        Transparent white and green text if mouse is over.
 */
 void display_choosing_level_screen()
 {
@@ -44,6 +50,11 @@ void display_choosing_level_screen()
     }
 }
 
+/*
+Handle choosing level screen:
+    Display choosing level screen (3 type, 1 more type is rename in player_name.hpp)
+    Handle quit menu, reset menu, quit/reset level/rename button, levels respectively.
+*/
 void handle_choosing_level_screen()
 {
     if (is_quit)

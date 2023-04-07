@@ -16,6 +16,9 @@ extern Level level;
 extern window win;
 extern bool is_leave;
 
+/*
+Display this when player tends to leave to main menu
+*/
 void display_game_leave()
 {
     win.draw_bg(level.background_directory);
@@ -26,15 +29,23 @@ void display_game_leave()
     CANCEL_LEAVE.blink();
 }
 
+/*
+Reset some variable when player really leave to main menu
+*/
 void leave_game()
 {
     is_paused = false;
     is_game_started = false;
     level_chosen = false;
     play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-    play_music(OPENING_MUSIC_DIRECTORY);
+    play_music(URF_DIRECTORY);
 }
 
+/*
+Handle when player tends to leave to main menu:
+    OK to leave to main menu
+    CANCEL to return back to the pause-menu
+*/
 void handle_leave_menu_click(const int &mouse_x, const int &mouse_y)
 {
     if (OK_LEAVE.is_mouse_in(mouse_x, mouse_y))

@@ -9,7 +9,6 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 #include <fstream>
 #include <stdlib.h>
 #include <time.h>
-#include "image_directory.hpp"
 using namespace std;
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*

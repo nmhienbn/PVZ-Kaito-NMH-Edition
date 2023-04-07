@@ -29,8 +29,10 @@ void remove_suns(vector<Sun> &suns)
 
 /*
 For all the sun:
-    + If the sun has not reached the ground: move it.
-    + Else increase sun-wait time.
+    If sun is clicked: move it to top left corner. Then remove it.
+    Else
+        If the sun has not reached the ground: move it.
+        Else increase sun-wait time.
 */
 void move_suns(vector<Sun> &suns)
 {

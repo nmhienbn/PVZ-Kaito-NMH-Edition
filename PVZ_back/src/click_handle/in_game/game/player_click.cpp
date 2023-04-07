@@ -169,8 +169,8 @@ void determine_row_and_col_chosen_by_second_click(const int &mouse_x, const int 
         }
 }
 
-/*New function:
-Remove chosen plant.
+/*
+Restore the status that player is not choosing a plant
 */
 void remove_chosen_plant()
 {
@@ -178,6 +178,13 @@ void remove_chosen_plant()
     icons.reset_is_chosen();
 }
 
+/*Plant the plant in the given row and col.
+Reset player_choosing_plant status.
+Increase plant's remaining time.
+Decrease player's sun count.
+Tick that the tile is planted.
+Play sound effect.
+*/
 template <class Plant_type>
 void plant_new_plant(vector<Plant_type> &vec_plant, const int &type, const int &row, const int &col)
 {
@@ -193,10 +200,10 @@ void plant_new_plant(vector<Plant_type> &vec_plant, const int &type, const int &
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }
 
-/*Need update: Show notification if the tile has planted
-Updated:
+/*Find row and column then plant the plant.
     Cannot plant if the tile has planted.
     Second click to cancel choosing plant.
+    Show notification if the tile has planted.
 */
 void create_new_plant(const int &mouse_x, const int &mouse_y)
 {
@@ -229,10 +236,10 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
         plant_new_plant<CherryBomb>(game_characters.cherrybombs, CHERRYBOMB, row, col);
     }
 }
-/*
-Remove plant if click on its tile
-*/
 
+/*
+Remove plant if player is shoveling and has clicked on its tile
+*/
 template <class VectorPlant>
 void remove_plant_if_clicked_on(VectorPlant &plants, const int &mouse_x, const int &mouse_y)
 {
@@ -244,6 +251,10 @@ void remove_plant_if_clicked_on(VectorPlant &plants, const int &mouse_x, const i
         }
     }
 }
+
+/*
+Find the type of plant to remove.
+*/
 void remove_element_if_clicked_on(const int &mouse_x, const int &mouse_y)
 {
     remove_plant_if_clicked_on(game_characters.peashooters, mouse_x, mouse_y);
@@ -264,8 +275,9 @@ bool is_click_made_in_element_block(const int &row, const int &col, const int &m
     return false;
 }
 
-/* Update: change void into bool
+/*
 For all the suns to check if any sun is clicked on.
+@return 'true' if sun is clicked on
 */
 bool pick_sun_if_clicked_on(const int &mouse_x, const int &mouse_y)
 {

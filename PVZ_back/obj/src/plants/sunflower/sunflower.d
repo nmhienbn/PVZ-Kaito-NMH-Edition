@@ -25,8 +25,8 @@ obj/src/plants/sunflower/sunflower.o: src/plants/sunflower/sunflower.cpp \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/game_stats.hpp src/image_directory.hpp \
- src/elements\sun\sun.hpp src/elements\Map\Map.hpp
+ include\SDL2/SDL_ttf.h src/game_stats.hpp src/draw/image_directory.hpp \
+ src/elements\sun\sun.hpp src/elements/Map/Map.hpp
 
 src/plants/sunflower/sunflower.hpp:
 
@@ -140,8 +140,8 @@ include\SDL2/SDL_ttf.h:
 
 src/game_stats.hpp:
 
-src/image_directory.hpp:
+src/draw/image_directory.hpp:
 
 src/elements\sun\sun.hpp:
 
-src/elements\Map\Map.hpp:
+src/elements/Map/Map.hpp:

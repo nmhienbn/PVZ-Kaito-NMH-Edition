@@ -1,6 +1,7 @@
 #pragma once
-#include "elements\button\button.hpp"
-#include "elements\elements.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
+#include "elements/progress_bar/progress_bar.hpp"
 
 void render_choose_level_no_mouse();
 void display_game_elements();

@@ -59,7 +59,7 @@ void start_level()
             {
                 for (int i = 0; i < PLANT_COUNT; i++)
                 {
-                    if (level.level_num == level_unlock_new_plant[i] - 1)
+                    if (level.level_num == level_unlock_new_plant[i] - 1 || level.level_num == 12)
                     {
                         is_unlocking_plant = true;
                     }
@@ -84,36 +84,37 @@ void start_level()
             display_all_in_game();
             MENU_ICON.blink();
         }
-    }
-    HANDLE(
-        QUIT(quit = true);
-        KEY_TO_WIN(
-            level.waves_finished = 1;
-            game_characters.zombies.clear();
-            game_characters.dead_zombies.clear();
+
+        HANDLE(
+            QUIT(quit = true);
+            KEY_TO_WIN(
+                level.waves_finished = 1;
+                game_characters.zombies.clear();
+                game_characters.dead_zombies.clear();
+
+            );
+            LCLICK({
+                if (is_restart)
+                {
+                    handle_restart_menu_click(mouse_x, mouse_y);
+                }
+                else if (is_leave)
+                {
+                    handle_leave_menu_click(mouse_x, mouse_y);
+                }
+                else if (is_paused)
+                {
+                    handle_menu_click(mouse_x, mouse_y);
+                }
+                else
+                {
+                    handle_menu_icon_click(mouse_x, mouse_y);
+                    handle_user_click(mouse_x, mouse_y);
+                }
+            });
 
         );
-        LCLICK({
-            if (is_restart)
-            {
-                handle_restart_menu_click(mouse_x, mouse_y);
-            }
-            else if (is_leave)
-            {
-                handle_leave_menu_click(mouse_x, mouse_y);
-            }
-            else if (is_paused)
-            {
-                handle_menu_click(mouse_x, mouse_y);
-            }
-            else
-            {
-                handle_menu_icon_click(mouse_x, mouse_y);
-                handle_user_click(mouse_x, mouse_y);
-            }
-        });
-
-    );
+    }
 
     if (is_paused == false)
         clk++;
@@ -153,6 +154,7 @@ Handle all game: graphic, move, value changes
 */
 void display_all_in_game()
 {
+    // Graphics:
     win.clear_renderer();
     display_game_layout();
     if (player.is_choosing_a_plant || player.is_shoveling)
@@ -163,8 +165,11 @@ void display_all_in_game()
     display_game_announce();
     win.show_announcer_text();
     display_chosen_plant();
+    // Move:
     handle_movements();
+    // Changes:
     handle_changes();
+    // Music and sound effect:
     play_music(BACKGROUND_MUSIC_DIRECTORY);
     if (game_characters.zombies.size() && !rand(0, 500))
     {

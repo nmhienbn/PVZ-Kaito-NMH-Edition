@@ -207,7 +207,7 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -225,7 +225,7 @@ void window::draw_png_center(int file_num)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -242,7 +242,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -258,7 +258,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         texture_cache[file_num] = res;
     }
     SDL_Rect r = {x, y, width, height};
@@ -273,7 +273,7 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -290,7 +290,7 @@ void window::draw_bg(int file_num, int x, int y)
     if (res == NULL)
     {
         res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res);
+        print_error(res, image_directory[file_num]);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -349,11 +349,11 @@ void window::set_texture_alpha(int file_num, int a)
         SDL_SetTextureAlphaMod(texture_cache[file_num], a);
     }
 }
-void print_error(SDL_Texture *res)
+void print_error(SDL_Texture *res, const string &img)
 {
     if (res == NULL)
     {
-        printf("SDL_WasInit Failed! Error: %s\n", SDL_GetError());
+        printf("Cannot load image %s! Error: %s\n", img.c_str(), SDL_GetError());
         exit(-1);
     }
 }

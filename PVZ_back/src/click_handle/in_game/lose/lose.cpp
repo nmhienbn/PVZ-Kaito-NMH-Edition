@@ -29,6 +29,12 @@ bool has_player_lost()
     return false;
 }
 
+/*
+Handle when player lose:
+    Display losing message.
+    Check if player click 'continue'.
+    Update some variables.
+*/
 void display_lose()
 {
     display_losing_message();
@@ -42,7 +48,7 @@ void display_lose()
             {
                 level.waves_finished = false;
                 level_chosen = false;
-                play_music(OPENING_MUSIC_DIRECTORY);
+                play_music(URF_DIRECTORY);
                 win.fade_out();
             }
         });

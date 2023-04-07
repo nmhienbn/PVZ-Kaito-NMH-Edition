@@ -26,10 +26,10 @@ obj/src/plants/peashooter/peashooter.o: \
  include\SDL2/SDL_system.h include\SDL2/SDL_timer.h \
  include\SDL2/SDL_version.h include\SDL2/SDL_locale.h \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
- include\SDL2/SDL_ttf.h src/game_stats.hpp src/image_directory.hpp \
+ include\SDL2/SDL_ttf.h src/game_stats.hpp src/draw/image_directory.hpp \
  src/music/music.hpp include\SDL2/SDL_mixer.h \
  src/elements\bullets\pea\pea.hpp src/zombies/zombie_struct.hpp \
- src/elements\Map\Map.hpp
+ src/elements/Map/Map.hpp
 
 src/plants/peashooter/peashooter.hpp:
 
@@ -143,7 +143,7 @@ include\SDL2/SDL_ttf.h:
 
 src/game_stats.hpp:
 
-src/image_directory.hpp:
+src/draw/image_directory.hpp:
 
 src/music/music.hpp:
 
@@ -153,4 +153,4 @@ src/elements\bullets\pea\pea.hpp:
 
 src/zombies/zombie_struct.hpp:
 
-src/elements\Map\Map.hpp:
+src/elements/Map/Map.hpp:

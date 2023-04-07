@@ -53,6 +53,7 @@ enum music_type
     NEW_PLANT_MUSIC_DIRECTORY,
     PAUSE_MUSIC_DIRECTORY,
     BUZZER_MUSIC_DIRECTORY, // player have not enough sun
+    URF_DIRECTORY,
 
     COUNT_MUSIC_DIRECTORY
 };
@@ -91,6 +92,7 @@ const string music_directory[] = {
     "./audio/cherrybomb.mp3",        // CHERRYBOMB_MUSIC_DIRECTORY
     "./audio/new_plant.mp3",         // NEW_PLANT_MUSIC_DIRECTORY
     "./audio/pause.mp3",             // PAUSE_MUSIC_DIRECTORY
-    "./audio/buzzer.mp3",            // PAUSE_MUSIC_DIRECTORY
+    "./audio/buzzer.mp3",            // BUZZER_MUSIC_DIRECTORY
+    "./audio/urf.mp3",               // URF_DIRECTORY
 
 };

@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <map>
 #include "game_stats.hpp"
+#include "image_directory.hpp"
 #define FONTS_DIRECTORY "./fonts/"
 #define MAX_TIME_ANNOUNCE 180
 
@@ -34,7 +35,7 @@ const RGB CYAN(0, 255, 255);
 const RGB GREEN(0, 255, 0);
 const RGB BLUE(0, 0, 255);
 const RGB BLACK(0, 0, 0);
-void print_error(SDL_Texture *res);
+void print_error(SDL_Texture *res, const string &img);
 class window
 {
 public:

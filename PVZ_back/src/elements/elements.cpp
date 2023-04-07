@@ -35,6 +35,8 @@ void Level::reset()
     cur_sec = 0;
     waves_finished = false;
     zombie_has_coming = false;
+    zombie_count = 0;
+    used_zombie_count = 0;
 
     announce_directory = NULL_DIRECTORY;
 
