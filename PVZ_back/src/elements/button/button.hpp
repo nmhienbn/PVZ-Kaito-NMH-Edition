@@ -60,7 +60,9 @@ const Button ICON_BAR_LV[] = {
     {20, 125, 100, 310},
     {20, 125, 100, 380},
     {20, 125, 100, 450}};
+
 const Button MENU_ICON(850, 975, 0, 35);
+const Button TURBO_ICON(800, 845, 0, 45);
 const Button MY_GAME(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
 
 #define MENU_X1 325

@@ -9,6 +9,7 @@
 #include "../main_menu/leave_menu.hpp"
 #include "../win/win.hpp"
 #include "../lose/lose.hpp"
+#include "../turbo/turbo.hpp"
 
 #include "player/player_data.hpp"
 #include "music/music.hpp"

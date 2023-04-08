@@ -88,6 +88,8 @@ enum ImageType
     FLAG_METER_PART,
 
     MENU_ICON_DIRECTORY,
+    TURBO_ICON_DIRECTORY,
+    TURBO_ICON_A_DIRECTORY,
     MENU_DIRECTORY,
     CONTINUE_DIRECTORY,
     RENAME_DIRECTORY,
@@ -297,20 +299,22 @@ const string image_directory[] = {
     "./image/Icons/FlagMeterLevelProgress.png", // FLAG_METER_PROGRESS
     "./image/Icons/FlagMeterParts.png",         // FLAG_METER_PART
 
-    "./image/Icons/menu_icon.png",      // MENU_ICON_DIRECTORY
-    "./image/Icons/menu.png",           // MENU_DIRECTORY
-    "./image/Icons/continue.png",       // CONTINUE_DIRECTORY
-    "./image/Icons/rename.png",         // RENAME_DIRECTORY
-    "./image/Icons/reset_level.png",    // RESET_LEVEL_DIRECTORY
-    "./image/Icons/quit.png",           // QUIT_DIRECTORY
-    "./image/Icons/ok.png",             // OK_DIRECTORY
-    "./image/Icons/cancel.png",         // CANCEL_DIRECTORY
-    "./image/Icons/rename_menu.png",    // RENAME_MENU_DIRECTORY
-    "./image/Icons/new_user.png",       // NEW_USER_DIRECTORY
-    "./image/Icons/leave_prompt.png",   // LEAVE_PROMPT_DIRECTORY
-    "./image/Icons/quit_prompt.png",    // QUIT_PROMPT_DIRECTORY
-    "./image/Icons/reset_prompt.png",   // RESET_PROMPT_DIRECTORY
-    "./image/Icons/restart_prompt.png", // RESTART_PROMPT_DIRECTORY
+    "./image/Icons/menu_icon.png",              // MENU_ICON_DIRECTORY
+    "./image/Icons/Turbo_Button.png",           // TURBO_ICON_DIRECTORY
+    "./image/Icons/Turbo_Button_Activited.png", // TURBO_ICON_A_DIRECTORY
+    "./image/Icons/menu.png",                   // MENU_DIRECTORY
+    "./image/Icons/continue.png",               // CONTINUE_DIRECTORY
+    "./image/Icons/rename.png",                 // RENAME_DIRECTORY
+    "./image/Icons/reset_level.png",            // RESET_LEVEL_DIRECTORY
+    "./image/Icons/quit.png",                   // QUIT_DIRECTORY
+    "./image/Icons/ok.png",                     // OK_DIRECTORY
+    "./image/Icons/cancel.png",                 // CANCEL_DIRECTORY
+    "./image/Icons/rename_menu.png",            // RENAME_MENU_DIRECTORY
+    "./image/Icons/new_user.png",               // NEW_USER_DIRECTORY
+    "./image/Icons/leave_prompt.png",           // LEAVE_PROMPT_DIRECTORY
+    "./image/Icons/quit_prompt.png",            // QUIT_PROMPT_DIRECTORY
+    "./image/Icons/reset_prompt.png",           // RESET_PROMPT_DIRECTORY
+    "./image/Icons/restart_prompt.png",         // RESTART_PROMPT_DIRECTORY
 
     // NORMAL ZOMBIE------------------------------------------------------------------------
     "./image/Zombie/Normal/ZombieWalk1.png", // ZOMBIE_WALK1_DIRECTORY
@@ -506,6 +510,8 @@ const int N_SHEET[] = {
     0, // FLAG_METER_PART
 
     0, // MENU_ICON_DIRECTORY
+    0, // TURBO_ICON_DIRECTORY
+    0, // TURBO_ICON_A_DIRECTORY
     0, // MENU_DIRECTORY
     0, // CONTINUE_DIRECTORY
     0, // RENAME_DIRECTORY
@@ -714,6 +720,8 @@ const int C_SHEET[] = {
     0, // FLAG_METER_PART
 
     0, // MENU_ICON_DIRECTORY
+    0, // TURBO_ICON_DIRECTORY
+    0, // TURBO_ICON_A_DIRECTORY
     0, // MENU_DIRECTORY
     0, // CONTINUE_DIRECTORY
     0, // RENAME_DIRECTORY

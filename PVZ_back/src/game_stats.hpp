@@ -39,7 +39,7 @@ using namespace std;
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Alter the 4 define values bellow to increase or decrease the price of plants and the initial sun count
-#define INIT_SUN_COUNT 1000
+#define INIT_SUN_COUNT 100
 #define NORMAL_SUN_VALUE 50
 #define PEASHOOTER_PRICE 100
 #define SUNFLOWER_PRICE 50

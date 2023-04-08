@@ -1,5 +1,7 @@
 #include "level.hpp"
 
+bool is_fast = false;
+
 extern bool level_chosen,
     quit,
     is_game_started,
@@ -38,6 +40,7 @@ Handle user click:
     Else player is_leave: handle_leave_menu_click
     Else player is_paused: handle_leave_menu
     Menu icon and menu click.
+    Turbo icon to speed up the game.
     Player click on game.
 
 Move to next frame (clk++)
@@ -95,12 +98,11 @@ void start_level()
 
         HANDLE(
             QUIT(quit = true);
-            KEY_TO_WIN(
+            KEY_TO_WIN({
                 level.waves_finished = 1;
                 game_characters.zombies.clear();
                 game_characters.dead_zombies.clear();
-
-            );
+            });
             LCLICK({
                 if (is_restart)
                 {
@@ -117,6 +119,7 @@ void start_level()
                 else
                 {
                     handle_menu_icon_click(mouse_x, mouse_y);
+                    handle_turbo_icon_click(mouse_x, mouse_y);
                     handle_user_click(mouse_x, mouse_y);
                 }
             });
@@ -126,15 +129,20 @@ void start_level()
 
     if (is_paused == false)
         clk++;
-    win.update_screen();
+    if (is_fast == false || (clk & 1))
+        win.update_screen();
 }
 
 /*
+Reset speed to normal, and no paused.
 Display welcome player
 Display ready-set-plant
+Now game is really start
  */
 void display_R_S_P()
 {
+    is_fast = false;
+    is_paused = false;
     play_music(R_S_P_MUSIC_DIRECTORY);
     win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 10);
     if (clk < 30)
@@ -169,6 +177,7 @@ void display_all_in_game()
     {
         blink_row_and_col();
     }
+    display_turbo_icon();
     display_game_elements();
     display_game_announce();
     win.show_announcer_text();

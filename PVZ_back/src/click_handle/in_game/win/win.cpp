@@ -1,6 +1,6 @@
 #include "win.hpp"
 
-extern bool level_chosen, quit, is_unlocking_plant;
+extern bool level_chosen, quit, is_unlocking_plant, is_paused;
 extern Level level;
 extern Elements game_characters;
 extern window win;
@@ -10,6 +10,7 @@ If player win, display this
 */
 void display_winning_message()
 {
+    is_paused = true;
     win.draw_bg(level.background_directory);
     display_game_paused_elements();
     win.draw_png_center(WINNING_MESSAGE_DIRECTORY);
@@ -46,6 +47,7 @@ bool display_win()
                 update_unlocked_level();
                 level.waves_finished = false;
                 level_chosen = false;
+                is_paused = false;
                 if (is_unlocking_plant == false)
                     play_music(URF_DIRECTORY);
                 win.fade_out();

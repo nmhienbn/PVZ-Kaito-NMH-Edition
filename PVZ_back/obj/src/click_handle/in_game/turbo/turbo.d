@@ -1,6 +1,6 @@
-obj/src/click_handle/in_game/game/level.o: \
- src/click_handle/in_game/game/level.cpp \
- src/click_handle/in_game/game/level.hpp src/draw/render_elements.hpp \
+obj/src/click_handle/in_game/turbo/turbo.o: \
+ src/click_handle/in_game/turbo/turbo.cpp \
+ src/click_handle/in_game/turbo/turbo.hpp src/draw/render_elements.hpp \
  src/elements/button/button.hpp src/game_stats.hpp src/draw/rsdl.hpp \
  include\SDL2/SDL.h include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
@@ -34,19 +34,9 @@ obj/src/click_handle/in_game/game/level.o: \
  src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
- src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
- src/draw/render_message.hpp src/elements/elements_actions.hpp \
- src/click_handle/in_game/game/player_click.hpp \
- src/click_handle/in_game/game/../pause_menu/game_pause.hpp \
- src/click_handle/in_game/game/../restart_menu/restart_menu.hpp \
- src/level/level_data.hpp \
- src/click_handle/in_game/game/../main_menu/leave_menu.hpp \
- src/click_handle/in_game/game/../win/win.hpp src/player/player_data.hpp \
- src/player/player_name.hpp \
- src/click_handle/in_game/game/../lose/lose.hpp \
- src/click_handle/in_game/game/../turbo/turbo.hpp
+ src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp
 
-src/click_handle/in_game/game/level.hpp:
+src/click_handle/in_game/turbo/turbo.hpp:
 
 src/draw/render_elements.hpp:
 
@@ -191,27 +181,3 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
-
-src/draw/render_message.hpp:
-
-src/elements/elements_actions.hpp:
-
-src/click_handle/in_game/game/player_click.hpp:
-
-src/click_handle/in_game/game/../pause_menu/game_pause.hpp:
-
-src/click_handle/in_game/game/../restart_menu/restart_menu.hpp:
-
-src/level/level_data.hpp:
-
-src/click_handle/in_game/game/../main_menu/leave_menu.hpp:
-
-src/click_handle/in_game/game/../win/win.hpp:
-
-src/player/player_data.hpp:
-
-src/player/player_name.hpp:
-
-src/click_handle/in_game/game/../lose/lose.hpp:
-
-src/click_handle/in_game/game/../turbo/turbo.hpp:
