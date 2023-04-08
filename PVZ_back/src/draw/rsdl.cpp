@@ -184,7 +184,7 @@ void window::set_color(RGB color)
 
 void window::draw_bmp(int file_num, int x, int y, int width, int height)
 {
-    if (file_num == NULL_DIRECTORY)
+    if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
@@ -200,7 +200,7 @@ void window::draw_bmp(int file_num, int x, int y, int width, int height)
 
 void window::draw_png_scale(int file_num, int x, int y, int width, int height)
 {
-    if (file_num == NULL_DIRECTORY)
+    if (file_num == NULL_DIRECTORY || width <= 0)
         return;
     SDL_Texture *res = texture_cache[file_num];
     int mWidth = 0, mHeight = 0;
@@ -236,7 +236,7 @@ void window::draw_png_center(int file_num)
 
 void window::draw_png(int file_num, int x, int y, int width, int height)
 {
-    if (file_num == NULL_DIRECTORY)
+    if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
@@ -252,8 +252,9 @@ void window::draw_png(int file_num, int x, int y, int width, int height)
 
 void window::draw_png(int file_num, int x, int y, int width, int height, int angle)
 {
-    if (file_num == NULL_DIRECTORY)
-        return;
+    if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
+        if (file_num == NULL_DIRECTORY)
+            return;
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
@@ -267,7 +268,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
 
 void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
 {
-    if (file_num == NULL_DIRECTORY)
+    if (file_num == NULL_DIRECTORY || sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0)
         return;
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)

@@ -187,8 +187,8 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
             if (is_paused == false)
                 if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
                 {
-
                     dead_zombies.erase(dead_zombies.begin() + i);
+                    i--;
                 }
         }
         else if (dead_zombies[i].head < 0)
@@ -198,6 +198,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
                 if (++dead_zombies[i].frame >= ZOMBIE_BURNT_FRAME * N_SHEET[dead_zombies[i].body])
                 {
                     dead_zombies.erase(dead_zombies.begin() + i);
+                    i--;
                 }
         }
         else
@@ -223,8 +224,8 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
             if (is_paused == false)
                 if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
                 {
-
                     dead_zombies.erase(dead_zombies.begin() + i);
+                    i--;
                 }
         }
     }

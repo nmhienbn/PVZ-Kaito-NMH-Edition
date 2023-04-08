@@ -55,6 +55,9 @@ void start_level()
             if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) { break; }
 
         )
+        clk++;
+        win.update_screen();
+        return;
     }
     else
     {
@@ -129,7 +132,7 @@ void start_level()
 
     if (is_paused == false)
         clk++;
-    if (is_fast == false || (clk & 1))
+    if (is_paused == true || is_fast == false || (clk & 1))
         win.update_screen();
 }
 

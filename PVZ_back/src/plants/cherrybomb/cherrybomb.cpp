@@ -33,6 +33,7 @@ void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
         {
             cells[cherrybombs[i].row][cherrybombs[i].col].is_planted = false;
             cherrybombs.erase(cherrybombs.begin() + i);
+            i--;
         }
         if (cherrybombs[i].frame == CHERRYBOMB_FRAME * 22)
         {

@@ -178,6 +178,11 @@ TOTAL now: 4 plants and 3 zombies available.
 07/04/2023:
 	Add game progress bar: Hugewave
 
+08/04/2023:
+	Add Turbo Button: speed up the game.
+	Fix bug: render a 0-width or 0-height images.
+	Minus index after erase sth.
+
 NEED TO ADD COMMENT
 
 	

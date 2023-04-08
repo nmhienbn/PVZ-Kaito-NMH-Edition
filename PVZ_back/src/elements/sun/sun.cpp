@@ -25,7 +25,10 @@ void remove_suns(vector<Sun> &suns)
 {
     for (int i = 0; i < (int)suns.size(); i++)
         if (suns[i].wait_seconds >= SUN_APPEAR_LIMIT)
+        {
             suns.erase(suns.begin() + i);
+            i--;
+        }
 }
 
 /*
@@ -46,6 +49,7 @@ void move_suns(vector<Sun> &suns)
             if (suns[i].x_location <= 0)
             {
                 suns.erase(suns.begin() + i);
+                i--;
             }
             continue;
         }

@@ -12,6 +12,9 @@ void handle_turbo_icon_click(const int &mouse_x, const int &mouse_y)
     }
 }
 
+/*
+Display Turbo icon: x2 speed or not
+*/
 void display_turbo_icon()
 {
     if (is_fast)

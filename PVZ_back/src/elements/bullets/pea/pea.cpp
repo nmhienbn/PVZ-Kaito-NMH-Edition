@@ -53,12 +53,14 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
             if (--peas[i].explode == 0)
             {
                 peas.erase(peas.begin() + i);
+                i--;
             }
             continue;
         }
         for (int j = 0; j < (int)zombies.size(); j++)
             if (apply_pea_hitting_zombie(zombies, dead_zombies, peas[i], j))
             {
+                j--;
                 break;
             }
     }
@@ -139,10 +141,13 @@ void move_peas(vector<Pea> &peas, vector<Zombie> &zombies)
     for (int i = 0; i < (int)peas.size(); i++)
     {
         if (can_pea_move(peas[i], zombies))
+        {
             peas[i].x_location += PEA_DX;
+        }
         else
         {
             peas.erase(peas.begin() + i);
+            i--;
         }
     }
 }

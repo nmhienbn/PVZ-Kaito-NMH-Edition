@@ -49,6 +49,7 @@ void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int 
             zombie.bite_time = 0;
             cells[plants[p_ind].row][plants[p_ind].col].is_planted = false;
             plants.erase(plants.begin() + p_ind);
+            p_ind--;
         }
     }
 }
