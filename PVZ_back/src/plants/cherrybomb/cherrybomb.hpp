@@ -1,7 +1,7 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "music/music.hpp"
-#include <zombies/zombie_struct.hpp>
+#include "zombies/zombie_struct.hpp"
 
 struct CherryBomb
 {

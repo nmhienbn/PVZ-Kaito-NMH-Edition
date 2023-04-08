@@ -1,5 +1,5 @@
 obj/src/elements/sun/sun.o: src/elements/sun/sun.cpp \
- src/elements\sun\sun.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
+ src/elements/sun/sun.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
@@ -28,7 +28,7 @@ obj/src/elements/sun/sun.o: src/elements/sun/sun.cpp \
  include\SDL2/SDL_ttf.h src/game_stats.hpp src/draw/image_directory.hpp \
  src/elements/Map/Map.hpp
 
-src/elements\sun\sun.hpp:
+src/elements/sun/sun.hpp:
 
 src/draw/rsdl.hpp:
 

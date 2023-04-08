@@ -1,5 +1,6 @@
 #pragma once
 #include "elements/elements.hpp"
+#define LEVELS_DIRECTORY "./levels/"
 
 void read_level();
 void convert_wave_cnt_str_into_int(const string &wave_cnt);

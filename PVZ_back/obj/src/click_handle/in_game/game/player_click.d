@@ -29,9 +29,9 @@ obj/src/click_handle/in_game/game/player_click.o: \
  include\SDL2/SDL_ttf.h src/game_stats.hpp src/draw/image_directory.hpp \
  src/elements/button/button.hpp src/elements/elements.hpp \
  src/plants/peashooter/peashooter.hpp src/music/music.hpp \
- include\SDL2/SDL_mixer.h src/elements\bullets\pea\pea.hpp \
+ include\SDL2/SDL_mixer.h src/elements/bullets/pea/pea.hpp \
  src/zombies/zombie_struct.hpp src/elements/Map/Map.hpp \
- src/plants/sunflower/sunflower.hpp src/elements\sun\sun.hpp \
+ src/plants/sunflower/sunflower.hpp src/elements/sun/sun.hpp \
  src/plants/walnut/walnut.hpp src/plants/snowpea/snowpea.hpp \
  src/plants/cherrybomb/cherrybomb.hpp src/zombies/zombie.hpp
 
@@ -159,7 +159,7 @@ src/music/music.hpp:
 
 include\SDL2/SDL_mixer.h:
 
-src/elements\bullets\pea\pea.hpp:
+src/elements/bullets/pea/pea.hpp:
 
 src/zombies/zombie_struct.hpp:
 
@@ -167,7 +167,7 @@ src/elements/Map/Map.hpp:
 
 src/plants/sunflower/sunflower.hpp:
 
-src/elements\sun\sun.hpp:
+src/elements/sun/sun.hpp:
 
 src/plants/walnut/walnut.hpp:
 

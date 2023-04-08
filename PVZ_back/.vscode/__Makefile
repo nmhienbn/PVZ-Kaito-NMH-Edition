@@ -19,9 +19,11 @@ flags = \
 	-lSDL2_image \
 	-lSDL2_ttf \
 	-lSDL2_mixer
+	
+rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
 game:
-	g++ -I $(SDL2_include) -L $(SDL2_lib)  src\*.cpp -o pvz main.res $(flags) -mwindows & pvz.exe
+	g++ -I $(SDL2_include) -I.\src -L $(SDL2_lib)  $(call rwildcard,src,*.cpp) -o pvz icon\main.res $(flags) -mwindows & pvz.exe
 debug:
 	g++ -I $(SDL2_include) -L $(SDL2_lib)  src\*.cpp -o pvz main.res $(flags) & pvz.exe
 SDL2:

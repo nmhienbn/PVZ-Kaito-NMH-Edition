@@ -1,4 +1,5 @@
-#include <elements\sun\sun.hpp>
+#include "sun.hpp"
+#define INIT_SUN_Y 5
 
 extern Map cells;
 extern window win;

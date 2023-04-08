@@ -5,6 +5,9 @@ using namespace std;
 
 #define ZOMBIE_SHEET_DIRECTORY rand(ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK2_DIRECTORY)
 
+/*
+Contain all image used for SDL
+*/
 enum ImageType
 {
     NULL_DIRECTORY = -1,
@@ -213,6 +216,9 @@ enum ImageType
     COUNT_USED_DIRECTORY
 };
 
+/*
+Contain all image directory corresponding
+*/
 const string image_directory[] = {
 
     "./image/Plant_sheet/peashooter/Peashooter.png", // PEASHOOTER_DIRECTORY
@@ -419,6 +425,9 @@ const string image_directory[] = {
 
 };
 
+/*
+The number of sheet in sprite of images
+*/
 const int N_SHEET[] = {
     0, // PEASHOOTER_DIRECTORY
     0, // SUNFLOWER_DIRECTORY
@@ -624,6 +633,9 @@ const int N_SHEET[] = {
 
 };
 
+/*
+The number of column in sprite of images
+*/
 const int C_SHEET[] = {
     0, // PEASHOOTER_DIRECTORY
     0, // SUNFLOWER_DIRECTORY
@@ -829,6 +841,9 @@ const int C_SHEET[] = {
 
 };
 
+/*
+Corresponding blink of image
+*/
 static map<int, int> blink_of = {
     {PEASHOOTER_SHEET_DIRECTORY, PEASHOOTER_SHEET_BLINK_DIRECTORY},
     {PEASHOOTER_ATTACK_DIRECTORY, PEASHOOTER_ATTACK_BLINK_DIRECTORY},
@@ -870,6 +885,9 @@ static map<int, int> blink_of = {
 
 };
 
+/*
+Corresponding cold of image
+*/
 static map<int, int> cold_of = {
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK1_COLD_DIRECTORY},
@@ -899,6 +917,9 @@ static map<int, int> cold_of = {
 
 };
 
+/*
+Corresponding eating of zombie walk image
+*/
 static map<int, int> eat_of = {
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
@@ -917,6 +938,9 @@ static map<int, int> eat_of = {
 
 };
 
+/*
+Corresponding walking of zombie eat image
+*/
 static map<int, int> walk_of = {
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_EATING_DIRECTORY},

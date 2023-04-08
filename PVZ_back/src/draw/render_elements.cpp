@@ -1,4 +1,6 @@
 #include "draw/render_elements.hpp"
+#define SUN_BAR_WIDTH 180
+#define SUN_BAR_HEIGHT 360
 
 extern Level level;
 extern Elements game_characters;
@@ -7,28 +9,58 @@ extern Player player;
 extern Map cells;
 extern window win;
 
-/*
-Draw the choosing level screen without handle the mouse-over event
-(mouse-over event : the level blink and text turn into green)
+/*Display choosing level screen:
+    Rename player
+    Reset level
+    Quit game.
+    These button will blink *if is_mouse_needed*
+    Levels:
+        Transparent black and black text if is locked.
+        White text if is unlocked.
+        If is_mouse_needed: Transparent white and green text if mouse is over.
 */
-void render_choose_level_no_mouse()
+void display_choose_level(const bool &is_mouse_needed)
 {
     win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    // Button
     display_button(RENAME_BUTTON, RENAME_DIRECTORY);
     display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
     display_button(QUIT_BUTTON, QUIT_DIRECTORY);
-    // Text
+    if (is_mouse_needed)
+    {
+        RENAME_BUTTON.blink();
+        RESET_LEVEL_BUTTON.blink();
+        QUIT_BUTTON.blink();
+    }
+
     for (int i = 1; i <= LEVEL_COUNT; i++)
     {
+        string lvl_txt = "Level " + to_string(i);
+        int w, h;
+        TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), lvl_txt.c_str(), &w, &h);
+        int kc = (LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1 - w) / 2;
         if (player.unlocked_level >= i)
         {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130);
+            if (is_mouse_needed)
+            {
+                int _x = 0, _y = 0;
+                SDL_GetMouseState(&_x, &_y);
+                if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
+                {
+
+                    win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, GREEN);
+                    win.draw_png(WHITE_SCREEN_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1,
+                                 LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
+                }
+                else
+                    win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
+            }
+            else
+                win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
         }
         else
         {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, BLACK);
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, BLACK);
 
             display_level_is_locked(LEVEL_BUTTON[i]);
         }
@@ -125,7 +157,6 @@ void display_icons_in_icon_bar()
 
 /*
 Display the game element: plants, zombies and the suns.
-Updated: render order.
 */
 void display_game_elements()
 {
@@ -153,7 +184,7 @@ void display_game_paused_elements()
 }
 
 /*
-If any plant seed is chosen: render it at the mouse position.
+If any plant seed is chosen: render it (transparent) at the mouse position.
 */
 void display_chosen_plant()
 {

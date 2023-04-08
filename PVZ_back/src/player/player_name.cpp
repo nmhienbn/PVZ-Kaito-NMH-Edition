@@ -1,9 +1,9 @@
-#include <player\player_name.hpp>
+#include "player_name.hpp"
 
 #define GET_NAME_MENU_WIDTH 677
 #define GET_NAME_MENU_HEIGHT 400
 #define GET_NAME_INPUT_X 75
-#define GET_NAME_INPUT_Y 215
+#define GET_NAME_INPUT_Y 208
 
 const int GET_NAME_MENU_X = (WINDOW_WIDTH - GET_NAME_MENU_WIDTH) / 2;
 const int GET_NAME_MENU_Y = (WINDOW_HEIGHT - GET_NAME_MENU_HEIGHT) / 2;
@@ -15,6 +15,9 @@ extern bool quit;
 extern Player player;
 extern window win;
 
+/*
+Change player's name in data file.
+*/
 void update_player_name(const string &new_name)
 {
     // Read data
@@ -45,26 +48,37 @@ void update_player_name(const string &new_name)
         cout << "Unable to open saved data file!\n";
 }
 
+/*
+Display player get_name menu:
+    Handle quit event.
+    Handle key down event:
+        Backspace
+        Ctrl + C
+        Ctrl + V
+        Enter
+    If not those key down events, handle text input (Do not let text input length > 20).
+    Handle mouse event:
+        OK to rename.
+        CANCEL to keep old name.
+    OR
+        OK to set name for new player
+*/
 void display_get_name_player(const int &get_name_dir)
 {
     bool is_new_user = (get_name_dir == NEW_USER_DIRECTORY);
     if (is_new_user && player.name != "")
         return;
-    SDL_StartTextInput();
 
+    SDL_StartTextInput();
     // Event handler
     SDL_Event e;
-
     // The current input text.
     string inputText = player.name;
-
     // Enable text input
     SDL_StartTextInput();
-
     // While application is running
     while (!quit)
     {
-
         // Handle events on queue
         while (SDL_PollEvent(&e) != 0)
         {
@@ -109,10 +123,9 @@ void display_get_name_player(const int &get_name_dir)
                 {
                     // Append character
                     inputText += e.text.text;
-                    if (inputText.size() > 10)
-                        inputText.erase(inputText.begin());
                 }
             }
+            // Mouse event
             LCLICK({
                 if (is_new_user)
                 {
@@ -145,7 +158,7 @@ void display_get_name_player(const int &get_name_dir)
             });
         }
 
-        render_choose_level_no_mouse();
+        display_choose_level(false);
         win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
         if (is_new_user)
@@ -161,8 +174,10 @@ void display_get_name_player(const int &get_name_dir)
         // Text is not empty
         if (inputText != "")
         {
+            while (inputText.size() > 20)
+                inputText.erase(inputText.begin());
             // Render new text
-            win.show_text(inputText.c_str(), GET_NAME_MENU_X + GET_NAME_INPUT_X, GET_NAME_MENU_Y + GET_NAME_INPUT_Y);
+            win.show_text(inputText.c_str(), GET_NAME_MENU_X + GET_NAME_INPUT_X, GET_NAME_MENU_Y + GET_NAME_INPUT_Y, WHITE, "HouseofTerror.ttf", 30);
         }
         win.update_screen();
     }

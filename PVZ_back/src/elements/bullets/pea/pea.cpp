@@ -1,4 +1,7 @@
-#include <elements\bullets\pea\pea.hpp>
+#include "pea.hpp"
+#define PEA_WIDTH 25
+#define PEA_HEIGHT 25
+#define PEA_EXPLODE_TIME 35
 
 extern Map cells;
 extern window win;
@@ -36,10 +39,9 @@ bool has_pea_reached_zombie(Pea &pea, Zombie &zombie)
     return false;
 }
 
-/*Updated
+/*
 For all pea and all zombie to check their collision.
-Old version: one pea hit many zombies at a time.
-Updated: one pea hit only one zombies at a time.
+One pea hit only one zombies at a time.
 */
 void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies)
 {
@@ -63,11 +65,12 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
 }
 
 /*
-If a pea collide with a zombie: apply it to hit the zombie
-Updated:
-    Zombie blink.
-    Remove zombie's 2 appearances.
-    Add zombies' death struct.
+If a pea collide with a zombie: apply it to hit the zombie:
+    Pea -> crashed pea.
+    Snow pea will slow zombies.
+    Zombie decrease health & blink.
+    Add zombies' death.
+    Has some probabilities not hit zombie =))
 */
 bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, const int &z_ind)
 {

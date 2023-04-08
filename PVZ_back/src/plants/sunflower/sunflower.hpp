@@ -1,6 +1,6 @@
 #pragma once
 #include "draw/rsdl.hpp"
-#include <elements\sun\sun.hpp>
+#include "elements/sun/sun.hpp"
 
 struct Sunflower
 {

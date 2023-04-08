@@ -32,6 +32,9 @@ bool Button::is_mouse_in(int mouse_x, int mouse_y) const
     return false;
 }
 
+/*
+Display blink effect when mouse move over the button.
+*/
 void Button::blink() const
 {
     int _x, _y;
@@ -45,7 +48,6 @@ void Button::blink() const
 /*
 Display Game Buttons
 */
-
 void display_button(const Button &button, const int &button_directory)
 {
     win.draw_png(button_directory, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);

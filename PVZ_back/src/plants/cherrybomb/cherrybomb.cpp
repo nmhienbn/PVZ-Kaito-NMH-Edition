@@ -1,4 +1,7 @@
-#include "plants/cherrybomb/cherrybomb.hpp"
+#include "cherrybomb.hpp"
+#define CHERRYBOMB_FRAME 5
+#define CHERRYBOMB_WIDTH 136
+#define CHERRYBOMB_HEIGHT 123
 
 extern bool is_paused;
 extern Map cells;
@@ -17,7 +20,12 @@ bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie)
     return false;
 }
 
-void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs, vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies)
+/*
+For all zombies and hit them by cherrybombs if they are in that area.
+*/
+void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
+                                        vector<Zombie> &zombies,
+                                        vector<DeadZombie> &dead_zombies)
 {
     for (int i = 0; i < (int)cherrybombs.size(); i++)
     {
@@ -38,6 +46,9 @@ void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs, vector<
     }
 }
 
+/*
+Apply cherrybomb explode the zombie. (chang zombie into burnt one)
+*/
 bool apply_cherrybomb_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
                                      CherryBomb &cherrybomb,
                                      vector<DeadZombie> &dead_zombies)
@@ -52,8 +63,9 @@ bool apply_cherrybomb_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
     return false;
 }
 
-/*New
- */
+/*
+Display cherry bomb
+*/
 void display_cherrybombs(vector<CherryBomb> &cherrybombs)
 {
     for (auto &cherrybomb : cherrybombs)
@@ -63,10 +75,16 @@ void display_cherrybombs(vector<CherryBomb> &cherrybombs)
         int frame = cherrybomb.frame / CHERRYBOMB_FRAME;
         int scol = frame % C_SHEET[cherrybomb.directory_num];
         int srow = frame / C_SHEET[cherrybomb.directory_num];
-        win.draw_png(cherrybomb.directory_num, CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png(cherrybomb.directory_num, CHERRYBOMB_WIDTH * scol,
+                     CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
+                     cells[row][col].x1, cells[row][col].y1 + 5,
+                     ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
         if (cherrybomb.is_attacked)
         {
-            win.draw_png(blink_of[cherrybomb.directory_num], CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(blink_of[cherrybomb.directory_num], CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow,
+                         CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
+                         cells[row][col].x1, cells[row][col].y1 + 5,
+                         ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
             cherrybomb.is_attacked--;
         }
         if (is_paused == false)

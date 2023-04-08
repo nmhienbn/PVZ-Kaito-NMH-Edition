@@ -128,8 +128,8 @@ void decide_zombie_cnt_for_each_sec()
     }
 }
 
-/*New function (Need update):
-Reset all things after a level finished.
+/*
+Reset all things of level.
 */
 void reset_level()
 {
@@ -145,6 +145,12 @@ void reset_level()
     }
     icons = Icons();
 }
+
+/*
+Reset level.
+Read level.
+Random zombie appear order.
+*/
 void load_level()
 {
     reset_level();

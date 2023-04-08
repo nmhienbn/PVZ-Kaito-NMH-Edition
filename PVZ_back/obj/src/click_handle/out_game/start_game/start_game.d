@@ -1,7 +1,7 @@
 obj/src/click_handle/out_game/start_game/start_game.o: \
  src/click_handle/out_game/start_game/start_game.cpp \
  src/click_handle/out_game/start_game/start_game.hpp \
- src/player/player_data.hpp src/player\player_name.hpp \
+ src/player/player_data.hpp src/player/player_name.hpp \
  src/draw/render_elements.hpp src/elements/button/button.hpp \
  src/game_stats.hpp src/draw/rsdl.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
@@ -32,9 +32,9 @@ obj/src/click_handle/out_game/start_game/start_game.o: \
  include\SDL2/SDL_ttf.h src/draw/image_directory.hpp \
  src/elements/elements.hpp src/plants/peashooter/peashooter.hpp \
  src/music/music.hpp include\SDL2/SDL_mixer.h \
- src/elements\bullets\pea\pea.hpp src/zombies/zombie_struct.hpp \
+ src/elements/bullets/pea/pea.hpp src/zombies/zombie_struct.hpp \
  src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
- src/elements\sun\sun.hpp src/plants/walnut/walnut.hpp \
+ src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp
 
@@ -42,7 +42,7 @@ src/click_handle/out_game/start_game/start_game.hpp:
 
 src/player/player_data.hpp:
 
-src/player\player_name.hpp:
+src/player/player_name.hpp:
 
 src/draw/render_elements.hpp:
 
@@ -168,7 +168,7 @@ src/music/music.hpp:
 
 include\SDL2/SDL_mixer.h:
 
-src/elements\bullets\pea\pea.hpp:
+src/elements/bullets/pea/pea.hpp:
 
 src/zombies/zombie_struct.hpp:
 
@@ -176,7 +176,7 @@ src/elements/Map/Map.hpp:
 
 src/plants/sunflower/sunflower.hpp:
 
-src/elements\sun\sun.hpp:
+src/elements/sun/sun.hpp:
 
 src/plants/walnut/walnut.hpp:
 

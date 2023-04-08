@@ -15,6 +15,9 @@ void display_unlock_plant(const int &new_plant_dir)
     win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
 
+/*
+Display and handle player click on unlocking plant screen.
+*/
 void unlock_plant(const int &_plant_type)
 {
     display_unlock_plant(NEW_PEASHOOTER_DIRECTORY + _plant_type);

@@ -18,6 +18,7 @@ If game has not started:
     0.5s: display "Ready"
     0.5s: display "Set"
     2s: display "Plant!"
+    Note that any mouse click has no effect.
 
 Else: (game has started)
     If player lose: display lose message. Reset level.
@@ -38,12 +39,19 @@ Handle user click:
     Else player is_paused: handle_leave_menu
     Menu icon and menu click.
     Player click on game.
+
+Move to next frame (clk++)
 */
 void start_level()
 {
     if (is_game_started == false)
     {
         display_R_S_P();
+        HANDLE(
+            QUIT(quit = true);
+            if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) { break; }
+
+        )
     }
     else
     {
@@ -128,7 +136,7 @@ Display ready-set-plant
 void display_R_S_P()
 {
     play_music(R_S_P_MUSIC_DIRECTORY);
-    win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES");
+    win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 10);
     if (clk < 30)
     {
         display_ready_set_plant(START_READY_DIRECTORY);

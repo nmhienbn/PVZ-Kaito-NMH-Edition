@@ -1,4 +1,9 @@
-#include "plants/walnut/walnut.hpp"
+#include "walnut.hpp"
+#define WALNUT_WIDTH 185
+#define WALNUT_HEIGHT 185
+#define WALNUT_G_WIDTH 105
+#define WALNUT_G_HEIGHT 105
+#define WALNUT_FRAME 60
 
 extern bool is_paused;
 extern Map cells;
@@ -30,8 +35,8 @@ void determine_walnut_appearance(Walnut &walnut)
     }
 }
 
-/*Updated:
-Change to sprite sheet.
+/*
+Display walnut
 Render sprite sheet of exactly status.
 */
 void display_walnuts(vector<Walnut> &walnuts)
@@ -42,25 +47,28 @@ void display_walnuts(vector<Walnut> &walnuts)
         int col = walnut.col;
         int row = walnut.row;
 
-        int frame = walnut.frame / 30;
-        int scol, srow = 0;
-        if (walnut.directory_num == WALNUT_1_DIRECTORY)
-        {
-            scol = frame % 3;
-        }
-        else
-        {
-            scol = frame & 1;
-        }
-        win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 15, cells[row][col].y1, ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
+        int frame = walnut.frame / WALNUT_FRAME;
+        int srow = frame / C_SHEET[walnut.directory_num];
+        int scol = frame % C_SHEET[walnut.directory_num];
+        win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
+                     WALNUT_WIDTH, WALNUT_HEIGHT,
+                     cells[row][col].x1 - 15, cells[row][col].y1,
+                     WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
 
         if (walnut.is_attacked)
         {
-            win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow, WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 15, cells[row][col].y1, ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
+            win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
+                         WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 15, cells[row][col].y1,
+                         WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
             walnut.is_attacked--;
         }
 
         if (is_paused == false)
-            ++walnut.frame;
+        {
+            if (++walnut.frame >= WALNUT_FRAME * N_SHEET[walnut.directory_num])
+            {
+                walnut.frame = 0;
+            }
+        }
     }
 }

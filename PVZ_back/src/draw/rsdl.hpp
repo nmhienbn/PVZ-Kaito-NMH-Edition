@@ -59,7 +59,7 @@ public:
 	void set_texture_alpha(int file_num, int a);
 
 	void fade_out();
-	void show_announcer_text(const string &announcer);
+	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);
 	void show_announcer_text();
 
 	int previous_time = 0;

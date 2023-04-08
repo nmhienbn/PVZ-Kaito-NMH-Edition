@@ -1,4 +1,4 @@
-#include <zombies/zombie_struct.hpp>
+#include "zombie_struct.hpp"
 
 /*Zombie constructor.
  */
@@ -47,7 +47,7 @@ Zombie::Zombie(int _type, int level_num)
 }
 
 /*
-Zombie construction: Special type of zombie
+Zombie construction: Specific type and image of zombie
 */
 Zombie::Zombie(int _type, int level_num, int _directory_num)
 {
@@ -274,7 +274,7 @@ bool Zombie::operator<(const Zombie &other) const
     return (row == other.row ? x_location < other.x_location : row > other.row);
 }
 
-/*Dead destructor*/
+/*Dead constructor*/
 DeadZombie::DeadZombie(int _r, int _x, bool _cold)
 {
     row = _r;
@@ -282,7 +282,7 @@ DeadZombie::DeadZombie(int _r, int _x, bool _cold)
     is_cold = _cold;
 }
 
-/*Dead destructor with other body and head*/
+/*Dead constructor with other body and head*/
 DeadZombie::DeadZombie(int _r, int _x, int _body, int _head)
 {
     row = _r;

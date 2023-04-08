@@ -1,5 +1,8 @@
 #include "elements/elements.hpp"
 
+/*
+Icons init
+*/
 Icons::Icons()
 {
     for (int i = 0; i < PLANT_COUNT; i++)
@@ -9,6 +12,9 @@ Icons::Icons()
     }
 }
 
+/*
+Reset plant seed chosen status
+*/
 void Icons::reset_is_chosen()
 {
     for (int i = 0; i < PLANT_COUNT; i++)
@@ -25,9 +31,14 @@ bool Level::is_huge_wave()
     {
         z_cnt += wave_zombie_count[i][cur_wave];
     }
+    if (cur_wave == wave_count - 1)
+        z_cnt++;
     return z_cnt >= 5;
 }
 
+/*
+Reset level
+*/
 void Level::reset()
 {
     wave_count = 0;
@@ -73,6 +84,9 @@ Map create_a_collection_of_blocks()
     return result;
 }
 
+/*
+Clear all elements
+*/
 void Elements::reset()
 {
     peashooters.clear();

@@ -24,6 +24,9 @@ void read_savedata()
         cout << "Unable to open saved data file!\n";
 }
 
+/*
+Read player saved data and Unlocked level:
+*/
 void update_unlocked_level()
 {
     // Read data
@@ -56,6 +59,9 @@ void update_unlocked_level()
         cout << "Unable to open saved data file!\n";
 }
 
+/*
+Read player saved data and reset unlocked level to 1:
+*/
 void reset_unlocked_level()
 {
     // Read data

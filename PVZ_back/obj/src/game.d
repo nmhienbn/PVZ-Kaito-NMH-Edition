@@ -28,18 +28,18 @@ obj/src/game.o: src/game.cpp src/game.hpp src/draw/render_elements.hpp \
  include\SDL2/SDL_ttf.h src/draw/image_directory.hpp \
  src/elements/elements.hpp src/plants/peashooter/peashooter.hpp \
  src/music/music.hpp include\SDL2/SDL_mixer.h \
- src/elements\bullets\pea\pea.hpp src/zombies/zombie_struct.hpp \
+ src/elements/bullets/pea/pea.hpp src/zombies/zombie_struct.hpp \
  src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
- src/elements\sun\sun.hpp src/plants/walnut/walnut.hpp \
+ src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
  src/draw/render_message.hpp src/elements/elements_actions.hpp \
  src/click_handle/out_game/start_game/start_game.hpp \
- src/player/player_data.hpp src/player\player_name.hpp \
+ src/player/player_data.hpp src/player/player_name.hpp \
  src/click_handle/out_game/choose_level/choose_level.hpp \
  src/level/level_data.hpp \
- src/click_handle\out_game\quit_menu\quit_menu.hpp \
- src/click_handle\out_game\reset_level\reset_menu.hpp \
+ src/click_handle/out_game/quit_menu/quit_menu.hpp \
+ src/click_handle/out_game/reset_level/reset_menu.hpp \
  src/click_handle/out_game/unlock_plant/unlock_plant.hpp \
  src/click_handle/in_game/game/player_click.hpp \
  src/click_handle/in_game/game/level.hpp \
@@ -175,7 +175,7 @@ src/music/music.hpp:
 
 include\SDL2/SDL_mixer.h:
 
-src/elements\bullets\pea\pea.hpp:
+src/elements/bullets/pea/pea.hpp:
 
 src/zombies/zombie_struct.hpp:
 
@@ -183,7 +183,7 @@ src/elements/Map/Map.hpp:
 
 src/plants/sunflower/sunflower.hpp:
 
-src/elements\sun\sun.hpp:
+src/elements/sun/sun.hpp:
 
 src/plants/walnut/walnut.hpp:
 
@@ -203,15 +203,15 @@ src/click_handle/out_game/start_game/start_game.hpp:
 
 src/player/player_data.hpp:
 
-src/player\player_name.hpp:
+src/player/player_name.hpp:
 
 src/click_handle/out_game/choose_level/choose_level.hpp:
 
 src/level/level_data.hpp:
 
-src/click_handle\out_game\quit_menu\quit_menu.hpp:
+src/click_handle/out_game/quit_menu/quit_menu.hpp:
 
-src/click_handle\out_game\reset_level\reset_menu.hpp:
+src/click_handle/out_game/reset_level/reset_menu.hpp:
 
 src/click_handle/out_game/unlock_plant/unlock_plant.hpp:
 

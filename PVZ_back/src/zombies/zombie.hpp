@@ -2,7 +2,7 @@
 #include "game_stats.hpp"
 #include "music/music.hpp"
 #include "draw/rsdl.hpp"
-#include <zombies/zombie_struct.hpp>
+#include "zombies/zombie_struct.hpp"
 
 extern Map cells;
 

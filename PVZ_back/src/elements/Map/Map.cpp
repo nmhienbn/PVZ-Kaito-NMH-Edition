@@ -10,6 +10,9 @@ int rand(int L, int R)
     return rd() % (R - L + 1) + L;
 }
 
+/*
+Check if x in [L; R]
+*/
 bool is_in(const int &L, const int &x, const int &R)
 {
     return L <= x && x <= R;

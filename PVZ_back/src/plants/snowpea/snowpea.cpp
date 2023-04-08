@@ -1,14 +1,16 @@
-#include "plants/snowpea/snowpea.hpp"
+#include "snowpea.hpp"
+#define SNOWPEA_FRAME 2
+#define SNOWPEA_WIDTH 185
+#define SNOWPEA_HEIGHT 177
 
 extern bool is_paused;
 extern Map cells;
 extern window win;
 
-/*Updated
+/*
 For all snowpea: If there is a zombie in that snowpea's row:
-Generate a new pea at that snowpea's position.
-Old version: all peas are generated at a time.
-Updated: all peas are generated not at a time.
+    Generate a new snowz pea at that snowpea's position (if it's sprite to fire).
+    All snowz peas are generated not at a time.
 */
 void fire_snowz_peas(vector<Snowpea> &snowpeas, vector<Zombie> &zombies, vector<Pea> &peas)
 {
@@ -59,8 +61,8 @@ bool are_there_zombies_in_snowpea_row(Snowpea &snowpea, vector<Zombie> &zombies)
     return false;
 }
 
-/*Updated
-Change to sprite sheet
+/*
+Display snow peas
 */
 void display_snowpeas(vector<Snowpea> &snowpeas)
 {
@@ -71,10 +73,10 @@ void display_snowpeas(vector<Snowpea> &snowpeas)
         int frame = snowpea.frame / SNOWPEA_FRAME;
         int scol = frame % C_SHEET[snowpea.directory_num];
         int srow = frame / C_SHEET[snowpea.directory_num];
-        win.draw_png(snowpea.directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow, SNOWPEA_WIDTH, SNOWPEA_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
         if (snowpea.is_attacked)
         {
-            win.draw_png(blink_of[snowpea.directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow, PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(blink_of[snowpea.directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow, SNOWPEA_WIDTH, SNOWPEA_HEIGHT, cells[row][col].x1, cells[row][col].y1 + 5, ELEMENT_WIDTH, ELEMENT_HEIGHT);
             snowpea.is_attacked--;
         }
         if (is_paused == false)

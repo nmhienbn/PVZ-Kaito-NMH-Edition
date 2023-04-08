@@ -4,6 +4,11 @@ This file contain in-game rectangles with their x1,x2,y1,y2
 #pragma once
 #include "game_stats.hpp"
 #include "draw/rsdl.hpp"
+#define ICON_BAR_X1 20
+#define ICON_BAR_WIDTH 120
+#define ICON_WIDTH 105
+#define ICON_HEIGHT 65
+
 struct Button
 {
     int x1, x2, y1, y2;

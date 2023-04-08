@@ -1,4 +1,4 @@
-#include "click_handle/out_game/choose_level/choose_level.hpp"
+#include "choose_level.hpp"
 
 extern bool level_chosen;
 extern bool quit;
@@ -7,52 +7,9 @@ extern Player player;
 extern window win;
 extern bool is_quit, is_reset;
 
-/*Display choosing level screen:
-    Rename player
-    Reset level
-    Quit game
-    Levels:
-        Transparent black and black text if is locked.
-        White text if is unlocked.
-        Transparent white and green text if mouse is over.
-*/
-void display_choosing_level_screen()
-{
-    win.clear_renderer();
-    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    display_button(RENAME_BUTTON, RENAME_DIRECTORY);
-    display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
-    display_button(QUIT_BUTTON, QUIT_DIRECTORY);
-    RENAME_BUTTON.blink();
-    RESET_LEVEL_BUTTON.blink();
-    QUIT_BUTTON.blink();
-
-    int _x = 0, _y = 0;
-    SDL_GetMouseState(&_x, &_y);
-    for (int i = 1; i <= LEVEL_COUNT; i++)
-    {
-        if (player.unlocked_level >= i)
-        {
-            if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
-            {
-                win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, GREEN);
-                win.draw_png(WHITE_SCREEN_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1, LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
-            }
-            else
-                win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, WHITE);
-        }
-        else
-        {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + 60, LEVEL_BUTTON[i].y1 + 130, BLACK);
-
-            display_level_is_locked(LEVEL_BUTTON[i]);
-        }
-    }
-}
-
 /*
 Handle choosing level screen:
-    Display choosing level screen (3 type, 1 more type is rename in player_name.hpp)
+    Display choosing level screen (3 type: normal, quit, reset level; 1 more type is rename in player_name.hpp)
     Handle quit menu, reset menu, quit/reset level/rename button, levels respectively.
 */
 void handle_choosing_level_screen()
@@ -67,7 +24,7 @@ void handle_choosing_level_screen()
     }
     else
     {
-        display_choosing_level_screen();
+        display_choose_level(true);
     }
     win.update_screen();
     HANDLE(

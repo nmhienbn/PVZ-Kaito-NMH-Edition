@@ -1,14 +1,16 @@
-#include "plants/peashooter/peashooter.hpp"
+#include "peashooter.hpp"
+#define PEASHOOTER_FRAME 2
+#define PEASHOOTER_WIDTH 185
+#define PEASHOOTER_HEIGHT 177
 
 extern bool is_paused;
 extern Map cells;
 extern window win;
 
-/*Updated
+/*
 For all peashooter: If there is a zombie in that peashooter's row:
-Generate a new pea at that peashooter's position.
-Old version: all peas are generated at a time.
-Updated: all peas are generated not at a time.
+    Generate a new pea at that peashooter's position (If it's sprite to fire pea).
+    All peas are generated not at a time.
 */
 void fire_peas(vector<Peashooter> &peashooters, vector<Zombie> &zombies, vector<Pea> &peas)
 {
@@ -59,8 +61,8 @@ bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, vector<Zombie> 
     return false;
 }
 
-/*Updated
-Change to sprite sheet
+/*
+Display peashooters
 */
 void display_peashooters(vector<Peashooter> &peashooters)
 {

@@ -4,6 +4,24 @@
 #include "game_stats.hpp"
 #include "elements/Map/Map.hpp"
 
+#define ZOMBIE_FRAME 3
+#define ZOMBIE_WIDTH 166
+#define ZOMBIE_HEIGHT 144
+#define ZOMBIE_EXACT_LOCATION 70
+#define ZOMBIE_G_WIDTH 166
+#define ZOMBIE_G_HEIGHT 144
+
+#define ZOMBIE_EATING_FRAME 10
+
+#define ZOMBIE_DIE_FRAME 10
+#define ZOMBIE_BURNT_FRAME 10
+#define DEAD_ZOMBIE_FRAMES 12
+
+#define HEAD_ZOMBIE_WIDTH 150
+#define HEAD_ZOMBIE_HEIGHT 187
+#define HEAD_ZOMBIE_G_WIDTH 125
+#define HEAD_ZOMBIE_G_HEIGHT 155
+
 enum ZombieType
 {
     NORMAL_TYPE,

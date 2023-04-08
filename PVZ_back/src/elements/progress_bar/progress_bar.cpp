@@ -3,6 +3,13 @@
 extern window win;
 extern Level level;
 
+/*
+Display game progress:
+    A bar: Appeared zombies will be green, remain is black.
+    Text below bar: "Level progress"
+    Level flags: a flag each huge wave.
+    Zombie head: curent position on progress bar.
+*/
 void display_progress_bar()
 {
     int dx = WINDOW_WIDTH - PROGRESS_BAR_WIDTH - 20;
@@ -21,6 +28,7 @@ void display_progress_bar()
     win.draw_png(FLAG_METER_PROGRESS, 0, 0, PROGRESS_TXT_WIDTH, PROGRESS_TXT_HEIGHT,
                  dx + (PROGRESS_BAR_WIDTH - PROGRESS_TXT_WIDTH) / 2, dy + 17,
                  PROGRESS_TXT_WIDTH, PROGRESS_TXT_HEIGHT);
+    // Level flag
     int z_cnt = 0;
     for (int i = 0; i < level.wave_count; i++)
     {
@@ -30,13 +38,14 @@ void display_progress_bar()
             tmp_cnt += level.wave_zombie_count[typ][i];
         if (tmp_cnt >= 5)
         {
-            if (z_cnt <= level.used_zombie_count)
+            tmp_cnt++; // huge wave
+            if (z_cnt < level.used_zombie_count)
             {
                 win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                             dx + tmp_width, dy - 2,
+                             dx + tmp_width, dy - 4,
                              PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
                 win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                             dx + tmp_width, dy - 15,
+                             dx + tmp_width, dy - 10,
                              PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
             }
             else
@@ -50,6 +59,6 @@ void display_progress_bar()
     }
     // Zombie head
     win.draw_png(FLAG_METER_PART, 0, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                 dx + progress_width - PROGRESS_PART_WIDTH / 2, dy,
+                 dx + progress_width - PROGRESS_PART_WIDTH + 6, dy,
                  PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
 }

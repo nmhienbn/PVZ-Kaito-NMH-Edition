@@ -66,9 +66,13 @@ Moving speed of some elements
 #define CHERRYBOMB_BITE_LIMIT 20
 #define ZOMBIE_NORMAL_HEALTH_LIMIT 10
 
-/*Playground elements size*/
+/*
+WINDOW size
+*/
 #define WINDOW_WIDTH 1050
 #define WINDOW_HEIGHT 600
+
+/*Playground elements size*/
 #define BLOCK_WIDTH 81
 #define BLOCK_HEIGHT 101
 #define HORIZ_BLOCK_COUNT 9
@@ -77,71 +81,5 @@ Moving speed of some elements
 #define X_UPPER_LEFT 250
 #define Y_UPPER_LEFT 70
 
-#define INIT_SUN_Y 5
-#define SUN_BAR_WIDTH 180
-#define SUN_BAR_HEIGHT 360
-
-#define ICON_BAR_X1 20
-#define ICON_BAR_WIDTH 120
-#define ICON_BAR_HEIGHT 194
-#define ICON_WIDTH 105
-#define ICON_HEIGHT 65
-#define SUN_COUNT_WIDTH 70
-#define SUN_COUNT_HEIGHT 30
-#define SUN_WIDTH 80
-#define SUN_HEIGHT 80
-
-#define PEA_WIDTH 25
-#define PEA_HEIGHT 25
-#define PEA_EXPLODE_TIME 35
-
-#define PEASHOOTER_FRAME 2
-#define PEASHOOTER_WIDTH 185
-#define PEASHOOTER_HEIGHT 177
-#define PEASHOOTER_G_WIDTH 200
-#define PEASHOOTER_G_HEIGHT 157 //**
-
-#define SNOWPEA_FRAME 2
-
-#define SUNFLOWER_WIDTH 215
-#define SUNFLOWER_HEIGHT 251
-
-#define SUNFLOWER_H_WIDTH 215
-#define SUNFLOWER_H_HEIGHT 251
-#define SUNFLOWER_F_SHEET 6
-
-#define WALNUT_WIDTH 185
-#define WALNUT_HEIGHT 185
-#define WALNUT_G_WIDTH 200
-#define WALNUT_G_HEIGHT 200
-
-#define CHERRYBOMB_FRAME 5
-#define CHERRYBOMB_WIDTH 136
-#define CHERRYBOMB_HEIGHT 123
-
-#define ZOMBIE_FRAME 3
-#define ZOMBIE_WIDTH 166
-#define ZOMBIE_HEIGHT 144
-#define ZOMBIE_EXACT_LOCATION 70
-#define ZOMBIE_G_WIDTH 166
-#define ZOMBIE_G_HEIGHT 144
-
-#define ZOMBIE_EATING_FRAME 10
-
-#define ZOMBIE_DIE_FRAME 10
-#define ZOMBIE_BURNT_FRAME 10
-#define DEAD_ZOMBIE_FRAMES 12
-
-#define HEAD_ZOMBIE_WIDTH 150
-#define HEAD_ZOMBIE_HEIGHT 187
-#define HEAD_ZOMBIE_G_WIDTH 125
-#define HEAD_ZOMBIE_G_HEIGHT 155
-
 #define ELEMENT_WIDTH 90
 #define ELEMENT_HEIGHT 90
-
-#define SHOVEL_WIDTH 139
-#define SHOVEL_HEIGHT 141
-
-#define SAVED_DATA_DIRECTORY "./userdata/savedata.txt"
-#define LEVELS_DIRECTORY "./levels/"

@@ -3,7 +3,7 @@
 #include "elements/elements.hpp"
 #include "elements/progress_bar/progress_bar.hpp"
 
-void render_choose_level_no_mouse();
+void display_choose_level(const bool &is_mouse_needed);
 void display_game_elements();
 void display_game_layout();
 void display_game_paused_elements();

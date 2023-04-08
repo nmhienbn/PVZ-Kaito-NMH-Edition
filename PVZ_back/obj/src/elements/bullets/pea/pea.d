@@ -1,5 +1,5 @@
 obj/src/elements/bullets/pea/pea.o: src/elements/bullets/pea/pea.cpp \
- src/elements\bullets\pea\pea.hpp src/music/music.hpp include\SDL2/SDL.h \
+ src/elements/bullets/pea/pea.hpp src/music/music.hpp include\SDL2/SDL.h \
  include\SDL2/SDL_main.h include\SDL2/SDL_stdinc.h \
  include\SDL2/SDL_config.h include\SDL2/SDL_platform.h \
  include\SDL2/begin_code.h include\SDL2/close_code.h \
@@ -29,7 +29,7 @@ obj/src/elements/bullets/pea/pea.o: src/elements/bullets/pea/pea.cpp \
  src/game_stats.hpp src/draw/image_directory.hpp \
  src/zombies/zombie_struct.hpp src/elements/Map/Map.hpp
 
-src/elements\bullets\pea\pea.hpp:
+src/elements/bullets/pea/pea.hpp:
 
 src/music/music.hpp:
 

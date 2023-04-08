@@ -7,14 +7,10 @@ extern Player player;
 extern Map cells;
 extern window win;
 
-/*
-Initialize game:
+/*Initialize game:
     Display loading and starting game.
     Read player data
-    Read level data
-    Random zombie appear time
     Create block on frontyard (playground)
-    Init player's sun
 */
 void init_game()
 {
@@ -24,12 +20,9 @@ void init_game()
 }
 
 /*
-DISPLAY STARTING SCREEN AND CHOOSING LEVEL SCREEN
-*/
-
-/*Need update: Fake loading screen
-Display starting screen
+Display starting screen.
 Updated: Now player can exit game from here.
+Handle player click on TAP_TO_START
 */
 void display_starting_screen()
 {

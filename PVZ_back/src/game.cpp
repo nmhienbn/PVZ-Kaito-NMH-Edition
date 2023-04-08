@@ -1,8 +1,5 @@
 #include "game.hpp"
 
-//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-
 bool level_chosen = false;
 bool quit = false;
 bool is_game_started = false;
@@ -18,10 +15,22 @@ window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 bool is_leave, is_quit, is_reset, is_restart;
 
+/*
+Init game & music.
+If player is a new user: Get name and unlock Peashooter.
+If a level is not chosen:
+    Handle unlocking screen if necessary.
+    Handle choosing level screen.
+Else: start level.
+
+*/
 int main(int argv, char **args)
 {
+    // Init game & music.
     init_music();
     init_game();
+
+    // If player is a new user: Get name and unlock Peashooter.
     display_get_name_player(NEW_USER_DIRECTORY);
     if (player.unlocked_level == 0)
     {
@@ -32,6 +41,7 @@ int main(int argv, char **args)
         }
         update_unlocked_level();
     }
+
     // Main loop
     while (!quit)
     {
@@ -74,6 +84,5 @@ int main(int argv, char **args)
         }
     }
     close_music();
-
     return 0;
 }

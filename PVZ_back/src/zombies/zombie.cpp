@@ -5,7 +5,7 @@ extern bool is_paused;
 extern Map cells;
 extern window win;
 /*
-Check if Zombie is in query tile or not.
+Check if Zombie is in query tile or not to change its status.
 @param zombie: query zombie
 @param row: query row
 @param col: query column
@@ -22,6 +22,10 @@ bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int 
     return false;
 }
 
+/*
+Check if zombie reached a planted tile.
+If true, Update zombie status.
+*/
 bool has_zombie_reached_plant(Zombie &zombie)
 {
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
@@ -71,7 +75,7 @@ bool can_zombie_move(Zombie &zombie)
     return true;
 }
 
-/* I have changed this for better performance
+/*
 Update all zombies' moving status.
 */
 void update_moving_status_for_zombies(vector<Zombie> &zombies)
@@ -84,7 +88,8 @@ void update_moving_status_for_zombies(vector<Zombie> &zombies)
 
 /*
 Move the zombie: For all zombie:
-    + If zombie can move, its location -= their speed.
+    If zombie can move, its location -= their speed.
+    Note that a zombie can be slow if it's cold.
 */
 void move_zombies(vector<Zombie> &zombies)
 {
@@ -100,9 +105,8 @@ void move_zombies(vector<Zombie> &zombies)
     }
 }
 
-/*Updated
-Change to sprite sheet.
-Render sprite sheet of exactly status.
+/*
+Display zombie of exactly status.
 */
 void display_zombies(vector<Zombie> &zombies)
 {
@@ -139,7 +143,7 @@ void display_zombies(vector<Zombie> &zombies)
     }
 }
 
-/*New function:
+/*
 Display armor drop.
 */
 void display_armor_drop(DeadZombie &dead_zombie)
@@ -153,6 +157,9 @@ void display_armor_drop(DeadZombie &dead_zombie)
     win.draw_png(dead_zombie.head, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombie.x_location + 80, y_location - 40, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT);
 }
 
+/*
+Display burnt zombie (after explosion)
+*/
 void display_burnt_zombie(DeadZombie &dead_zombie)
 {
     int row = dead_zombie.row;
@@ -166,8 +173,9 @@ void display_burnt_zombie(DeadZombie &dead_zombie)
     }
 }
 
-/*New function:
-Display zombie dead independently.
+/*
+Display dead zombie independently.
+Add armor drop and burnt effect.
 */
 void display_dead_zombies(vector<DeadZombie> &dead_zombies)
 {
@@ -222,6 +230,9 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
     }
 }
 
+/*
+Update time for all zombies' next bite.
+*/
 void update_zombie_next_bite(vector<Zombie> &zombies)
 {
     for (auto &zombie : zombies)

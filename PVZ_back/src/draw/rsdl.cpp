@@ -369,10 +369,10 @@ void window::fade_out()
     clear_renderer();
 }
 
-void window::show_announcer_text(const string &announcer)
+void window::show_announcer_text(const string &announcer, const int &time_a)
 {
     announce = announcer;
-    time_announce = MAX_TIME_ANNOUNCE;
+    time_announce = time_a;
 }
 
 void window::show_announcer_text()

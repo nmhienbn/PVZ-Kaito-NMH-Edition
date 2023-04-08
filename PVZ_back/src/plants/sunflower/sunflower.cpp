@@ -1,4 +1,11 @@
-#include "plants/sunflower/sunflower.hpp"
+#include "sunflower.hpp"
+#define SUNFLOWER_WIDTH 215
+#define SUNFLOWER_HEIGHT 251
+#define SUNFLOWER_FRAME 2
+
+#define SUNFLOWER_H_WIDTH 215
+#define SUNFLOWER_H_HEIGHT 251
+#define SUNFLOWER_F_SHEET 9
 
 extern bool is_paused;
 extern Map cells;
@@ -6,7 +13,6 @@ extern window win;
 
 /**
 Generate suns from sunflowers not at the same time.
-Old version: gen all sun at a time.
 **/
 void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &suns)
 {
@@ -38,8 +44,10 @@ void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &sun
 }
 
 /*
-Generate sun from the sunflowers
-Then add it into vector<Sun>
+Generate sun from the sunflowers.
+Init waiting time of sun.
+Then add it into vector<Sun>.
+Reset time to have next sun.
 */
 void gen_sun_from_a_sunflower(Sunflower &sunflower, vector<Sun> &suns)
 {
@@ -52,9 +60,8 @@ void gen_sun_from_a_sunflower(Sunflower &sunflower, vector<Sun> &suns)
     suns.push_back(temp);
 }
 
-/*Updated
-Change to sprite sheet
-Add blink
+/*
+Display sunflowers
 */
 void display_sunflowers(vector<Sunflower> &sunflowers)
 {
@@ -66,19 +73,26 @@ void display_sunflowers(vector<Sunflower> &sunflowers)
             int row = sunflower.row;
             // win.draw_png_scale(SUNFLOWER_DIRECTORY, cells[row][col].x1 + 9, cells[row][col].y1 + 9, ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
-            int frame = sunflower.frame;
+            int frame = sunflower.frame / SUNFLOWER_FRAME;
             int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
             int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
-            win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 15, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                         SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
+                         cells[row][col].x1, cells[row][col].y1 - 15,
+                         ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             if (is_paused == false)
-                if (++sunflower.frame >= N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
+                if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
                 {
                     sunflower.frame = 0;
                 }
             if (sunflower.is_attacked)
             {
-                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow, SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 15, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                win.draw_png(blink_of[sunflower.directory_num],
+                             SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                             SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
+                             cells[row][col].x1, cells[row][col].y1 - 15,
+                             ELEMENT_WIDTH, ELEMENT_HEIGHT);
                 sunflower.is_attacked--;
             }
         }
@@ -91,7 +105,10 @@ void display_sunflowers(vector<Sunflower> &sunflowers)
             int frame = sunflower.frame / SUNFLOWER_F_SHEET;
             int scol = frame % C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
             int srow = frame / C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
-            win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 15, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                         SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
+                         cells[row][col].x1, cells[row][col].y1 - 15,
+                         ELEMENT_WIDTH, ELEMENT_HEIGHT);
 
             if (is_paused == false)
                 if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
@@ -100,7 +117,10 @@ void display_sunflowers(vector<Sunflower> &sunflowers)
                 }
             if (sunflower.is_attacked)
             {
-                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow, SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT, cells[row][col].x1, cells[row][col].y1 - 15, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                             SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
+                             cells[row][col].x1, cells[row][col].y1 - 15,
+                             ELEMENT_WIDTH, ELEMENT_HEIGHT);
                 sunflower.is_attacked--;
             }
         }

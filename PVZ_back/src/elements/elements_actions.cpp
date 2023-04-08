@@ -117,6 +117,7 @@ void create_new_zombies()
                     // Make flag zombies
                     temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
                     game_characters.zombies.push_back(temp);
+                    level.used_zombie_count++;
                 }
                 else if (level.is_huge_wave())
                 {
@@ -125,6 +126,7 @@ void create_new_zombies()
                     // Make flag zombies
                     temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
                     game_characters.zombies.push_back(temp);
+                    level.used_zombie_count++;
                 }
             }
             else
