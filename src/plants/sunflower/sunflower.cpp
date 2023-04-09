@@ -1,0 +1,129 @@
+#include "sunflower.hpp"
+#define SUNFLOWER_WIDTH 215
+#define SUNFLOWER_HEIGHT 251
+#define SUNFLOWER_FRAME 2
+
+#define SUNFLOWER_H_WIDTH 215
+#define SUNFLOWER_H_HEIGHT 251
+#define SUNFLOWER_F_SHEET 9
+
+#define SUNFLOWER_G_WIDTH 80
+#define SUNFLOWER_G_HEIGHT 80
+
+extern bool is_paused;
+extern Map cells;
+extern window win;
+
+/**
+Generate suns from sunflowers not at the same time.
+**/
+void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &suns)
+{
+    for (auto &sunflower : sunflowers)
+        if (--sunflower.sec_for_another_sun <= 0)
+        {
+            if (sunflower.directory_num == SUNFLOWER_SHEET_DIRECTORY)
+            {
+                if (sunflower.frame == 0)
+                {
+                    sunflower.directory_num = SUNFLOWER_HAPPY_DIRECTORY;
+                }
+            }
+            else if (sunflower.frame == 13 * SUNFLOWER_F_SHEET)
+            {
+                gen_sun_from_a_sunflower(sunflower, suns);
+            }
+        }
+        else
+        {
+            if (sunflower.directory_num == SUNFLOWER_HAPPY_DIRECTORY)
+            {
+                if (sunflower.frame == 0)
+                {
+                    sunflower.directory_num = SUNFLOWER_SHEET_DIRECTORY;
+                }
+            }
+        }
+}
+
+/*
+Generate sun from the sunflowers.
+Init waiting time of sun.
+Then add it into vector<Sun>.
+Reset time to have next sun.
+*/
+void gen_sun_from_a_sunflower(Sunflower &sunflower, vector<Sun> &suns)
+{
+    sunflower.sec_for_another_sun = SUN_GEN_SUNFLOWER_CLK_COUNT;
+    Sun temp;
+    temp.final_col = sunflower.col;
+    temp.final_row = sunflower.row;
+    temp.y_location = cells[sunflower.row][sunflower.col].y1 - 20;
+    temp.wait_seconds = 0;
+    suns.push_back(temp);
+}
+
+/*
+Display sunflowers
+*/
+void display_sunflowers(vector<Sunflower> &sunflowers)
+{
+    for (auto &sunflower : sunflowers)
+    {
+        if (sunflower.directory_num == SUNFLOWER_SHEET_DIRECTORY)
+        {
+            int col = sunflower.col;
+            int row = sunflower.row;
+
+            int frame = sunflower.frame / SUNFLOWER_FRAME;
+            int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+            int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+            win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                         SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
+                         cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                         SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+
+            if (is_paused == false)
+                if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
+                {
+                    sunflower.frame = 0;
+                }
+            if (sunflower.is_attacked)
+            {
+                win.draw_png(blink_of[sunflower.directory_num],
+                             SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                             SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
+                             cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                             SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+                sunflower.is_attacked--;
+            }
+        }
+        else
+        {
+            int col = sunflower.col;
+            int row = sunflower.row;
+
+            int frame = sunflower.frame / SUNFLOWER_F_SHEET;
+            int scol = frame % C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
+            int srow = frame / C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
+            win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                         SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
+                         cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                         SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+
+            if (is_paused == false)
+                if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
+                {
+                    sunflower.frame = 0;
+                }
+            if (sunflower.is_attacked)
+            {
+                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                             SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
+                             cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                             SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+                sunflower.is_attacked--;
+            }
+        }
+    }
+}

@@ -1,0 +1,10 @@
+normal : 200 (100 armless)
+conehead : 570
+buckethead: 1300
+football: 1600
+pea = snowpea: 20 (1.5s)
+snowpea slow: 1/2
+
+wallnut: 4000
+cherry bomb: 1800
+
