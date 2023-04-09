@@ -215,6 +215,81 @@ enum ImageType
     FRONTYARD_R4,
     FRONTYARD_R5,
 
+    WIN_00_DIRECTORY,
+    WIN_01_DIRECTORY,
+    WIN_02_DIRECTORY,
+    WIN_03_DIRECTORY,
+    WIN_04_DIRECTORY,
+    WIN_05_DIRECTORY,
+    WIN_06_DIRECTORY,
+    WIN_07_DIRECTORY,
+    WIN_08_DIRECTORY,
+    WIN_09_DIRECTORY,
+    WIN_10_DIRECTORY,
+    WIN_11_DIRECTORY,
+    WIN_12_DIRECTORY,
+    WIN_13_DIRECTORY,
+    WIN_14_DIRECTORY,
+    WIN_15_DIRECTORY,
+    WIN_16_DIRECTORY,
+    WIN_17_DIRECTORY,
+    WIN_18_DIRECTORY,
+    WIN_19_DIRECTORY,
+    WIN_20_DIRECTORY,
+    WIN_21_DIRECTORY,
+    WIN_22_DIRECTORY,
+    WIN_23_DIRECTORY,
+    WIN_24_DIRECTORY,
+    WIN_25_DIRECTORY,
+    WIN_26_DIRECTORY,
+    WIN_27_DIRECTORY,
+    WIN_28_DIRECTORY,
+    WIN_29_DIRECTORY,
+    WIN_30_DIRECTORY,
+    WIN_31_DIRECTORY,
+    WIN_32_DIRECTORY,
+    WIN_33_DIRECTORY,
+    WIN_34_DIRECTORY,
+    WIN_35_DIRECTORY,
+    WIN_36_DIRECTORY,
+    WIN_37_DIRECTORY,
+    WIN_38_DIRECTORY,
+    WIN_39_DIRECTORY,
+    WIN_40_DIRECTORY,
+    WIN_41_DIRECTORY,
+    WIN_42_DIRECTORY,
+    WIN_43_DIRECTORY,
+    WIN_44_DIRECTORY,
+    WIN_45_DIRECTORY,
+    WIN_46_DIRECTORY,
+    WIN_47_DIRECTORY,
+    WIN_48_DIRECTORY,
+    WIN_49_DIRECTORY,
+    WIN_50_DIRECTORY,
+    WIN_51_DIRECTORY,
+    WIN_52_DIRECTORY,
+    WIN_53_DIRECTORY,
+    WIN_54_DIRECTORY,
+    WIN_55_DIRECTORY,
+    WIN_56_DIRECTORY,
+    WIN_57_DIRECTORY,
+    WIN_58_DIRECTORY,
+    WIN_59_DIRECTORY,
+    WIN_60_DIRECTORY,
+    WIN_61_DIRECTORY,
+    WIN_62_DIRECTORY,
+    WIN_63_DIRECTORY,
+    WIN_64_DIRECTORY,
+    WIN_65_DIRECTORY,
+    WIN_66_DIRECTORY,
+    WIN_67_DIRECTORY,
+    WIN_68_DIRECTORY,
+    WIN_69_DIRECTORY,
+    WIN_70_DIRECTORY,
+    WIN_71_DIRECTORY,
+    WIN_72_DIRECTORY,
+    WIN_73_DIRECTORY,
+
     COUNT_USED_DIRECTORY
 };
 
@@ -427,6 +502,81 @@ const string image_directory[] = {
     "./image/Background/yard_blink/Frontyardr4.png", // FRONTYARD_R4
     "./image/Background/yard_blink/Frontyardr5.png", // FRONTYARD_R5
 
+    "./image/Background/win/win_e_00.png", // WIN_00_DIRECTORY
+    "./image/Background/win/win_e_01.png", // WIN_01_DIRECTORY
+    "./image/Background/win/win_e_02.png", // WIN_02_DIRECTORY
+    "./image/Background/win/win_e_03.png", // WIN_03_DIRECTORY
+    "./image/Background/win/win_e_04.png", // WIN_04_DIRECTORY
+    "./image/Background/win/win_e_05.png", // WIN_05_DIRECTORY
+    "./image/Background/win/win_e_06.png", // WIN_06_DIRECTORY
+    "./image/Background/win/win_e_07.png", // WIN_07_DIRECTORY
+    "./image/Background/win/win_e_08.png", // WIN_08_DIRECTORY
+    "./image/Background/win/win_e_09.png", // WIN_09_DIRECTORY
+    "./image/Background/win/win_e_10.png", // WIN_10_DIRECTORY
+    "./image/Background/win/win_e_11.png", // WIN_11_DIRECTORY
+    "./image/Background/win/win_e_12.png", // WIN_12_DIRECTORY
+    "./image/Background/win/win_e_13.png", // WIN_13_DIRECTORY
+    "./image/Background/win/win_e_14.png", // WIN_14_DIRECTORY
+    "./image/Background/win/win_e_15.png", // WIN_15_DIRECTORY
+    "./image/Background/win/win_e_16.png", // WIN_16_DIRECTORY
+    "./image/Background/win/win_e_17.png", // WIN_17_DIRECTORY
+    "./image/Background/win/win_e_18.png", // WIN_18_DIRECTORY
+    "./image/Background/win/win_e_19.png", // WIN_19_DIRECTORY
+    "./image/Background/win/win_e_20.png", // WIN_20_DIRECTORY
+    "./image/Background/win/win_e_21.png", // WIN_21_DIRECTORY
+    "./image/Background/win/win_e_22.png", // WIN_22_DIRECTORY
+    "./image/Background/win/win_e_23.png", // WIN_23_DIRECTORY
+    "./image/Background/win/win_e_24.png", // WIN_24_DIRECTORY
+    "./image/Background/win/win_e_25.png", // WIN_25_DIRECTORY
+    "./image/Background/win/win_e_26.png", // WIN_26_DIRECTORY
+    "./image/Background/win/win_e_27.png", // WIN_27_DIRECTORY
+    "./image/Background/win/win_e_28.png", // WIN_28_DIRECTORY
+    "./image/Background/win/win_e_29.png", // WIN_29_DIRECTORY
+    "./image/Background/win/win_e_30.png", // WIN_30_DIRECTORY
+    "./image/Background/win/win_e_31.png", // WIN_31_DIRECTORY
+    "./image/Background/win/win_e_32.png", // WIN_32_DIRECTORY
+    "./image/Background/win/win_e_33.png", // WIN_33_DIRECTORY
+    "./image/Background/win/win_e_34.png", // WIN_34_DIRECTORY
+    "./image/Background/win/win_e_35.png", // WIN_35_DIRECTORY
+    "./image/Background/win/win_e_36.png", // WIN_36_DIRECTORY
+    "./image/Background/win/win_e_37.png", // WIN_37_DIRECTORY
+    "./image/Background/win/win_e_38.png", // WIN_38_DIRECTORY
+    "./image/Background/win/win_e_39.png", // WIN_39_DIRECTORY
+    "./image/Background/win/win_e_40.png", // WIN_40_DIRECTORY
+    "./image/Background/win/win_e_41.png", // WIN_41_DIRECTORY
+    "./image/Background/win/win_e_42.png", // WIN_42_DIRECTORY
+    "./image/Background/win/win_e_43.png", // WIN_43_DIRECTORY
+    "./image/Background/win/win_e_44.png", // WIN_44_DIRECTORY
+    "./image/Background/win/win_e_45.png", // WIN_45_DIRECTORY
+    "./image/Background/win/win_e_46.png", // WIN_46_DIRECTORY
+    "./image/Background/win/win_e_47.png", // WIN_47_DIRECTORY
+    "./image/Background/win/win_e_48.png", // WIN_48_DIRECTORY
+    "./image/Background/win/win_e_49.png", // WIN_49_DIRECTORY
+    "./image/Background/win/win_e_50.png", // WIN_50_DIRECTORY
+    "./image/Background/win/win_e_51.png", // WIN_51_DIRECTORY
+    "./image/Background/win/win_e_52.png", // WIN_52_DIRECTORY
+    "./image/Background/win/win_e_53.png", // WIN_53_DIRECTORY
+    "./image/Background/win/win_e_54.png", // WIN_54_DIRECTORY
+    "./image/Background/win/win_e_55.png", // WIN_55_DIRECTORY
+    "./image/Background/win/win_e_56.png", // WIN_56_DIRECTORY
+    "./image/Background/win/win_e_57.png", // WIN_57_DIRECTORY
+    "./image/Background/win/win_e_58.png", // WIN_58_DIRECTORY
+    "./image/Background/win/win_e_59.png", // WIN_59_DIRECTORY
+    "./image/Background/win/win_e_60.png", // WIN_60_DIRECTORY
+    "./image/Background/win/win_e_61.png", // WIN_61_DIRECTORY
+    "./image/Background/win/win_e_62.png", // WIN_62_DIRECTORY
+    "./image/Background/win/win_e_63.png", // WIN_63_DIRECTORY
+    "./image/Background/win/win_e_64.png", // WIN_64_DIRECTORY
+    "./image/Background/win/win_e_65.png", // WIN_65_DIRECTORY
+    "./image/Background/win/win_e_66.png", // WIN_66_DIRECTORY
+    "./image/Background/win/win_e_67.png", // WIN_67_DIRECTORY
+    "./image/Background/win/win_e_68.png", // WIN_68_DIRECTORY
+    "./image/Background/win/win_e_69.png", // WIN_69_DIRECTORY
+    "./image/Background/win/win_e_70.png", // WIN_70_DIRECTORY
+    "./image/Background/win/win_e_71.png", // WIN_71_DIRECTORY
+    "./image/Background/win/win_e_72.png", // WIN_72_DIRECTORY
+    "./image/Background/win/win_e_73.png", // WIN_73_DIRECTORY
+
 };
 
 /*
@@ -637,6 +787,80 @@ const int N_SHEET[] = {
     0, // FRONTYARD_R4
     0, // FRONTYARD_R5
 
+    0, // WIN_00_DIRECTORY
+    0, // WIN_01_DIRECTORY
+    0, // WIN_02_DIRECTORY
+    0, // WIN_03_DIRECTORY
+    0, // WIN_04_DIRECTORY
+    0, // WIN_05_DIRECTORY
+    0, // WIN_06_DIRECTORY
+    0, // WIN_07_DIRECTORY
+    0, // WIN_08_DIRECTORY
+    0, // WIN_09_DIRECTORY
+    0, // WIN_10_DIRECTORY
+    0, // WIN_11_DIRECTORY
+    0, // WIN_12_DIRECTORY
+    0, // WIN_13_DIRECTORY
+    0, // WIN_14_DIRECTORY
+    0, // WIN_15_DIRECTORY
+    0, // WIN_16_DIRECTORY
+    0, // WIN_17_DIRECTORY
+    0, // WIN_18_DIRECTORY
+    0, // WIN_19_DIRECTORY
+    0, // WIN_20_DIRECTORY
+    0, // WIN_21_DIRECTORY
+    0, // WIN_22_DIRECTORY
+    0, // WIN_23_DIRECTORY
+    0, // WIN_24_DIRECTORY
+    0, // WIN_25_DIRECTORY
+    0, // WIN_26_DIRECTORY
+    0, // WIN_27_DIRECTORY
+    0, // WIN_28_DIRECTORY
+    0, // WIN_29_DIRECTORY
+    0, // WIN_30_DIRECTORY
+    0, // WIN_31_DIRECTORY
+    0, // WIN_32_DIRECTORY
+    0, // WIN_33_DIRECTORY
+    0, // WIN_34_DIRECTORY
+    0, // WIN_35_DIRECTORY
+    0, // WIN_36_DIRECTORY
+    0, // WIN_37_DIRECTORY
+    0, // WIN_38_DIRECTORY
+    0, // WIN_39_DIRECTORY
+    0, // WIN_40_DIRECTORY
+    0, // WIN_41_DIRECTORY
+    0, // WIN_42_DIRECTORY
+    0, // WIN_43_DIRECTORY
+    0, // WIN_44_DIRECTORY
+    0, // WIN_45_DIRECTORY
+    0, // WIN_46_DIRECTORY
+    0, // WIN_47_DIRECTORY
+    0, // WIN_48_DIRECTORY
+    0, // WIN_49_DIRECTORY
+    0, // WIN_50_DIRECTORY
+    0, // WIN_51_DIRECTORY
+    0, // WIN_52_DIRECTORY
+    0, // WIN_53_DIRECTORY
+    0, // WIN_54_DIRECTORY
+    0, // WIN_55_DIRECTORY
+    0, // WIN_56_DIRECTORY
+    0, // WIN_57_DIRECTORY
+    0, // WIN_58_DIRECTORY
+    0, // WIN_59_DIRECTORY
+    0, // WIN_60_DIRECTORY
+    0, // WIN_61_DIRECTORY
+    0, // WIN_62_DIRECTORY
+    0, // WIN_63_DIRECTORY
+    0, // WIN_64_DIRECTORY
+    0, // WIN_65_DIRECTORY
+    0, // WIN_66_DIRECTORY
+    0, // WIN_67_DIRECTORY
+    0, // WIN_68_DIRECTORY
+    0, // WIN_69_DIRECTORY
+    0, // WIN_70_DIRECTORY
+    0, // WIN_71_DIRECTORY
+    0, // WIN_72_DIRECTORY
+    0, // WIN_73_DIRECTORY
 };
 
 /*
@@ -847,6 +1071,80 @@ const int C_SHEET[] = {
     0, // FRONTYARD_R4
     0, // FRONTYARD_R5
 
+    0, // WIN_00_DIRECTORY
+    0, // WIN_01_DIRECTORY
+    0, // WIN_02_DIRECTORY
+    0, // WIN_03_DIRECTORY
+    0, // WIN_04_DIRECTORY
+    0, // WIN_05_DIRECTORY
+    0, // WIN_06_DIRECTORY
+    0, // WIN_07_DIRECTORY
+    0, // WIN_08_DIRECTORY
+    0, // WIN_09_DIRECTORY
+    0, // WIN_10_DIRECTORY
+    0, // WIN_11_DIRECTORY
+    0, // WIN_12_DIRECTORY
+    0, // WIN_13_DIRECTORY
+    0, // WIN_14_DIRECTORY
+    0, // WIN_15_DIRECTORY
+    0, // WIN_16_DIRECTORY
+    0, // WIN_17_DIRECTORY
+    0, // WIN_18_DIRECTORY
+    0, // WIN_19_DIRECTORY
+    0, // WIN_20_DIRECTORY
+    0, // WIN_21_DIRECTORY
+    0, // WIN_22_DIRECTORY
+    0, // WIN_23_DIRECTORY
+    0, // WIN_24_DIRECTORY
+    0, // WIN_25_DIRECTORY
+    0, // WIN_26_DIRECTORY
+    0, // WIN_27_DIRECTORY
+    0, // WIN_28_DIRECTORY
+    0, // WIN_29_DIRECTORY
+    0, // WIN_30_DIRECTORY
+    0, // WIN_31_DIRECTORY
+    0, // WIN_32_DIRECTORY
+    0, // WIN_33_DIRECTORY
+    0, // WIN_34_DIRECTORY
+    0, // WIN_35_DIRECTORY
+    0, // WIN_36_DIRECTORY
+    0, // WIN_37_DIRECTORY
+    0, // WIN_38_DIRECTORY
+    0, // WIN_39_DIRECTORY
+    0, // WIN_40_DIRECTORY
+    0, // WIN_41_DIRECTORY
+    0, // WIN_42_DIRECTORY
+    0, // WIN_43_DIRECTORY
+    0, // WIN_44_DIRECTORY
+    0, // WIN_45_DIRECTORY
+    0, // WIN_46_DIRECTORY
+    0, // WIN_47_DIRECTORY
+    0, // WIN_48_DIRECTORY
+    0, // WIN_49_DIRECTORY
+    0, // WIN_50_DIRECTORY
+    0, // WIN_51_DIRECTORY
+    0, // WIN_52_DIRECTORY
+    0, // WIN_53_DIRECTORY
+    0, // WIN_54_DIRECTORY
+    0, // WIN_55_DIRECTORY
+    0, // WIN_56_DIRECTORY
+    0, // WIN_57_DIRECTORY
+    0, // WIN_58_DIRECTORY
+    0, // WIN_59_DIRECTORY
+    0, // WIN_60_DIRECTORY
+    0, // WIN_61_DIRECTORY
+    0, // WIN_62_DIRECTORY
+    0, // WIN_63_DIRECTORY
+    0, // WIN_64_DIRECTORY
+    0, // WIN_65_DIRECTORY
+    0, // WIN_66_DIRECTORY
+    0, // WIN_67_DIRECTORY
+    0, // WIN_68_DIRECTORY
+    0, // WIN_69_DIRECTORY
+    0, // WIN_70_DIRECTORY
+    0, // WIN_71_DIRECTORY
+    0, // WIN_72_DIRECTORY
+    0, // WIN_73_DIRECTORY
 };
 
 /*
@@ -969,3 +1267,4 @@ static map<int, int> walk_of = {
 
 const int front_yard_r = FRONTYARD_R1;
 const int front_yard_c = FRONTYARD_C1;
+const int win_dir = WIN_00_DIRECTORY;

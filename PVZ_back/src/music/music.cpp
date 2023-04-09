@@ -1,10 +1,13 @@
-#include "music/music.hpp"
+#include "music.hpp"
 
 // The music that will be played
 static Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
 static Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 static int now_music = -1;
 
+/*
+Init music
+*/
 bool init_music()
 {
     // Initialization flag
@@ -28,6 +31,9 @@ bool init_music()
     return success;
 }
 
+/*
+Play music
+*/
 void play_music(int num_path, int repeat_times)
 {
     if (now_music != num_path)
@@ -60,6 +66,9 @@ void play_music(int num_path, int repeat_times)
     }
 }
 
+/*
+Play sound effect
+*/
 void play_sound_effect(int num_path)
 {
     if (gChunk[num_path] == NULL)
@@ -71,6 +80,9 @@ void play_sound_effect(int num_path)
     Mix_PlayChannel(-1, gChunk[num_path], 0);
 }
 
+/*
+Close the music
+*/
 void close_music()
 {
     // Free the music

@@ -50,11 +50,7 @@ void start_level()
     if (is_game_started == false)
     {
         display_R_S_P();
-        HANDLE(
-            QUIT(quit = true);
-            if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) { break; }
-
-        )
+        HANDLE(QUIT(quit = true; return;))
         clk++;
         win.update_screen();
         return;
@@ -100,7 +96,7 @@ void start_level()
         }
 
         HANDLE(
-            QUIT(quit = true);
+            QUIT(quit = true; return;);
             KEY_TO_WIN({
                 level.waves_finished = 1;
                 game_characters.zombies.clear();
@@ -180,11 +176,11 @@ void display_all_in_game()
     {
         blink_row_and_col();
     }
-    display_turbo_icon();
     display_game_elements();
     display_game_announce();
     win.show_announcer_text();
     display_chosen_plant();
+    display_turbo_icon();
     // Move:
     handle_movements();
     // Changes:

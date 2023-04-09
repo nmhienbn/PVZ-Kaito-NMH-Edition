@@ -10,11 +10,6 @@ If player win, display this
 */
 void display_winning_message()
 {
-    is_paused = true;
-    win.draw_bg(level.background_directory);
-    display_game_paused_elements();
-    win.draw_png_center(WINNING_MESSAGE_DIRECTORY);
-    win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
 
 /*
@@ -35,26 +30,39 @@ Handle when player win the game:
 */
 bool display_win()
 {
-    display_winning_message();
     play_music(WIN_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink();
-    win.update_screen();
-    HANDLE(
-        QUIT(quit = true);
-        LCLICK({
-            if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
+    is_paused = true;
+    for (int i = 0;; i++)
+    {
+        if (i >= 74)
+            i = 24;
+        for (int j = 1; j <= 5; j++)
+        {
+            win.draw_png(win_dir + i, 0, 0, 1050, 591);
+            if (i >= 14)
             {
-                update_unlocked_level();
-                level.waves_finished = false;
-                level_chosen = false;
-                is_paused = false;
-                if (is_unlocking_plant == false)
-                    play_music(URF_DIRECTORY);
-                win.fade_out();
-                return true;
+                win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
+                CONTINUE.blink();
             }
-        });
+            win.update_screen();
+            HANDLE(
+                QUIT(quit = true; return true);
+                LCLICK({
+                    if (i >= 14 && CONTINUE.is_mouse_in(mouse_x, mouse_y))
+                    {
+                        update_unlocked_level();
+                        level.waves_finished = false;
+                        level_chosen = false;
+                        is_paused = false;
+                        if (is_unlocking_plant == false)
+                            play_music(URF_DIRECTORY);
+                        win.fade_out();
+                        return true;
+                    }
+                });
 
-    );
+            );
+        }
+    }
     return false;
 }

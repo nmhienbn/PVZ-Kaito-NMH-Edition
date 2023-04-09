@@ -35,36 +35,54 @@ const RGB CYAN(0, 255, 255);
 const RGB GREEN(0, 255, 0);
 const RGB BLUE(0, 0, 255);
 const RGB BLACK(0, 0, 0);
+
 void print_error(SDL_Texture *res, const string &img);
+void set_default_alpha(int file_num, SDL_Texture *res);
+
 class window
 {
 public:
+	// global window & renderer
+
 	window(int width = 800, int height = 400, string title = "PVZ - Kaito NMH Edition");
 	~window();
+	void update_screen();
+	void clear_renderer();
+
+	// normal draw
+
+	void fill_rect(int x, int y, int width, int height, RGB color = WHITE);
+	void draw_line(int x1, int y1, int x2, int y2, RGB color = WHITE);
+	void draw_point(int x, int y, RGB color = WHITE);
+	void draw_rect(int x, int y, int width, int height, RGB color = WHITE);
+
+	// draw images
+	// Note that we don't draw 0-width and 0-height images
+	// To optimize, we use texture_cache[] to store images
+
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);
 	void draw_png_scale(int file_num, int x, int y, int width, int height);
 	void draw_png_center(int file_num);
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
+	void draw_bg(int file_num, int x = 0, int y = 0);
+
+	void set_texture_alpha(int file_num, int a);
+	void fade_out();
+
+	// draw text
+	// Note that we don't draw null strings
+	// To optimize, we use fonts_cache[] to store fonts
+	//					and string_cache[] to store used strings
+
 	TTF_Font *get_font(string font_addr, RGB color, int size);
 	void show_text(string input, int x = 0, int y = 0, RGB color = WHITE, string font_addr = "FreeSans.ttf", int size = 24);
-	void draw_bg(int file_num, int x = 0, int y = 0);
-	void update_screen();
-	void fill_rect(int x, int y, int width, int height, RGB color = WHITE);
-	void draw_line(int x1, int y1, int x2, int y2, RGB color = WHITE);
-	void draw_point(int x, int y, RGB color = WHITE);
-	void draw_rect(int x, int y, int width, int height, RGB color = WHITE);
-	void clear_renderer();
-	void set_texture_alpha(int file_num, int a);
-
-	void fade_out();
 	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);
 	void show_announcer_text();
 
-	int previous_time = 0;
-
 private:
+	int previous_time = 0;
 	SDL_Window *win;
 	SDL_Renderer *renderer;
 	SDL_Texture *texture_cache[COUNT_USED_DIRECTORY];
