@@ -89,6 +89,7 @@ void display_game_layout()
     // Shovel
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);
     Shovel_bar.blink();
+    win.show_text("S", Shovel_bar.x2 - 13, Shovel_bar.y1, WHITE, "Brianne_s_hand.ttf");
 
     // Plant seed
     display_icons_in_icon_bar();
@@ -157,6 +158,7 @@ void display_icons_in_icon_bar()
             win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
                          icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
         }
+        win.show_text(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, "Brianne_s_hand.ttf");
     }
 }
 
