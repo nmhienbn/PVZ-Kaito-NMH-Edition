@@ -37,10 +37,13 @@ void display_choose_level(const bool &is_mouse_needed)
     {
         string lvl_txt = "Level " + to_string(i);
         int w, h;
-        TTF_SizeText(win.get_font("FreeSans.ttf", WHITE, 24), lvl_txt.c_str(), &w, &h);
+        TTF_SizeText(win.get_font(FREESANS_TTF, WHITE, 24), lvl_txt.c_str(), &w, &h);
         int kc = (LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1 - w) / 2;
         if (player.unlocked_level >= i)
         {
+            win.set_outline(FREESANS_TTF, BLACK, 24, 2);
+            win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, BLACK);
+            win.set_outline(FREESANS_TTF, BLACK, 24, 0);
             if (is_mouse_needed)
             {
                 int _x = 0, _y = 0;
@@ -71,7 +74,7 @@ void display_choose_level(const bool &is_mouse_needed)
 Display game layout:
     + Background (playground).
     + Sun and Player's sun count.
-    + Shovel.
+    + Shovel. (and key to choose)
     + Plant seeds (Chosen or not).
     + Menu icon.
     + Game progress bar
@@ -84,12 +87,14 @@ void display_game_layout()
 
     // Sun bar and player's sun count
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
-    win.show_text(std::to_string(player.sun_count), 90, 33, (player.sun_count_change_color_times & 1 ? RED : BLACK), "contm.ttf");
+    win.set_style(CONTM_TTF, RED, 24, TTF_STYLE_BOLD);
+    win.set_style(CONTM_TTF, BLACK, 24, TTF_STYLE_BOLD);
+    win.show_text(to_string(player.sun_count), 90, 33, (player.sun_count_change_color_times & 1 ? RED : BLACK), CONTM_TTF);
 
     // Shovel
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);
     Shovel_bar.blink();
-    win.show_text("S", Shovel_bar.x2 - 13, Shovel_bar.y1, WHITE, "Brianne_s_hand.ttf");
+    win.show_text_shadowed("S", Shovel_bar.x2 - 13, Shovel_bar.y1, WHITE, BRIANNE_TTF);
 
     // Plant seed
     display_icons_in_icon_bar();
@@ -113,6 +118,7 @@ Display the plants' seed:
     + Dim if player doesn't have enough sun or it is chosen.
     + Render a black screen to display remaining time for it to refresh.
     + Normal if player have enough sun.
+    + Key to choose
 */
 void display_icons_in_icon_bar()
 {
@@ -158,7 +164,7 @@ void display_icons_in_icon_bar()
             win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
                          icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
         }
-        win.show_text(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, "Brianne_s_hand.ttf");
+        win.show_text_shadowed(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
     }
 }
 

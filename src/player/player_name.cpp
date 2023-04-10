@@ -177,7 +177,7 @@ void display_get_name_player(const int &get_name_dir)
             while (inputText.size() > 20)
                 inputText.erase(inputText.begin());
             // Render new text
-            win.show_text(inputText.c_str(), GET_NAME_MENU_X + GET_NAME_INPUT_X, GET_NAME_MENU_Y + GET_NAME_INPUT_Y, WHITE, "HouseofTerror.ttf", 30);
+            win.show_text(inputText.c_str(), GET_NAME_MENU_X + GET_NAME_INPUT_X, GET_NAME_MENU_Y + GET_NAME_INPUT_Y, WHITE, HOUSEOFTERROR_TTF, 30);
         }
         win.update_screen();
     }

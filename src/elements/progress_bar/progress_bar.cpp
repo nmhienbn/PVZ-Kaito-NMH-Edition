@@ -3,8 +3,8 @@
 extern window win;
 extern Level level;
 int now_progress = 0;
-const int dx = WINDOW_WIDTH - PROGRESS_BAR_WIDTH - 20;
-const int dy = WINDOW_HEIGHT - PROGRESS_BAR_HEIGHT - 10;
+const int dx = WINDOW_WIDTH - PROGRESS_BAR_WIDTH - 25;
+const int dy = WINDOW_HEIGHT - PROGRESS_BAR_HEIGHT - 5;
 
 /*
 Display game progress:
@@ -12,6 +12,7 @@ Display game progress:
     Text below bar: "Level progress"
     Level flags: a flag each huge wave.
     Zombie head: curent position on progress bar.
+    Level num text
 */
 void display_progress_bar()
 {
@@ -72,4 +73,10 @@ void display_progress_bar()
     win.draw_png(FLAG_METER_PART, 0, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
                  dx + max(0, now_progress - PROGRESS_PART_WIDTH + 6), dy,
                  PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
+
+    string LEVEL_NUMBER = "Level " + to_string(level.level_num);
+    int w = 1, h = 1;
+    TTF_SizeText(win.get_font(CONTM_TTF, YELLOW, 24), LEVEL_NUMBER.c_str(), &w, &h);
+
+    win.show_text_shadowed(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, CONTM_TTF, 24);
 }

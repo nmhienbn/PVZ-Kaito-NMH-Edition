@@ -9,6 +9,10 @@
 #include "game_stats.hpp"
 #include "image_directory.hpp"
 #define FONTS_DIRECTORY "./fonts/"
+#define FREESANS_TTF "FreeSans.ttf"
+#define CONTM_TTF "contm.ttf"
+#define BRIANNE_TTF "Brianne_s_hand.ttf"
+#define HOUSEOFTERROR_TTF "HouseofTerror.ttf"
 #define MAX_TIME_ANNOUNCE 180
 
 class RGB
@@ -35,6 +39,7 @@ const RGB CYAN(0, 255, 255);
 const RGB GREEN(0, 255, 0);
 const RGB BLUE(0, 0, 255);
 const RGB BLACK(0, 0, 0);
+const RGB YELLOW_A(226, 189, 98);
 
 void print_error(SDL_Texture *res, const string &img);
 void set_default_alpha(int file_num, SDL_Texture *res);
@@ -76,10 +81,17 @@ public:
 	// To optimize, we use fonts_cache[] to store fonts
 	//					and string_cache[] to store used strings
 
-	TTF_Font *get_font(string font_addr, RGB color, int size);
-	void show_text(string input, int x = 0, int y = 0, RGB color = WHITE, string font_addr = "FreeSans.ttf", int size = 24);
+	TTF_Font *get_font(string font_addr, const RGB &color, const int &size);
+	void show_text(const string &input, const int &x = 0, const int &y = 0,
+				   const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
+	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
+							const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
 	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);
 	void show_announcer_text();
+	void set_style(const string &font_addr, const RGB &color, const int &size, const int &style);
+	void set_outline(const string &font_addr, const RGB &color, const int &size, const int &outline);
+	void show_text_utf8(const string &input, const int &x, const int &y,
+						const RGB &color, string font_addr, const int &size);
 
 private:
 	int previous_time = 0;
