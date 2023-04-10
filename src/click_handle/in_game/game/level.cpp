@@ -102,26 +102,17 @@ void start_level()
                 game_characters.zombies.clear();
                 game_characters.dead_zombies.clear();
             });
-            KEY_PRESS(1, {
-                change_chosen_status(0, player.is_choosing_a_plant);
-            });
-            KEY_PRESS(2, {
-                change_chosen_status(1, player.is_choosing_a_plant);
-            });
-            KEY_PRESS(3, {
-                change_chosen_status(2, player.is_choosing_a_plant);
-            });
-            KEY_PRESS(4, {
-                change_chosen_status(3, player.is_choosing_a_plant);
-            });
-            KEY_PRESS(5, {
-                change_chosen_status(4, player.is_choosing_a_plant);
-            });
-            KEY_PRESS(s, {
-                play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
-                player.is_shoveling = true;
-                remove_chosen_plant();
-            });
+            if (!is_paused) {
+                if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_5))
+                {
+                    change_chosen_status(e.key.keysym.sym - SDLK_1, player.is_choosing_a_plant);
+                }
+                KEY_PRESS(s, {
+                    play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
+                    player.is_shoveling = true;
+                    remove_chosen_plant();
+                });
+            }
 
             LCLICK({
                 if (is_restart)
