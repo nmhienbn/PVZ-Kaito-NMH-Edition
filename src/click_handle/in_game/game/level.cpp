@@ -51,7 +51,7 @@ void start_level()
     if (is_game_started == false)
     {
         display_R_S_P();
-        HANDLE(QUIT(quit = true; return;))
+        HANDLE(QUIT(quit = true; return;);)
         clk++;
         win.update_screen();
         return;
@@ -92,6 +92,7 @@ void start_level()
         }
         else
         {
+            SDL_CaptureMouse(SDL_TRUE);
             display_all_in_game();
             MENU_ICON.blink();
         }
@@ -112,9 +113,15 @@ void start_level()
                     player.is_shoveling ^= 1;
                     remove_chosen_plant();
                 });
-            }
+            };
 
             LCLICK({
+                if (mouse_x < 0 || mouse_y < 0 || mouse_x > WINDOW_WIDTH || mouse_y > WINDOW_HEIGHT)
+                {
+                    is_paused = true;
+                    Mix_PauseMusic();
+                    Mix_Pause(-1);
+                }
                 if (is_restart)
                 {
                     handle_restart_menu_click(mouse_x, mouse_y);
@@ -144,6 +151,7 @@ void start_level()
     {
         win.update_screen();
     }
+    SDL_CaptureMouse(SDL_FALSE);
 }
 
 /*

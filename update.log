@@ -192,6 +192,8 @@ TOTAL now: 4 plants and 3 zombies available.
 	No render frame that does not need when x2.
 	flower happy blink.
 	No more zombie appears until the last zombie die -> create zombie: while --> do - while (zombie respond).
-	Each zombie bite a plant at a time
+	Each zombie bite a plant at a time.
+	SDL_CaptureMouse: outside mouse. Now can pause game if player click outside the window.
+	Pause sound effect when game paused.
 
 	
