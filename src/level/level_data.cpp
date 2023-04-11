@@ -123,11 +123,6 @@ void decide_zombie_cnt_for_each_sec()
                         enough_zombies = true;
                     }
                 }
-                if (sec == level.wave_duration[wave] - 1)
-                {
-                    temp[sec] = level.wave_zombie_count[typ][wave] - sum;
-                    enough_zombies = true;
-                }
                 sum += temp[sec];
             }
             level.zombie_distr_for_wave[typ].push_back(temp);

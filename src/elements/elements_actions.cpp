@@ -29,7 +29,8 @@ void handle_changes()
     handle_cherrybomb_zombie_encounter(game_characters.cherrybombs, game_characters.zombies, game_characters.dead_zombies);
 
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
-    if (level.waves_finished == false && clk >= 300 && clk % ZOMBIE_CREATE_CLK_COUNT == 0)
+    if (level.waves_finished == false &&
+        (clk == 900 || (clk > ZOMBIE_CREATE_CLK_COUNT && clk % ZOMBIE_CREATE_CLK_COUNT == 0)))
         create_new_zombies();
     else if (clk % ZOMBIE_CREATE_CLK_COUNT == ANNOUNCER_CLK_COUNT)
         level.announce_directory = NULL_DIRECTORY;

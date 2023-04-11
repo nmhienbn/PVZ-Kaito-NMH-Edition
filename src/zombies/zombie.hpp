@@ -19,7 +19,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies);
 void update_zombie_next_bite(vector<Zombie> &zombies);
 
 template <class plant_type>
-void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, const int bite_limit);
+bool apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, const int bite_limit);
 
 template <class plant_type>
 void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<plant_type> &plants, const int bite_limit);
@@ -33,7 +33,7 @@ If the zombie reached plant_type, apply its bites on the plant_type:
     + if plant_type's bite == LIMIT: reset zombie moving and delete that plant_type
 */
 template <class plant_type>
-void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, const int bite_limit)
+bool apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int &p_ind, const int bite_limit)
 {
     if (has_zombie_reached_element(zombie, plants[p_ind].row, plants[p_ind].col))
     {
@@ -51,7 +51,9 @@ void apply_zombie_bite_on_plant(Zombie &zombie, vector<plant_type> &plants, int 
             plants.erase(plants.begin() + p_ind);
             p_ind--;
         }
+        return true;
     }
+    return false;
 }
 
 /* Note to optimize after
@@ -63,5 +65,8 @@ void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<plant_type> &
     for (auto &zombie : zombies)
         if (zombie.bite_time == 0)
             for (int i = 0; i < (int)plants.size(); i++)
-                apply_zombie_bite_on_plant(zombie, plants, i, bite_limit);
+                if (apply_zombie_bite_on_plant(zombie, plants, i, bite_limit))
+                {
+                    break;
+                }
 }

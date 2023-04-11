@@ -13,7 +13,7 @@ Check if Zombie is in query tile or not to change its status.
 */
 bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int &col)
 {
-    int right_limit = cells[row][col].x2 - BLOCK_WIDTH;
+    int right_limit = cells[row][col].x2 - BLOCK_WIDTH - 1;
     int left_limit = cells[row][col].x1 - BLOCK_WIDTH;
     int zombie_new_location = zombie.x_location - (zombie.cold_time ? ZOMBIE_COLD_DX : ZOMBIE_DX);
     if (zombie.row == row &&

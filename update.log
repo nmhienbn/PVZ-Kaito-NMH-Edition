@@ -191,6 +191,7 @@ TOTAL now: 4 plants and 3 zombies available.
 11/04/2023:
 	No render frame that does not need when x2.
 	flower happy blink.
-	No more zombie appears until the last zombie die -> create zombie: while --> do - while (zombie respond)
+	No more zombie appears until the last zombie die -> create zombie: while --> do - while (zombie respond).
+	Each zombie bite a plant at a time
 
 	
