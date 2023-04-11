@@ -81,15 +81,15 @@ public:
 	// To optimize, we use fonts_cache[] to store fonts
 	//					and string_cache[] to store used strings
 
-	TTF_Font *get_font(string font_addr, const RGB &color, const int &size);
+	TTF_Font *get_font(string font_addr, const int &size);
 	void show_text(const string &input, const int &x = 0, const int &y = 0,
 				   const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
 	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
 							const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
 	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);
 	void show_announcer_text();
-	void set_style(const string &font_addr, const RGB &color, const int &size, const int &style);
-	void set_outline(const string &font_addr, const RGB &color, const int &size, const int &outline);
+	void set_style(const string &font_addr, const int &size, const int &style);
+	void set_outline(const string &font_addr, const int &size, const int &outline);
 	void show_text_utf8(const string &input, const int &x, const int &y,
 						const RGB &color, string font_addr, const int &size);
 

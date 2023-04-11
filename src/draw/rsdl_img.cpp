@@ -40,6 +40,7 @@ void set_default_alpha(int file_num, SDL_Texture *res)
              file_num == BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
 
              file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
+             file_num == SUNFLOWER_HAPPY_BLINK_DIRECTORY ||
              file_num == WALNUT_1_BLINK_DIRECTORY ||
              file_num == WALNUT_2_BLINK_DIRECTORY ||
              file_num == WALNUT_3_BLINK_DIRECTORY ||

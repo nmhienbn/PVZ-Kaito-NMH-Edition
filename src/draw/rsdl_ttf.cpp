@@ -6,7 +6,7 @@ using namespace std;
 /*
 Get the TTF_Font pointer of a font
 */
-TTF_Font *window::get_font(string font_addr, const RGB &color, const int &size)
+TTF_Font *window::get_font(string font_addr, const int &size)
 {
     font_addr = FONTS_DIRECTORY + font_addr;
     stringstream ss;
@@ -66,7 +66,7 @@ void window::show_announcer_text()
         time_announce--;
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
         int w = 0, h = 0;
-        TTF_SizeText(get_font(HOUSEOFTERROR_TTF, WHITE, 50), announce.c_str(), &w, &h);
+        TTF_SizeText(get_font(HOUSEOFTERROR_TTF, 50), announce.c_str(), &w, &h);
         show_text_shadowed(announce, (WINDOW_WIDTH - w) / 2, 500 + (100 - h) / 2, WHITE, HOUSEOFTERROR_TTF, 50);
     }
 }
@@ -74,27 +74,27 @@ void window::show_announcer_text()
 /*
 Set a font style.
 */
-void window::set_style(const string &font_addr, const RGB &color, const int &size, const int &style)
+void window::set_style(const string &font_addr, const int &size, const int &style)
 {
-    TTF_Font *font = get_font(font_addr, color, size);
+    TTF_Font *font = get_font(font_addr, size);
     TTF_SetFontStyle(font, style);
 }
 
 /*
 Set a font outline.
 */
-void window::set_outline(const string &font_addr, const RGB &color, const int &size, const int &outline)
+void window::set_outline(const string &font_addr, const int &size, const int &outline)
 {
-    TTF_Font *font = get_font(font_addr, color, size);
+    TTF_Font *font = get_font(font_addr, size);
     TTF_SetFontOutline(font, outline);
 }
 
 void window::show_text_shadowed(const string &input, const int &x, const int &y,
                                 const RGB &color, string font_addr, const int &size)
 {
-    set_outline(font_addr, BLACK, size, 2);
-    show_text(input, x, y, BLACK, font_addr, size);
-    set_outline(font_addr, BLACK, size, 0);
+    set_outline(font_addr, size, 2);
+    show_text(input, x - 2, y - 2, BLACK, font_addr, size);
+    set_outline(font_addr, size, 0);
     show_text(input, x, y, color, font_addr, size);
 }
 /* Show the utf 8 text at (x; y)

@@ -109,7 +109,7 @@ void start_level()
                 }
                 KEY_PRESS(s, {
                     play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
-                    player.is_shoveling = true;
+                    player.is_shoveling ^= 1;
                     remove_chosen_plant();
                 });
             }
@@ -141,7 +141,9 @@ void start_level()
     if (is_paused == false)
         clk++;
     if (is_paused == true || is_fast == false || (clk & 1))
+    {
         win.update_screen();
+    }
 }
 
 /*
@@ -183,11 +185,18 @@ void display_all_in_game()
 {
     // Graphics:
     win.clear_renderer();
-    display_game_layout();
-    display_game_announce();
-    win.show_announcer_text();
-    display_chosen_plant();
-    display_turbo_icon();
+    if (is_fast == false || (!(clk & 1)))
+    {
+        display_game_layout();
+        display_game_announce();
+        win.show_announcer_text();
+        display_chosen_plant();
+        display_turbo_icon();
+    }
+    else
+    {
+        display_game_elements();
+    }
     // Move:
     handle_movements();
     // Changes:

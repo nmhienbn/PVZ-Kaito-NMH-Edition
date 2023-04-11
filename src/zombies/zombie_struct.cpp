@@ -25,7 +25,8 @@ Zombie::Zombie(int _type, int level_num)
     x_location = WINDOW_WIDTH - 70 + rand(0, 100);
     // Set init status
     is_moving = true;
-    is_attacked = cold_time = bite_time = 0;
+    is_attacked = cold_time = 0;
+    bite_time = BITE_CLK_COUNT;
 
     if (type == NORMAL_TYPE)
     {
@@ -64,7 +65,8 @@ Zombie::Zombie(int _type, int level_num, int _directory_num)
     x_location = WINDOW_WIDTH - 50;
     // Set init status
     is_moving = true;
-    is_attacked = cold_time = bite_time = 0;
+    is_attacked = cold_time = 0;
+    bite_time = BITE_CLK_COUNT;
     health = ZOMBIE_NORMAL_HEALTH_LIMIT;
     directory_num = _directory_num;
     // Random first frame.
@@ -83,7 +85,8 @@ Zombie::Zombie(int _type, int level_num, int _row, int _x)
 
     // Set init status
     is_moving = true;
-    is_attacked = cold_time = bite_time = 0;
+    is_attacked = cold_time = 0;
+    bite_time = BITE_CLK_COUNT;
 
     if (type == NORMAL_TYPE)
     {
@@ -270,7 +273,7 @@ Compare zombie < zombie:
 */
 bool Zombie::operator<(const Zombie &other) const
 {
-    return (row == other.row ? x_location < other.x_location : row > other.row);
+    return (row == other.row ? (type == other.type ? x_location < other.x_location : type < other.type) : row > other.row);
 }
 
 /*Dead constructor*/

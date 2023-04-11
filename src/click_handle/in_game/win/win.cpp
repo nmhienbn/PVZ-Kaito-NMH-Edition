@@ -39,7 +39,7 @@ bool display_win()
         for (int j = 1; j <= 5; j++)
         {
             win.draw_png(win_dir + i, 0, 0, 1050, 591);
-            if (i >= 14)
+            if (i >= 23)
             {
                 win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
                 CONTINUE.blink();
@@ -48,7 +48,7 @@ bool display_win()
             HANDLE(
                 QUIT(quit = true; return true);
                 LCLICK({
-                    if (i >= 14 && CONTINUE.is_mouse_in(mouse_x, mouse_y))
+                    if (i >= 23 && CONTINUE.is_mouse_in(mouse_x, mouse_y))
                     {
                         update_unlocked_level();
                         level.waves_finished = false;

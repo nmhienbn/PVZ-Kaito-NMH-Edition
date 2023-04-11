@@ -76,7 +76,7 @@ void display_progress_bar()
 
     string LEVEL_NUMBER = "Level " + to_string(level.level_num);
     int w = 1, h = 1;
-    TTF_SizeText(win.get_font(CONTM_TTF, YELLOW, 24), LEVEL_NUMBER.c_str(), &w, &h);
+    TTF_SizeText(win.get_font(CONTM_TTF, 24), LEVEL_NUMBER.c_str(), &w, &h);
 
     win.show_text_shadowed(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, CONTM_TTF, 24);
 }

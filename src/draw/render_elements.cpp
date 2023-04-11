@@ -37,13 +37,10 @@ void display_choose_level(const bool &is_mouse_needed)
     {
         string lvl_txt = "Level " + to_string(i);
         int w, h;
-        TTF_SizeText(win.get_font(FREESANS_TTF, WHITE, 24), lvl_txt.c_str(), &w, &h);
+        TTF_SizeText(win.get_font(FREESANS_TTF, 24), lvl_txt.c_str(), &w, &h);
         int kc = (LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1 - w) / 2;
         if (player.unlocked_level >= i)
         {
-            win.set_outline(FREESANS_TTF, BLACK, 24, 2);
-            win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, BLACK);
-            win.set_outline(FREESANS_TTF, BLACK, 24, 0);
             if (is_mouse_needed)
             {
                 int _x = 0, _y = 0;
@@ -51,15 +48,15 @@ void display_choose_level(const bool &is_mouse_needed)
                 if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
                 {
 
-                    win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, GREEN);
+                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, GREEN);
                     win.draw_png(WHITE_SCREEN_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1,
                                  LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
                 }
                 else
-                    win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
+                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
             }
             else
-                win.show_text(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
+                win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
         }
         else
         {
@@ -87,8 +84,7 @@ void display_game_layout()
 
     // Sun bar and player's sun count
     win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
-    win.set_style(CONTM_TTF, RED, 24, TTF_STYLE_BOLD);
-    win.set_style(CONTM_TTF, BLACK, 24, TTF_STYLE_BOLD);
+    win.set_style(CONTM_TTF, 24, TTF_STYLE_BOLD);
     win.show_text(to_string(player.sun_count), 90, 33, (player.sun_count_change_color_times & 1 ? RED : BLACK), CONTM_TTF);
 
     // Shovel
@@ -148,7 +144,7 @@ void display_icons_in_icon_bar()
     for (int i = 0; i <= num_plants; i++)
     {
         // Not enough sun or is chosen
-        if (player.sun_count < plant_sun_cost[i] || icons.is_plant_chosen[i])
+        if (player.sun_count < plant_sun_cost[i] || icons.is_plant_chosen[i] || icons.plant_remaining_time[i])
         {
             plant_seed_dir[i]++;
         }

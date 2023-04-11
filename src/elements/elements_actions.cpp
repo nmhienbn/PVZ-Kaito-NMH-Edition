@@ -75,7 +75,7 @@ void create_new_zombies()
     if (level.waves_finished == false)
     {
         // This loop is to reduce the empty time between waves of zombies when all current zombies died.
-        while (game_characters.zombies.empty())
+        do
         {
             // Generate zombies for current wave and current second.
             // For all type of zombies.
@@ -134,7 +134,7 @@ void create_new_zombies()
                 level.waves_finished = true;
                 break;
             }
-        }
+        } while (game_characters.zombies.empty());
     }
 }
 
