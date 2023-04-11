@@ -78,6 +78,10 @@ void create_new_zombies()
         // This loop is to reduce the empty time between waves of zombies when all current zombies died.
         do
         {
+            if (game_characters.zombies.size() >= 10)
+            {
+                break;
+            }
             // Generate zombies for current wave and current second.
             // For all type of zombies.
             for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)

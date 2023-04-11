@@ -64,10 +64,12 @@ void window::show_announcer_text()
     if (time_announce > 0)
     {
         time_announce--;
-        draw_png(BLACK_SCREEN_DIRECTORY, 0, 500, WINDOW_WIDTH, 100);
+        // set_texture_alpha(BLACK_SCREEN_DIRECTORY, 100);
+        draw_png(BLACK_SCREEN_DIRECTORY, 0, 540, WINDOW_WIDTH, 100);
+        // set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
         int w = 0, h = 0;
-        TTF_SizeText(get_font(HOUSEOFTERROR_TTF, 50), announce.c_str(), &w, &h);
-        show_text_shadowed(announce, (WINDOW_WIDTH - w) / 2, 500 + (100 - h) / 2, WHITE, HOUSEOFTERROR_TTF, 50);
+        TTF_SizeText(get_font(HOUSEOFTERROR_TTF, 40), announce.c_str(), &w, &h);
+        show_text_shadowed(announce, (WINDOW_WIDTH - w) / 2, 540 + (60 - h) / 2, WHITE, HOUSEOFTERROR_TTF, 40);
     }
 }
 
