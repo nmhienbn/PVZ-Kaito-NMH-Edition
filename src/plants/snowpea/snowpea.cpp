@@ -5,7 +5,7 @@
 #define SNOWPEA_G_WIDTH 85
 #define SNOWPEA_G_HEIGHT 85
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 
@@ -87,7 +87,7 @@ void display_snowpeas(vector<Snowpea> &snowpeas)
                          SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
             snowpea.is_attacked--;
         }
-        if (is_paused == false)
+        if (check_status(game_state, IS_PAUSED) == false)
             if (++snowpea.frame >= SNOWPEA_FRAME * N_SHEET[snowpea.directory_num])
             {
                 snowpea.frame = 0;

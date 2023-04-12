@@ -1,7 +1,7 @@
 #include "turbo.hpp"
 #define MAX_DIM_SCREEN_TIME 10
 
-extern bool is_fast;
+extern int game_state;
 extern window win;
 int dim_screen_time = 0;
 
@@ -14,7 +14,7 @@ void handle_turbo_icon_click(const int &mouse_x, const int &mouse_y)
     if (TURBO_ICON.is_mouse_in(mouse_x, mouse_y))
     {
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-        is_fast ^= 1;
+        game_state ^= IS_FAST;
         dim_screen_time = MAX_DIM_SCREEN_TIME;
     }
 }
@@ -25,7 +25,7 @@ Display dim_screen if necessary
 */
 void display_turbo_icon()
 {
-    if (is_fast)
+    if (check_status(game_state, IS_FAST) == true)
     {
         display_button(TURBO_ICON, TURBO_ICON_A_DIRECTORY);
     }

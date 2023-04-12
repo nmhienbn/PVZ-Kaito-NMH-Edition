@@ -290,6 +290,8 @@ enum ImageType
     WIN_72_DIRECTORY,
     WIN_73_DIRECTORY,
 
+    MOUSE_CURSOR_DIRECTORY,
+
     COUNT_USED_DIRECTORY
 };
 
@@ -577,6 +579,8 @@ const string image_directory[] = {
     "./image/Background/win/win_e_72.png", // WIN_72_DIRECTORY
     "./image/Background/win/win_e_73.png", // WIN_73_DIRECTORY
 
+    "./image/Icons/starter_fire_pack.png", // MOUSE_CURSOR_DIRECTORY
+
 };
 
 /*
@@ -861,6 +865,8 @@ const int N_SHEET[] = {
     0, // WIN_71_DIRECTORY
     0, // WIN_72_DIRECTORY
     0, // WIN_73_DIRECTORY
+
+    1, // MOUSE_CURSOR_DIRECTORY
 };
 
 /*
@@ -1145,6 +1151,8 @@ const int C_SHEET[] = {
     0, // WIN_71_DIRECTORY
     0, // WIN_72_DIRECTORY
     0, // WIN_73_DIRECTORY
+
+    1, // MOUSE_CURSOR_DIRECTORY
 };
 
 /*

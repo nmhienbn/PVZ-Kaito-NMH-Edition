@@ -1,8 +1,8 @@
 #include "quit_menu.hpp"
 
+extern int game_state;
 extern bool quit;
 extern Level level;
-extern bool is_quit;
 
 #define QUIT_X1 325
 #define QUIT_X2 725
@@ -38,7 +38,7 @@ void handle_quit_menu_click(const int &mouse_x, const int &mouse_y)
     }
     if (CANCEL_QUIT.is_mouse_in(mouse_x, mouse_y))
     {
-        is_quit = false;
+        set_status(game_state, IS_QUIT, false);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }

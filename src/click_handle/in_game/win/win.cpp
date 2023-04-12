@@ -1,6 +1,7 @@
 #include "win.hpp"
 
-extern bool level_chosen, quit, is_unlocking_plant, is_paused;
+extern int game_state;
+extern bool quit;
 extern Level level;
 extern Elements game_characters;
 extern window win;
@@ -31,7 +32,7 @@ Handle when player win the game:
 bool display_win()
 {
     play_music(WIN_MUSIC_DIRECTORY, 0);
-    is_paused = true;
+    set_status(game_state, IS_PAUSED, true);
     for (int i = 0;; i++)
     {
         if (i >= 74)
@@ -52,9 +53,9 @@ bool display_win()
                     {
                         update_unlocked_level();
                         level.waves_finished = false;
-                        level_chosen = false;
-                        is_paused = false;
-                        if (is_unlocking_plant == false)
+                        set_status(game_state, IS_LEVEL_CHOSEN, false);
+                        set_status(game_state, IS_PAUSED, false);
+                        if (check_status(game_state, IS_UNLOCKING_PLANT))
                             play_music(URF_DIRECTORY);
                         win.fade_out();
                         return true;

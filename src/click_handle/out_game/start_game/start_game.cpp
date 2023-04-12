@@ -14,6 +14,7 @@ extern window win;
 */
 void init_game()
 {
+    play_music(OPENING_MUSIC_DIRECTORY);
     display_starting_screen();
     read_savedata();
     cells = create_a_collection_of_blocks();
@@ -28,7 +29,6 @@ void display_starting_screen()
 {
     bool game_started = false;
     bool quit = false;
-    play_music(OPENING_MUSIC_DIRECTORY);
     while (!quit && !game_started)
     {
         int _x = 0, _y = 0;

@@ -48,7 +48,8 @@ obj/src/game.o: src/game.cpp src/game.hpp src/draw/render_elements.hpp \
  src/click_handle/in_game/game/../main_menu/leave_menu.hpp \
  src/click_handle/in_game/game/../win/win.hpp \
  src/click_handle/in_game/game/../lose/lose.hpp \
- src/click_handle/in_game/game/../turbo/turbo.hpp
+ src/click_handle/in_game/game/../turbo/turbo.hpp \
+ src/click_handle/mouse_cursor/mouse_cursor.hpp
 
 src/game.hpp:
 
@@ -231,3 +232,5 @@ src/click_handle/in_game/game/../win/win.hpp:
 src/click_handle/in_game/game/../lose/lose.hpp:
 
 src/click_handle/in_game/game/../turbo/turbo.hpp:
+
+src/click_handle/mouse_cursor/mouse_cursor.hpp:

@@ -1,4 +1,12 @@
 #include "progress_bar.hpp"
+#define PROGRESS_BAR_WIDTH 158
+#define PROGRESS_BAR_WIDTH_1 7
+#define PROGRESS_BAR_WIDTH_2 144
+#define PROGRESS_BAR_HEIGHT 27
+#define PROGRESS_TXT_WIDTH 86
+#define PROGRESS_TXT_HEIGHT 11
+#define PROGRESS_PART_WIDTH 25
+#define PROGRESS_PART_HEIGHT 25
 
 extern window win;
 extern Level level;
@@ -16,12 +24,10 @@ Display game progress:
 */
 void display_progress_bar()
 {
-    int progress_width = 0;
-    if (level.zombie_count)
-        progress_width = level.used_zombie_count * PROGRESS_BAR_WIDTH / level.zombie_count;
+    int progress_width = PROGRESS_BAR_WIDTH_1 + level.used_zombie_count * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
     if (now_progress > progress_width)
     {
-        now_progress = 0;
+        now_progress = PROGRESS_BAR_WIDTH_1;
     }
     if (now_progress < progress_width)
     {
@@ -42,11 +48,10 @@ void display_progress_bar()
     int z_cnt = 0;
     for (int i = 0; i < level.wave_count; i++)
     {
-        int tmp_width = 1;
-        if (level.zombie_count)
-            tmp_width = max(1, z_cnt * PROGRESS_BAR_WIDTH / level.zombie_count);
+        int tmp_width = PROGRESS_BAR_WIDTH_1 + z_cnt * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
+        // cout << z_cnt << ' ' << level.zombie_count << endl;
         int tmp_cnt = 0;
-        for (int typ = 0; typ < COUNT_ZOMBIE_TYPE; typ++)
+        for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
             tmp_cnt += level.wave_zombie_count[typ][i];
         if (tmp_cnt >= 5 || i == level.wave_count - 1)
         {
@@ -54,11 +59,9 @@ void display_progress_bar()
             if (z_cnt < level.used_zombie_count)
             {
                 win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                             dx + tmp_width, dy - 4,
-                             PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
+                             dx + tmp_width, dy - 4, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
                 win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                             dx + tmp_width, dy - 10,
-                             PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
+                             dx + tmp_width, dy - 10, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
             }
             else
             {

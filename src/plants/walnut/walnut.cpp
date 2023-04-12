@@ -5,7 +5,7 @@
 #define WALNUT_G_HEIGHT 95
 #define WALNUT_FRAME 60
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 
@@ -63,7 +63,7 @@ void display_walnuts(vector<Walnut> &walnuts)
             walnut.is_attacked--;
         }
 
-        if (is_paused == false)
+        if (check_status(game_state, IS_PAUSED) == false)
         {
             if (++walnut.frame >= WALNUT_FRAME * N_SHEET[walnut.directory_num])
             {

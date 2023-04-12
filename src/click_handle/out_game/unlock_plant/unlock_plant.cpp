@@ -1,6 +1,7 @@
 #include "unlock_plant.hpp"
 
-extern bool quit, is_unlocking_plant;
+extern int game_state;
+extern bool quit;
 extern Level level;
 extern Elements game_characters;
 extern window win;
@@ -30,7 +31,7 @@ void unlock_plant(const int &_plant_type)
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
                 win.fade_out();
-                is_unlocking_plant = false;
+                set_status(game_state, IS_UNLOCKING_PLANT, false);
                 play_music(URF_DIRECTORY);
             }
         });

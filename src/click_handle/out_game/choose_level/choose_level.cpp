@@ -1,11 +1,10 @@
 #include "choose_level.hpp"
 
-extern bool level_chosen;
+extern int game_state;
 extern bool quit;
 extern Level level;
 extern Player player;
 extern window win;
-extern bool is_quit, is_reset;
 
 /*
 Handle choosing level screen:
@@ -14,11 +13,11 @@ Handle choosing level screen:
 */
 void handle_choosing_level_screen()
 {
-    if (is_quit)
+    if (check_status(game_state, IS_QUIT) == true)
     {
         display_game_quit();
     }
-    else if (is_reset)
+    else if (check_status(game_state, IS_RESET) == true)
     {
         display_game_reset();
     }
@@ -30,12 +29,12 @@ void handle_choosing_level_screen()
     HANDLE(
         QUIT(quit = true; exit(0););
         LCLICK({
-            if (is_quit)
+            if (check_status(game_state, IS_QUIT) == true)
             {
                 handle_quit_menu_click(mouse_x, mouse_y);
                 break;
             }
-            if (is_reset)
+            if (check_status(game_state, IS_RESET) == true)
             {
                 handle_reset_menu_click(mouse_x, mouse_y);
                 break;
@@ -43,7 +42,7 @@ void handle_choosing_level_screen()
             if (RESET_LEVEL_BUTTON.is_mouse_in(mouse_x, mouse_y))
             {
                 play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-                is_reset = true;
+                set_status(game_state, IS_RESET, true);
                 break;
             }
             if (RENAME_BUTTON.is_mouse_in(mouse_x, mouse_y))
@@ -55,7 +54,7 @@ void handle_choosing_level_screen()
             if (QUIT_BUTTON.is_mouse_in(mouse_x, mouse_y))
             {
                 play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-                is_quit = true;
+                set_status(game_state, IS_QUIT, true);
                 break;
             }
             for (int i = 1; i <= LEVEL_COUNT; i++)
@@ -64,7 +63,7 @@ void handle_choosing_level_screen()
                     level.level_num = i;
                     load_level();
                     level.background_directory = BACKGROUND_LV1_DIRECTORY + level.map_type;
-                    level_chosen = true;
+                    set_status(game_state, IS_LEVEL_CHOSEN, true);
                     break;
                 }
         });

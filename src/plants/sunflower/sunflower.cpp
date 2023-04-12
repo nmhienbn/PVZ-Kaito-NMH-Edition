@@ -10,7 +10,7 @@
 #define SUNFLOWER_G_WIDTH 80
 #define SUNFLOWER_G_HEIGHT 80
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 
@@ -83,7 +83,7 @@ void display_sunflowers(vector<Sunflower> &sunflowers)
                          cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                          SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
 
-            if (is_paused == false)
+            if (check_status(game_state, IS_PAUSED) == false)
                 if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
                 {
                     sunflower.frame = 0;
@@ -111,7 +111,7 @@ void display_sunflowers(vector<Sunflower> &sunflowers)
                          cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                          SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
 
-            if (is_paused == false)
+            if (check_status(game_state, IS_PAUSED) == false)
                 if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
                 {
                     sunflower.frame = 0;

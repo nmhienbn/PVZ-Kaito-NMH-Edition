@@ -107,10 +107,13 @@ void create_new_zombies()
             }
             // Move to the next second and maybe next wave.
             // First second of each wave: sound effect "Huge wave".
+
+            // Next sec
             if (level.cur_sec + 1 < level.wave_duration[level.cur_wave])
             {
                 level.cur_sec++;
             }
+            // Next wave
             else if (level.cur_wave + 1 < level.wave_count)
             {
                 level.cur_sec = 0;
@@ -134,6 +137,7 @@ void create_new_zombies()
                     level.used_zombie_count++;
                 }
             }
+            // waves finished
             else
             {
                 level.waves_finished = true;

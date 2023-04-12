@@ -1,19 +1,12 @@
 #include "level.hpp"
 
-bool is_fast = false;
-
-extern bool level_chosen,
-    quit,
-    is_game_started,
-    is_paused,
-    is_unlocking_plant;
+extern int game_state;
+extern bool quit;
 extern int clk;
 extern Level level;
 extern Elements game_characters;
 extern Player player;
 extern window win;
-extern bool is_leave,
-    is_restart;
 
 /*
 If game has not started:
@@ -34,6 +27,7 @@ Else: (game has started)
     Else display gameplay.
 
 Handle key: 1,2,3,4,5: plant; s: shovel
+Handle window focus lose:
 Handle user click:
     Quit event.
     Key to win. //For developer.
@@ -48,10 +42,15 @@ Move to next frame (clk++)
 */
 void start_level()
 {
-    if (is_game_started == false)
+    if (check_status(game_state, IS_GAME_STARTED) == false)
     {
         display_R_S_P();
-        HANDLE(QUIT(quit = true; return;);)
+        HANDLE(
+            QUIT(quit = true; return;);
+            LOST_FOCUS(
+                set_status(game_state, IS_PAUSED, true);
+                Mix_PauseMusic();
+                Mix_Pause(-1););)
         clk++;
         win.update_screen();
         return;
@@ -72,27 +71,26 @@ void start_level()
                 {
                     if (level.level_num == level_unlock_new_plant[i] - 1 || level.level_num == 12)
                     {
-                        is_unlocking_plant = true;
+                        set_status(game_state, IS_UNLOCKING_PLANT, true);
                     }
                 }
             }
             return;
         }
-        if (is_restart)
+        if (check_status(game_state, IS_RESTART) == true)
         {
             display_game_restart();
         }
-        else if (is_leave)
+        else if (check_status(game_state, IS_LEAVE) == true)
         {
             display_game_leave();
         }
-        else if (is_paused)
+        else if (check_status(game_state, IS_PAUSED) == true)
         {
             display_game_pause();
         }
         else
         {
-            SDL_CaptureMouse(SDL_TRUE);
             display_all_in_game();
             MENU_ICON.blink();
         }
@@ -103,7 +101,7 @@ void start_level()
                 game_characters.zombies.clear();
                 game_characters.dead_zombies.clear();
             });
-            if (!is_paused) {
+            if (check_status(game_state, IS_PAUSED) == false) {
                 if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_5))
                 {
                     change_chosen_status(e.key.keysym.sym - SDLK_1, player.is_choosing_a_plant);
@@ -115,22 +113,21 @@ void start_level()
                 });
             };
 
+            LOST_FOCUS(
+                set_status(game_state, IS_PAUSED, true);
+                Mix_PauseMusic();
+                Mix_Pause(-1););
+
             LCLICK({
-                if (mouse_x < 0 || mouse_y < 0 || mouse_x > WINDOW_WIDTH || mouse_y > WINDOW_HEIGHT)
-                {
-                    is_paused = true;
-                    Mix_PauseMusic();
-                    Mix_Pause(-1);
-                }
-                if (is_restart)
+                if (check_status(game_state, IS_RESTART) == true)
                 {
                     handle_restart_menu_click(mouse_x, mouse_y);
                 }
-                else if (is_leave)
+                else if (check_status(game_state, IS_LEAVE) == true)
                 {
                     handle_leave_menu_click(mouse_x, mouse_y);
                 }
-                else if (is_paused)
+                else if (check_status(game_state, IS_PAUSED) == true)
                 {
                     handle_menu_click(mouse_x, mouse_y);
                 }
@@ -145,13 +142,12 @@ void start_level()
         );
     }
 
-    if (is_paused == false)
+    if (check_status(game_state, IS_PAUSED) == false)
         clk++;
-    if (is_paused == true || is_fast == false || (clk & 1))
+    if (check_status(game_state, IS_PAUSED) == true || check_status(game_state, IS_FAST) == false || (clk & 1))
     {
         win.update_screen();
     }
-    SDL_CaptureMouse(SDL_FALSE);
 }
 
 /*
@@ -162,8 +158,8 @@ Now game is really start
  */
 void display_R_S_P()
 {
-    is_fast = false;
-    is_paused = false;
+    set_status(game_state, IS_FAST, false);
+    set_status(game_state, IS_PAUSED, false);
     play_music(R_S_P_MUSIC_DIRECTORY);
     win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 10);
     if (clk < 30)
@@ -182,7 +178,7 @@ void display_R_S_P()
     {
         display_ready_set_plant(START_PLANT_DIRECTORY);
         clk = 0;
-        is_game_started = true;
+        set_status(game_state, IS_GAME_STARTED, true);
     }
 }
 
@@ -193,7 +189,7 @@ void display_all_in_game()
 {
     // Graphics:
     win.clear_renderer();
-    if (is_fast == false || (!(clk & 1)))
+    if (check_status(game_state, IS_FAST) == false || (!(clk & 1)))
     {
         display_game_layout();
         display_game_announce();

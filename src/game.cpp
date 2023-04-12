@@ -1,10 +1,7 @@
 #include "game.hpp"
 
-bool level_chosen = false;
+int game_state = 0;
 bool quit = false;
-bool is_game_started = false;
-bool is_paused = false;
-bool is_unlocking_plant = false;
 int clk = 0;
 Level level;
 Elements game_characters;
@@ -12,8 +9,6 @@ Icons icons;
 Player player;
 Map cells;
 window win(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-bool is_leave, is_quit, is_reset, is_restart;
 
 /*
 Init game & music.
@@ -28,14 +23,16 @@ int main(int argv, char **args)
 {
     // Init game & music.
     init_music();
+    Mouse Mouse_cursor;
+    Mouse_cursor.set_cursor();
     init_game();
 
     // If player is a new user: Get name and unlock Peashooter.
     display_get_name_player(NEW_USER_DIRECTORY);
     if (player.unlocked_level == 0)
     {
-        is_unlocking_plant = true;
-        while (!quit && is_unlocking_plant)
+        set_status(game_state, IS_UNLOCKING_PLANT, true);
+        while (!quit && check_status(game_state, IS_UNLOCKING_PLANT) == true)
         {
             unlock_plant(PEASHOOTER);
         }
@@ -45,9 +42,9 @@ int main(int argv, char **args)
     // Main loop
     while (!quit)
     {
-        if (level_chosen == false)
+        if (check_status(game_state, IS_LEVEL_CHOSEN) == false)
         {
-            if (is_unlocking_plant)
+            if (check_status(game_state, IS_UNLOCKING_PLANT) == true)
             {
                 for (int i = 0; i < PLANT_COUNT; i++)
                 {
@@ -67,12 +64,12 @@ int main(int argv, char **args)
             {
                 // win.clear_renderer();
                 handle_choosing_level_screen();
-                if (level_chosen)
+                if (check_status(game_state, IS_LEVEL_CHOSEN))
                 {
                     Mix_HaltMusic();
                     play_sound_effect(EVIL_LAUGH_MUSIC_DIRECTORY);
                     clk = 0;
-                    is_game_started = false;
+                    set_status(game_state, IS_GAME_STARTED, false);
                     win.fade_out();
                 }
             }

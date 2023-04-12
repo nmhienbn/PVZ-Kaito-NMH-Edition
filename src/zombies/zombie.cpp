@@ -1,7 +1,7 @@
 #include "zombies/zombie.hpp"
 #include <algorithm>
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 /*
@@ -128,7 +128,7 @@ void display_zombies(vector<Zombie> &zombies)
             win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
             zombies[i].is_attacked--;
         }
-        if (is_paused == false)
+        if (check_status(game_state, IS_PAUSED) == false)
         {
             if (zombies[i].cold_time % 3 == 0)
                 zombies[i].frame++;
@@ -181,7 +181,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
         if (dead_zombies[i].body < 0)
         {
             display_armor_drop(dead_zombies[i]);
-            if (is_paused == false)
+            if (check_status(game_state, IS_PAUSED) == false)
                 if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
                 {
                     dead_zombies.erase(dead_zombies.begin() + i);
@@ -191,7 +191,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
         else if (dead_zombies[i].head < 0)
         {
             display_burnt_zombie(dead_zombies[i]);
-            if (is_paused == false)
+            if (check_status(game_state, IS_PAUSED) == false)
                 if (++dead_zombies[i].frame >= ZOMBIE_BURNT_FRAME * N_SHEET[dead_zombies[i].body])
                 {
                     dead_zombies.erase(dead_zombies.begin() + i);
@@ -218,7 +218,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies)
             if (dead_zombies[i].is_cold)
                 win.draw_png(cold_of[dead_zombies[i].head], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
 
-            if (is_paused == false)
+            if (check_status(game_state, IS_PAUSED) == false)
                 if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
                 {
                     dead_zombies.erase(dead_zombies.begin() + i);

@@ -196,4 +196,11 @@ TOTAL now: 4 plants and 3 zombies available.
 	SDL_CaptureMouse: outside mouse. Now can pause game if player click outside the window.
 	Pause sound effect when game paused.
 
+12/04/2023:
+	Add mouse cursor: SDL_SetCursor
+	Change number of audio channel: Mix_AllocateChannels
+	--> Fix bug: many sound effects does not play.
+	Use game_state instead of many bool variables.
+	
+
 	

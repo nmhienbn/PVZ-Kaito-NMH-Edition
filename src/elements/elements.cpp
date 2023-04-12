@@ -31,8 +31,6 @@ bool Level::is_huge_wave()
     {
         z_cnt += wave_zombie_count[i][cur_wave];
     }
-    if (cur_wave == wave_count - 1)
-        z_cnt++;
     return z_cnt >= 5;
 }
 

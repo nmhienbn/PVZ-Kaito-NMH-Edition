@@ -8,12 +8,11 @@ const Button RESTART_MENU(RESTART_X1, RESTART_X2, RESTART_Y1, RESTART_Y2);
 const Button OK_RESTART(RESTART_X1 + 33, RESTART_X1 + 190, RESTART_Y1 + 226, RESTART_Y1 + 266);
 const Button CANCEL_RESTART(RESTART_X1 + 210, RESTART_X1 + 365, RESTART_Y1 + 226, RESTART_Y1 + 266);
 
-extern bool is_game_started,
-    is_paused;
+extern int game_state;
+extern int game_state;
 extern int clk;
 extern Level level;
 extern window win;
-extern bool is_restart;
 
 /*
 Display all needed elements when player tends to restart.
@@ -33,8 +32,8 @@ Reset some variables to restart game.
 */
 void restart_game()
 {
-    is_paused = false;
-    is_game_started = false;
+    set_status(game_state, IS_PAUSED, false);
+    set_status(game_state, IS_GAME_STARTED, false);
     play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
     load_level();
     clk = 0;
@@ -49,13 +48,13 @@ void handle_restart_menu_click(const int &mouse_x, const int &mouse_y)
 {
     if (OK_RESTART.is_mouse_in(mouse_x, mouse_y))
     {
-        is_restart = false;
+        set_status(game_state, IS_RESTART, false);
         restart_game();
         return;
     }
     if (CANCEL_RESTART.is_mouse_in(mouse_x, mouse_y))
     {
-        is_restart = false;
+        set_status(game_state, IS_RESTART, false);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }

@@ -27,6 +27,7 @@ bool init_music()
             printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
             success = false;
         }
+        Mix_AllocateChannels(200);
     }
     return success;
 }

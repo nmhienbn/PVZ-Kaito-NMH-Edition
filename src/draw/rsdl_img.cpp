@@ -104,6 +104,31 @@ void set_default_alpha(int file_num, SDL_Texture *res)
 }
 
 /*
+Print error when loading image
+*/
+void print_error(SDL_Texture *res, const string &img)
+{
+    if (res == NULL)
+    {
+        printf("Cannot load image %s! Error: %s\n", img.c_str(), SDL_GetError());
+        exit(-123);
+    }
+}
+
+SDL_Texture *window::load_texture(int file_num)
+{
+    SDL_Texture *res = texture_cache[file_num];
+    if (res == NULL)
+    {
+        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
+        print_error(res, image_directory[file_num]);
+        set_default_alpha(file_num, res);
+        texture_cache[file_num] = res;
+    }
+    return res;
+}
+
+/*
 Load & draw bmp:
     Load: Surface -> Texture
     Draw: SDL_RenderCopy
@@ -136,15 +161,8 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
 {
     if (file_num == NULL_DIRECTORY || width <= 0)
         return;
-    SDL_Texture *res = texture_cache[file_num];
+    SDL_Texture *res = load_texture(file_num);
     int mWidth = 0, mHeight = 0;
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
-    }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {x, y, width, width * mHeight / mWidth};
     SDL_RenderCopy(renderer, res, NULL, &r);
@@ -160,15 +178,8 @@ void window::draw_png_center(int file_num)
 {
     if (file_num == NULL_DIRECTORY)
         return;
-    SDL_Texture *res = texture_cache[file_num];
+    SDL_Texture *res = load_texture(file_num);
     int mWidth = 0, mHeight = 0;
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
-    }
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {(WINDOW_WIDTH - mWidth) >> 1, (WINDOW_HEIGHT - mHeight) >> 1, mWidth, mHeight};
     SDL_RenderCopy(renderer, res, NULL, &r);
@@ -183,14 +194,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
-    SDL_Texture *res = texture_cache[file_num];
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
-    }
+    SDL_Texture *res = load_texture(file_num);
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
@@ -205,13 +209,7 @@ void window::draw_png(int file_num, int x, int y, int width, int height, int ang
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         if (file_num == NULL_DIRECTORY)
             return;
-    SDL_Texture *res = texture_cache[file_num];
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        texture_cache[file_num] = res;
-    }
+    SDL_Texture *res = load_texture(file_num);
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
 }
@@ -225,14 +223,7 @@ void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
 {
     if (file_num == NULL_DIRECTORY || sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0)
         return;
-    SDL_Texture *res = texture_cache[file_num];
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
-    }
+    SDL_Texture *res = load_texture(file_num);
     SDL_Rect src = {sx, sy, sw, sh};
     SDL_Rect dst = {dx, dy, dw, sh * dw / sw};
     SDL_RenderCopy(renderer, res, &src, &dst);
@@ -247,14 +238,7 @@ void window::draw_bg(int file_num, int x, int y)
 {
     if (file_num == NULL_DIRECTORY)
         return;
-    SDL_Texture *res = texture_cache[file_num];
-    if (res == NULL)
-    {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
-    }
+    SDL_Texture *res = load_texture(file_num);
     SDL_Rect src = {x, y, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_Rect dst = {0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
     SDL_RenderCopy(renderer, res, &src, &dst);
@@ -268,18 +252,6 @@ void window::set_texture_alpha(int file_num, int a)
     if (texture_cache[file_num] != NULL)
     {
         SDL_SetTextureAlphaMod(texture_cache[file_num], a);
-    }
-}
-
-/*
-Print error when loading image
-*/
-void print_error(SDL_Texture *res, const string &img)
-{
-    if (res == NULL)
-    {
-        printf("Cannot load image %s! Error: %s\n", img.c_str(), SDL_GetError());
-        exit(-123);
     }
 }
 

@@ -84,7 +84,6 @@ void convert_zombie_seq_str_into_int_vect(const string &zombie_seq, const int &t
     {
         temp = zombie_seq.substr(num_ind, space_ind - num_ind);
         level.wave_zombie_count[typ].push_back(stoi(temp));
-        level.zombie_count += level.wave_zombie_count[typ].back();
         num_ind = space_ind + 1;
         space_ind = zombie_seq.find(" ", num_ind);
     }
@@ -110,7 +109,7 @@ void decide_zombie_cnt_for_each_sec()
                 aver = max(1, aver / level.wave_duration[wave] + 1);
             for (int sec = 0; sec < level.wave_duration[wave]; sec++)
             {
-                z_cnt = rand(1, aver);
+                z_cnt = rand(0, aver);
                 if (enough_zombies)
                     temp[sec] = 0;
                 else
@@ -126,6 +125,20 @@ void decide_zombie_cnt_for_each_sec()
                 sum += temp[sec];
             }
             level.zombie_distr_for_wave[typ].push_back(temp);
+            level.wave_zombie_count[typ][wave] = sum;
+        }
+    }
+    for (int i = 0; i < level.wave_count; i++)
+    {
+        int tmp = 0;
+        for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
+        {
+            tmp += level.wave_zombie_count[typ][i];
+        }
+        level.zombie_count += tmp;
+        if (tmp >= 5 || i == level.wave_count - 1)
+        {
+            level.zombie_count++;
         }
     }
 }

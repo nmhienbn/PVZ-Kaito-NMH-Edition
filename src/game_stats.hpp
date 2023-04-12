@@ -88,3 +88,40 @@ WINDOW size
 
 #define ELEMENT_WIDTH 90
 #define ELEMENT_HEIGHT 90
+
+enum Game_State
+{
+    IS_LEVEL_CHOSEN = 1,
+    IS_GAME_STARTED = 2,
+    IS_PAUSED = 4,
+    IS_UNLOCKING_PLANT = 8,
+    IS_LEAVE = 16,
+    IS_QUIT = 32,
+    IS_RESET = 64,
+    IS_RESTART = 128,
+    IS_FAST = 256
+
+};
+
+inline bool check_status(const int &x, Game_State state)
+{
+    return ((x & state) > 0);
+}
+
+inline void set_status(int &x, Game_State state, const bool &status)
+{
+    if (status == false)
+    {
+        if (check_status(x, state))
+        {
+            x ^= state;
+        }
+    }
+    else
+    {
+        if (check_status(x, state) == false)
+        {
+            x |= state;
+        }
+    }
+}

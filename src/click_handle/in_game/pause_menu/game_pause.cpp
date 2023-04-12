@@ -1,11 +1,9 @@
 #include "game_pause.hpp"
 
-extern bool quit,
-    is_paused;
+extern int game_state;
+extern bool quit;
 extern Level level;
 extern window win;
-extern bool is_leave,
-    is_restart;
 
 /*
 Display all elements when player paused the game
@@ -35,13 +33,13 @@ void handle_menu_click(const int &mouse_x, const int &mouse_y)
     }
     if (MAIN_MENU.is_mouse_in(mouse_x, mouse_y))
     {
-        is_leave = true;
+        set_status(game_state, IS_LEAVE, true);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }
     if (RESTART.is_mouse_in(mouse_x, mouse_y))
     {
-        is_restart = true;
+        set_status(game_state, IS_RESTART, true);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }
@@ -54,7 +52,7 @@ void handle_menu_icon_click(const int &mouse_x, const int &mouse_y)
 {
     if (MENU_ICON.is_mouse_in(mouse_x, mouse_y))
     {
-        is_paused = true;
+        set_status(game_state, IS_PAUSED, true);
         Mix_PauseMusic();
         Mix_Pause(-1);
         play_sound_effect(PAUSE_MUSIC_DIRECTORY);
@@ -66,7 +64,7 @@ Update some variables to resume game.
 */
 void unpause_game()
 {
-    is_paused = false;
+    set_status(game_state, IS_PAUSED, false);
     play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
     Mix_ResumeMusic();
     Mix_Resume(-1);

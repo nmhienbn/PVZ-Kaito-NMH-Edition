@@ -8,13 +8,10 @@ const Button LEAVE_MENU(LEAVE_X1, LEAVE_X2, LEAVE_Y1, LEAVE_Y2);
 const Button OK_LEAVE(LEAVE_X1 + 33, LEAVE_X1 + 190, LEAVE_Y1 + 280, LEAVE_Y1 + 320);
 const Button CANCEL_LEAVE(LEAVE_X1 + 210, LEAVE_X1 + 365, LEAVE_Y1 + 280, LEAVE_Y1 + 320);
 
-extern bool level_chosen,
-    quit,
-    is_game_started,
-    is_paused;
+extern int game_state;
+extern bool quit;
 extern Level level;
 extern window win;
-extern bool is_leave;
 
 /*
 Display this when player tends to leave to main menu
@@ -34,9 +31,9 @@ Reset some variable when player really leave to main menu
 */
 void leave_game()
 {
-    is_paused = false;
-    is_game_started = false;
-    level_chosen = false;
+    set_status(game_state, IS_PAUSED, false);
+    set_status(game_state, IS_GAME_STARTED, false);
+    set_status(game_state, IS_LEVEL_CHOSEN, false);
     play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
     play_music(URF_DIRECTORY);
 }
@@ -50,13 +47,13 @@ void handle_leave_menu_click(const int &mouse_x, const int &mouse_y)
 {
     if (OK_LEAVE.is_mouse_in(mouse_x, mouse_y))
     {
-        is_leave = false;
+        set_status(game_state, IS_LEAVE, false);
         leave_game();
         return;
     }
     if (CANCEL_LEAVE.is_mouse_in(mouse_x, mouse_y))
     {
-        is_leave = false;
+        set_status(game_state, IS_LEAVE, false);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }

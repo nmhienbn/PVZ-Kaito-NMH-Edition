@@ -1,6 +1,7 @@
 #include "lose.hpp"
 
-extern bool level_chosen, quit, is_paused;
+extern int game_state;
+extern bool quit;
 extern Level level;
 extern Elements game_characters;
 extern window win;
@@ -10,7 +11,7 @@ If player lose, display this.
 */
 void display_losing_message()
 {
-    is_paused = true;
+    set_status(game_state, IS_PAUSED, true);
     win.draw_bg(level.background_directory);
     display_game_paused_elements();
     win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
@@ -48,8 +49,8 @@ void display_lose()
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
                 level.waves_finished = false;
-                level_chosen = false;
-                is_paused = false;
+                set_status(game_state, IS_LEVEL_CHOSEN, false);
+                set_status(game_state, IS_PAUSED, false);
                 play_music(URF_DIRECTORY);
                 win.fade_out();
             }

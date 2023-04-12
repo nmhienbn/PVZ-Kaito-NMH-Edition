@@ -5,7 +5,7 @@
 #define PEASHOOTER_G_WIDTH 85
 #define PEASHOOTER_G_HEIGHT 85
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 
@@ -87,7 +87,7 @@ void display_peashooters(vector<Peashooter> &peashooters)
                          PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
             peashooter.is_attacked--;
         }
-        if (is_paused == false)
+        if (check_status(game_state, IS_PAUSED) == false)
             if (++peashooter.frame >= PEASHOOTER_FRAME * N_SHEET[peashooter.directory_num])
             {
                 peashooter.frame = 0;

@@ -65,6 +65,7 @@ public:
 	// Note that we don't draw 0-width and 0-height images
 	// To optimize, we use texture_cache[] to store images
 
+	SDL_Texture *load_texture(int file_num);
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);
 	void draw_png_scale(int file_num, int x, int y, int width, int height);
@@ -117,6 +118,11 @@ private:
 	if (e.type == SDL_QUIT) \
 	{                       \
 		Code;               \
+	}
+#define LOST_FOCUS(Code)                                                           \
+	if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_FOCUS_LOST) \
+	{                                                                              \
+		Code;                                                                      \
 	}
 #define LCLICK(Code)                                                         \
 	if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) \

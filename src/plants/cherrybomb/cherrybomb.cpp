@@ -3,7 +3,7 @@
 #define CHERRYBOMB_WIDTH 136
 #define CHERRYBOMB_HEIGHT 123
 
-extern bool is_paused;
+extern int game_state;
 extern Map cells;
 extern window win;
 
@@ -88,7 +88,7 @@ void display_cherrybombs(vector<CherryBomb> &cherrybombs)
                          ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
             cherrybomb.is_attacked--;
         }
-        if (is_paused == false)
+        if (check_status(game_state, IS_PAUSED) == false)
             ++cherrybomb.frame;
     }
 }

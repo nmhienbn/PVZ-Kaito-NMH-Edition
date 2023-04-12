@@ -10,3 +10,5 @@
 
 #include "click_handle/in_game/game/player_click.hpp"
 #include "click_handle/in_game/game/level.hpp"
+
+#include "click_handle/mouse_cursor/mouse_cursor.hpp"
