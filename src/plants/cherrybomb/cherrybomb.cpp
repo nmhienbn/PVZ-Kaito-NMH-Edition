@@ -88,7 +88,8 @@ void display_cherrybombs(vector<CherryBomb> &cherrybombs, const int &_row)
                              CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
                              cells[row][col].x1, cells[row][col].y1 + 5,
                              ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
-                cherrybomb.is_attacked--;
+                if (check_status(game_state, IS_PAUSED) == false)
+                    cherrybomb.is_attacked--;
             }
             if (check_status(game_state, IS_PAUSED) == false)
                 ++cherrybomb.frame;

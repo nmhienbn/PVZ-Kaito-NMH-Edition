@@ -3,7 +3,26 @@
 
 extern int game_state;
 extern window win;
+extern Map cells;
+extern Elements game_characters;
 int dim_screen_time = 0;
+
+/*
+If zombie to near the house, disable the turbo.
+*/
+void auto_disable_turbo()
+{
+    for (auto &zombie : game_characters.zombies)
+    {
+        if (is_in(cells[0][2].x2 - ZOMBIE_DX + 1, zombie.x_location + ZOMBIE_EXACT_LOCATION, cells[0][2].x2) &&
+            check_status(game_state, IS_FAST) == true)
+        {
+            game_state ^= IS_FAST;
+            dim_screen_time = MAX_DIM_SCREEN_TIME;
+            return;
+        }
+    }
+}
 
 /*
 Handle player click on Turbo icon to speed up the game.

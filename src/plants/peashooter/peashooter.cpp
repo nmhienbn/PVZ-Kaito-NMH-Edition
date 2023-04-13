@@ -78,15 +78,16 @@ void display_peashooters(vector<Peashooter> &peashooters, const int &_row)
             int srow = frame / C_SHEET[peashooter.directory_num];
             win.draw_png(peashooter.directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
                          PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
-                         cells[row][col].x1, cells[row][col].y1 + 5,
+                         cells[row][col].x1 + 5, cells[row][col].y1 + 5,
                          PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
             if (peashooter.is_attacked)
             {
                 win.draw_png(blink_of[peashooter.directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
                              PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
-                             cells[row][col].x1, cells[row][col].y1 + 5,
+                             cells[row][col].x1 + 5, cells[row][col].y1 + 5,
                              PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
-                peashooter.is_attacked--;
+                if (check_status(game_state, IS_PAUSED) == false)
+                    peashooter.is_attacked--;
             }
             if (check_status(game_state, IS_PAUSED) == false)
                 if (++peashooter.frame >= PEASHOOTER_FRAME * N_SHEET[peashooter.directory_num])

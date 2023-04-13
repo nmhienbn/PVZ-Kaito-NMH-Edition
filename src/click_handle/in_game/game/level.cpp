@@ -205,6 +205,8 @@ void display_all_in_game()
     handle_movements();
     // Changes:
     handle_changes();
+    // Auto disable faster
+    auto_disable_turbo();
     // Music and sound effect:
     play_music(BACKGROUND_MUSIC_DIRECTORY);
     if (game_characters.zombies.size() && !rand(0, 500))

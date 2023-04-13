@@ -207,6 +207,8 @@ TOTAL now: 4 plants and 3 zombies available.
 	Draw plants, zombies, mowers by each row.
 	Increase sun's opacity.
 	Buff snowpea: increase slow rate (by sort zombies in other order).
+	New: plants', peas', zombies' shadow.
+	Auto disable turbo if zombie is too near the house. Of course player can enable it again.
 	
 
 	

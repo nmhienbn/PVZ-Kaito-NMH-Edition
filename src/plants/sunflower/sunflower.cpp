@@ -96,7 +96,8 @@ void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row)
                                  SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
                                  cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                                  SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-                    sunflower.is_attacked--;
+                    if (check_status(game_state, IS_PAUSED) == false)
+                        sunflower.is_attacked--;
                 }
             }
             else
@@ -123,7 +124,8 @@ void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row)
                                  SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
                                  cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                                  SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-                    sunflower.is_attacked--;
+                    if (check_status(game_state, IS_PAUSED) == false)
+                        sunflower.is_attacked--;
                 }
             }
         }

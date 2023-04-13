@@ -61,7 +61,8 @@ void display_walnuts(vector<Walnut> &walnuts, const int &_row)
                 win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
                              WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1,
                              WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
-                walnut.is_attacked--;
+                if (check_status(game_state, IS_PAUSED) == false)
+                    walnut.is_attacked--;
             }
 
             if (check_status(game_state, IS_PAUSED) == false)

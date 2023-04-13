@@ -112,7 +112,7 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
         if (zombies[i].row == _row)
         {
             int row = zombies[i].row;
-            int y_location = cells[row][0].y1 - 45;
+            int y_location = cells[row][0].y1 - 50;
             // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
             int z_frame = 100 / N_SHEET[zombies[i].directory_num];
             int frame = zombies[i].frame / z_frame;
@@ -122,12 +122,14 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
             if (zombies[i].cold_time)
             {
                 win.draw_png(cold_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-                zombies[i].cold_time--;
+                if (check_status(game_state, IS_PAUSED) == false)
+                    zombies[i].cold_time--;
             }
             if (zombies[i].is_attacked)
             {
                 win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-                zombies[i].is_attacked--;
+                if (check_status(game_state, IS_PAUSED) == false)
+                    zombies[i].is_attacked--;
             }
             if (check_status(game_state, IS_PAUSED) == false)
             {
@@ -147,7 +149,7 @@ Display armor drop.
 void display_armor_drop(DeadZombie &dead_zombie)
 {
     int row = dead_zombie.row;
-    int y_location = cells[row][0].y1 - 45;
+    int y_location = cells[row][0].y1 - 50;
     int frame = dead_zombie.frame / ZOMBIE_DIE_FRAME;
 
     int scol = frame % C_SHEET[dead_zombie.head];
@@ -161,7 +163,7 @@ Display burnt zombie (after explosion)
 void display_burnt_zombie(DeadZombie &dead_zombie)
 {
     int row = dead_zombie.row;
-    int y_location = cells[row][0].y1 - 45;
+    int y_location = cells[row][0].y1 - 50;
     int frame = dead_zombie.frame / ZOMBIE_BURNT_FRAME;
     if (frame <= N_SHEET[dead_zombie.body])
     {
@@ -203,7 +205,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies, const int &_row)
             else
             {
                 int row = dead_zombies[i].row;
-                int y_location = cells[row][0].y1 - 45;
+                int y_location = cells[row][0].y1 - 50;
                 // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
                 int frame = dead_zombies[i].frame / ZOMBIE_DIE_FRAME;
                 if (frame <= N_SHEET[dead_zombies[i].body])

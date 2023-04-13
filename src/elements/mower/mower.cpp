@@ -2,13 +2,16 @@
 #define MOWER_WIDTH 70
 #define MOWER_HEIGHT 57
 #define MOWER_FRAME 5
-#define MOWER_DX 2
+#define MOWER_DX 3
 
 extern int game_state;
 extern window win;
 extern Map cells;
 vector<Mower> mowers;
 
+/*
+Init the mower from l_row to r_row
+*/
 void init_mower(int l_row, int r_row)
 {
     mowers.clear();
@@ -19,6 +22,9 @@ void init_mower(int l_row, int r_row)
     }
 }
 
+/*
+Display the mower inactive/active
+*/
 void display_mower(const int &_row)
 {
     for (int i = 0, _ = mowers.size(); i < _; i++)
@@ -39,6 +45,9 @@ void display_mower(const int &_row)
         }
 }
 
+/*
+Handle mower vs zombie collision
+*/
 void handle_mower_zombie_encounter(vector<Zombie> &zombies,
                                    vector<DeadZombie> &dead_zombies)
 {
@@ -130,10 +139,16 @@ bool active_mower(int row)
     return false;
 }
 
+/*
+Mower constructor
+*/
 Mower::Mower()
 {
 }
 
+/*
+Mower constructor with details
+*/
 Mower::Mower(int _x, int _row, int _frame, Mower_status _status)
 {
     x = _x;

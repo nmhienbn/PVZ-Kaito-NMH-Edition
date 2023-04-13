@@ -4,3 +4,4 @@
 
 void handle_turbo_icon_click(const int &mouse_x, const int &mouse_y);
 void display_turbo_icon();
+void auto_disable_turbo();

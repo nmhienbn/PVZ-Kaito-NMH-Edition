@@ -164,11 +164,36 @@ void display_icons_in_icon_bar()
     }
 }
 
+void display_shadow()
+{
+    for (int row = 0; row < VERT_BLOCK_COUNT; row++)
+    {
+        for (int col = 0; col < HORIZ_BLOCK_COUNT; col++)
+        {
+            if (cells[row][col].is_planted)
+            {
+                win.draw_png(SHADOW_DIRECTORY, cells[row][col].x1 - 5, cells[row][col].y2 - 40, 86, 36);
+            }
+        }
+    }
+    for (auto &zombie : game_characters.zombies)
+    {
+        win.draw_png(SHADOW_DIRECTORY, zombie.x_location + 70, cells[zombie.row][0].y2 - 40, 96, 40);
+    }
+    for (auto &pea : game_characters.peas)
+    {
+        win.draw_png(PEA_SHADOW_DIRECTORY, pea.x_location, cells[pea.row][0].y2 - 13, 21, 9);
+    }
+}
+
 /*
 Display the game element: plants, zombies and the suns.
 */
 void display_game_elements()
 {
+    // Shadows
+    display_shadow();
+
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
     {
         // Plants

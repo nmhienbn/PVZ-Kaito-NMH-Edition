@@ -293,6 +293,9 @@ enum ImageType
     MOUSE_CURSOR_DIRECTORY,
     MOWER_DIRECTORY,
 
+    SHADOW_DIRECTORY,
+    PEA_SHADOW_DIRECTORY,
+
     COUNT_USED_DIRECTORY
 };
 
@@ -583,6 +586,9 @@ const string image_directory[] = {
     "./image/Icons/starter_fire_pack.png", // MOUSE_CURSOR_DIRECTORY
     "./image/Icons/mower.png",             // MOWER_DIRECTORY
 
+    "./image/Shadow/plantshadow.png", // SHADOW_DIRECTORY
+    "./image/Shadow/pea_shadows.png", // PEA_SHADOW_DIRECTORY
+
 };
 
 /*
@@ -870,6 +876,9 @@ const int N_SHEET[] = {
 
     1,  // MOUSE_CURSOR_DIRECTORY
     17, // MOWER_DIRECTORY
+
+    0, // SHADOW_DIRECTORY
+    0, // PEA_SHADOW_DIRECTORY
 };
 
 /*
@@ -1157,6 +1166,9 @@ const int C_SHEET[] = {
 
     1, // MOUSE_CURSOR_DIRECTORY
     8, // MOWER_DIRECTORY
+
+    0, // SHADOW_DIRECTORY
+    0, // PEA_SHADOW_DIRECTORY
 };
 
 /*
