@@ -74,7 +74,7 @@ void display_progress_bar()
     }
     // Zombie head
     win.draw_png(FLAG_METER_PART, 0, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                 dx + max(0, now_progress - PROGRESS_PART_WIDTH + 6), dy,
+                 dx + now_progress - PROGRESS_PART_WIDTH / 2, dy,
                  PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
 
     string LEVEL_NUMBER = "Level " + to_string(level.level_num);
