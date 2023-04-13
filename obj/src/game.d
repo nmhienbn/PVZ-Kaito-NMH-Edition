@@ -33,7 +33,8 @@ obj/src/game.o: src/game.cpp src/game.hpp src/draw/render_elements.hpp \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
- src/draw/render_message.hpp src/elements/elements_actions.hpp \
+ src/elements/mower/mower.hpp src/draw/render_message.hpp \
+ src/elements/elements_actions.hpp \
  src/click_handle/out_game/start_game/start_game.hpp \
  src/player/player_data.hpp src/player/player_name.hpp \
  src/click_handle/out_game/choose_level/choose_level.hpp \
@@ -196,6 +197,8 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
+
+src/elements/mower/mower.hpp:
 
 src/draw/render_message.hpp:
 

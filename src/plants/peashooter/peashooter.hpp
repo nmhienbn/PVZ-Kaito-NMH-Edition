@@ -15,4 +15,4 @@ struct Peashooter
 
 void fire_peas(vector<Peashooter> &peashooters, vector<Zombie> &zombies, vector<Pea> &peas);
 bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, vector<Zombie> &zombies);
-void display_peashooters(vector<Peashooter> &peashooters);
+void display_peashooters(vector<Peashooter> &peashooters, const int &_row);

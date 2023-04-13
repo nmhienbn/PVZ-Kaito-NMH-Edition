@@ -39,36 +39,37 @@ void determine_walnut_appearance(Walnut &walnut)
 Display walnut
 Render sprite sheet of exactly status.
 */
-void display_walnuts(vector<Walnut> &walnuts)
+void display_walnuts(vector<Walnut> &walnuts, const int &_row)
 {
     for (auto &walnut : walnuts)
-    {
-        determine_walnut_appearance(walnut);
-        int col = walnut.col;
-        int row = walnut.row;
-
-        int frame = walnut.frame / WALNUT_FRAME;
-        int srow = frame / C_SHEET[walnut.directory_num];
-        int scol = frame % C_SHEET[walnut.directory_num];
-        win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
-                     WALNUT_WIDTH, WALNUT_HEIGHT,
-                     cells[row][col].x1 - 5, cells[row][col].y1,
-                     WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
-
-        if (walnut.is_attacked)
+        if (walnut.row == _row)
         {
-            win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
-                         WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1,
+            determine_walnut_appearance(walnut);
+            int col = walnut.col;
+            int row = walnut.row;
+
+            int frame = walnut.frame / WALNUT_FRAME;
+            int srow = frame / C_SHEET[walnut.directory_num];
+            int scol = frame % C_SHEET[walnut.directory_num];
+            win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
+                         WALNUT_WIDTH, WALNUT_HEIGHT,
+                         cells[row][col].x1 - 5, cells[row][col].y1,
                          WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
-            walnut.is_attacked--;
-        }
 
-        if (check_status(game_state, IS_PAUSED) == false)
-        {
-            if (++walnut.frame >= WALNUT_FRAME * N_SHEET[walnut.directory_num])
+            if (walnut.is_attacked)
             {
-                walnut.frame = 0;
+                win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
+                             WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1,
+                             WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
+                walnut.is_attacked--;
+            }
+
+            if (check_status(game_state, IS_PAUSED) == false)
+            {
+                if (++walnut.frame >= WALNUT_FRAME * N_SHEET[walnut.directory_num])
+                {
+                    walnut.frame = 0;
+                }
             }
         }
-    }
 }

@@ -1,8 +1,9 @@
 #pragma once
 #include "draw/rsdl.hpp"
 
-extern window win;
-
+/*
+Set game mouse cursor
+*/
 class Mouse
 {
     SDL_Cursor *Cursor;

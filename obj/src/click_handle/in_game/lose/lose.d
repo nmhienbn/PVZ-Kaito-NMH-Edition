@@ -35,7 +35,8 @@ obj/src/click_handle/in_game/lose/lose.o: \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
- src/player/player_data.hpp src/player/player_name.hpp
+ src/elements/mower/mower.hpp src/player/player_data.hpp \
+ src/player/player_name.hpp
 
 src/click_handle/in_game/lose/lose.hpp:
 
@@ -182,6 +183,8 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
+
+src/elements/mower/mower.hpp:
 
 src/player/player_data.hpp:
 

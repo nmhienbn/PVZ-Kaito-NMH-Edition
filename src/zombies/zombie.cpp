@@ -105,39 +105,40 @@ void move_zombies(vector<Zombie> &zombies)
 /*
 Display zombie of exactly status.
 */
-void display_zombies(vector<Zombie> &zombies)
+void display_zombies(vector<Zombie> &zombies, const int &_row)
 {
     std::sort(zombies.begin(), zombies.end());
     for (int i = (int)zombies.size() - 1; i >= 0; i--)
-    {
-        int row = zombies[i].row;
-        int y_location = cells[row][0].y1 - 45;
-        // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        int z_frame = 100 / N_SHEET[zombies[i].directory_num];
-        int frame = zombies[i].frame / z_frame;
-        int scol = frame % C_SHEET[zombies[i].directory_num];
-        int srow = frame / C_SHEET[zombies[i].directory_num];
-        win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-        if (zombies[i].cold_time)
+        if (zombies[i].row == _row)
         {
-            win.draw_png(cold_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-            zombies[i].cold_time--;
-        }
-        if (zombies[i].is_attacked)
-        {
-            win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-            zombies[i].is_attacked--;
-        }
-        if (check_status(game_state, IS_PAUSED) == false)
-        {
-            if (zombies[i].cold_time % 3 == 0)
-                zombies[i].frame++;
-            if (zombies[i].frame >= z_frame * N_SHEET[zombies[i].directory_num])
+            int row = zombies[i].row;
+            int y_location = cells[row][0].y1 - 45;
+            // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+            int z_frame = 100 / N_SHEET[zombies[i].directory_num];
+            int frame = zombies[i].frame / z_frame;
+            int scol = frame % C_SHEET[zombies[i].directory_num];
+            int srow = frame / C_SHEET[zombies[i].directory_num];
+            win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+            if (zombies[i].cold_time)
             {
-                zombies[i].frame = 0;
+                win.draw_png(cold_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                zombies[i].cold_time--;
+            }
+            if (zombies[i].is_attacked)
+            {
+                win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                zombies[i].is_attacked--;
+            }
+            if (check_status(game_state, IS_PAUSED) == false)
+            {
+                if (zombies[i].cold_time % 3 == 0)
+                    zombies[i].frame++;
+                if (zombies[i].frame >= z_frame * N_SHEET[zombies[i].directory_num])
+                {
+                    zombies[i].frame = 0;
+                }
             }
         }
-    }
 }
 
 /*
@@ -174,58 +175,59 @@ void display_burnt_zombie(DeadZombie &dead_zombie)
 Display dead zombie independently.
 Add armor drop and burnt effect.
 */
-void display_dead_zombies(vector<DeadZombie> &dead_zombies)
+void display_dead_zombies(vector<DeadZombie> &dead_zombies, const int &_row)
 {
     for (int i = 0; i < (int)dead_zombies.size(); i++)
-    {
-        if (dead_zombies[i].body < 0)
+        if (dead_zombies[i].row == _row)
         {
-            display_armor_drop(dead_zombies[i]);
-            if (check_status(game_state, IS_PAUSED) == false)
-                if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
-                {
-                    dead_zombies.erase(dead_zombies.begin() + i);
-                    i--;
-                }
-        }
-        else if (dead_zombies[i].head < 0)
-        {
-            display_burnt_zombie(dead_zombies[i]);
-            if (check_status(game_state, IS_PAUSED) == false)
-                if (++dead_zombies[i].frame >= ZOMBIE_BURNT_FRAME * N_SHEET[dead_zombies[i].body])
-                {
-                    dead_zombies.erase(dead_zombies.begin() + i);
-                    i--;
-                }
-        }
-        else
-        {
-            int row = dead_zombies[i].row;
-            int y_location = cells[row][0].y1 - 45;
-            // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-            int frame = dead_zombies[i].frame / ZOMBIE_DIE_FRAME;
-            if (frame <= N_SHEET[dead_zombies[i].body])
+            if (dead_zombies[i].body < 0)
             {
-                int scol = frame % C_SHEET[dead_zombies[i].body];
-                int srow = frame / C_SHEET[dead_zombies[i].body];
-                win.draw_png(dead_zombies[i].body, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
-                if (dead_zombies[i].is_cold)
-                    win.draw_png(cold_of[dead_zombies[i].body], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+                display_armor_drop(dead_zombies[i]);
+                if (check_status(game_state, IS_PAUSED) == false)
+                    if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                    {
+                        dead_zombies.erase(dead_zombies.begin() + i);
+                        i--;
+                    }
             }
-            int scol = frame % C_SHEET[dead_zombies[i].head];
-            int srow = frame / C_SHEET[dead_zombies[i].head];
-            win.draw_png(dead_zombies[i].head, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
-            if (dead_zombies[i].is_cold)
-                win.draw_png(cold_of[dead_zombies[i].head], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
-
-            if (check_status(game_state, IS_PAUSED) == false)
-                if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+            else if (dead_zombies[i].head < 0)
+            {
+                display_burnt_zombie(dead_zombies[i]);
+                if (check_status(game_state, IS_PAUSED) == false)
+                    if (++dead_zombies[i].frame >= ZOMBIE_BURNT_FRAME * N_SHEET[dead_zombies[i].body])
+                    {
+                        dead_zombies.erase(dead_zombies.begin() + i);
+                        i--;
+                    }
+            }
+            else
+            {
+                int row = dead_zombies[i].row;
+                int y_location = cells[row][0].y1 - 45;
+                // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+                int frame = dead_zombies[i].frame / ZOMBIE_DIE_FRAME;
+                if (frame <= N_SHEET[dead_zombies[i].body])
                 {
-                    dead_zombies.erase(dead_zombies.begin() + i);
-                    i--;
+                    int scol = frame % C_SHEET[dead_zombies[i].body];
+                    int srow = frame / C_SHEET[dead_zombies[i].body];
+                    win.draw_png(dead_zombies[i].body, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
+                    if (dead_zombies[i].is_cold)
+                        win.draw_png(cold_of[dead_zombies[i].body], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, dead_zombies[i].x_location, y_location, ZOMBIE_WIDTH, ZOMBIE_HEIGHT);
                 }
+                int scol = frame % C_SHEET[dead_zombies[i].head];
+                int srow = frame / C_SHEET[dead_zombies[i].head];
+                win.draw_png(dead_zombies[i].head, HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
+                if (dead_zombies[i].is_cold)
+                    win.draw_png(cold_of[dead_zombies[i].head], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
+
+                if (check_status(game_state, IS_PAUSED) == false)
+                    if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                    {
+                        dead_zombies.erase(dead_zombies.begin() + i);
+                        i--;
+                    }
+            }
         }
-    }
 }
 
 /*

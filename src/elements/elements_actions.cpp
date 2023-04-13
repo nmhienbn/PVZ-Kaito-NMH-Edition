@@ -26,7 +26,11 @@ void handle_changes()
     handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.dead_zombies);
 
     // Check all cherrybombs' status
-    handle_cherrybomb_zombie_encounter(game_characters.cherrybombs, game_characters.zombies, game_characters.dead_zombies);
+    handle_cherrybomb_zombie_encounter(game_characters.cherrybombs, game_characters.zombies,
+                                       game_characters.dead_zombies);
+
+    // Check all mowers' status
+    handle_mower_zombie_encounter(game_characters.zombies, game_characters.dead_zombies);
 
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
     if (level.waves_finished == false &&

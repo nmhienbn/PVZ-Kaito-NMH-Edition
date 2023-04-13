@@ -66,64 +66,65 @@ void gen_sun_from_a_sunflower(Sunflower &sunflower, vector<Sun> &suns)
 /*
 Display sunflowers
 */
-void display_sunflowers(vector<Sunflower> &sunflowers)
+void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row)
 {
     for (auto &sunflower : sunflowers)
-    {
-        if (sunflower.directory_num == SUNFLOWER_SHEET_DIRECTORY)
+        if (sunflower.row == _row)
         {
-            int col = sunflower.col;
-            int row = sunflower.row;
-
-            int frame = sunflower.frame / SUNFLOWER_FRAME;
-            int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
-            int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
-            win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
-                         SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
-                         cells[row][col].x1 + 3, cells[row][col].y1 - 7,
-                         SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-
-            if (check_status(game_state, IS_PAUSED) == false)
-                if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
-                {
-                    sunflower.frame = 0;
-                }
-            if (sunflower.is_attacked)
+            if (sunflower.directory_num == SUNFLOWER_SHEET_DIRECTORY)
             {
-                win.draw_png(blink_of[sunflower.directory_num],
-                             SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                int col = sunflower.col;
+                int row = sunflower.row;
+
+                int frame = sunflower.frame / SUNFLOWER_FRAME;
+                int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+                int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+                win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
                              SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
                              cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                              SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-                sunflower.is_attacked--;
-            }
-        }
-        else
-        {
-            int col = sunflower.col;
-            int row = sunflower.row;
 
-            int frame = sunflower.frame / SUNFLOWER_F_SHEET;
-            int scol = frame % C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
-            int srow = frame / C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
-            win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
-                         SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
-                         cells[row][col].x1 + 3, cells[row][col].y1 - 7,
-                         SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-
-            if (check_status(game_state, IS_PAUSED) == false)
-                if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
+                if (check_status(game_state, IS_PAUSED) == false)
+                    if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
+                    {
+                        sunflower.frame = 0;
+                    }
+                if (sunflower.is_attacked)
                 {
-                    sunflower.frame = 0;
+                    win.draw_png(blink_of[sunflower.directory_num],
+                                 SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
+                                 SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
+                                 cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                                 SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+                    sunflower.is_attacked--;
                 }
-            if (sunflower.is_attacked)
+            }
+            else
             {
-                win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                int col = sunflower.col;
+                int row = sunflower.row;
+
+                int frame = sunflower.frame / SUNFLOWER_F_SHEET;
+                int scol = frame % C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
+                int srow = frame / C_SHEET[SUNFLOWER_HAPPY_DIRECTORY];
+                win.draw_png(sunflower.directory_num, SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
                              SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
                              cells[row][col].x1 + 3, cells[row][col].y1 - 7,
                              SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-                sunflower.is_attacked--;
+
+                if (check_status(game_state, IS_PAUSED) == false)
+                    if (++sunflower.frame >= SUNFLOWER_F_SHEET * N_SHEET[SUNFLOWER_HAPPY_DIRECTORY])
+                    {
+                        sunflower.frame = 0;
+                    }
+                if (sunflower.is_attacked)
+                {
+                    win.draw_png(blink_of[sunflower.directory_num], SUNFLOWER_H_WIDTH * scol, SUNFLOWER_H_HEIGHT * srow,
+                                 SUNFLOWER_H_WIDTH, SUNFLOWER_H_HEIGHT,
+                                 cells[row][col].x1 + 3, cells[row][col].y1 - 7,
+                                 SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
+                    sunflower.is_attacked--;
+                }
             }
         }
-    }
 }

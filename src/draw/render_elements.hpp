@@ -2,6 +2,7 @@
 #include "elements/button/button.hpp"
 #include "elements/elements.hpp"
 #include "elements/progress_bar/progress_bar.hpp"
+#include "elements/mower/mower.hpp"
 
 void display_choose_level(const bool &is_mouse_needed);
 void display_game_elements();

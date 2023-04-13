@@ -66,31 +66,32 @@ bool are_there_zombies_in_snowpea_row(Snowpea &snowpea, vector<Zombie> &zombies)
 /*
 Display snow peas
 */
-void display_snowpeas(vector<Snowpea> &snowpeas)
+void display_snowpeas(vector<Snowpea> &snowpeas, const int &_row)
 {
     for (auto &snowpea : snowpeas)
-    {
-        int col = snowpea.col;
-        int row = snowpea.row;
-        int frame = snowpea.frame / SNOWPEA_FRAME;
-        int scol = frame % C_SHEET[snowpea.directory_num];
-        int srow = frame / C_SHEET[snowpea.directory_num];
-        win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
-                     SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                     cells[row][col].x1, cells[row][col].y1 + 5,
-                     SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-        if (snowpea.is_attacked)
+        if (snowpea.row == _row)
         {
-            win.draw_png(blink_of[snowpea.directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
+            int col = snowpea.col;
+            int row = snowpea.row;
+            int frame = snowpea.frame / SNOWPEA_FRAME;
+            int scol = frame % C_SHEET[snowpea.directory_num];
+            int srow = frame / C_SHEET[snowpea.directory_num];
+            win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
                          SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
                          cells[row][col].x1, cells[row][col].y1 + 5,
                          SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-            snowpea.is_attacked--;
-        }
-        if (check_status(game_state, IS_PAUSED) == false)
-            if (++snowpea.frame >= SNOWPEA_FRAME * N_SHEET[snowpea.directory_num])
+            if (snowpea.is_attacked)
             {
-                snowpea.frame = 0;
+                win.draw_png(blink_of[snowpea.directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
+                             SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
+                             cells[row][col].x1, cells[row][col].y1 + 5,
+                             SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
+                snowpea.is_attacked--;
             }
-    }
+            if (check_status(game_state, IS_PAUSED) == false)
+                if (++snowpea.frame >= SNOWPEA_FRAME * N_SHEET[snowpea.directory_num])
+                {
+                    snowpea.frame = 0;
+                }
+        }
 }

@@ -201,6 +201,12 @@ TOTAL now: 4 plants and 3 zombies available.
 	Change number of audio channel: Mix_AllocateChannels
 	--> Fix bug: many sound effects does not play.
 	Use game_state instead of many bool variables.
+
+13/04/2023:
+	New: Mowers to protect the house better.
+	Draw plants, zombies, mowers by each row.
+	Increase sun's opacity.
+	Buff snowpea: increase slow rate (by sort zombies in other order).
 	
 
 	

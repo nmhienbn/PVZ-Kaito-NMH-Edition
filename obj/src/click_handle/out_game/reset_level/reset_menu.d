@@ -36,7 +36,8 @@ obj/src/click_handle/out_game/reset_level/reset_menu.o: \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
- src/player/player_data.hpp src/player/player_name.hpp
+ src/elements/mower/mower.hpp src/player/player_data.hpp \
+ src/player/player_name.hpp
 
 src/click_handle/out_game/reset_level/reset_menu.hpp:
 
@@ -183,6 +184,8 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
+
+src/elements/mower/mower.hpp:
 
 src/player/player_data.hpp:
 

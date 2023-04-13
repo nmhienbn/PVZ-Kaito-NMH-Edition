@@ -11,7 +11,7 @@ Map cells;
 window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 /*
-Init game & music.
+Init game & music. Set mouse cursor
 If player is a new user: Get name and unlock Peashooter.
 If a level is not chosen:
     Handle unlocking screen if necessary.

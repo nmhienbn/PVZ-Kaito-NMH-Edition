@@ -268,12 +268,13 @@ bool Zombie::decrease_health(vector<DeadZombie> &dead_zombies)
 
 /*
 Compare zombie < zombie:
-    row > row
-    x < x;
+    x < x,
+    cold_time < cold_time
 */
 bool Zombie::operator<(const Zombie &other) const
 {
-    return (row == other.row ? (type == other.type ? x_location < other.x_location : type < other.type) : row > other.row);
+    return (x_location == other.x_location ? x_location < other.x_location
+                                           : cold_time < other.cold_time);
 }
 
 /*Dead constructor*/

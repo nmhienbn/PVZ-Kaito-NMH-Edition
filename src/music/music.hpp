@@ -54,6 +54,7 @@ enum music_type
     PAUSE_MUSIC_DIRECTORY,
     BUZZER_MUSIC_DIRECTORY, // player have not enough sun
     URF_DIRECTORY,
+    MOWER_MUSIC_DIRECTORY,
 
     COUNT_MUSIC_DIRECTORY
 };
@@ -94,5 +95,6 @@ const string music_directory[] = {
     "./audio/pause.mp3",             // PAUSE_MUSIC_DIRECTORY
     "./audio/buzzer.mp3",            // BUZZER_MUSIC_DIRECTORY
     "./audio/urf.mp3",               // URF_DIRECTORY
+    "./audio/lawnmower.mp3",         // MOWER_DIRECTORY
 
 };

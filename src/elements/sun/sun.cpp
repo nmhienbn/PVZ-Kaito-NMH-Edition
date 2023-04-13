@@ -74,7 +74,7 @@ void display_suns(vector<Sun> &suns)
         {
             int col = sun.final_col;
             sun.x_location = cells[0][col].x1;
-            win.set_texture_alpha(SUN_DIRECTORY, 255 * (SUN_APPEAR_LIMIT - sun.wait_seconds) / SUN_APPEAR_LIMIT);
+            win.set_texture_alpha(SUN_DIRECTORY, 100 + 155 * (SUN_APPEAR_LIMIT - sun.wait_seconds) / SUN_APPEAR_LIMIT);
         }
         else
         {

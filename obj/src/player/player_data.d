@@ -34,7 +34,8 @@ obj/src/player/player_data.o: src/player/player_data.cpp \
  src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
- src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp
+ src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
+ src/elements/mower/mower.hpp
 
 src/player/player_data.hpp:
 
@@ -183,3 +184,5 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
+
+src/elements/mower/mower.hpp:

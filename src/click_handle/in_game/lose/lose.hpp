@@ -2,6 +2,7 @@
 #include "draw/render_elements.hpp"
 #include "music/music.hpp"
 #include "player/player_data.hpp"
+#include "elements/mower/mower.hpp"
 
 void display_losing_message();
 bool has_player_lost();

@@ -15,4 +15,4 @@ struct Snowpea
 
 void fire_snowz_peas(vector<Snowpea> &snowpeas, vector<Zombie> &zombies, vector<Pea> &peas);
 bool are_there_zombies_in_snowpea_row(Snowpea &snowpea, vector<Zombie> &zombies);
-void display_snowpeas(vector<Snowpea> &snowpeas);
+void display_snowpeas(vector<Snowpea> &snowpea, const int &_row);

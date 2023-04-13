@@ -109,7 +109,7 @@ void decide_zombie_cnt_for_each_sec()
                 aver = max(1, aver / level.wave_duration[wave] + 1);
             for (int sec = 0; sec < level.wave_duration[wave]; sec++)
             {
-                z_cnt = rand(0, aver);
+                z_cnt = rand((typ == NORMAL_TYPE), aver);
                 if (enough_zombies)
                     temp[sec] = 0;
                 else
@@ -172,6 +172,12 @@ void load_level()
     read_level();
     // cout << level.level_num << '\n';
     decide_zombie_cnt_for_each_sec();
+    if (level.level_num == 1)
+        init_mower(2, 2);
+    else if (level.level_num == 2)
+        init_mower(1, 3);
+    else
+        init_mower(0, 4);
     player.sun_count = INIT_SUN_COUNT;
     player.is_choosing_a_plant = false;
     player.is_shoveling = false;

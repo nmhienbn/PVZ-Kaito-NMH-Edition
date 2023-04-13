@@ -35,7 +35,8 @@ obj/src/click_handle/in_game/game/level.o: \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
- src/draw/render_message.hpp src/elements/elements_actions.hpp \
+ src/elements/mower/mower.hpp src/draw/render_message.hpp \
+ src/elements/elements_actions.hpp \
  src/click_handle/in_game/game/player_click.hpp \
  src/click_handle/in_game/game/../pause_menu/game_pause.hpp \
  src/click_handle/in_game/game/../restart_menu/restart_menu.hpp \
@@ -191,6 +192,8 @@ src/plants/cherrybomb/cherrybomb.hpp:
 src/zombies/zombie.hpp:
 
 src/elements/progress_bar/progress_bar.hpp:
+
+src/elements/mower/mower.hpp:
 
 src/draw/render_message.hpp:
 

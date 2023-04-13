@@ -12,7 +12,7 @@ struct CherryBomb
     int is_attacked = 0;
 };
 
-void display_cherrybombs(vector<CherryBomb> &cherrybombs);
+void display_cherrybombs(vector<CherryBomb> &cherrybombs, const int &_row);
 bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie);
 void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
                                         vector<Zombie> &zombies,

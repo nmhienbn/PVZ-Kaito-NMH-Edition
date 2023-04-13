@@ -1,6 +1,7 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "elements/elements.hpp"
+#include "elements/mower/mower.hpp"
 
 void handle_changes();
 void handle_movements();

@@ -14,4 +14,4 @@ struct Sunflower
 
 void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &suns);
 void gen_sun_from_a_sunflower(Sunflower &sunflower, vector<Sun> &suns);
-void display_sunflowers(vector<Sunflower> &sunflowers);
+void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row);

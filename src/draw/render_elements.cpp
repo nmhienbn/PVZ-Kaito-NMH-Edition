@@ -169,15 +169,23 @@ Display the game element: plants, zombies and the suns.
 */
 void display_game_elements()
 {
-    display_peashooters(game_characters.peashooters);
-    display_sunflowers(game_characters.sunflowers);
-    display_walnuts(game_characters.walnuts);
-    display_snowpeas(game_characters.snowpeas);
-    display_cherrybombs(game_characters.cherrybombs);
+    for (int row = 0; row < VERT_BLOCK_COUNT; row++)
+    {
+        // Plants
+        display_peashooters(game_characters.peashooters, row);
+        display_sunflowers(game_characters.sunflowers, row);
+        display_walnuts(game_characters.walnuts, row);
+        display_snowpeas(game_characters.snowpeas, row);
+        display_cherrybombs(game_characters.cherrybombs, row);
 
-    display_dead_zombies(game_characters.dead_zombies);
-    display_zombies(game_characters.zombies);
+        // Zombies
+        display_dead_zombies(game_characters.dead_zombies, row);
+        display_zombies(game_characters.zombies, row);
 
+        // Mowers
+        display_mower(row);
+    }
+    // Others
     display_peas(game_characters.peas);
     display_suns(game_characters.suns);
 }

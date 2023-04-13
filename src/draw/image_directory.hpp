@@ -291,6 +291,7 @@ enum ImageType
     WIN_73_DIRECTORY,
 
     MOUSE_CURSOR_DIRECTORY,
+    MOWER_DIRECTORY,
 
     COUNT_USED_DIRECTORY
 };
@@ -580,6 +581,7 @@ const string image_directory[] = {
     "./image/Background/win/win_e_73.png", // WIN_73_DIRECTORY
 
     "./image/Icons/starter_fire_pack.png", // MOUSE_CURSOR_DIRECTORY
+    "./image/Icons/mower.png",             // MOWER_DIRECTORY
 
 };
 
@@ -866,7 +868,8 @@ const int N_SHEET[] = {
     0, // WIN_72_DIRECTORY
     0, // WIN_73_DIRECTORY
 
-    1, // MOUSE_CURSOR_DIRECTORY
+    1,  // MOUSE_CURSOR_DIRECTORY
+    17, // MOWER_DIRECTORY
 };
 
 /*
@@ -1153,6 +1156,7 @@ const int C_SHEET[] = {
     0, // WIN_73_DIRECTORY
 
     1, // MOUSE_CURSOR_DIRECTORY
+    8, // MOWER_DIRECTORY
 };
 
 /*

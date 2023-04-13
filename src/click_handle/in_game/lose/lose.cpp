@@ -25,7 +25,7 @@ bool has_player_lost()
 {
     for (auto &zombie : game_characters.zombies)
     {
-        if (zombie.x_location + 70 < X_UPPER_LEFT - 30)
+        if (zombie.x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - BLOCK_WIDTH)
             return true;
     }
     return false;

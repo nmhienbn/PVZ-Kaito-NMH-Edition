@@ -32,7 +32,7 @@ obj/src/elements/elements_actions.o: src/elements/elements_actions.cpp \
  src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
- src/zombies/zombie.hpp
+ src/zombies/zombie.hpp src/elements/mower/mower.hpp
 
 src/elements/elements_actions.hpp:
 
@@ -173,3 +173,5 @@ src/plants/snowpea/snowpea.hpp:
 src/plants/cherrybomb/cherrybomb.hpp:
 
 src/zombies/zombie.hpp:
+
+src/elements/mower/mower.hpp:

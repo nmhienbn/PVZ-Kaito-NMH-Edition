@@ -13,4 +13,4 @@ struct Walnut
 };
 
 void determine_walnut_appearance(Walnut &walnut);
-void display_walnuts(vector<Walnut> &walnuts);
+void display_walnuts(vector<Walnut> &walnuts, const int &_row);
