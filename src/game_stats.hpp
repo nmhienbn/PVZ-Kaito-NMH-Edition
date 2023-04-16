@@ -56,13 +56,15 @@ Moving speed of some elements
 #define SUN_DY 1
 #define CLICKED_SUN_D 50
 
-/*Health of plants and zombies*/
+/*Health of plants*/
 #define WALNUT_BITE_LIMIT 72
 #define SUNFLOWER_BITE_LIMIT 6
 #define PEASHOOTER_BITE_LIMIT 6
 #define SNOWPEA_BITE_LIMIT 6
 #define CHERRYBOMB_BITE_LIMIT 9999
 
+/*Health of zombies*/
+#define ZOMBIE_ARMLESS_HEALTH_LIMIT 5
 #define ZOMBIE_NORMAL_HEALTH_LIMIT 10
 #define ZOMBIE_CONE1_HEALTH_LIMIT 28
 #define ZOMBIE_CONE2_HEALTH_LIMIT 22

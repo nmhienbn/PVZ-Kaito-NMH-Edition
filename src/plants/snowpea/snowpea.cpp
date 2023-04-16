@@ -1,9 +1,9 @@
 #include "snowpea.hpp"
-#define SNOWPEA_FRAME 2
-#define SNOWPEA_WIDTH 185
-#define SNOWPEA_HEIGHT 177
-#define SNOWPEA_G_WIDTH 85
-#define SNOWPEA_G_HEIGHT 85
+#define SNOWPEA_FRAME 4
+#define SNOWPEA_WIDTH 153
+#define SNOWPEA_HEIGHT 131
+#define SNOWPEA_G_WIDTH 115
+#define SNOWPEA_G_HEIGHT 115
 
 extern int game_state;
 extern Map cells;
@@ -20,7 +20,7 @@ void fire_snowz_peas(vector<Snowpea> &snowpeas, vector<Zombie> &zombies, vector<
     {
         int row = snowpea.row;
         int col = snowpea.col;
-        if (snowpea.directory_num == SNOWPEA_ATTACK_DIRECTORY && snowpea.frame == 32 * SNOWPEA_FRAME)
+        if (snowpea.directory_num == SNOWPEA_ATTACK_DIRECTORY && snowpea.frame == 17 * SNOWPEA_FRAME)
         {
             play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
             Pea temp(2, row, cells[row][col].x2 - 10);
@@ -78,13 +78,13 @@ void display_snowpeas(vector<Snowpea> &snowpeas, const int &_row)
             int srow = frame / C_SHEET[snowpea.directory_num];
             win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
                          SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                         cells[row][col].x1 + 5, cells[row][col].y1 + 5,
+                         cells[row][col].x1 - 10, cells[row][col].y1 - 5,
                          SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
             if (snowpea.is_attacked)
             {
                 win.draw_png(blink_of[snowpea.directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
                              SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                             cells[row][col].x1 + 5, cells[row][col].y1 + 5,
+                             cells[row][col].x1 - 10, cells[row][col].y1 - 5,
                              SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
                 if (check_status(game_state, IS_PAUSED) == false)
                     snowpea.is_attacked--;

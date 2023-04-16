@@ -114,7 +114,7 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
             int row = zombies[i].row;
             int y_location = cells[row][0].y1 - 50;
             // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
-            int z_frame = 100 / N_SHEET[zombies[i].directory_num];
+            int z_frame = 2;
             int frame = zombies[i].frame / z_frame;
             int scol = frame % C_SHEET[zombies[i].directory_num];
             int srow = frame / C_SHEET[zombies[i].directory_num];
@@ -133,7 +133,7 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
             }
             if (check_status(game_state, IS_PAUSED) == false)
             {
-                if (zombies[i].cold_time % 3 == 0)
+                if (zombies[i].cold_time % 2 == 0)
                     zombies[i].frame++;
                 if (zombies[i].frame >= z_frame * N_SHEET[zombies[i].directory_num])
                 {
@@ -150,7 +150,7 @@ void display_armor_drop(DeadZombie &dead_zombie)
 {
     int row = dead_zombie.row;
     int y_location = cells[row][0].y1 - 50;
-    int frame = dead_zombie.frame / ZOMBIE_DIE_FRAME;
+    int frame = dead_zombie.frame / HEAD_ZOMBIE_FRAME;
 
     int scol = frame % C_SHEET[dead_zombie.head];
     int srow = frame / C_SHEET[dead_zombie.head];
@@ -186,7 +186,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies, const int &_row)
             {
                 display_armor_drop(dead_zombies[i]);
                 if (check_status(game_state, IS_PAUSED) == false)
-                    if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                    if (++dead_zombies[i].frame >= HEAD_ZOMBIE_FRAME * N_SHEET[dead_zombies[i].head])
                     {
                         dead_zombies.erase(dead_zombies.begin() + i);
                         i--;
@@ -223,7 +223,7 @@ void display_dead_zombies(vector<DeadZombie> &dead_zombies, const int &_row)
                     win.draw_png(cold_of[dead_zombies[i].head], HEAD_ZOMBIE_WIDTH * scol, HEAD_ZOMBIE_HEIGHT * srow, HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, dead_zombies[i].x_location + 80, y_location - 40, HEAD_ZOMBIE_G_WIDTH, HEAD_ZOMBIE_G_HEIGHT);
 
                 if (check_status(game_state, IS_PAUSED) == false)
-                    if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].head])
+                    if (++dead_zombies[i].frame >= ZOMBIE_DIE_FRAME * N_SHEET[dead_zombies[i].body])
                     {
                         dead_zombies.erase(dead_zombies.begin() + i);
                         i--;

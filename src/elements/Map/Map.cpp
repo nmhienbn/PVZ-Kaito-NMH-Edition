@@ -1,4 +1,4 @@
-#include "elements/Map/Map.hpp"
+#include "Map.hpp"
 
 /*
 random int in [L;R]

@@ -17,7 +17,7 @@ void init_mower(int l_row, int r_row)
     mowers.clear();
     for (int row = l_row; row <= r_row; row++)
     {
-        Mower tmp(cells[0][0].x1 - 55, row, 0, MOWER_INACTIVE);
+        Mower tmp(cells[0][0].x1 - 55 - row * 2, row, 0, MOWER_INACTIVE);
         mowers.push_back(tmp);
     }
 }

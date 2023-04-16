@@ -178,7 +178,7 @@ void display_shadow()
     }
     for (auto &zombie : game_characters.zombies)
     {
-        win.draw_png(SHADOW_DIRECTORY, zombie.x_location + 70, cells[zombie.row][0].y2 - 40, 96, 40);
+        win.draw_png(SHADOW_DIRECTORY, zombie.x_location + 85, cells[zombie.row][0].y2 - 40, 96, 40);
     }
     for (auto &pea : game_characters.peas)
     {

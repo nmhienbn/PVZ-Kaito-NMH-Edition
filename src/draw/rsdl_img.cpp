@@ -20,55 +20,91 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     {
         SDL_SetTextureAlphaMod(res, 150);
     }
-    else if (file_num == ZOMBIE_WALK1_BLINK_DIRECTORY ||
-             file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
-             file_num == ZOMBIE_WALK3_BLINK_DIRECTORY ||
-             file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
-             file_num == FLAG_ZOMBIE_WALK_BLINK_DIRECTORY ||
-             file_num == FLAG_ZOMBIE_EATING_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_WALK_1_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_WALK_2_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_WALK_3_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
-             file_num == CONE_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_WALK_1_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_WALK_2_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_WALK_3_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
-             file_num == BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
+    else if (
+        // ZOMBIES
+        file_num == ZOMBIE_WALK1_BLINK_DIRECTORY ||
+        file_num == ZOMBIE_WALK2_BLINK_DIRECTORY ||
+        file_num == ZOMBIE_EATING_BLINK_DIRECTORY ||
 
-             file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
-             file_num == SUNFLOWER_HAPPY_BLINK_DIRECTORY ||
-             file_num == WALNUT_1_BLINK_DIRECTORY ||
-             file_num == WALNUT_2_BLINK_DIRECTORY ||
-             file_num == WALNUT_3_BLINK_DIRECTORY ||
-             file_num == WALNUT_4_BLINK_DIRECTORY ||
-             file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
-             file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY ||
-             file_num == CHERRYBOMB_SHEET_BLINK_DIRECTORY)
+        file_num == ARMLESS_ZOMBIE_WALK1_BLINK_DIRECTORY ||
+        file_num == ARMLESS_ZOMBIE_WALK2_BLINK_DIRECTORY ||
+        file_num == ARMLESS_ZOMBIE_EATING_BLINK_DIRECTORY ||
+
+        file_num == FLAG_ZOMBIE_WALK_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_BLINK_DIRECTORY ||
+
+        file_num == CONE_ZOMBIE_WALK1_1_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_1_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK1_2_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_2_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK1_3_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_3_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
+        file_num == CONE_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
+
+        file_num == BUCKET_ZOMBIE_WALK1_1_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_1_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK1_2_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_2_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK1_3_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_3_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
+
+        // PLANTS
+        file_num == PEASHOOTER_SHEET_BLINK_DIRECTORY ||
+        file_num == PEASHOOTER_ATTACK_BLINK_DIRECTORY ||
+
+        file_num == SUNFLOWER_SHEET_BLINK_DIRECTORY ||
+        file_num == SUNFLOWER_HAPPY_BLINK_DIRECTORY ||
+
+        file_num == WALNUT_1_BLINK_DIRECTORY ||
+        file_num == WALNUT_2_BLINK_DIRECTORY ||
+        file_num == WALNUT_3_BLINK_DIRECTORY ||
+        file_num == WALNUT_4_BLINK_DIRECTORY ||
+        file_num == WALNUT_5_BLINK_DIRECTORY ||
+
+        file_num == SNOWPEA_SHEET_BLINK_DIRECTORY ||
+        file_num == SNOWPEA_ATTACK_BLINK_DIRECTORY ||
+
+        file_num == CHERRYBOMB_SHEET_BLINK_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 70);
     }
     else if (
         file_num == ZOMBIE_WALK1_COLD_DIRECTORY ||
         file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
-        file_num == ZOMBIE_WALK3_COLD_DIRECTORY ||
         file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
+
+        file_num == ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY ||
+        file_num == ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY ||
+        file_num == ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY ||
+
         file_num == FLAG_ZOMBIE_WALK_COLD_DIRECTORY ||
         file_num == FLAG_ZOMBIE_EATING_COLD_DIRECTORY ||
+
         file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
-        file_num == ZOMBIE_DIE_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK_1_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK_2_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK_3_COLD_DIRECTORY ||
+        file_num == ZOMBIE_DIE1_COLD_DIRECTORY ||
+        file_num == ZOMBIE_DIE2_COLD_DIRECTORY ||
+
+        file_num == CONE_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
+        file_num == CONE_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
         file_num == CONE_ZOMBIE_EATING_1_COLD_DIRECTORY ||
         file_num == CONE_ZOMBIE_EATING_2_COLD_DIRECTORY ||
         file_num == CONE_ZOMBIE_EATING_3_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK_1_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK_2_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK_3_COLD_DIRECTORY ||
+
+        file_num == BUCKET_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
+        file_num == BUCKET_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
         file_num == BUCKET_ZOMBIE_EATING_1_COLD_DIRECTORY ||
         file_num == BUCKET_ZOMBIE_EATING_2_COLD_DIRECTORY ||
         file_num == BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY)
@@ -207,8 +243,7 @@ Load & draw in the SDL_Rect(x, y, width, height) and rotation of angle
 void window::draw_png(int file_num, int x, int y, int width, int height, int angle)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
-        if (file_num == NULL_DIRECTORY)
-            return;
+        return;
     SDL_Texture *res = load_texture(file_num);
     SDL_Rect r = {x, y, width, height};
     SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
@@ -249,7 +284,7 @@ Set texture alpha mod
 */
 void window::set_texture_alpha(int file_num, int a)
 {
-    if (texture_cache[file_num] != NULL)
+    if (file_num != NULL_DIRECTORY && texture_cache[file_num] != NULL)
     {
         SDL_SetTextureAlphaMod(texture_cache[file_num], a);
     }
@@ -261,10 +296,10 @@ Fade out effect
 */
 void window::fade_out()
 {
-    for (int i = 0; i <= 255; i++)
+    for (int i = 0; i <= 64; i++)
     {
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i >> 3));
+        set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i));
         update_screen();
         HANDLE(QUIT(quit = true; return;))
     }

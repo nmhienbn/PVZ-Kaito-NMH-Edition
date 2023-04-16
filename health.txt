@@ -8,3 +8,4 @@ snowpea slow: 1/2
 wallnut: 4000
 cherry bomb: 1800
 
+cold rgb: 0096ff

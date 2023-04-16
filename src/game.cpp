@@ -19,8 +19,15 @@ If a level is not chosen:
 Else: start level.
 
 */
+// #include <iomanip>
 int main(int argv, char **args)
 {
+    // for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
+    // {
+    //     win.draw_png(i, 0, 0, 10, 10);
+    //     cout << setw(2) << N_SHEET[i] << ' ' << C_SHEET[i] << ' ';
+    //     cout << image_directory[i] << '\n';
+    // }
     // Init game & music.
     init_music();
     Mouse Mouse_cursor;

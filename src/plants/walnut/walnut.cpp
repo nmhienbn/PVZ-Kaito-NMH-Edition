@@ -1,37 +1,30 @@
 #include "walnut.hpp"
-#define WALNUT_WIDTH 185
-#define WALNUT_HEIGHT 185
-#define WALNUT_G_WIDTH 95
-#define WALNUT_G_HEIGHT 95
-#define WALNUT_FRAME 60
+#define WALNUT_WIDTH 116
+#define WALNUT_HEIGHT 143
+#define WALNUT_G_WIDTH 68
+#define WALNUT_G_HEIGHT 68
+#define WALNUT_FRAME 6
 
 extern int game_state;
 extern Map cells;
 extern window win;
 
 /*
-bite <= (1/4) * WALNUT_BITE_LIMIT: 1
-bite <= (2/4) * WALNUT_BITE_LIMIT: 2
-bite <= (3/4) * WALNUT_BITE_LIMIT: 3
-bite <= (4/4) * WALNUT_BITE_LIMIT: 4
+bite <= (1/5) * WALNUT_BITE_LIMIT: 1
+bite <= (2/5) * WALNUT_BITE_LIMIT: 2
+bite <= (3/5) * WALNUT_BITE_LIMIT: 3
+bite <= (4/5) * WALNUT_BITE_LIMIT: 4
+bite <= (5/5) * WALNUT_BITE_LIMIT: 5
 */
 void determine_walnut_appearance(Walnut &walnut)
 {
-    if (walnut.bite <= WALNUT_BITE_LIMIT / 4)
+    for (int i = 1; i <= 5; i++)
     {
-        walnut.directory_num = WALNUT_1_DIRECTORY;
-    }
-    else if (walnut.bite <= WALNUT_BITE_LIMIT / 2)
-    {
-        walnut.directory_num = WALNUT_2_DIRECTORY;
-    }
-    else if (walnut.bite <= WALNUT_BITE_LIMIT * 3 / 4)
-    {
-        walnut.directory_num = WALNUT_3_DIRECTORY;
-    }
-    else
-    {
-        walnut.directory_num = WALNUT_4_DIRECTORY;
+        if (walnut.bite <= WALNUT_BITE_LIMIT * i / 5)
+        {
+            walnut.directory_num = WALNUT_1_DIRECTORY + i - 1;
+            return;
+        }
     }
 }
 
@@ -44,6 +37,10 @@ void display_walnuts(vector<Walnut> &walnuts, const int &_row)
     for (auto &walnut : walnuts)
         if (walnut.row == _row)
         {
+            if (walnut.frame >= WALNUT_FRAME * N_SHEET[walnut.directory_num])
+            {
+                walnut.frame = 0;
+            }
             determine_walnut_appearance(walnut);
             int col = walnut.col;
             int row = walnut.row;
@@ -53,13 +50,14 @@ void display_walnuts(vector<Walnut> &walnuts, const int &_row)
             int scol = frame % C_SHEET[walnut.directory_num];
             win.draw_png(walnut.directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
                          WALNUT_WIDTH, WALNUT_HEIGHT,
-                         cells[row][col].x1 - 5, cells[row][col].y1,
+                         cells[row][col].x1 + 5, cells[row][col].y1 + 3,
                          WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
 
             if (walnut.is_attacked)
             {
                 win.draw_png(blink_of[walnut.directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
-                             WALNUT_WIDTH, WALNUT_HEIGHT, cells[row][col].x1 - 5, cells[row][col].y1,
+                             WALNUT_WIDTH, WALNUT_HEIGHT,
+                             cells[row][col].x1 + 5, cells[row][col].y1 + 3,
                              WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
                 if (check_status(game_state, IS_PAUSED) == false)
                     walnut.is_attacked--;

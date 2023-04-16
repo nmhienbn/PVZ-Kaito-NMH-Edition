@@ -31,7 +31,7 @@ Zombie::Zombie(int _type, int level_num)
     if (type == NORMAL_TYPE)
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
-        directory_num = ZOMBIE_SHEET_DIRECTORY;
+        directory_num = ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == CONE_TYPE)
     {
@@ -91,7 +91,7 @@ Zombie::Zombie(int _type, int level_num, int _row, int _x)
     if (type == NORMAL_TYPE)
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
-        directory_num = ZOMBIE_SHEET_DIRECTORY;
+        directory_num = ZOMBIE_WALK_DIRECTORY;
     }
     else if (type == CONE_TYPE)
     {
@@ -109,144 +109,89 @@ Zombie::Zombie(int _type, int level_num, int _row, int _x)
 
 /*Change zombie eating status
 If is_moving is false, then the zombie must be eating.
-Else the zombie can't be eating.
+Else the zombie must be moving.
 */
 void Zombie::change_zombie_eating_status()
 {
     if (is_moving == false)
     {
-        if (type == NORMAL_TYPE)
+        auto it = eat_of.find(directory_num);
+        if (it != eat_of.end())
         {
-            if (directory_num == FLAG_ZOMBIE_WALK_DIRECTORY)
-            {
-                directory_num = FLAG_ZOMBIE_EATING_DIRECTORY;
-            }
-            else if (directory_num != ZOMBIE_EATING_DIRECTORY)
-            {
-                frame = 0;
-                directory_num = ZOMBIE_EATING_DIRECTORY;
-            }
-        }
-        else if (type == CONE_TYPE)
-        {
-            auto it = eat_of.find(directory_num);
-            if (it != eat_of.end())
-            {
-                frame = 0;
-                directory_num = it->second;
-            }
-        }
-        else if (type == BUCKET_TYPE)
-        {
-            auto it = eat_of.find(directory_num);
-            if (it != eat_of.end())
-            {
-                frame = 0;
-                directory_num = it->second;
-            }
+            frame = 0;
+            directory_num = it->second;
         }
     }
     else
     {
-        if (type == NORMAL_TYPE)
+        if (walk_of(directory_num) >= 0)
         {
-            if (directory_num == ZOMBIE_EATING_DIRECTORY)
-            {
-                frame = 0;
-                directory_num = ZOMBIE_SHEET_DIRECTORY;
-            }
-            else if (directory_num == FLAG_ZOMBIE_EATING_DIRECTORY)
-            {
-                directory_num = FLAG_ZOMBIE_WALK_DIRECTORY;
-            }
-        }
-        else if (type == CONE_TYPE)
-        {
-            auto it = walk_of.find(directory_num);
-            if (it != walk_of.end())
-            {
-                frame = 0;
-                directory_num = it->second;
-            }
-        }
-        else if (type == BUCKET_TYPE)
-        {
-            auto it = walk_of.find(directory_num);
-            if (it != walk_of.end())
-            {
-                frame = 0;
-                directory_num = it->second;
-            }
+            frame = 0;
+            directory_num = walk_of(directory_num);
         }
     }
 }
 
 /*Determine zombies's appearance depend on their health:
 Let x = normal zombie's health limit.
-Bucket-head:
-    + ZOMBIE_BUCKET1_HEALTH_LIMIT: degrade 1.
-    + ZOMBIE_BUCKET2_HEALTH_LIMIT: degrade 2.
-    + ZOMBIE_BUCKET3_HEALTH_LIMIT: degrade 3.
-    + x: turn into normal.
+Normal:
+    + ZOMBIE_ARMLESS_HEALTH_LIMIT: armless
 Cone-head:
     + ZOMBIE_CONE1_HEALTH_LIMIT: degrade 1.
     + ZOMBIE_CONE2_HEALTH_LIMIT: degrade 2.
     + ZOMBIE_CONE3_HEALTH_LIMIT: degrade 3.
     + x: turn into normal.
+Bucket-head:
+    + ZOMBIE_BUCKET1_HEALTH_LIMIT: degrade 1.
+    + ZOMBIE_BUCKET2_HEALTH_LIMIT: degrade 2.
+    + ZOMBIE_BUCKET3_HEALTH_LIMIT: degrade 3.
+    + x: turn into normal.
 */
 void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
 {
-    if (type == BUCKET_TYPE)
+    switch (type)
     {
-        if (health == ZOMBIE_BUCKET2_HEALTH_LIMIT)
+    case NORMAL_TYPE:
+    {
+        if (health == ZOMBIE_ARMLESS_HEALTH_LIMIT)
         {
-            if (is_moving)
-                directory_num = BUCKET_ZOMBIE_WALK_2_DIRECTORY;
-            else
-                directory_num = BUCKET_ZOMBIE_EATING_2_DIRECTORY;
+            directory_num = degrade_of[directory_num];
         }
-        else if (health == ZOMBIE_BUCKET3_HEALTH_LIMIT)
-        {
-            if (is_moving)
-                directory_num = BUCKET_ZOMBIE_WALK_3_DIRECTORY;
-            else
-                directory_num = BUCKET_ZOMBIE_EATING_3_DIRECTORY;
-        }
-        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
-        {
-            type = NORMAL_TYPE;
-            dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));
-            if (is_moving)
-                directory_num = ZOMBIE_WALK1_DIRECTORY;
-            else
-                directory_num = ZOMBIE_EATING_DIRECTORY;
-        }
+        break;
     }
-    if (type == CONE_TYPE)
+
+    case CONE_TYPE:
     {
-        if (health == ZOMBIE_CONE2_HEALTH_LIMIT)
+        if (health == ZOMBIE_CONE2_HEALTH_LIMIT || health == ZOMBIE_CONE3_HEALTH_LIMIT)
         {
-            if (is_moving)
-                directory_num = CONE_ZOMBIE_WALK_2_DIRECTORY;
-            else
-                directory_num = CONE_ZOMBIE_EATING_2_DIRECTORY;
-        }
-        else if (health == ZOMBIE_CONE3_HEALTH_LIMIT)
-        {
-            if (is_moving)
-                directory_num = CONE_ZOMBIE_WALK_3_DIRECTORY;
-            else
-                directory_num = CONE_ZOMBIE_EATING_3_DIRECTORY;
+            directory_num = degrade_of[directory_num];
         }
         else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
         {
             type = NORMAL_TYPE;
             dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, CONE_DROP_DIRECTORY));
-            if (is_moving)
-                directory_num = ZOMBIE_WALK1_DIRECTORY;
-            else
-                directory_num = ZOMBIE_EATING_DIRECTORY;
+            directory_num = degrade_of[directory_num];
         }
+        break;
+    }
+
+    case BUCKET_TYPE:
+    {
+        if (health == ZOMBIE_BUCKET2_HEALTH_LIMIT || health == ZOMBIE_BUCKET3_HEALTH_LIMIT)
+        {
+            directory_num = degrade_of[directory_num];
+        }
+        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        {
+            type = NORMAL_TYPE;
+            dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));
+            directory_num = degrade_of[directory_num];
+        }
+        break;
+    }
+
+    default:
+        break;
     }
 }
 
