@@ -22,86 +22,44 @@ Zombie::Zombie(int _type, int level_num)
     else
         row = rand(0, 4);
     // Random delay time to appear
-    x_location = WINDOW_WIDTH - 70 + rand(0, 100);
+    x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + rand(10, 100);
     // Set init status
     is_moving = true;
     is_attacked = cold_time = 0;
     bite_time = BITE_CLK_COUNT;
 
-    if (type == NORMAL_TYPE)
+    switch (type)
+    {
+    case NORMAL_TYPE:
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
         directory_num = ZOMBIE_WALK_DIRECTORY;
+        break;
     }
-    else if (type == CONE_TYPE)
-    {
-        health = ZOMBIE_CONE1_HEALTH_LIMIT;
-        directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
-    }
-    else if (type == BUCKET_TYPE)
-    {
-        health = ZOMBIE_BUCKET1_HEALTH_LIMIT;
-        directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
-    }
-    // Random first frame.
-    frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
-}
 
-/*
-Zombie construction: Specific type (Flag) and image of zombie
-Zombie appear at once.
-*/
-Zombie::Zombie(int _type, int level_num, int _directory_num)
-{
-    type = _type;
-    // Random appear row
-    if (level_num == 1)
-        row = 2;
-    else if (level_num == 2)
-        row = rand(1, 3);
-    else
-        row = rand(0, 4);
-    // Fix delay time to appear
-    x_location = WINDOW_WIDTH - 50;
-    // Set init status
-    is_moving = true;
-    is_attacked = cold_time = 0;
-    bite_time = BITE_CLK_COUNT;
-    health = ZOMBIE_NORMAL_HEALTH_LIMIT;
-    directory_num = _directory_num;
-    // Random first frame.
-    frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
-}
-
-/*Zombie constructor with fixed _row and _x.
-Set init status, heath and image to render.
-Random first frame.
-*/
-Zombie::Zombie(int _type, int level_num, int _row, int _x)
-{
-    type = _type;
-    row = _row;
-    x_location = _x;
-
-    // Set init status
-    is_moving = true;
-    is_attacked = cold_time = 0;
-    bite_time = BITE_CLK_COUNT;
-
-    if (type == NORMAL_TYPE)
+    case FLAG_TYPE:
     {
         health = ZOMBIE_NORMAL_HEALTH_LIMIT;
-        directory_num = ZOMBIE_WALK_DIRECTORY;
+        directory_num = FLAG_ZOMBIE_WALK_1_DIRECTORY;
+        break;
     }
-    else if (type == CONE_TYPE)
+
+    case CONE_TYPE:
     {
         health = ZOMBIE_CONE1_HEALTH_LIMIT;
         directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
+        break;
     }
-    else if (type == BUCKET_TYPE)
+
+    case BUCKET_TYPE:
     {
         health = ZOMBIE_BUCKET1_HEALTH_LIMIT;
         directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
+        break;
+    }
+
+    default:
+        break;
     }
     // Random first frame.
     frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
@@ -160,9 +118,21 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
         break;
     }
 
+    case FLAG_TYPE:
+    {
+        if (health == ZOMBIE_FLAG2_HEALTH_LIMIT ||
+            health == ZOMBIE_FLAG3_HEALTH_LIMIT ||
+            health == ZOMBIE_FLAG4_HEALTH_LIMIT)
+        {
+            directory_num = degrade_of[directory_num];
+        }
+        break;
+    }
+
     case CONE_TYPE:
     {
-        if (health == ZOMBIE_CONE2_HEALTH_LIMIT || health == ZOMBIE_CONE3_HEALTH_LIMIT)
+        if (health == ZOMBIE_CONE2_HEALTH_LIMIT ||
+            health == ZOMBIE_CONE3_HEALTH_LIMIT)
         {
             directory_num = degrade_of[directory_num];
         }
@@ -177,7 +147,8 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
 
     case BUCKET_TYPE:
     {
-        if (health == ZOMBIE_BUCKET2_HEALTH_LIMIT || health == ZOMBIE_BUCKET3_HEALTH_LIMIT)
+        if (health == ZOMBIE_BUCKET2_HEALTH_LIMIT ||
+            health == ZOMBIE_BUCKET3_HEALTH_LIMIT)
         {
             directory_num = degrade_of[directory_num];
         }
@@ -218,8 +189,7 @@ Compare zombie < zombie:
 */
 bool Zombie::operator<(const Zombie &other) const
 {
-    return (x_location == other.x_location ? x_location < other.x_location
-                                           : cold_time < other.cold_time);
+    return x_location < other.x_location;
 }
 
 /*Dead constructor*/

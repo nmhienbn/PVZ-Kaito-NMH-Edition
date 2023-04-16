@@ -127,8 +127,7 @@ void create_new_zombies()
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = FINAL_WAVE_DIRECTORY;
                     // Make flag zombies
-                    temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
-                    game_characters.zombies.push_back(temp);
+                    game_characters.zombies.push_back(Zombie(FLAG_TYPE, level.level_num));
                     level.used_zombie_count++;
                 }
                 else if (level.is_huge_wave())
@@ -136,8 +135,7 @@ void create_new_zombies()
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = HUGE_WAVE_DIRECTORY;
                     // Make flag zombies
-                    temp = Zombie(NORMAL_TYPE, level.level_num, FLAG_ZOMBIE_WALK_DIRECTORY);
-                    game_characters.zombies.push_back(temp);
+                    game_characters.zombies.push_back(Zombie(FLAG_TYPE, level.level_num));
                     level.used_zombie_count++;
                 }
             }

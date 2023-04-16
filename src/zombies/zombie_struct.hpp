@@ -26,6 +26,7 @@
 enum ZombieType
 {
     NORMAL_TYPE,
+    FLAG_TYPE,
     CONE_TYPE,
     BUCKET_TYPE,
 
@@ -69,8 +70,6 @@ struct Zombie
 
     Zombie();
     Zombie(int _type, int level_num);
-    Zombie(int _type, int level_num, int _directory_num);
-    Zombie(int _type, int level_num, int _row, int _x);
     void change_zombie_eating_status();
     void determine_appearance(vector<DeadZombie> &dead_zombies);
     bool decrease_health(vector<DeadZombie> &dead_zombies);

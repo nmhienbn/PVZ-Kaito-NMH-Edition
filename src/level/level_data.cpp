@@ -36,7 +36,10 @@ void read_level()
     for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
     {
         zombie_seq = "";
-        getline(myfile, zombie_seq);
+        if (typ != FLAG_TYPE)
+        {
+            getline(myfile, zombie_seq);
+        }
         convert_zombie_seq_str_into_int_vect(zombie_seq, typ);
     }
     level.cur_wave = 0;
@@ -77,13 +80,18 @@ Get information of number of zombie in each wave in file.
 */
 void convert_zombie_seq_str_into_int_vect(const string &zombie_seq, const int &typ)
 {
+    level.wave_zombie_count[typ].assign(level.wave_count, 0);
+    if (typ == FLAG_TYPE)
+    {
+        return;
+    }
     string temp;
     int num_ind = zombie_seq.find(":") + 2;
     int space_ind = zombie_seq.find(" ", num_ind);
     for (int i = 0; i < level.wave_count; i++)
     {
         temp = zombie_seq.substr(num_ind, space_ind - num_ind);
-        level.wave_zombie_count[typ].push_back(stoi(temp));
+        level.wave_zombie_count[typ][i] = stoi(temp);
         num_ind = space_ind + 1;
         space_ind = zombie_seq.find(" ", num_ind);
     }
@@ -98,6 +106,16 @@ void decide_zombie_cnt_for_each_sec()
     int z_cnt, sum;
     for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
     {
+        if (typ == FLAG_TYPE)
+        {
+            for (int wave = 0; wave < level.wave_count; wave++)
+            {
+                vector<int> temp(level.wave_duration[wave], 0);
+                level.zombie_distr_for_wave[typ].push_back(temp);
+                level.wave_zombie_count[typ][wave] = 0;
+            }
+            continue;
+        }
         for (int wave = 0; wave < level.wave_count; wave++)
         {
             vector<int> temp(level.wave_duration[wave], 0);

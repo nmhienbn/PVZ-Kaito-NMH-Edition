@@ -30,8 +30,15 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ARMLESS_ZOMBIE_WALK2_BLINK_DIRECTORY ||
         file_num == ARMLESS_ZOMBIE_EATING_BLINK_DIRECTORY ||
 
-        file_num == FLAG_ZOMBIE_WALK_BLINK_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_EATING_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_1_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_1_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_2_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_2_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_3_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_3_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_1_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_2_BLINK_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_3_BLINK_DIRECTORY ||
 
         file_num == CONE_ZOMBIE_WALK1_1_BLINK_DIRECTORY ||
         file_num == CONE_ZOMBIE_WALK2_1_BLINK_DIRECTORY ||
@@ -82,8 +89,15 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY ||
         file_num == ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY ||
 
-        file_num == FLAG_ZOMBIE_WALK_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_EATING_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_1_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_2_COLD_DIRECTORY ||
+        file_num == FLAG_ZOMBIE_EATING_3_COLD_DIRECTORY ||
 
         file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
         file_num == ZOMBIE_DIE1_COLD_DIRECTORY ||

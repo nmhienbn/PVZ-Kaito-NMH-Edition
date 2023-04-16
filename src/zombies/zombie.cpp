@@ -107,7 +107,7 @@ Display zombie of exactly status.
 */
 void display_zombies(vector<Zombie> &zombies, const int &_row)
 {
-    std::sort(zombies.begin(), zombies.end());
+    stable_sort(zombies.begin(), zombies.end());
     for (int i = (int)zombies.size() - 1; i >= 0; i--)
         if (zombies[i].row == _row)
         {
