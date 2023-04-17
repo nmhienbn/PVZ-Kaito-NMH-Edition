@@ -217,6 +217,7 @@ TOTAL now: 4 plants and 3 zombies available.
 	Seed packet chosen animation.
 	Shorten the code. Using struct Images contains string img_dir and n_sheet, c_sheet.
 	Add zombie next time step to zombie struct.
+	Fix bug: when player is picking a plant, then they click on another invalid plant, chosen plant won't be reset ---> will be reset
 	
 
 Dim = Exposue - 3.20

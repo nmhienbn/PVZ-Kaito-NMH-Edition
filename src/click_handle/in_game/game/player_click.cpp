@@ -82,12 +82,14 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     is_a_plant_chosen = false;
     if (player.sun_count < plant_sun_cost[i])
     {
+        remove_chosen_plant();
         player.sun_count_change_color_times = 4;
         play_sound_effect(BUZZER_MUSIC_DIRECTORY);
         win.show_announcer_text("YOU DO NOT HAVE ENOUGH SUNS!");
     }
     else if (icons.plant_remaining_time[i])
     {
+        remove_chosen_plant();
         win.show_announcer_text("YOU MUST WAIT FOR PLANT SEED TO REFRESH!");
     }
     else
