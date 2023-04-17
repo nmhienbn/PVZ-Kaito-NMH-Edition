@@ -161,9 +161,7 @@ Handle all movement is happening: zombies, suns, peas.
 */
 void handle_movements()
 {
-    if (clk % ZOMBIE_CLK_COUNT == 0)
-        move_zombies(game_characters.zombies);
-
+    move_zombies(game_characters.zombies);
     move_suns(game_characters.suns);
     move_peas(game_characters.peas, game_characters.zombies);
 }

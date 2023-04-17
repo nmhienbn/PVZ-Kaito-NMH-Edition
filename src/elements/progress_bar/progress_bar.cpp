@@ -25,6 +25,7 @@ Display game progress:
 void display_progress_bar()
 {
     int progress_width = PROGRESS_BAR_WIDTH_1 + level.used_zombie_count * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
+    // Not let this progress update too fast
     if (now_progress > progress_width)
     {
         now_progress = PROGRESS_BAR_WIDTH_1;

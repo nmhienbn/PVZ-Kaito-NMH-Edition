@@ -27,6 +27,7 @@ Zombie::Zombie(int _type, int level_num)
     is_moving = true;
     is_attacked = cold_time = 0;
     bite_time = BITE_CLK_COUNT;
+    next_step_time = 0;
 
     switch (type)
     {
@@ -148,8 +149,7 @@ bool Zombie::decrease_health(vector<DeadZombie> &dead_zombies)
 
 /*
 Compare zombie < zombie:
-    x < x,
-    cold_time < cold_time
+    x < x
 */
 bool Zombie::operator<(const Zombie &other) const
 {

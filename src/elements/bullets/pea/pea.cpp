@@ -69,7 +69,7 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
 /*
 If a pea collide with a zombie: apply it to hit the zombie:
     Pea -> crashed pea.
-    Snow pea will slow zombies.
+    Snow pea will slow zombies at once.
     Zombie decrease health & blink.
     Add zombies' death.
     Has some probabilities not hit zombie =))
@@ -94,6 +94,12 @@ bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_
         // Snowz peas effects
         if (pea.type == 2)
         {
+            // If zombie is not cold, its next step and bite will be delay
+            if (!zombies[z_ind].cold_time)
+            {
+                zombies[z_ind].bite_time *= 2;
+                zombies[z_ind].next_step_time *= 2;
+            }
             zombies[z_ind].cold_time = MAX_COLD_TIME;
         }
         // Pea explode

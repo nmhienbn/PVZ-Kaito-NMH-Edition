@@ -1,6 +1,23 @@
 #include "zombies/zombie.hpp"
 #include <algorithm>
 
+#define ZOMBIE_WIDTH 166
+#define ZOMBIE_HEIGHT 144
+#define ZOMBIE_G_WIDTH 166
+#define ZOMBIE_G_HEIGHT 144
+
+#define ZOMBIE_EATING_FRAME 10
+
+#define ZOMBIE_DIE_FRAME 2
+#define ZOMBIE_BURNT_FRAME 10
+#define DEAD_ZOMBIE_FRAMES 12
+
+#define HEAD_ZOMBIE_FRAME 15
+#define HEAD_ZOMBIE_WIDTH 150
+#define HEAD_ZOMBIE_HEIGHT 187
+#define HEAD_ZOMBIE_G_WIDTH 125
+#define HEAD_ZOMBIE_G_HEIGHT 155
+
 extern int game_state;
 extern Map cells;
 extern window win;
@@ -13,11 +30,11 @@ Check if Zombie is in query tile or not to change its status.
 */
 bool has_zombie_reached_element(const Zombie &zombie, const int &row, const int &col)
 {
-    int right_limit = cells[row][col].x2 - BLOCK_WIDTH - 1;
-    int left_limit = cells[row][col].x1 - BLOCK_WIDTH;
-    int zombie_new_location = zombie.x_location - (zombie.cold_time ? ZOMBIE_COLD_DX : ZOMBIE_DX);
+    int right_limit = cells[row][col].x2 - 1;
+    int left_limit = cells[row][col].x1;
+    int zombie_new_location = zombie.x_location - ZOMBIE_DX;
     if (zombie.row == row &&
-        is_in(left_limit, zombie_new_location, right_limit))
+        is_in(left_limit, zombie_new_location + 95, right_limit))
         return true;
     return false;
 }
@@ -64,10 +81,6 @@ Check if zombie can move or not:
 */
 bool can_zombie_move(Zombie &zombie)
 {
-    // int left_bound = cells[0][0].x1 - BLOCK_WIDTH;
-    // int zombie_new_location = zombie.x_location - ZOMBIE_DX * (zombie.cold_time ? ZOMBIE_COLD_DX : ZOMBIE_DX);
-    // if (zombie_new_location < left_bound)
-    //     return false;
     if (!zombie.is_moving)
         return false;
     if (has_zombie_reached_any_plant(zombie))
@@ -95,9 +108,17 @@ void move_zombies(vector<Zombie> &zombies)
 {
     for (auto &zombie : zombies)
     {
+        if (zombie.next_step_time)
+        {
+            zombie.next_step_time--;
+            continue;
+        }
+        zombie.next_step_time = ZOMBIE_CLK_COUNT;
+        if (zombie.cold_time)
+            zombie.next_step_time += ZOMBIE_CLK_COUNT;
         if (can_zombie_move(zombie))
         {
-            zombie.x_location -= (zombie.cold_time ? ZOMBIE_COLD_DX : ZOMBIE_DX);
+            zombie.x_location -= ZOMBIE_DX;
         }
     }
 }
@@ -113,24 +134,35 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
         {
             int row = zombies[i].row;
             int y_location = cells[row][0].y1 - 50;
-            // win.draw_png_scale(zombies[i].directory_num, zombies[i].x_location, y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+
+            // zombie
             int z_frame = 2;
             int frame = zombies[i].frame / z_frame;
             int scol = frame % all_img[zombies[i].directory_num].c_sheet;
             int srow = frame / all_img[zombies[i].directory_num].c_sheet;
             win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+
+            // zombie cold
             if (zombies[i].cold_time)
             {
                 win.draw_png(cold_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
                 if (check_status(game_state, IS_PAUSED) == false)
-                    zombies[i].cold_time--;
+                    if (--zombies[i].cold_time == 0)
+                    {
+                        zombies[i].bite_time /= 2;
+                        zombies[i].next_step_time /= 2;
+                    }
             }
+
+            // zombie attacked
             if (zombies[i].is_attacked)
             {
                 win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
                 if (check_status(game_state, IS_PAUSED) == false)
                     zombies[i].is_attacked--;
             }
+
+            // zombie next frame
             if (check_status(game_state, IS_PAUSED) == false)
             {
                 if (zombies[i].cold_time % 2 == 0)
