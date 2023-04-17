@@ -5,7 +5,7 @@ Load game mouse cursor
 */
 Mouse::Mouse()
 {
-    SDL_Surface *tmp = IMG_Load(image_directory[MOUSE_CURSOR_DIRECTORY].c_str());
+    SDL_Surface *tmp = IMG_Load(all_img[MOUSE_CURSOR_DIRECTORY].img_dir.c_str());
     Cursor = SDL_CreateColorCursor(tmp, 0, 0);
     SDL_FreeSurface(tmp);
 }

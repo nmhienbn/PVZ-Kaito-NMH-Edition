@@ -153,6 +153,8 @@ void display_icons_in_icon_bar()
         {
             if (icons.is_plant_chosen[i] == false)
                 plant_seed[i].blink();
+            else
+                win.draw_png_scale(SEED_CHOSEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
         }
         else
         {

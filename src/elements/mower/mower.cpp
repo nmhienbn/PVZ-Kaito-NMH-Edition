@@ -31,13 +31,13 @@ void display_mower(const int &_row)
         if (mowers[i].row == _row)
         {
             int frame = mowers[i].frame / MOWER_FRAME;
-            int scol = frame % C_SHEET[MOWER_DIRECTORY];
-            int srow = frame / C_SHEET[MOWER_DIRECTORY];
+            int scol = frame % all_img[MOWER_DIRECTORY].c_sheet;
+            int srow = frame / all_img[MOWER_DIRECTORY].c_sheet;
             win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
                          mowers[i].x, cells[mowers[i].row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
             if (mowers[i].status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
             {
-                if (++mowers[i].frame >= MOWER_FRAME * N_SHEET[MOWER_DIRECTORY])
+                if (++mowers[i].frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
                 {
                     mowers[i].frame = 0;
                 }

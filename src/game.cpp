@@ -25,8 +25,8 @@ int main(int argv, char **args)
     // for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
     // {
     //     win.draw_png(i, 0, 0, 10, 10);
-    //     cout << setw(2) << N_SHEET[i] << ' ' << C_SHEET[i] << ' ';
-    //     cout << image_directory[i] << '\n';
+    //     cout << setw(2) << all_img[i].n_sheet << ' ' << all_img[i].c_sheet << ' ';
+    //     cout << all_img[i].img_dir << '\n';
     // }
     // Init game & music.
     init_music();
@@ -41,7 +41,7 @@ int main(int argv, char **args)
         set_status(game_state, IS_UNLOCKING_PLANT, true);
         while (!quit && check_status(game_state, IS_UNLOCKING_PLANT) == true)
         {
-            unlock_plant(PEASHOOTER);
+            unlock_plant(PEASHOOTER_TYPE);
         }
         update_unlocked_level();
     }

@@ -33,3 +33,16 @@ int walk_of(const int &img_dir)
     }
     return NULL_DIRECTORY;
 }
+
+Image::Image(string _dir)
+{
+    img_dir = _dir;
+    n_sheet = 0;
+    c_sheet = 0;
+}
+Image::Image(string _dir, int _n, int _c)
+{
+    img_dir = _dir;
+    n_sheet = _n;
+    c_sheet = _c;
+}

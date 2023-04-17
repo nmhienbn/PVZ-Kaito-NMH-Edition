@@ -11,6 +11,9 @@ Handles all the changes to the game:
     + Update all zombies' moving status.
     + Check all bullets' moving status.
     + Create new wave of zombies. (if level has finised and that's time to create new wave)
+        + first wave
+        + there's no zombie
+        + long time no seen new zombies
     + Make zombies' bite to plants and update the next time they can bite them.
     + Fire all the bullets.
     + Generate suns from the sky (not same time). No sun at night.
@@ -34,17 +37,19 @@ void handle_changes()
 
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
     if (level.waves_finished == false &&
-        (clk == 900 || (clk > ZOMBIE_CREATE_CLK_COUNT && clk % ZOMBIE_CREATE_CLK_COUNT == 0)))
+        (clk == FIRST_WAVE_CLK_COUNT ||                                     // first wave
+         (clk > FIRST_WAVE_CLK_COUNT && game_characters.zombies.empty()) || // if there's no zombie
+         clk - level.last_clk_zombie_appear >= ZOMBIE_CREATE_CLK_COUNT))    // long time no seen new zombies
         create_new_zombies();
-    else if (clk % ZOMBIE_CREATE_CLK_COUNT == ANNOUNCER_CLK_COUNT)
+    else if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT)
         level.announce_directory = NULL_DIRECTORY;
 
     // Zombie bite plant
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters, PEASHOOTER_BITE_LIMIT);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers, SUNFLOWER_BITE_LIMIT);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts, WALNUT_BITE_LIMIT);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas, SNOWPEA_BITE_LIMIT);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs, CHERRYBOMB_BITE_LIMIT);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters, PLANT_HEALTH_LIMIT[PEASHOOTER_TYPE]);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers, PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE]);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts, PLANT_HEALTH_LIMIT[WALNUT_TYPE]);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas, PLANT_HEALTH_LIMIT[SNOWPEA_TYPE]);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs, PLANT_HEALTH_LIMIT[CHERRYBOMB_TYPE]);
 
     // Update next time for each zombie to bite plant
     update_zombie_next_bite(game_characters.zombies);
@@ -86,6 +91,7 @@ void create_new_zombies()
             {
                 break;
             }
+            level.last_clk_zombie_appear = clk;
             // Generate zombies for current wave and current second.
             // For all type of zombies.
             for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)

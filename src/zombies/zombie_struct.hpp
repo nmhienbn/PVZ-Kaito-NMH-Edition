@@ -23,16 +23,6 @@
 #define HEAD_ZOMBIE_G_WIDTH 125
 #define HEAD_ZOMBIE_G_HEIGHT 155
 
-enum ZombieType
-{
-    NORMAL_TYPE,
-    FLAG_TYPE,
-    CONE_TYPE,
-    BUCKET_TYPE,
-
-    COUNT_ZOMBIE_TYPE,
-};
-
 struct DeadZombie
 {
     int row;

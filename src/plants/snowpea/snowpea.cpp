@@ -74,8 +74,8 @@ void display_snowpeas(vector<Snowpea> &snowpeas, const int &_row)
             int col = snowpea.col;
             int row = snowpea.row;
             int frame = snowpea.frame / SNOWPEA_FRAME;
-            int scol = frame % C_SHEET[snowpea.directory_num];
-            int srow = frame / C_SHEET[snowpea.directory_num];
+            int scol = frame % all_img[snowpea.directory_num].c_sheet;
+            int srow = frame / all_img[snowpea.directory_num].c_sheet;
             win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
                          SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
                          cells[row][col].x1 - 10, cells[row][col].y1 - 5,
@@ -90,7 +90,7 @@ void display_snowpeas(vector<Snowpea> &snowpeas, const int &_row)
                     snowpea.is_attacked--;
             }
             if (check_status(game_state, IS_PAUSED) == false)
-                if (++snowpea.frame >= SNOWPEA_FRAME * N_SHEET[snowpea.directory_num])
+                if (++snowpea.frame >= SNOWPEA_FRAME * all_img[snowpea.directory_num].n_sheet)
                 {
                     snowpea.frame = 0;
                 }

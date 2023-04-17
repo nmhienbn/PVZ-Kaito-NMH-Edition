@@ -67,7 +67,7 @@ void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row)
     for (auto &sunflower : sunflowers)
         if (sunflower.row == _row)
         {
-            if (sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
+            if (sunflower.frame >= SUNFLOWER_FRAME * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
             {
                 sunflower.frame = 0;
             }
@@ -75,15 +75,15 @@ void display_sunflowers(vector<Sunflower> &sunflowers, const int &_row)
             int row = sunflower.row;
 
             int frame = sunflower.frame / SUNFLOWER_FRAME;
-            int scol = frame % C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
-            int srow = frame / C_SHEET[SUNFLOWER_SHEET_DIRECTORY];
+            int scol = frame % all_img[SUNFLOWER_SHEET_DIRECTORY].c_sheet;
+            int srow = frame / all_img[SUNFLOWER_SHEET_DIRECTORY].c_sheet;
             win.draw_png(sunflower.directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
                          SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
                          cells[row][col].x1 - 22, cells[row][col].y1 - 28,
                          SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
 
             if (check_status(game_state, IS_PAUSED) == false)
-                if (++sunflower.frame >= SUNFLOWER_FRAME * N_SHEET[SUNFLOWER_SHEET_DIRECTORY])
+                if (++sunflower.frame >= SUNFLOWER_FRAME * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
                 {
                     sunflower.frame = 0;
                 }

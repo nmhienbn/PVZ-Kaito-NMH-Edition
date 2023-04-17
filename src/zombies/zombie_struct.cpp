@@ -32,28 +32,28 @@ Zombie::Zombie(int _type, int level_num)
     {
     case NORMAL_TYPE:
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        health = *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin();
         directory_num = ZOMBIE_WALK_DIRECTORY;
         break;
     }
 
     case FLAG_TYPE:
     {
-        health = ZOMBIE_NORMAL_HEALTH_LIMIT;
+        health = *ZOMBIE_HEALTH_LIMIT[FLAG_TYPE].rbegin();
         directory_num = FLAG_ZOMBIE_WALK_1_DIRECTORY;
         break;
     }
 
     case CONE_TYPE:
     {
-        health = ZOMBIE_CONE1_HEALTH_LIMIT;
+        health = *ZOMBIE_HEALTH_LIMIT[CONE_TYPE].rbegin();
         directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
         break;
     }
 
     case BUCKET_TYPE:
     {
-        health = ZOMBIE_BUCKET1_HEALTH_LIMIT;
+        health = *ZOMBIE_HEALTH_LIMIT[BUCKET_TYPE].rbegin();
         directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
         break;
     }
@@ -62,7 +62,7 @@ Zombie::Zombie(int _type, int level_num)
         break;
     }
     // Random first frame.
-    frame = rand(0, ZOMBIE_FRAME * N_SHEET[directory_num] - 1);
+    frame = rand(0, ZOMBIE_FRAME * all_img[directory_num].n_sheet - 1);
 }
 
 /*Change zombie eating status
@@ -91,52 +91,21 @@ void Zombie::change_zombie_eating_status()
 }
 
 /*Determine zombies's appearance depend on their health:
-Let x = normal zombie's health limit.
-Normal:
-    + ZOMBIE_ARMLESS_HEALTH_LIMIT: armless
-Cone-head:
-    + ZOMBIE_CONE1_HEALTH_LIMIT: degrade 1.
-    + ZOMBIE_CONE2_HEALTH_LIMIT: degrade 2.
-    + ZOMBIE_CONE3_HEALTH_LIMIT: degrade 3.
-    + x: turn into normal.
-Bucket-head:
-    + ZOMBIE_BUCKET1_HEALTH_LIMIT: degrade 1.
-    + ZOMBIE_BUCKET2_HEALTH_LIMIT: degrade 2.
-    + ZOMBIE_BUCKET3_HEALTH_LIMIT: degrade 3.
-    + x: turn into normal.
+Armor drop if necessary
 */
 void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
 {
+    // Degrade the zombie
+    if (ZOMBIE_HEALTH_LIMIT[type].find(health) != ZOMBIE_HEALTH_LIMIT[type].end())
+    {
+        directory_num = degrade_of[directory_num];
+    }
+    // Armor drop if necessary
     switch (type)
     {
-    case NORMAL_TYPE:
-    {
-        if (health == ZOMBIE_ARMLESS_HEALTH_LIMIT)
-        {
-            directory_num = degrade_of[directory_num];
-        }
-        break;
-    }
-
-    case FLAG_TYPE:
-    {
-        if (health == ZOMBIE_FLAG2_HEALTH_LIMIT ||
-            health == ZOMBIE_FLAG3_HEALTH_LIMIT ||
-            health == ZOMBIE_FLAG4_HEALTH_LIMIT)
-        {
-            directory_num = degrade_of[directory_num];
-        }
-        break;
-    }
-
     case CONE_TYPE:
     {
-        if (health == ZOMBIE_CONE2_HEALTH_LIMIT ||
-            health == ZOMBIE_CONE3_HEALTH_LIMIT)
-        {
-            directory_num = degrade_of[directory_num];
-        }
-        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
         {
             type = NORMAL_TYPE;
             dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, CONE_DROP_DIRECTORY));
@@ -147,12 +116,7 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
 
     case BUCKET_TYPE:
     {
-        if (health == ZOMBIE_BUCKET2_HEALTH_LIMIT ||
-            health == ZOMBIE_BUCKET3_HEALTH_LIMIT)
-        {
-            directory_num = degrade_of[directory_num];
-        }
-        else if (health == ZOMBIE_NORMAL_HEALTH_LIMIT)
+        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
         {
             type = NORMAL_TYPE;
             dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));

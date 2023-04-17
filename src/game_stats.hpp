@@ -5,6 +5,7 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
 #include <string>
 #include <fstream>
 #include <stdlib.h>
@@ -19,6 +20,7 @@ using namespace std;
 
 #define SUN_GEN_SKY_CLK_COUNT 1500       // Sun from sky frequency
 #define SUN_GEN_SUNFLOWER_CLK_COUNT 1440 // Sun from sunflower frequency
+#define FIRST_WAVE_CLK_COUNT 900         // Time between zombies' different groups
 #define ZOMBIE_CREATE_CLK_COUNT 2000     // Time between zombies' different groups
 #define BITE_CLK_COUNT 30                // Zombie bite plant frequency
 #define ZOMBIE_CLK_COUNT 15              // Zombie moving frequency
@@ -56,29 +58,46 @@ Moving speed of some elements
 #define SUN_DY 1
 #define CLICKED_SUN_D 50
 
+enum PlantType
+{
+    SUNFLOWER_TROPHY = -1,
+    PEASHOOTER_TYPE,
+    SUNFLOWER_TYPE,
+    WALNUT_TYPE,
+    SNOWPEA_TYPE,
+    CHERRYBOMB_TYPE,
+
+    PLANT_COUNT
+};
+
+enum ZombieType
+{
+    NORMAL_TYPE,
+    FLAG_TYPE,
+    CONE_TYPE,
+    BUCKET_TYPE,
+
+    COUNT_ZOMBIE_TYPE,
+};
+
 /*Health of plants*/
-#define WALNUT_BITE_LIMIT 72
-#define SUNFLOWER_BITE_LIMIT 6
-#define PEASHOOTER_BITE_LIMIT 6
-#define SNOWPEA_BITE_LIMIT 6
-#define CHERRYBOMB_BITE_LIMIT 9999
+const int PLANT_HEALTH_LIMIT[] = {
+    6,   // SUNFLOWER
+    6,   // PEASHOOTER
+    72,  // WALNUT
+    6,   // SNOWPEA
+    9999 // CHERRYBOMB
+
+};
 
 /*Health of zombies*/
-#define ZOMBIE_ARMLESS_HEALTH_LIMIT 5
-#define ZOMBIE_NORMAL_HEALTH_LIMIT 10
+const set<int> ZOMBIE_HEALTH_LIMIT[] = {
+    {5, 10},       // NORMAL
+    {3, 6, 9, 12}, // FLAG
+    {16, 22, 28},  // CONE
+    {25, 45, 65}   // BUCKET
 
-#define ZOMBIE_FLAG1_HEALTH_LIMIT 12
-#define ZOMBIE_FLAG2_HEALTH_LIMIT 9
-#define ZOMBIE_FLAG3_HEALTH_LIMIT 6
-#define ZOMBIE_FLAG4_HEALTH_LIMIT 3
-
-#define ZOMBIE_CONE1_HEALTH_LIMIT 28
-#define ZOMBIE_CONE2_HEALTH_LIMIT 22
-#define ZOMBIE_CONE3_HEALTH_LIMIT 16
-
-#define ZOMBIE_BUCKET1_HEALTH_LIMIT 65
-#define ZOMBIE_BUCKET2_HEALTH_LIMIT 45
-#define ZOMBIE_BUCKET3_HEALTH_LIMIT 25
+};
 
 /*
 WINDOW size

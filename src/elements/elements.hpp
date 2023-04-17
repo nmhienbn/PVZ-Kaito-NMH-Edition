@@ -52,18 +52,6 @@ struct Player
     int sun_count_change_color_times = 0;
 };
 
-enum PlantType
-{
-    SUNFLOWER_TROPHY = -1,
-    PEASHOOTER,
-    SUNFLOWER,
-    WALNUT,
-    SNOWPEA,
-    CHERRYBOMB,
-
-    PLANT_COUNT
-};
-
 struct Icons
 {
     bool is_plant_chosen[PLANT_COUNT];
@@ -87,15 +75,19 @@ Information about level:
 */
 struct Level
 {
-    int level_num;
-    int wave_count;
-    int cur_wave;
-    int cur_sec;
-    bool waves_finished;
-    int map_type;
-    bool is_night;
-    bool zombie_has_coming;
-    int zombie_count, used_zombie_count;
+    int level_num; // level num
+    int map_type;  // type of map: day, night
+    bool is_night; // true if map is night
+
+    int wave_count;      // number of wave
+    int cur_wave;        // current wave
+    int cur_sec;         // current second
+    bool waves_finished; // true if waves has finished
+
+    bool zombie_has_coming;     // true if any zombie has appeared
+    int zombie_count;           // total level zombies
+    int used_zombie_count;      // appeared zombies
+    int last_clk_zombie_appear; // last clk new zombies appeared
 
     int background_directory = BACKGROUND_DIRECTORY;
     int announce_directory = NULL_DIRECTORY;

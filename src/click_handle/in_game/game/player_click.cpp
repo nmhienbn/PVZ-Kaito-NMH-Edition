@@ -223,25 +223,25 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
         remove_chosen_plant();
         return;
     }
-    if (icons.is_plant_chosen[PEASHOOTER])
+    if (icons.is_plant_chosen[PEASHOOTER_TYPE])
     {
-        plant_new_plant<Peashooter>(game_characters.peashooters, PEASHOOTER, row, col);
+        plant_new_plant<Peashooter>(game_characters.peashooters, PEASHOOTER_TYPE, row, col);
     }
-    else if (icons.is_plant_chosen[SUNFLOWER])
+    else if (icons.is_plant_chosen[SUNFLOWER_TYPE])
     {
-        plant_new_plant<Sunflower>(game_characters.sunflowers, SUNFLOWER, row, col);
+        plant_new_plant<Sunflower>(game_characters.sunflowers, SUNFLOWER_TYPE, row, col);
     }
-    else if (icons.is_plant_chosen[WALNUT])
+    else if (icons.is_plant_chosen[WALNUT_TYPE])
     {
-        plant_new_plant<Walnut>(game_characters.walnuts, WALNUT, row, col);
+        plant_new_plant<Walnut>(game_characters.walnuts, WALNUT_TYPE, row, col);
     }
-    else if (icons.is_plant_chosen[SNOWPEA])
+    else if (icons.is_plant_chosen[SNOWPEA_TYPE])
     {
-        plant_new_plant<Snowpea>(game_characters.snowpeas, SNOWPEA, row, col);
+        plant_new_plant<Snowpea>(game_characters.snowpeas, SNOWPEA_TYPE, row, col);
     }
-    else if (icons.is_plant_chosen[CHERRYBOMB])
+    else if (icons.is_plant_chosen[CHERRYBOMB_TYPE])
     {
-        plant_new_plant<CherryBomb>(game_characters.cherrybombs, CHERRYBOMB, row, col);
+        plant_new_plant<CherryBomb>(game_characters.cherrybombs, CHERRYBOMB_TYPE, row, col);
     }
 }
 

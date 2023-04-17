@@ -29,7 +29,7 @@ void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
 {
     for (int i = 0; i < (int)cherrybombs.size(); i++)
     {
-        if (cherrybombs[i].frame >= CHERRYBOMB_FRAME * N_SHEET[CHERRYBOMB_SHEET_DIRECTORY])
+        if (cherrybombs[i].frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
         {
             cells[cherrybombs[i].row][cherrybombs[i].col].is_planted = false;
             cherrybombs.erase(cherrybombs.begin() + i);
@@ -76,8 +76,8 @@ void display_cherrybombs(vector<CherryBomb> &cherrybombs, const int &_row)
             int col = cherrybomb.col;
             int row = cherrybomb.row;
             int frame = cherrybomb.frame / CHERRYBOMB_FRAME;
-            int scol = frame % C_SHEET[cherrybomb.directory_num];
-            int srow = frame / C_SHEET[cherrybomb.directory_num];
+            int scol = frame % all_img[cherrybomb.directory_num].c_sheet;
+            int srow = frame / all_img[cherrybomb.directory_num].c_sheet;
             win.draw_png(cherrybomb.directory_num, CHERRYBOMB_WIDTH * scol,
                          CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
                          cells[row][col].x1, cells[row][col].y1 + 5,

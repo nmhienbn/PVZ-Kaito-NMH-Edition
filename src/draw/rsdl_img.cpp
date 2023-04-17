@@ -170,8 +170,8 @@ SDL_Texture *window::load_texture(int file_num)
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, image_directory[file_num].c_str());
-        print_error(res, image_directory[file_num]);
+        res = IMG_LoadTexture(renderer, all_img[file_num].img_dir.c_str());
+        print_error(res, all_img[file_num].img_dir);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }
@@ -190,10 +190,10 @@ void window::draw_bmp(int file_num, int x, int y, int width, int height)
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        SDL_Surface *surface = SDL_LoadBMP(image_directory[file_num].c_str());
+        SDL_Surface *surface = SDL_LoadBMP(all_img[file_num].img_dir.c_str());
         res = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
-        print_error(res, image_directory[file_num]);
+        print_error(res, all_img[file_num].img_dir);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
     }

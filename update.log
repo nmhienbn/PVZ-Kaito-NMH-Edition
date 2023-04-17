@@ -209,6 +209,13 @@ TOTAL now: 4 plants and 3 zombies available.
 	Buff snowpea: increase slow rate (by sort zombies in other order).
 	New: plants', peas', zombies' shadow.
 	Auto disable turbo if zombie is too near the house. Of course player can enable it again.
+
+14-17/04/2023:
+	Snow pea new appearance.
+	Zombie animation upgrade.
+	Add flag zombie type and their degrade.
+	Seed packet chosen animation.
+	Shorten the code. Using struct Images contains string img_dir and n_sheet, c_sheet
 	
 
 Dim = Exposue - 3.20

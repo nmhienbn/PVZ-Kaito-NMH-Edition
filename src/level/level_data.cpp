@@ -200,4 +200,5 @@ void load_level()
     player.is_choosing_a_plant = false;
     player.is_shoveling = false;
     level.zombie_has_coming = false;
+    level.last_clk_zombie_appear = 0;
 }
