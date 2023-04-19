@@ -2,15 +2,13 @@
 #include "draw/rsdl.hpp"
 #include "game_stats.hpp"
 #include "elements/Map/Map.hpp"
+#include "plants/plants.hpp"
 
-struct Walnut
+class Walnut : public Plants
 {
-    int row, col;
-    int bite;
-    int directory_num = WALNUT_1_DIRECTORY;
-    int frame = 0;
-    int is_attacked = 0;
+public:
+    Walnut(const int &_row, const int &_col);
+    ~Walnut();
+    void determine_appearance();
+    void display(const int &_row) override;
 };
-
-void determine_walnut_appearance(Walnut &walnut);
-void display_walnuts(vector<Walnut> &walnuts, const int &_row);

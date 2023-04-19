@@ -7,17 +7,39 @@ extern int game_state;
 extern Map cells;
 extern window win;
 
+CherryBomb::CherryBomb(const int &_row, const int &_col)
+{
+    row = _row;
+    col = _col;
+    health = PLANT_HEALTH_LIMIT[CHERRYBOMB_TYPE];
+    directory_num = CHERRYBOMB_SHEET_DIRECTORY;
+    frame = 0;
+    attacked_time = 0;
+}
+CherryBomb::~CherryBomb()
+{
+}
 /*
 @return 'true' if cherrybomb hit the zombie
 */
-bool is_cherrybomb_hit_zombie(CherryBomb &cherrybomb, Zombie &zombie)
+bool CherryBomb::is_hit_zombie(Zombie &zombie)
 {
-    int right_limit = cells[cherrybomb.row][cherrybomb.col].x2 + BLOCK_WIDTH + 10;
-    int left_limit = cells[cherrybomb.row][cherrybomb.col].x1 - BLOCK_WIDTH - 25;
-    if (is_in(cherrybomb.row - 1, zombie.row, cherrybomb.row + 1) &&
+    int right_limit = cells[row][col].x2 + BLOCK_WIDTH + 10;
+    int left_limit = cells[row][col].x1 - BLOCK_WIDTH - 25;
+    if (is_in(row - 1, zombie.row, row + 1) &&
         is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION, right_limit))
         return true;
     return false;
+}
+
+bool CherryBomb::is_blow()
+{
+    return frame == CHERRYBOMB_FRAME * 22;
+}
+
+bool CherryBomb::is_disappeared()
+{
+    return frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet;
 }
 
 /*
@@ -29,18 +51,18 @@ void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
 {
     for (int i = 0; i < (int)cherrybombs.size(); i++)
     {
-        if (cherrybombs[i].frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
+        if (cherrybombs[i].is_disappeared())
         {
-            cells[cherrybombs[i].row][cherrybombs[i].col].is_planted = false;
+            cells[cherrybombs[i].get_row()][cherrybombs[i].get_col()].is_planted = false;
             cherrybombs.erase(cherrybombs.begin() + i);
             i--;
             continue;
         }
-        if (cherrybombs[i].frame == CHERRYBOMB_FRAME * 22)
+        if (cherrybombs[i].is_blow())
         {
             play_sound_effect(CHERRYBOMB_MUSIC_DIRECTORY);
             for (int j = 0; j < (int)zombies.size();)
-                if (!apply_cherrybomb_hitting_zombie(zombies, j, cherrybombs[i], dead_zombies))
+                if (!cherrybombs[i].apply_hitting_zombie(zombies, j, dead_zombies))
                 {
                     j++;
                 }
@@ -51,11 +73,10 @@ void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
 /*
 Apply cherrybomb explode the zombie. (change zombie into burnt one)
 */
-bool apply_cherrybomb_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
-                                     CherryBomb &cherrybomb,
-                                     vector<DeadZombie> &dead_zombies)
+bool CherryBomb::apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
+                                      vector<DeadZombie> &dead_zombies)
 {
-    if (is_cherrybomb_hit_zombie(cherrybomb, zombies[z_ind]))
+    if (is_hit_zombie(zombies[z_ind]))
     {
         DeadZombie tmp(zombies[z_ind].row, zombies[z_ind].x_location, ZOMBIE_BURNT_DIRECTORY, NULL_DIRECTORY);
         dead_zombies.push_back(tmp);
@@ -68,30 +89,27 @@ bool apply_cherrybomb_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
 /*
 Display cherry bomb
 */
-void display_cherrybombs(vector<CherryBomb> &cherrybombs, const int &_row)
+void CherryBomb::display(const int &_row)
 {
-    for (auto &cherrybomb : cherrybombs)
-        if (cherrybomb.row == _row)
+    if (row == _row)
+    {
+        int sframe = frame / CHERRYBOMB_FRAME;
+        int scol = sframe % all_img[directory_num].c_sheet;
+        int srow = sframe / all_img[directory_num].c_sheet;
+        win.draw_png(directory_num, CHERRYBOMB_WIDTH * scol,
+                     CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
+                     cells[row][col].x1, cells[row][col].y1 + 5,
+                     ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
+        if (attacked_time)
         {
-            int col = cherrybomb.col;
-            int row = cherrybomb.row;
-            int frame = cherrybomb.frame / CHERRYBOMB_FRAME;
-            int scol = frame % all_img[cherrybomb.directory_num].c_sheet;
-            int srow = frame / all_img[cherrybomb.directory_num].c_sheet;
-            win.draw_png(cherrybomb.directory_num, CHERRYBOMB_WIDTH * scol,
-                         CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
+            win.draw_png(blink_of[directory_num], CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow,
+                         CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
                          cells[row][col].x1, cells[row][col].y1 + 5,
                          ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
-            if (cherrybomb.is_attacked)
-            {
-                win.draw_png(blink_of[cherrybomb.directory_num], CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow,
-                             CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
-                             cells[row][col].x1, cells[row][col].y1 + 5,
-                             ELEMENT_WIDTH + 15, ELEMENT_HEIGHT);
-                if (check_status(game_state, IS_PAUSED) == false)
-                    cherrybomb.is_attacked--;
-            }
             if (check_status(game_state, IS_PAUSED) == false)
-                ++cherrybomb.frame;
+                attacked_time--;
         }
+        if (check_status(game_state, IS_PAUSED) == false)
+            ++frame;
+    }
 }

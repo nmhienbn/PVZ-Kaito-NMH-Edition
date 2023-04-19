@@ -26,6 +26,6 @@ template <class VectorPlant>
 void remove_plant(VectorPlant &plants, int p_ind)
 {
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
-    cells[plants[p_ind].row][plants[p_ind].col].is_planted = false;
+    cells[plants[p_ind].get_row()][plants[p_ind].get_col()].is_planted = false;
     plants.erase(plants.begin() + p_ind);
 }

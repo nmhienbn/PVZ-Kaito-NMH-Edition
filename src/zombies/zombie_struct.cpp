@@ -25,7 +25,7 @@ Zombie::Zombie(int _type, int level_num)
     x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + rand(10, 100);
     // Set init status
     is_moving = true;
-    is_attacked = cold_time = 0;
+    attacked_time = cold_time = 0;
     bite_time = BITE_CLK_COUNT;
     next_step_time = 0;
 
@@ -138,7 +138,7 @@ Decrease zombie health and change their appearance if necessary.
 bool Zombie::decrease_health(vector<DeadZombie> &dead_zombies)
 {
     health--;
-    is_attacked = MAX_TIME_BLINK;
+    attacked_time = MAX_TIME_BLINK;
     determine_appearance(dead_zombies);
     if (health == 0)
     {

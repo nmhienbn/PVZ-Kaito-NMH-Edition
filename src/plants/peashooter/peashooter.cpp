@@ -9,6 +9,19 @@ extern int game_state;
 extern Map cells;
 extern window win;
 
+Peashooter::Peashooter(const int &_row, const int &_col)
+{
+    row = _row;
+    col = _col;
+    health = PLANT_HEALTH_LIMIT[PEASHOOTER_TYPE];
+    sec_for_prepare = 1;
+    directory_num = PEASHOOTER_SHEET_DIRECTORY;
+    frame = 0;
+    attacked_time = 0;
+}
+Peashooter::~Peashooter()
+{
+}
 /*
 For all peashooter: If there is a zombie in that peashooter's row:
     Generate a new pea at that peashooter's position (If it's sprite to fire pea).
@@ -18,81 +31,76 @@ void fire_peas(vector<Peashooter> &peashooters, vector<Zombie> &zombies, vector<
 {
     for (Peashooter &peashooter : peashooters)
     {
-        int row = peashooter.row;
-        int col = peashooter.col;
-        if (peashooter.directory_num == PEASHOOTER_ATTACK_DIRECTORY && peashooter.frame == 32 * PEASHOOTER_FRAME)
-        {
-            play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-            Pea temp(1, row, cells[row][col].x2 - 10);
-            peas.push_back(temp);
-        }
-        if (are_there_zombies_in_peashooter_row(peashooter, zombies))
-        {
-            if (peashooter.directory_num == PEASHOOTER_SHEET_DIRECTORY)
-            {
-                if (peashooter.frame == 0)
-                {
-                    peashooter.directory_num = PEASHOOTER_ATTACK_DIRECTORY;
-                }
-            }
-        }
-        else
-        {
-            if (peashooter.directory_num == PEASHOOTER_ATTACK_DIRECTORY)
-            {
-                if (peashooter.frame == 0)
-                {
-                    peashooter.directory_num = PEASHOOTER_SHEET_DIRECTORY;
-                }
-            }
-        }
+        peashooter.fire_pea(zombies, peas);
     }
 }
 
+void Peashooter::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)
+{
+    if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_FRAME)
+    {
+        play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
+        Pea temp(1, row, cells[row][col].x2 - 10);
+        peas.push_back(temp);
+    }
+    determine_appearance(zombies);
+}
 /*
 Check if a peashooter need to attack or not.
 Peashooter is attack only if there are some zombies in the row.
 Updated: Zombie position > peashooter position
 */
-bool are_there_zombies_in_peashooter_row(Peashooter &peashooter, vector<Zombie> &zombies)
+void Peashooter::determine_appearance(vector<Zombie> &zombies)
 {
     for (Zombie zombie : zombies)
-        if (peashooter.row == zombie.row &&
-            is_in(cells[0][peashooter.col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
-            return true;
-    return false;
+        if (row == zombie.row &&
+            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
+        {
+            if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
+            {
+                if (frame == 0)
+                {
+                    directory_num = PEASHOOTER_ATTACK_DIRECTORY;
+                }
+            }
+            return;
+        }
+    if (directory_num == PEASHOOTER_ATTACK_DIRECTORY)
+    {
+        if (frame == 0)
+        {
+            directory_num = PEASHOOTER_SHEET_DIRECTORY;
+        }
+    }
 }
 
 /*
 Display peashooters
 */
-void display_peashooters(vector<Peashooter> &peashooters, const int &_row)
+void Peashooter::display(const int &_row)
 {
-    for (auto &peashooter : peashooters)
-        if (peashooter.row == _row)
+    if (row == _row)
+    {
+        int sframe = frame / PEASHOOTER_FRAME;
+        int scol = sframe % all_img[directory_num].c_sheet;
+        int srow = sframe / all_img[directory_num].c_sheet;
+        win.draw_png(directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
+                     PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
+                     cells[row][col].x1 + 5, cells[row][col].y1 + 5,
+                     PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
+        if (attacked_time)
         {
-            int col = peashooter.col;
-            int row = peashooter.row;
-            int frame = peashooter.frame / PEASHOOTER_FRAME;
-            int scol = frame % all_img[peashooter.directory_num].c_sheet;
-            int srow = frame / all_img[peashooter.directory_num].c_sheet;
-            win.draw_png(peashooter.directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
+            win.draw_png(blink_of[directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
                          PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
                          cells[row][col].x1 + 5, cells[row][col].y1 + 5,
                          PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
-            if (peashooter.is_attacked)
-            {
-                win.draw_png(blink_of[peashooter.directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
-                             PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
-                             cells[row][col].x1 + 5, cells[row][col].y1 + 5,
-                             PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
-                if (check_status(game_state, IS_PAUSED) == false)
-                    peashooter.is_attacked--;
-            }
             if (check_status(game_state, IS_PAUSED) == false)
-                if (++peashooter.frame >= PEASHOOTER_FRAME * all_img[peashooter.directory_num].n_sheet)
-                {
-                    peashooter.frame = 0;
-                }
+                attacked_time--;
         }
+        if (check_status(game_state, IS_PAUSED) == false)
+            if (++frame >= PEASHOOTER_FRAME * all_img[directory_num].n_sheet)
+            {
+                frame = 0;
+            }
+    }
 }

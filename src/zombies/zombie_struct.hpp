@@ -39,7 +39,7 @@ struct Zombie
     bool is_moving;
     int directory_num;
     int frame;
-    int is_attacked, cold_time;
+    int attacked_time, cold_time;
     int bite_time;
     int next_step_time;
 

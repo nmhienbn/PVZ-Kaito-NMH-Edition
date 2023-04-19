@@ -155,11 +155,11 @@ void display_zombies(vector<Zombie> &zombies, const int &_row)
             }
 
             // zombie attacked
-            if (zombies[i].is_attacked)
+            if (zombies[i].attacked_time)
             {
                 win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
                 if (check_status(game_state, IS_PAUSED) == false)
-                    zombies[i].is_attacked--;
+                    zombies[i].attacked_time--;
             }
 
             // zombie next frame

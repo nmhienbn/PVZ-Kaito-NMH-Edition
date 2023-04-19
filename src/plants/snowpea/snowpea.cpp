@@ -9,6 +9,19 @@ extern int game_state;
 extern Map cells;
 extern window win;
 
+Snowpea::Snowpea(const int &_row, const int &_col)
+{
+    row = _row;
+    col = _col;
+    health = PLANT_HEALTH_LIMIT[SNOWPEA_TYPE];
+    sec_for_prepare = 1;
+    directory_num = SNOWPEA_SHEET_DIRECTORY;
+    frame = 0;
+    attacked_time = 0;
+}
+Snowpea::~Snowpea()
+{
+}
 /*
 For all snowpea: If there is a zombie in that snowpea's row:
     Generate a new snowz pea at that snowpea's position (if it's sprite to fire).
@@ -18,35 +31,19 @@ void fire_snowz_peas(vector<Snowpea> &snowpeas, vector<Zombie> &zombies, vector<
 {
     for (Snowpea &snowpea : snowpeas)
     {
-        int row = snowpea.row;
-        int col = snowpea.col;
-        if (snowpea.directory_num == SNOWPEA_ATTACK_DIRECTORY && snowpea.frame == 17 * SNOWPEA_FRAME)
-        {
-            play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-            Pea temp(2, row, cells[row][col].x2 - 10);
-            peas.push_back(temp);
-        }
-        if (are_there_zombies_in_snowpea_row(snowpea, zombies))
-        {
-            if (snowpea.directory_num == SNOWPEA_SHEET_DIRECTORY)
-            {
-                if (snowpea.frame == 0)
-                {
-                    snowpea.directory_num = SNOWPEA_ATTACK_DIRECTORY;
-                }
-            }
-        }
-        else
-        {
-            if (snowpea.directory_num == SNOWPEA_ATTACK_DIRECTORY)
-            {
-                if (snowpea.frame == 0)
-                {
-                    snowpea.directory_num = SNOWPEA_SHEET_DIRECTORY;
-                }
-            }
-        }
+        snowpea.fire_pea(zombies, peas);
     }
+}
+
+void Snowpea::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)
+{
+    if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_FRAME)
+    {
+        play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
+        Pea temp(2, row, cells[row][col].x2 - 10);
+        peas.push_back(temp);
+    }
+    determine_appearance(zombies);
 }
 
 /*
@@ -54,45 +51,57 @@ Check if a snowpea need to attack or not.
 Snowpea is attack only if there are some zombies in the row.
 Updated: Zombie position > snowpea position
 */
-bool are_there_zombies_in_snowpea_row(Snowpea &snowpea, vector<Zombie> &zombies)
+void Snowpea::determine_appearance(vector<Zombie> &zombies)
 {
     for (Zombie zombie : zombies)
-        if (snowpea.row == zombie.row &&
-            is_in(cells[0][snowpea.col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
-            return true;
-    return false;
+        if (row == zombie.row &&
+            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
+        {
+            if (directory_num == SNOWPEA_SHEET_DIRECTORY)
+            {
+                if (frame == 0)
+                {
+                    directory_num = SNOWPEA_ATTACK_DIRECTORY;
+                }
+            }
+            return;
+        }
+    if (directory_num == SNOWPEA_ATTACK_DIRECTORY)
+    {
+        if (frame == 0)
+        {
+            directory_num = SNOWPEA_SHEET_DIRECTORY;
+        }
+    }
 }
 
 /*
 Display snow peas
 */
-void display_snowpeas(vector<Snowpea> &snowpeas, const int &_row)
+void Snowpea::display(const int &_row)
 {
-    for (auto &snowpea : snowpeas)
-        if (snowpea.row == _row)
+    if (row == _row)
+    {
+        int sframe = frame / SNOWPEA_FRAME;
+        int scol = sframe % all_img[directory_num].c_sheet;
+        int srow = sframe / all_img[directory_num].c_sheet;
+        win.draw_png(directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
+                     SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
+                     cells[row][col].x1 - 10, cells[row][col].y1 - 5,
+                     SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
+        if (attacked_time)
         {
-            int col = snowpea.col;
-            int row = snowpea.row;
-            int frame = snowpea.frame / SNOWPEA_FRAME;
-            int scol = frame % all_img[snowpea.directory_num].c_sheet;
-            int srow = frame / all_img[snowpea.directory_num].c_sheet;
-            win.draw_png(snowpea.directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
+            win.draw_png(blink_of[directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
                          SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
                          cells[row][col].x1 - 10, cells[row][col].y1 - 5,
                          SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-            if (snowpea.is_attacked)
-            {
-                win.draw_png(blink_of[snowpea.directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
-                             SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                             cells[row][col].x1 - 10, cells[row][col].y1 - 5,
-                             SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-                if (check_status(game_state, IS_PAUSED) == false)
-                    snowpea.is_attacked--;
-            }
             if (check_status(game_state, IS_PAUSED) == false)
-                if (++snowpea.frame >= SNOWPEA_FRAME * all_img[snowpea.directory_num].n_sheet)
-                {
-                    snowpea.frame = 0;
-                }
+                attacked_time--;
         }
+        if (check_status(game_state, IS_PAUSED) == false)
+            if (++frame >= SNOWPEA_FRAME * all_img[directory_num].n_sheet)
+            {
+                frame = 0;
+            }
+    }
 }

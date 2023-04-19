@@ -35,9 +35,9 @@ void display_choose_level(const bool &is_mouse_needed)
 
     for (int i = 1; i <= LEVEL_COUNT; i++)
     {
-        string lvl_txt = "Level " + to_string(i);
+        string lvl_txt = "LEVEL " + to_string(i);
         int w, h;
-        TTF_SizeText(win.get_font(FREESANS_TTF, 24), lvl_txt.c_str(), &w, &h);
+        TTF_SizeText(win.get_font(HOUSEOFTERROR_TTF, 40), lvl_txt.c_str(), &w, &h);
         int kc = (LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1 - w) / 2;
         if (player.unlocked_level >= i)
         {
@@ -48,19 +48,19 @@ void display_choose_level(const bool &is_mouse_needed)
                 if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
                 {
 
-                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, GREEN);
+                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, GREEN, HOUSEOFTERROR_TTF, 40);
                     win.draw_png(WHITE_SCREEN_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1,
                                  LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
                 }
                 else
-                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
+                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, WHITE, HOUSEOFTERROR_TTF, 40);
             }
             else
-                win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, WHITE);
+                win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, WHITE, HOUSEOFTERROR_TTF, 40);
         }
         else
         {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 130, BLACK);
+            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, BLACK, HOUSEOFTERROR_TTF, 40);
 
             display_level_is_locked(LEVEL_BUTTON[i]);
         }
@@ -199,11 +199,16 @@ void display_game_elements()
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
     {
         // Plants
-        display_peashooters(game_characters.peashooters, row);
-        display_sunflowers(game_characters.sunflowers, row);
-        display_walnuts(game_characters.walnuts, row);
-        display_snowpeas(game_characters.snowpeas, row);
-        display_cherrybombs(game_characters.cherrybombs, row);
+        for (auto &peashooter : game_characters.peashooters)
+            peashooter.display(row);
+        for (auto &sunflower : game_characters.sunflowers)
+            sunflower.display(row);
+        for (auto &walnut : game_characters.walnuts)
+            walnut.display(row);
+        for (auto &snowpea : game_characters.snowpeas)
+            snowpea.display(row);
+        for (auto &cherrybomb : game_characters.cherrybombs)
+            cherrybomb.display(row);
 
         // Zombies
         display_dead_zombies(game_characters.dead_zombies, row);
@@ -213,7 +218,8 @@ void display_game_elements()
         display_mower(row);
     }
     // Others
-    display_peas(game_characters.peas);
+    for (auto &pea : game_characters.peas)
+        pea.display();
     display_suns(game_characters.suns);
 }
 

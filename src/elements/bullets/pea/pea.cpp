@@ -10,7 +10,7 @@ Pea::Pea()
 {
 }
 
-/*Generate new pea*/
+/*Construct new pea*/
 Pea::Pea(int _type, int _row, int _x)
 {
     type = _type;
@@ -31,10 +31,10 @@ Pea::Pea(int _type, int _row, int _x)
 /*
 @return 'true' if pea reach the zombie
 */
-bool has_pea_reached_zombie(Pea &pea, Zombie &zombie)
+bool Pea::has_reached_zombie(Zombie &zombie)
 {
-    if (zombie.row == pea.row &&
-        pea.x_location > zombie.x_location + 70)
+    if (zombie.row == row &&
+        x_location > zombie.x_location + 70)
         return true;
     return false;
 }
@@ -58,7 +58,7 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
             continue;
         }
         for (int j = 0; j < (int)zombies.size(); j++)
-            if (apply_pea_hitting_zombie(zombies, dead_zombies, peas[i], j))
+            if (peas[i].apply_hitting_zombie(zombies, dead_zombies, j))
             {
                 j--;
                 break;
@@ -74,12 +74,12 @@ If a pea collide with a zombie: apply it to hit the zombie:
     Add zombies' death.
     Has some probabilities not hit zombie =))
 */
-bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, Pea &pea, const int &z_ind)
+bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, const int &z_ind)
 {
-    if (has_pea_reached_zombie(pea, zombies[z_ind]))
+    if (has_reached_zombie(zombies[z_ind]))
     {
         // Sound effects
-        if (pea.type == 2)
+        if (type == 2)
         {
             play_sound_effect(SNOW_PEA_SPARKLES_DIRECTORY);
         }
@@ -92,7 +92,7 @@ bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_
             play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
         }
         // Snowz peas effects
-        if (pea.type == 2)
+        if (type == 2)
         {
             // If zombie is not cold, its next step and bite will be delay
             if (!zombies[z_ind].cold_time)
@@ -103,10 +103,10 @@ bool apply_pea_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_
             zombies[z_ind].cold_time = MAX_COLD_TIME;
         }
         // Pea explode
-        if (pea.directory_num == PEA_DIRECTORY ||
-            pea.directory_num == SNOWZ_PEA_DIRECTORY)
+        if (directory_num == PEA_DIRECTORY ||
+            directory_num == SNOWZ_PEA_DIRECTORY)
         {
-            pea.directory_num++; // Make the pea explode
+            directory_num++; // Make the pea explode
         }
         // Attack zombie
         if (zombies[z_ind].decrease_health(dead_zombies))
@@ -127,13 +127,13 @@ Return true if pea can move
     + If pea reach any zombie: false
     + Else: true
 */
-bool can_pea_move(Pea &pea, vector<Zombie> &zombies)
+bool Pea::can_move(vector<Zombie> &zombies)
 {
     int right_bound = WINDOW_WIDTH;
-    if (pea.x_location > right_bound)
+    if (x_location > right_bound)
         return false;
     for (auto &zombie : zombies)
-        if (has_pea_reached_zombie(pea, zombie))
+        if (has_reached_zombie(zombie))
             return false;
     return true;
 }
@@ -146,7 +146,7 @@ void move_peas(vector<Pea> &peas, vector<Zombie> &zombies)
 {
     for (int i = 0; i < (int)peas.size(); i++)
     {
-        if (can_pea_move(peas[i], zombies))
+        if (peas[i].can_move(zombies))
         {
             peas[i].x_location += PEA_DX;
         }
@@ -161,16 +161,12 @@ void move_peas(vector<Pea> &peas, vector<Zombie> &zombies)
 /*
 Display the peas
 */
-void display_peas(vector<Pea> &peas)
+void Pea::display()
 {
-    for (auto &pea : peas)
-    {
-        int row = pea.row;
-        int y_location = cells[row][0].y1 + 20;
-        int more_px = 0;
-        if (pea.directory_num == PEA_EXPLODE_DIRECTORY ||
-            pea.directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
-            more_px += 25;
-        win.draw_png_scale(pea.directory_num, pea.x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
-    }
+    int y_location = cells[row][0].y1 + 20;
+    int more_px = 0;
+    if (directory_num == PEA_EXPLODE_DIRECTORY ||
+        directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
+        more_px += 25;
+    win.draw_png_scale(directory_num, x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
 }

@@ -15,3 +15,10 @@ void gen_random_sun_from_sky(vector<Sun> &suns);
 void remove_suns(vector<Sun> &suns);
 void move_suns(vector<Sun> &suns);
 void display_suns(vector<Sun> &suns);
+
+// class VSun {
+//     vector<Sun> suns;
+
+//     public:
+//     void create
+// };

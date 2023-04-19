@@ -45,11 +45,11 @@ void handle_changes()
         level.announce_directory = NULL_DIRECTORY;
 
     // Zombie bite plant
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters, PLANT_HEALTH_LIMIT[PEASHOOTER_TYPE]);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers, PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE]);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts, PLANT_HEALTH_LIMIT[WALNUT_TYPE]);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas, PLANT_HEALTH_LIMIT[SNOWPEA_TYPE]);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs, PLANT_HEALTH_LIMIT[CHERRYBOMB_TYPE]);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs);
 
     // Update next time for each zombie to bite plant
     update_zombie_next_bite(game_characters.zombies);

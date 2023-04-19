@@ -200,11 +200,7 @@ void plant_new_plant(vector<Plant_type> &vec_plant, const int &type, const int &
 {
     icons.is_plant_chosen[type] = false;
     icons.plant_remaining_time[type] = plant_loading_time[type];
-    Plant_type temp;
-    temp.row = row;
-    temp.col = col;
-    temp.bite = 0;
-    vec_plant.push_back(temp);
+    vec_plant.push_back(Plant_type(row, col));
     player.sun_count -= plant_sun_cost[type];
     cells[row][col].is_planted = 1;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
@@ -255,9 +251,10 @@ void remove_plant_if_clicked_on(VectorPlant &plants, const int &mouse_x, const i
 {
     for (int i = 0, _ = plants.size(); i < _; i++)
     {
-        if (is_click_made_in_element_block(plants[i].row, plants[i].col, mouse_x, mouse_y))
+        if (is_click_made_in_element_block(plants[i].get_row(), plants[i].get_col(), mouse_x, mouse_y))
         {
             remove_plant(plants, i);
+            return;
         }
     }
 }
