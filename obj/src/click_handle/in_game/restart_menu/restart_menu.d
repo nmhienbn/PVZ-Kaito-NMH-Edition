@@ -30,10 +30,10 @@ obj/src/click_handle/in_game/restart_menu/restart_menu.o: \
  include\SDL2/SDL_misc.h include\SDL2/SDL_image.h include\SDL2/SDL.h \
  include\SDL2/SDL_ttf.h src/draw/image_directory.hpp \
  src/elements/elements.hpp src/plants/plant_type.hpp \
- src/plants/peashooter/peashooter.hpp src/music/music.hpp \
- include\SDL2/SDL_mixer.h src/elements/bullets/pea/pea.hpp \
- src/zombies/zombie_struct.hpp src/elements/Map/Map.hpp \
- src/plants/plants.hpp src/plants/sunflower/sunflower.hpp \
+ src/plants/plants.hpp src/plants/peashooter/peashooter.hpp \
+ src/music/music.hpp include\SDL2/SDL_mixer.h \
+ src/elements/bullets/pea/pea.hpp src/zombies/zombie_struct.hpp \
+ src/elements/Map/Map.hpp src/plants/sunflower/sunflower.hpp \
  src/elements/sun/sun.hpp src/plants/walnut/walnut.hpp \
  src/plants/snowpea/snowpea.hpp src/plants/cherrybomb/cherrybomb.hpp \
  src/zombies/zombie.hpp src/elements/progress_bar/progress_bar.hpp \
@@ -161,6 +161,8 @@ src/elements/elements.hpp:
 
 src/plants/plant_type.hpp:
 
+src/plants/plants.hpp:
+
 src/plants/peashooter/peashooter.hpp:
 
 src/music/music.hpp:
@@ -172,8 +174,6 @@ src/elements/bullets/pea/pea.hpp:
 src/zombies/zombie_struct.hpp:
 
 src/elements/Map/Map.hpp:
-
-src/plants/plants.hpp:
 
 src/plants/sunflower/sunflower.hpp:
 

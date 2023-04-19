@@ -21,11 +21,7 @@ Contain vector of all plants and zombies:
 */
 struct Elements
 {
-    vector<Peashooter> peashooters;
-    vector<Sunflower> sunflowers;
-    vector<Walnut> walnuts;
-    vector<Snowpea> snowpeas;
-    vector<CherryBomb> cherrybombs;
+    vector<Plants *> plants;
 
     vector<Zombie> zombies;
     vector<DeadZombie> dead_zombies;

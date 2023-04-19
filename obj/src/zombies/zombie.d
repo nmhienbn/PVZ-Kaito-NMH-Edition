@@ -27,7 +27,11 @@ obj/src/zombies/zombie.o: src/zombies/zombie.cpp src/zombies/zombie.hpp \
  include\SDL2/SDL_misc.h include\SDL2/SDL_mixer.h src/draw/rsdl.hpp \
  include\SDL2/SDL_image.h include\SDL2/SDL.h include\SDL2/SDL_ttf.h \
  src/draw/image_directory.hpp src/zombies/zombie_struct.hpp \
- src/elements/Map/Map.hpp
+ src/elements/Map/Map.hpp src/plants/plant_type.hpp src/plants/plants.hpp \
+ src/plants/peashooter/peashooter.hpp src/elements/bullets/pea/pea.hpp \
+ src/plants/sunflower/sunflower.hpp src/elements/sun/sun.hpp \
+ src/plants/walnut/walnut.hpp src/plants/snowpea/snowpea.hpp \
+ src/plants/cherrybomb/cherrybomb.hpp
 
 src/zombies/zombie.hpp:
 
@@ -150,3 +154,21 @@ src/draw/image_directory.hpp:
 src/zombies/zombie_struct.hpp:
 
 src/elements/Map/Map.hpp:
+
+src/plants/plant_type.hpp:
+
+src/plants/plants.hpp:
+
+src/plants/peashooter/peashooter.hpp:
+
+src/elements/bullets/pea/pea.hpp:
+
+src/plants/sunflower/sunflower.hpp:
+
+src/elements/sun/sun.hpp:
+
+src/plants/walnut/walnut.hpp:
+
+src/plants/snowpea/snowpea.hpp:
+
+src/plants/cherrybomb/cherrybomb.hpp:

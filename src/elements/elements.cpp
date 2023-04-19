@@ -87,11 +87,11 @@ Clear all elements
 */
 void Elements::reset()
 {
-    peashooters.clear();
-    sunflowers.clear();
-    walnuts.clear();
-    snowpeas.clear();
-    cherrybombs.clear();
+    for (auto &plant : plants)
+    {
+        delete plant;
+    }
+    plants.clear();
 
     suns.clear();
     peas.clear();

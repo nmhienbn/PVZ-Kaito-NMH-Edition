@@ -44,15 +44,7 @@ void start_level()
 {
     if (check_status(game_state, IS_GAME_STARTED) == false)
     {
-        display_R_S_P();
-        HANDLE(
-            QUIT(quit = true; return;);
-            LOST_FOCUS(
-                set_status(game_state, IS_PAUSED, true);
-                Mix_PauseMusic();
-                Mix_Pause(-1););)
-        clk++;
-        win.update_screen();
+        display_credit();
         return;
     }
     else
@@ -147,38 +139,6 @@ void start_level()
     if (check_status(game_state, IS_PAUSED) == true || check_status(game_state, IS_FAST) == false || (clk & 1))
     {
         win.update_screen();
-    }
-}
-
-/*
-Reset speed to normal, and no paused.
-Display welcome player
-Display ready-set-plant
-Now game is really start
- */
-void display_R_S_P()
-{
-    set_status(game_state, IS_FAST, false);
-    set_status(game_state, IS_PAUSED, false);
-    play_music(R_S_P_MUSIC_DIRECTORY);
-    win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 10);
-    if (clk < 30)
-    {
-        display_ready_set_plant(START_READY_DIRECTORY);
-    }
-    else if (clk < 60)
-    {
-        display_ready_set_plant(START_SET_DIRECTORY);
-    }
-    else if (clk < 180)
-    {
-        display_ready_set_plant(START_PLANT_DIRECTORY);
-    }
-    else
-    {
-        display_ready_set_plant(START_PLANT_DIRECTORY);
-        clk = 0;
-        set_status(game_state, IS_GAME_STARTED, true);
     }
 }
 

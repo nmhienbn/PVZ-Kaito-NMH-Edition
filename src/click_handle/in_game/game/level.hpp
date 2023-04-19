@@ -10,10 +10,10 @@
 #include "../win/win.hpp"
 #include "../lose/lose.hpp"
 #include "../turbo/turbo.hpp"
+#include "../credit/credit.hpp"
 
 #include "player/player_data.hpp"
 #include "music/music.hpp"
 
 void start_level();
-void display_R_S_P();
 void display_all_in_game();

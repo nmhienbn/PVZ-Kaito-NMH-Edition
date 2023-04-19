@@ -11,6 +11,7 @@ extern window win;
 
 Snowpea::Snowpea(const int &_row, const int &_col)
 {
+    type = SNOWPEA_TYPE;
     row = _row;
     col = _col;
     health = PLANT_HEALTH_LIMIT[SNOWPEA_TYPE];
@@ -21,18 +22,6 @@ Snowpea::Snowpea(const int &_row, const int &_col)
 }
 Snowpea::~Snowpea()
 {
-}
-/*
-For all snowpea: If there is a zombie in that snowpea's row:
-    Generate a new snowz pea at that snowpea's position (if it's sprite to fire).
-    All snowz peas are generated not at a time.
-*/
-void fire_snowz_peas(vector<Snowpea> &snowpeas, vector<Zombie> &zombies, vector<Pea> &peas)
-{
-    for (Snowpea &snowpea : snowpeas)
-    {
-        snowpea.fire_pea(zombies, peas);
-    }
 }
 
 void Snowpea::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)

@@ -1,15 +1,10 @@
 #include "zombies/zombie.hpp"
 #include <algorithm>
 
-#define ZOMBIE_WIDTH 166
-#define ZOMBIE_HEIGHT 144
-#define ZOMBIE_G_WIDTH 166
-#define ZOMBIE_G_HEIGHT 144
-
 #define ZOMBIE_EATING_FRAME 10
 
 #define ZOMBIE_DIE_FRAME 2
-#define ZOMBIE_BURNT_FRAME 10
+#define ZOMBIE_BURNT_FRAME 6
 #define DEAD_ZOMBIE_FRAMES 12
 
 #define HEAD_ZOMBIE_FRAME 15
@@ -129,50 +124,10 @@ Display zombie of exactly status.
 void display_zombies(vector<Zombie> &zombies, const int &_row)
 {
     stable_sort(zombies.begin(), zombies.end());
-    for (int i = (int)zombies.size() - 1; i >= 0; i--)
-        if (zombies[i].row == _row)
-        {
-            int row = zombies[i].row;
-            int y_location = cells[row][0].y1 - 50;
-
-            // zombie
-            int z_frame = 2;
-            int frame = zombies[i].frame / z_frame;
-            int scol = frame % all_img[zombies[i].directory_num].c_sheet;
-            int srow = frame / all_img[zombies[i].directory_num].c_sheet;
-            win.draw_png(zombies[i].directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-
-            // zombie cold
-            if (zombies[i].cold_time)
-            {
-                win.draw_png(cold_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-                if (check_status(game_state, IS_PAUSED) == false)
-                    if (--zombies[i].cold_time == 0)
-                    {
-                        zombies[i].bite_time /= 2;
-                        zombies[i].next_step_time /= 2;
-                    }
-            }
-
-            // zombie attacked
-            if (zombies[i].attacked_time)
-            {
-                win.draw_png(blink_of[zombies[i].directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow, ZOMBIE_WIDTH, ZOMBIE_HEIGHT, zombies[i].x_location, y_location, ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
-                if (check_status(game_state, IS_PAUSED) == false)
-                    zombies[i].attacked_time--;
-            }
-
-            // zombie next frame
-            if (check_status(game_state, IS_PAUSED) == false)
-            {
-                if (zombies[i].cold_time % 2 == 0)
-                    zombies[i].frame++;
-                if (zombies[i].frame >= z_frame * all_img[zombies[i].directory_num].n_sheet)
-                {
-                    zombies[i].frame = 0;
-                }
-            }
-        }
+    for (auto &zombie : zombies)
+    {
+        zombie.display(_row);
+    }
 }
 
 /*
@@ -272,4 +227,45 @@ void update_zombie_next_bite(vector<Zombie> &zombies)
     for (auto &zombie : zombies)
         if (zombie.bite_time)
             zombie.bite_time--;
+}
+/*
+If the zombie reached plant_type, apply its bites on the plant_type:
+    + bite++
+    + if plant_type's health == 0: reset zombie moving and delete that plant_type
+*/
+bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p_ind)
+{
+    if (has_zombie_reached_element(zombie, plants[p_ind]->get_row(), plants[p_ind]->get_col()))
+    {
+        play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
+        zombie.bite_time = BITE_CLK_COUNT;
+        if (zombie.cold_time)
+            zombie.bite_time += BITE_CLK_COUNT;
+        plants[p_ind]->set_attacked_time(MAX_TIME_BLINK);
+        if (plants[p_ind]->decrease_health())
+        {
+            zombie.is_moving = true;
+            zombie.bite_time = BITE_CLK_COUNT;
+            cells[plants[p_ind]->get_row()][plants[p_ind]->get_col()].is_planted = false;
+            delete plants[p_ind];
+            plants.erase(plants.begin() + p_ind);
+            p_ind--;
+        }
+        return true;
+    }
+    return false;
+}
+
+/* Note to optimize after
+For all zombie and all plant_type: apply zombie's bite
+*/
+void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<Plants *> &plants)
+{
+    for (auto &zombie : zombies)
+        if (zombie.bite_time == 0)
+            for (int i = 0; i < (int)plants.size(); i++)
+                if (apply_zombie_bite_on_plant(zombie, plants, i))
+                {
+                    break;
+                }
 }

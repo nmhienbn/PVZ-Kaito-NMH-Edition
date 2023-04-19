@@ -124,6 +124,9 @@ enum ImageType
     RESTART_PROMPT_DIRECTORY,
 
     // NORMAL ZOMBIE---------------------------------------------------
+    ZOMBIE_CREDIT1_DIRECTORY,
+    ZOMBIE_CREDIT2_DIRECTORY,
+
     ZOMBIE_WALK1_DIRECTORY,
     ZOMBIE_WALK2_DIRECTORY,
 
@@ -191,6 +194,8 @@ enum ImageType
 
     // CONEHEAD ZOMBIE--------------------------------------------------------
     CONE_DROP_DIRECTORY,
+    CONE_ZOMBIE_CREDIT1_DIRECTORY,
+    CONE_ZOMBIE_CREDIT2_DIRECTORY,
 
     CONE_ZOMBIE_WALK1_1_DIRECTORY,
     CONE_ZOMBIE_WALK2_1_DIRECTORY,
@@ -224,6 +229,8 @@ enum ImageType
 
     // BUCKETHEAD ZOMBIE--------------------------------------------------------
     BUCKET_DROP_DIRECTORY,
+    BUCKET_ZOMBIE_CREDIT1_DIRECTORY,
+    BUCKET_ZOMBIE_CREDIT2_DIRECTORY,
 
     BUCKET_ZOMBIE_WALK1_1_DIRECTORY,
     BUCKET_ZOMBIE_WALK2_1_DIRECTORY,
@@ -476,6 +483,8 @@ const Image all_img[] = {
     Image("./image/Icons/restart_prompt.png"),         // RESTART_PROMPT_DIRECTORY
 
     // NORMAL ZOMBIE------------------------------------------------------------------------
+    Image("./image/Zombie/Normal/Zombie_credit1.png", 22, 8),     // ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Normal/Zombie_credit2.png", 22, 8),     // ZOMBIE_CREDIT2_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk1.png", 46, 8),        // ZOMBIE_WALK1_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk2.png", 46, 8),        // ZOMBIE_WALK2_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk1_blink.png", 46, 8),  // ZOMBIE_WALK1_BLINK_DIRECTORY
@@ -535,6 +544,8 @@ const Image all_img[] = {
 
     // CONEHEAD ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Cone/cone_drop.png", 8, 8),                          // CONE_DROP_DIRECTORY
+    Image("./image/Zombie/Cone/Cone_zombie_credit1.png", 22, 8),               // CONE_ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Cone/Cone_zombie_credit1.png", 22, 8),               // CONE_ZOMBIE_CREDIT2_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk1_1.png", 46, 8),        // CONE_ZOMBIE_WALK1_1_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk2_1.png", 46, 8),        // CONE_ZOMBIE_WALK2_1_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk1_1_blink.png", 46, 8),  // CONE_ZOMBIE_WALK1_1_BLINK_DIRECTORY
@@ -565,6 +576,8 @@ const Image all_img[] = {
 
     // BUCKETHEAD ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Bucket/bucket_drop.png", 8, 8),                          // BUCKET_DROP_DIRECTORY
+    Image("./image/Zombie/Bucket/Bucket_zombie_credit1.png", 22, 8),               // BUCKET_ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Bucket/Bucket_zombie_credit1.png", 22, 8),               // BUCKET_ZOMBIE_CREDIT2_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk1_1.png", 46, 8),        // BUCKET_ZOMBIE_WALK1_1_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk2_1.png", 46, 8),        // BUCKET_ZOMBIE_WALK2_1_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk1_1_blink.png", 46, 8),  // BUCKET_ZOMBIE_WALK1_1_BLINK_DIRECTORY

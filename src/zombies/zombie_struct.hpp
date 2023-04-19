@@ -6,6 +6,10 @@
 
 #define ZOMBIE_FRAME 3
 #define ZOMBIE_EXACT_LOCATION 70
+#define ZOMBIE_WIDTH 166
+#define ZOMBIE_HEIGHT 144
+#define ZOMBIE_G_WIDTH 166
+#define ZOMBIE_G_HEIGHT 144
 
 struct DeadZombie
 {
@@ -34,7 +38,7 @@ struct Zombie
 {
     int type;
 
-    int row, x_location;
+    int row, x_location, y_location;
     int health;
     bool is_moving;
     int directory_num;
@@ -48,5 +52,8 @@ struct Zombie
     void change_zombie_eating_status();
     void determine_appearance(vector<DeadZombie> &dead_zombies);
     bool decrease_health(vector<DeadZombie> &dead_zombies);
+    void display(const int &_row);
+    void display2(const int &_minus_x);
     bool operator<(const Zombie &other) const;
+    void make_credit();
 };

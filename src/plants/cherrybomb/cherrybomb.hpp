@@ -15,8 +15,6 @@ public:
     bool is_disappeared();
     bool apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
                               vector<DeadZombie> &dead_zombies);
+    void hit_all_zombies(vector<Zombie> &zombies,
+                         vector<DeadZombie> &dead_zombies);
 };
-
-void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
-                                        vector<Zombie> &zombies,
-                                        vector<DeadZombie> &dead_zombies);

@@ -11,6 +11,7 @@ extern window win;
 
 Walnut::Walnut(const int &_row, const int &_col)
 {
+    type = WALNUT_TYPE;
     row = _row;
     col = _col;
     health = PLANT_HEALTH_LIMIT[WALNUT_TYPE];

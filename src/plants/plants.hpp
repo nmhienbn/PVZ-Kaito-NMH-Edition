@@ -3,6 +3,7 @@
 class Plants
 {
 protected:
+    int type;
     int row, col;
     int health;
     int sec_for_prepare;
@@ -12,8 +13,9 @@ protected:
 
 public:
     Plants();
-    ~Plants();
+    virtual ~Plants();
     virtual void display(const int &_row);
+    int get_type();
     int get_row();
     int get_col();
     void set_attacked_time(const int &_attacked_time);

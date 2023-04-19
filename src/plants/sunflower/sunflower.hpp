@@ -13,5 +13,3 @@ public:
     bool is_gen_sun();
     void gen_sun_from_a_sunflower(vector<Sun> &suns);
 };
-
-void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &suns);

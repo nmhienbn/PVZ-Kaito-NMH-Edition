@@ -12,6 +12,7 @@ extern window win;
 
 Sunflower::Sunflower(const int &_row, const int &_col)
 {
+    type = SUNFLOWER_TYPE;
     row = _row;
     col = _col;
     health = PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE];
@@ -23,17 +24,6 @@ Sunflower::Sunflower(const int &_row, const int &_col)
 
 Sunflower::~Sunflower()
 {
-}
-
-/**
-Generate suns from sunflowers not at the same time.
-**/
-void gen_sun_from_all_sunflowers(vector<Sunflower> &sunflowers, vector<Sun> &suns)
-{
-    for (auto &sunflower : sunflowers)
-    {
-        sunflower.gen_sun_from_a_sunflower(suns);
-    }
 }
 
 bool Sunflower::is_gen_sun()

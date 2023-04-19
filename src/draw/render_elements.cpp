@@ -199,16 +199,8 @@ void display_game_elements()
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
     {
         // Plants
-        for (auto &peashooter : game_characters.peashooters)
-            peashooter.display(row);
-        for (auto &sunflower : game_characters.sunflowers)
-            sunflower.display(row);
-        for (auto &walnut : game_characters.walnuts)
-            walnut.display(row);
-        for (auto &snowpea : game_characters.snowpeas)
-            snowpea.display(row);
-        for (auto &cherrybomb : game_characters.cherrybombs)
-            cherrybomb.display(row);
+        for (auto &plant : game_characters.plants)
+            plant->display(row);
 
         // Zombies
         display_dead_zombies(game_characters.dead_zombies, row);

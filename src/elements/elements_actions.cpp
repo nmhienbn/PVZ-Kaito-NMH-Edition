@@ -5,6 +5,7 @@ extern Level level;
 extern Elements game_characters;
 extern Icons icons;
 extern Player player;
+extern Map cells;
 
 /*
 Handles all the changes to the game:
@@ -28,10 +29,6 @@ void handle_changes()
     // Check all bullets' moving status
     handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.dead_zombies);
 
-    // Check all cherrybombs' status
-    handle_cherrybomb_zombie_encounter(game_characters.cherrybombs, game_characters.zombies,
-                                       game_characters.dead_zombies);
-
     // Check all mowers' status
     handle_mower_zombie_encounter(game_characters.zombies, game_characters.dead_zombies);
 
@@ -45,25 +42,75 @@ void handle_changes()
         level.announce_directory = NULL_DIRECTORY;
 
     // Zombie bite plant
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.peashooters);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.sunflowers);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.walnuts);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.snowpeas);
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.cherrybombs);
+    handle_zombie_plant_encounter(game_characters.zombies, game_characters.plants);
 
     // Update next time for each zombie to bite plant
     update_zombie_next_bite(game_characters.zombies);
 
-    // Fire pea, snowpea
-    fire_peas(game_characters.peashooters, game_characters.zombies, game_characters.peas);
-    fire_snowz_peas(game_characters.snowpeas, game_characters.zombies, game_characters.peas);
+    for (int i = 0; i < (int)game_characters.plants.size(); i++)
+    {
+        auto plant = game_characters.plants[i];
+        switch (plant->get_type())
+        {
+        case PEASHOOTER_TYPE:
+        {
+            // Fire pea
+            auto tmp = dynamic_cast<Peashooter *>(plant);
+            if (tmp)
+            {
+                tmp->fire_pea(game_characters.zombies, game_characters.peas);
+            }
+            break;
+        }
+
+        case SUNFLOWER_TYPE:
+        {
+            // Generate suns from sunflowers.
+            auto tmp = dynamic_cast<Sunflower *>(plant);
+            if (tmp)
+            {
+                tmp->gen_sun_from_a_sunflower(game_characters.suns);
+            }
+            break;
+        }
+
+        case SNOWPEA_TYPE:
+        {
+            // Fire snowpea
+            auto tmp = dynamic_cast<Snowpea *>(plant);
+            if (tmp)
+            {
+                tmp->fire_pea(game_characters.zombies, game_characters.peas);
+            }
+            break;
+        }
+
+        case CHERRYBOMB_TYPE:
+        {
+            // Cherrybomb hit
+            auto tmp = dynamic_cast<CherryBomb *>(plant);
+            if (tmp)
+            {
+                tmp->hit_all_zombies(game_characters.zombies, game_characters.dead_zombies);
+                if (tmp->is_disappeared())
+                {
+                    cells[plant->get_row()][plant->get_col()].is_planted = false;
+                    delete plant;
+                    game_characters.plants.erase(game_characters.plants.begin() + i);
+                    i--;
+                }
+            }
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
 
     // Generate suns from the sky. No sun at night.
     if (level.is_night == false && clk % SUN_GEN_SKY_CLK_COUNT == 0)
         gen_random_sun_from_sky(game_characters.suns);
-
-    // Generate suns from sunflowers.
-    gen_sun_from_all_sunflowers(game_characters.sunflowers, game_characters.suns);
 
     // Remove the suns that appear for a long time
     remove_suns(game_characters.suns);

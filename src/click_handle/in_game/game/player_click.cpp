@@ -196,11 +196,11 @@ Tick that the tile is planted.
 Play sound effect.
 */
 template <class Plant_type>
-void plant_new_plant(vector<Plant_type> &vec_plant, const int &type, const int &row, const int &col)
+void plant_new_plant(const int &type, const int &row, const int &col)
 {
     icons.is_plant_chosen[type] = false;
     icons.plant_remaining_time[type] = plant_loading_time[type];
-    vec_plant.push_back(Plant_type(row, col));
+    game_characters.plants.push_back(new Plant_type(row, col));
     player.sun_count -= plant_sun_cost[type];
     cells[row][col].is_planted = 1;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
@@ -223,37 +223,39 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
     }
     if (icons.is_plant_chosen[PEASHOOTER_TYPE])
     {
-        plant_new_plant<Peashooter>(game_characters.peashooters, PEASHOOTER_TYPE, row, col);
+        plant_new_plant<Peashooter>(PEASHOOTER_TYPE, row, col);
     }
     else if (icons.is_plant_chosen[SUNFLOWER_TYPE])
     {
-        plant_new_plant<Sunflower>(game_characters.sunflowers, SUNFLOWER_TYPE, row, col);
+        plant_new_plant<Sunflower>(SUNFLOWER_TYPE, row, col);
     }
     else if (icons.is_plant_chosen[WALNUT_TYPE])
     {
-        plant_new_plant<Walnut>(game_characters.walnuts, WALNUT_TYPE, row, col);
+        plant_new_plant<Walnut>(WALNUT_TYPE, row, col);
     }
     else if (icons.is_plant_chosen[SNOWPEA_TYPE])
     {
-        plant_new_plant<Snowpea>(game_characters.snowpeas, SNOWPEA_TYPE, row, col);
+        plant_new_plant<Snowpea>(SNOWPEA_TYPE, row, col);
     }
     else if (icons.is_plant_chosen[CHERRYBOMB_TYPE])
     {
-        plant_new_plant<CherryBomb>(game_characters.cherrybombs, CHERRYBOMB_TYPE, row, col);
+        plant_new_plant<CherryBomb>(CHERRYBOMB_TYPE, row, col);
     }
 }
 
 /*
 Remove plant if player is shoveling and has clicked on its tile
 */
-template <class VectorPlant>
-void remove_plant_if_clicked_on(VectorPlant &plants, const int &mouse_x, const int &mouse_y)
+void remove_plant_if_clicked_on(vector<Plants *> &plants, const int &mouse_x, const int &mouse_y)
 {
     for (int i = 0, _ = plants.size(); i < _; i++)
     {
-        if (is_click_made_in_element_block(plants[i].get_row(), plants[i].get_col(), mouse_x, mouse_y))
+        if (is_click_made_in_element_block(plants[i]->get_row(), plants[i]->get_col(), mouse_x, mouse_y))
         {
-            remove_plant(plants, i);
+            play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
+            cells[plants[i]->get_row()][plants[i]->get_col()].is_planted = false;
+            delete plants[i];
+            plants.erase(plants.begin() + i);
             return;
         }
     }
@@ -264,11 +266,7 @@ Find the type of plant to remove.
 */
 void remove_element_if_clicked_on(const int &mouse_x, const int &mouse_y)
 {
-    remove_plant_if_clicked_on(game_characters.peashooters, mouse_x, mouse_y);
-    remove_plant_if_clicked_on(game_characters.sunflowers, mouse_x, mouse_y);
-    remove_plant_if_clicked_on(game_characters.walnuts, mouse_x, mouse_y);
-    remove_plant_if_clicked_on(game_characters.snowpeas, mouse_x, mouse_y);
-    remove_plant_if_clicked_on(game_characters.cherrybombs, mouse_x, mouse_y);
+    remove_plant_if_clicked_on(game_characters.plants, mouse_x, mouse_y);
 }
 
 /*

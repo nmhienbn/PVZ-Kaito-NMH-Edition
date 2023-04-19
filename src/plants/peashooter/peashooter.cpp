@@ -11,6 +11,7 @@ extern window win;
 
 Peashooter::Peashooter(const int &_row, const int &_col)
 {
+    type = PEASHOOTER_TYPE;
     row = _row;
     col = _col;
     health = PLANT_HEALTH_LIMIT[PEASHOOTER_TYPE];
@@ -21,18 +22,6 @@ Peashooter::Peashooter(const int &_row, const int &_col)
 }
 Peashooter::~Peashooter()
 {
-}
-/*
-For all peashooter: If there is a zombie in that peashooter's row:
-    Generate a new pea at that peashooter's position (If it's sprite to fire pea).
-    All peas are generated not at a time.
-*/
-void fire_peas(vector<Peashooter> &peashooters, vector<Zombie> &zombies, vector<Pea> &peas)
-{
-    for (Peashooter &peashooter : peashooters)
-    {
-        peashooter.fire_pea(zombies, peas);
-    }
 }
 
 void Peashooter::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)

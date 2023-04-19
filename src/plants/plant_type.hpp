@@ -1,4 +1,5 @@
 #pragma once
+#include "plants.hpp"
 #include "plants/peashooter/peashooter.hpp"
 #include "plants/sunflower/sunflower.hpp"
 #include "plants/walnut/walnut.hpp"

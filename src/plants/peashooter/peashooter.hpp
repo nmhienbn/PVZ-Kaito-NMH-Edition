@@ -13,5 +13,3 @@ public:
     void display(const int &_row) override;
     void fire_pea(vector<Zombie> &zombies, vector<Pea> &peas);
 };
-
-void fire_peas(vector<Peashooter> &peashooters, vector<Zombie> &zombies, vector<Pea> &peas);

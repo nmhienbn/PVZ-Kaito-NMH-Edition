@@ -22,10 +22,3 @@ void remove_chosen_plant();
 void create_new_plant(const int &mouse_x, const int &mouse_y);
 
 extern Map cells;
-template <class VectorPlant>
-void remove_plant(VectorPlant &plants, int p_ind)
-{
-    play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
-    cells[plants[p_ind].get_row()][plants[p_ind].get_col()].is_planted = false;
-    plants.erase(plants.begin() + p_ind);
-}

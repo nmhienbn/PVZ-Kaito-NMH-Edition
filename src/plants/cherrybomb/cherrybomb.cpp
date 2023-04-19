@@ -9,6 +9,7 @@ extern window win;
 
 CherryBomb::CherryBomb(const int &_row, const int &_col)
 {
+    type = CHERRYBOMB_TYPE;
     row = _row;
     col = _col;
     health = PLANT_HEALTH_LIMIT[CHERRYBOMB_TYPE];
@@ -42,31 +43,17 @@ bool CherryBomb::is_disappeared()
     return frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet;
 }
 
-/*
-For all zombies and hit them by cherrybombs if they are in that area.
-*/
-void handle_cherrybomb_zombie_encounter(vector<CherryBomb> &cherrybombs,
-                                        vector<Zombie> &zombies,
-                                        vector<DeadZombie> &dead_zombies)
+void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,
+                                 vector<DeadZombie> &dead_zombies)
 {
-    for (int i = 0; i < (int)cherrybombs.size(); i++)
+    if (is_blow())
     {
-        if (cherrybombs[i].is_disappeared())
-        {
-            cells[cherrybombs[i].get_row()][cherrybombs[i].get_col()].is_planted = false;
-            cherrybombs.erase(cherrybombs.begin() + i);
-            i--;
-            continue;
-        }
-        if (cherrybombs[i].is_blow())
-        {
-            play_sound_effect(CHERRYBOMB_MUSIC_DIRECTORY);
-            for (int j = 0; j < (int)zombies.size();)
-                if (!cherrybombs[i].apply_hitting_zombie(zombies, j, dead_zombies))
-                {
-                    j++;
-                }
-        }
+        play_sound_effect(CHERRYBOMB_MUSIC_DIRECTORY);
+        for (int j = 0; j < (int)zombies.size();)
+            if (!apply_hitting_zombie(zombies, j, dead_zombies))
+            {
+                j++;
+            }
     }
 }
 
