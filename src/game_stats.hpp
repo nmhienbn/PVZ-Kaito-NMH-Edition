@@ -33,7 +33,7 @@ using namespace std;
 #define SUNFLOWER_LOADING 450   // Sunflower loading
 #define WALNUT_LOADING 1800     // Walnut loading
 #define SNOWPEA_LOADING 450     // SnowPea loading
-#define CHERRYBOMB_LOADING 3000 // Cherrybomb loading
+#define CHERRYBOMB_LOADING 4500 // Cherrybomb loading
 #define MAX_TIME_BLINK 10       // time blink when attack
 #define MAX_COLD_TIME 600       // time being cold = 10s
 #define SUN_APPEAR_LIMIT 600    // Max time that a sun can appear.

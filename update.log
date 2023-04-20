@@ -224,6 +224,7 @@ TOTAL now: 4 plants and 3 zombies available.
 	Make credit before begin the game	
 
 19/04/2023:
+	Zombie door: Snow peas cannot slow him until he lost his door.
 	Fix bug of pea: 2 times erase()
 
 
