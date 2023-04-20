@@ -221,7 +221,10 @@ TOTAL now: 4 plants and 3 zombies available.
 	
 19/04/2023:
 	Make OOP : class Plants
-	Make credit before begin the game
+	Make credit before begin the game	
+
+19/04/2023:
+	Fix bug of pea: 2 times erase()
 
 
 Dim = Exposue - 3.20

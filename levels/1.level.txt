@@ -4,3 +4,4 @@ wave length: 2 2 2 2 1
 normal zombies: 1 1 1 4 4
 conehead zombies: 0 0 0 0 0
 buckethead zombies: 0 0 0 0 0
+door zombies: 0 0 0 0 0

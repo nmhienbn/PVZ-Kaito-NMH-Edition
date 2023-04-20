@@ -184,7 +184,7 @@ void display_shadow()
     }
     for (auto &pea : game_characters.peas)
     {
-        win.draw_png(PEA_SHADOW_DIRECTORY, pea.x_location, cells[pea.row][0].y2 - 13, 21, 9);
+        pea.display_shadow();
     }
 }
 

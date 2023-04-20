@@ -19,6 +19,10 @@ using namespace std;
 #define BUCKET_ZOMBIE_WALK_2_DIRECTORY rand(BUCKET_ZOMBIE_WALK1_2_DIRECTORY, BUCKET_ZOMBIE_WALK2_2_DIRECTORY)
 #define BUCKET_ZOMBIE_WALK_3_DIRECTORY rand(BUCKET_ZOMBIE_WALK1_3_DIRECTORY, BUCKET_ZOMBIE_WALK2_3_DIRECTORY)
 
+#define DOOR_ZOMBIE_WALK_1_DIRECTORY rand(DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_WALK2_1_DIRECTORY)
+#define DOOR_ZOMBIE_WALK_2_DIRECTORY rand(DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_WALK2_2_DIRECTORY)
+#define DOOR_ZOMBIE_WALK_3_DIRECTORY rand(DOOR_ZOMBIE_WALK1_3_DIRECTORY, DOOR_ZOMBIE_WALK2_3_DIRECTORY)
+
 /*
 Contain all image used for SDL
 */
@@ -262,6 +266,40 @@ enum ImageType
     BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY,
     BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY,
 
+    // DOOR ZOMBIE--------------------------------------------------------
+    DOOR_ZOMBIE_CREDIT1_DIRECTORY,
+    DOOR_ZOMBIE_CREDIT2_DIRECTORY,
+
+    DOOR_ZOMBIE_WALK1_1_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_1_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_1_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_1_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_1_COLD_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_1_COLD_DIRECTORY,
+    DOOR_ZOMBIE_EATING_1_DIRECTORY,
+    DOOR_ZOMBIE_EATING_1_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_EATING_1_COLD_DIRECTORY,
+
+    DOOR_ZOMBIE_WALK1_2_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_2_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_2_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_2_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_2_COLD_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_2_COLD_DIRECTORY,
+    DOOR_ZOMBIE_EATING_2_DIRECTORY,
+    DOOR_ZOMBIE_EATING_2_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_EATING_2_COLD_DIRECTORY,
+
+    DOOR_ZOMBIE_WALK1_3_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_3_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_3_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_3_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_WALK1_3_COLD_DIRECTORY,
+    DOOR_ZOMBIE_WALK2_3_COLD_DIRECTORY,
+    DOOR_ZOMBIE_EATING_3_DIRECTORY,
+    DOOR_ZOMBIE_EATING_3_BLINK_DIRECTORY,
+    DOOR_ZOMBIE_EATING_3_COLD_DIRECTORY,
+
     //-------------------------------------------------------
     START_READY_DIRECTORY,
     START_SET_DIRECTORY,
@@ -503,15 +541,15 @@ const Image all_img[] = {
     Image("./image/Zombie/Normal/ZombieAttack_cold.png", 39, 8),  // ZOMBIE_EATING_COLD_DIRECTORY
 
     // ARMLESS ZOMBIE--------------------------------------------------------
-    Image("./image/Zombie/Armless/armless_walk1.png", 46, 8),        // ARMLESS_ZOMBIE_WALK1_DIRECTORY
-    Image("./image/Zombie/Armless/armless_walk2.png", 46, 8),        // ARMLESS_ZOMBIE_WALK2_DIRECTORY
-    Image("./image/Zombie/Armless/armless_walk1_blink.png", 46, 8),  // ARMLESS_ZOMBIE_WALK1_BLINK_DIRECTORY
-    Image("./image/Zombie/Armless/armless_walk2_blink.png", 46, 8),  // ARMLESS_ZOMBIE_WALK2_BLINK_DIRECTORY
-    Image("./image/Zombie/Armless/armless_walk1_cold.png", 46, 8),   // ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY
-    Image("./image/Zombie/Armless/armless_walk2_cold.png", 46, 8),   // ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY
-    Image("./image/Zombie/Armless/armless_attack.png", 39, 8),       // ARMLESS_ZOMBIE_EATING_DIRECTORY
-    Image("./image/Zombie/Armless/armless_attack_blink.png", 39, 8), // ARMLESS_ZOMBIE_EATING_BLINK_DIRECTORY
-    Image("./image/Zombie/Armless/armless_attack_cold.png", 39, 8),  // ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk1.png", 46, 8),        // ARMLESS_ZOMBIE_WALK1_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk2.png", 46, 8),        // ARMLESS_ZOMBIE_WALK2_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk1_blink.png", 46, 8),  // ARMLESS_ZOMBIE_WALK1_BLINK_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk2_blink.png", 46, 8),  // ARMLESS_ZOMBIE_WALK2_BLINK_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk1_cold.png", 46, 8),   // ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessWalk2_cold.png", 46, 8),   // ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessAttack.png", 39, 8),       // ARMLESS_ZOMBIE_EATING_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessAttack_blink.png", 39, 8), // ARMLESS_ZOMBIE_EATING_BLINK_DIRECTORY
+    Image("./image/Zombie/Armless/ArmlessAttack_cold.png", 39, 8),  // ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY
 
     // FLAG ZOMBIE--------------------------------------------------------
     Image("./image/Zombie/Flag/Degrade1/FlagZombieWalk1_1.png", 46, 8),        // FLAG_ZOMBIE_WALK1_1_DIRECTORY
@@ -544,8 +582,8 @@ const Image all_img[] = {
 
     // CONEHEAD ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Cone/cone_drop.png", 8, 8),                          // CONE_DROP_DIRECTORY
-    Image("./image/Zombie/Cone/Cone_zombie_credit1.png", 22, 8),               // CONE_ZOMBIE_CREDIT1_DIRECTORY
-    Image("./image/Zombie/Cone/Cone_zombie_credit1.png", 22, 8),               // CONE_ZOMBIE_CREDIT2_DIRECTORY
+    Image("./image/Zombie/Cone/ConeZombie_credit1.png", 22, 8),                // CONE_ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Cone/ConeZombie_credit2.png", 22, 8),                // CONE_ZOMBIE_CREDIT2_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk1_1.png", 46, 8),        // CONE_ZOMBIE_WALK1_1_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk2_1.png", 46, 8),        // CONE_ZOMBIE_WALK2_1_DIRECTORY
     Image("./image/Zombie/Cone/Degrade1/ConeZombieWalk1_1_blink.png", 46, 8),  // CONE_ZOMBIE_WALK1_1_BLINK_DIRECTORY
@@ -576,8 +614,8 @@ const Image all_img[] = {
 
     // BUCKETHEAD ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Bucket/bucket_drop.png", 8, 8),                          // BUCKET_DROP_DIRECTORY
-    Image("./image/Zombie/Bucket/Bucket_zombie_credit1.png", 22, 8),               // BUCKET_ZOMBIE_CREDIT1_DIRECTORY
-    Image("./image/Zombie/Bucket/Bucket_zombie_credit1.png", 22, 8),               // BUCKET_ZOMBIE_CREDIT2_DIRECTORY
+    Image("./image/Zombie/Bucket/BucketZombie_credit1.png", 22, 8),                // BUCKET_ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Bucket/BucketZombie_credit2.png", 22, 8),                // BUCKET_ZOMBIE_CREDIT2_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk1_1.png", 46, 8),        // BUCKET_ZOMBIE_WALK1_1_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk2_1.png", 46, 8),        // BUCKET_ZOMBIE_WALK2_1_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade1/BucketZombieWalk1_1_blink.png", 46, 8),  // BUCKET_ZOMBIE_WALK1_1_BLINK_DIRECTORY
@@ -605,6 +643,37 @@ const Image all_img[] = {
     Image("./image/Zombie/Bucket/Degrade3/BucketZombieAttack_3.png", 39, 8),       // BUCKET_ZOMBIE_EATING_3_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade3/BucketZombieAttack_3_blink.png", 39, 8), // BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY
     Image("./image/Zombie/Bucket/Degrade3/BucketZombieAttack_3_cold.png", 39, 8),  // BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY
+
+    // DOOR ZOMBIE------------------------------------------------------------------------
+    Image("./image/Zombie/Door/DoorZombie_credit1.png", 22, 8),                // DOOR_ZOMBIE_CREDIT1_DIRECTORY
+    Image("./image/Zombie/Door/DoorZombie_credit1.png", 22, 8),                // DOOR_ZOMBIE_CREDIT2_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk1_1.png", 46, 8),        // DOOR_ZOMBIE_WALK1_1_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk2_1.png", 46, 8),        // DOOR_ZOMBIE_WALK2_1_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk1_1_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK1_1_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk2_1_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK2_1_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk1_1_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK1_1_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieWalk2_1_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK2_1_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieAttack_1.png", 39, 8),       // DOOR_ZOMBIE_EATING_1_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieAttack_1_blink.png", 39, 8), // DOOR_ZOMBIE_EATING_1_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade1/DoorZombieAttack_1_cold.png", 39, 8),  // DOOR_ZOMBIE_EATING_1_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk1_2.png", 46, 8),        // DOOR_ZOMBIE_WALK1_2_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk2_2.png", 46, 8),        // DOOR_ZOMBIE_WALK2_2_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk1_2_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK1_2_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk2_2_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK2_2_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk1_2_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK1_2_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieWalk2_2_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK2_2_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieAttack_2.png", 39, 8),       // DOOR_ZOMBIE_EATING_2_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieAttack_2_blink.png", 39, 8), // DOOR_ZOMBIE_EATING_2_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade2/DoorZombieAttack_2_cold.png", 39, 8),  // DOOR_ZOMBIE_EATING_2_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk1_3.png", 46, 8),        // DOOR_ZOMBIE_WALK1_3_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk2_3.png", 46, 8),        // DOOR_ZOMBIE_WALK2_3_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk1_3_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK1_3_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk2_3_blink.png", 46, 8),  // DOOR_ZOMBIE_WALK2_3_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk1_3_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK1_3_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieWalk2_3_cold.png", 46, 8),   // DOOR_ZOMBIE_WALK2_3_COLD_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieAttack_3.png", 39, 8),       // DOOR_ZOMBIE_EATING_3_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieAttack_3_blink.png", 39, 8), // DOOR_ZOMBIE_EATING_3_BLINK_DIRECTORY
+    Image("./image/Zombie/Door/Degrade3/DoorZombieAttack_3_cold.png", 39, 8),  // DOOR_ZOMBIE_EATING_3_COLD_DIRECTORY
 
     //----------------------------------------------------------------------------------------------
     Image("./image/Announcement/StartReady.png"), // START_READY_DIRECTORY
@@ -770,7 +839,17 @@ static map<int, int> blink_of = {
     {BUCKET_ZOMBIE_WALK2_3_DIRECTORY, BUCKET_ZOMBIE_WALK2_3_BLINK_DIRECTORY},
     {BUCKET_ZOMBIE_EATING_1_DIRECTORY, BUCKET_ZOMBIE_EATING_1_BLINK_DIRECTORY},
     {BUCKET_ZOMBIE_EATING_2_DIRECTORY, BUCKET_ZOMBIE_EATING_2_BLINK_DIRECTORY},
-    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY}
+    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_BLINK_DIRECTORY},
+
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_WALK1_1_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_WALK1_2_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_3_DIRECTORY, DOOR_ZOMBIE_WALK1_3_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_1_DIRECTORY, DOOR_ZOMBIE_WALK2_1_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_2_DIRECTORY, DOOR_ZOMBIE_WALK2_2_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_3_DIRECTORY, DOOR_ZOMBIE_WALK2_3_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_1_DIRECTORY, DOOR_ZOMBIE_EATING_1_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_2_DIRECTORY, DOOR_ZOMBIE_EATING_2_BLINK_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_3_DIRECTORY, DOOR_ZOMBIE_EATING_3_BLINK_DIRECTORY}
 
 };
 
@@ -819,7 +898,17 @@ static map<int, int> cold_of = {
     {BUCKET_ZOMBIE_WALK2_3_DIRECTORY, BUCKET_ZOMBIE_WALK2_3_COLD_DIRECTORY},
     {BUCKET_ZOMBIE_EATING_1_DIRECTORY, BUCKET_ZOMBIE_EATING_1_COLD_DIRECTORY},
     {BUCKET_ZOMBIE_EATING_2_DIRECTORY, BUCKET_ZOMBIE_EATING_2_COLD_DIRECTORY},
-    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY}
+    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY},
+
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_WALK1_1_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_WALK1_2_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_3_DIRECTORY, DOOR_ZOMBIE_WALK1_3_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_1_DIRECTORY, DOOR_ZOMBIE_WALK2_1_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_2_DIRECTORY, DOOR_ZOMBIE_WALK2_2_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_3_DIRECTORY, DOOR_ZOMBIE_WALK2_3_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_1_DIRECTORY, DOOR_ZOMBIE_EATING_1_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_2_DIRECTORY, DOOR_ZOMBIE_EATING_2_COLD_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_3_DIRECTORY, DOOR_ZOMBIE_EATING_3_COLD_DIRECTORY}
 
 };
 
@@ -853,7 +942,14 @@ static map<int, int> eat_of = {
     {BUCKET_ZOMBIE_WALK1_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_DIRECTORY},
     {BUCKET_ZOMBIE_WALK2_1_DIRECTORY, BUCKET_ZOMBIE_EATING_1_DIRECTORY},
     {BUCKET_ZOMBIE_WALK2_2_DIRECTORY, BUCKET_ZOMBIE_EATING_2_DIRECTORY},
-    {BUCKET_ZOMBIE_WALK2_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_DIRECTORY}
+    {BUCKET_ZOMBIE_WALK2_3_DIRECTORY, BUCKET_ZOMBIE_EATING_3_DIRECTORY},
+
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_EATING_1_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_EATING_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_3_DIRECTORY, DOOR_ZOMBIE_EATING_3_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_1_DIRECTORY, DOOR_ZOMBIE_EATING_1_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_2_DIRECTORY, DOOR_ZOMBIE_EATING_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_3_DIRECTORY, DOOR_ZOMBIE_EATING_3_DIRECTORY}
 
 };
 
@@ -898,7 +994,17 @@ static map<int, int> degrade_of = {
     {BUCKET_ZOMBIE_EATING_2_DIRECTORY, BUCKET_ZOMBIE_EATING_3_DIRECTORY},
     {BUCKET_ZOMBIE_WALK1_3_DIRECTORY, ZOMBIE_WALK1_DIRECTORY},
     {BUCKET_ZOMBIE_WALK2_3_DIRECTORY, ZOMBIE_WALK2_DIRECTORY},
-    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, ZOMBIE_EATING_DIRECTORY}
+    {BUCKET_ZOMBIE_EATING_3_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
+
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_WALK1_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_1_DIRECTORY, DOOR_ZOMBIE_WALK2_2_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_1_DIRECTORY, DOOR_ZOMBIE_EATING_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_WALK1_3_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_2_DIRECTORY, DOOR_ZOMBIE_WALK2_3_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_2_DIRECTORY, DOOR_ZOMBIE_EATING_3_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_3_DIRECTORY, ZOMBIE_WALK1_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_3_DIRECTORY, ZOMBIE_WALK2_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_3_DIRECTORY, ZOMBIE_EATING_DIRECTORY}
 
 };
 

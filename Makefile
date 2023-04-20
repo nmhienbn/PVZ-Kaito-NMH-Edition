@@ -27,7 +27,7 @@ LIBS =
 LIB_DIRS = 
 #* SDL flags
 LIB_DIRS += -L$(SDL2_path)\lib
-LIBS     += -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -mwindows
+LIBS     += -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer #-mwindows
 
 
 .PHONY: all 

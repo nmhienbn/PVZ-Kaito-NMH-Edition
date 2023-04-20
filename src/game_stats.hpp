@@ -12,6 +12,8 @@ Change this to make game more beautiful, faster or easier, harder or easier.
 #include <time.h>
 using namespace std;
 
+#define INF 1000000000
+
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Speed properties: increase or decrease the following 9 define values to speed up or speed down entities in the game
 // CLK meaning : clock
@@ -76,6 +78,7 @@ enum ZombieType
     FLAG_TYPE,
     CONE_TYPE,
     BUCKET_TYPE,
+    DOOR_TYPE,
 
     COUNT_ZOMBIE_TYPE,
 };
@@ -92,10 +95,11 @@ const int PLANT_HEALTH_LIMIT[] = {
 
 /*Health of zombies*/
 const set<int> ZOMBIE_HEALTH_LIMIT[] = {
-    {5, 10},       // NORMAL
-    {3, 6, 9, 12}, // FLAG
-    {16, 22, 28},  // CONE
-    {25, 45, 65}   // BUCKET
+    {5, 10},             // NORMAL
+    {3, 6, 9, 12},       // FLAG
+    {5, 10, 16, 22, 28}, // CONE
+    {5, 10, 25, 45, 65}, // BUCKET
+    {5, 10, 25, 45, 65}  // DOOR
 
 };
 

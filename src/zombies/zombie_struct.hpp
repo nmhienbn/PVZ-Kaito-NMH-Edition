@@ -8,8 +8,6 @@
 #define ZOMBIE_EXACT_LOCATION 70
 #define ZOMBIE_WIDTH 166
 #define ZOMBIE_HEIGHT 144
-#define ZOMBIE_G_WIDTH 166
-#define ZOMBIE_G_HEIGHT 144
 
 struct DeadZombie
 {
@@ -34,15 +32,19 @@ struct DeadZombie
 @param c_sheet: number of column in sprite sheet
 @param directory(string): decide what image to be render.
 */
-struct Zombie
+class Zombie
 {
-    int type;
-
-    int row, x_location, y_location;
+private:
     int health;
-    bool is_moving;
     int directory_num;
     int frame;
+    int dir_width, dir_height;
+    int nZom;
+
+public:
+    int type;
+    int row, x_location, y_location;
+    bool is_moving;
     int attacked_time, cold_time;
     int bite_time;
     int next_step_time;

@@ -34,7 +34,7 @@ void display_credit()
         }
     }
     sort(tmp.begin(), tmp.end(), cmp);
-    for (int i = 0; i <= 1400 - WINDOW_WIDTH; i += 3)
+    for (int i = 0; i <= 1400 - WINDOW_WIDTH; i += 7)
     {
         win.clear_renderer();
         win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -51,7 +51,7 @@ void display_credit()
                 Mix_PauseMusic();
                 Mix_Pause(-1););)
     }
-    for (int i = 0; i <= 30; i++)
+    for (int i = 0; i <= 60; i++)
     {
         win.clear_renderer();
         win.draw_bg(level.background_directory, 1400 - WINDOW_WIDTH, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -68,7 +68,7 @@ void display_credit()
                 Mix_PauseMusic();
                 Mix_Pause(-1););)
     }
-    for (int i = 1400 - WINDOW_WIDTH; i >= 0; i -= 3)
+    for (int i = 1400 - WINDOW_WIDTH; i >= 0; i -= 7)
     {
         win.clear_renderer();
         win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -76,6 +76,7 @@ void display_credit()
         {
             zombie.display2(i);
         }
+        win.show_announcer_text();
         win.update_screen();
         HANDLE(
             QUIT(quit = true; return;);

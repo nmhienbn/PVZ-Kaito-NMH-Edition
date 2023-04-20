@@ -1,7 +1,7 @@
 #include "pea.hpp"
 #define PEA_WIDTH 25
 #define PEA_HEIGHT 25
-#define PEA_EXPLODE_TIME 35
+#define PEA_EXPLODE_TIME 15
 
 extern Map cells;
 extern window win;
@@ -19,13 +19,12 @@ Pea::Pea(int _type, int _row, int _x)
     if (type == 1)
     {
         directory_num = PEA_DIRECTORY;
-        explode = PEA_EXPLODE_TIME;
     }
     else if (type == 2)
     {
         directory_num = SNOWZ_PEA_DIRECTORY;
-        explode = PEA_EXPLODE_TIME;
     }
+    explode = INF;
 }
 
 /*
@@ -47,15 +46,15 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
 {
     for (int i = 0; i < (int)peas.size(); i++)
     {
-        if (peas[i].directory_num == PEA_EXPLODE_DIRECTORY ||
-            peas[i].directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
+        if (peas[i].is_disappeared())
         {
-            if (--peas[i].explode == 0)
-            {
-                peas.erase(peas.begin() + i);
-                i--;
-            }
+            peas.erase(peas.begin() + i);
+            i--;
             continue;
+        }
+        if (peas[i].has_exploded())
+            continue;
+        {
         }
         for (int j = 0; j < (int)zombies.size(); j++)
             if (peas[i].apply_hitting_zombie(zombies, dead_zombies, j))
@@ -83,7 +82,7 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
         {
             play_sound_effect(SNOW_PEA_SPARKLES_DIRECTORY);
         }
-        if (zombies[z_ind].type == BUCKET_TYPE)
+        if (zombies[z_ind].type == BUCKET_TYPE || zombies[z_ind].type == DOOR_TYPE)
         {
             play_sound_effect(SHIELD_HIT_MUSIC_DIRECTORY);
         }
@@ -92,7 +91,7 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
             play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
         }
         // Snowz peas effects
-        if (type == 2)
+        if (type == 2 && (zombies[z_ind].type != DOOR_TYPE))
         {
             // If zombie is not cold, its next step and bite will be delay
             if (!zombies[z_ind].cold_time)
@@ -107,6 +106,7 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
             directory_num == SNOWZ_PEA_DIRECTORY)
         {
             directory_num++; // Make the pea explode
+            explode = PEA_EXPLODE_TIME;
         }
         // Attack zombie
         if (zombies[z_ind].decrease_health(dead_zombies))
@@ -121,40 +121,44 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
     return false;
 }
 
+bool Pea::has_exploded()
+{
+    return explode <= PEA_EXPLODE_TIME;
+}
+
+bool Pea::is_disappeared()
+{
+    int right_bound = WINDOW_WIDTH;
+    return --explode == 0 || x_location > right_bound;
+}
+
 /*
 Return true if pea can move
     + If pea go out the playground: false
     + If pea reach any zombie: false
     + Else: true
 */
-bool Pea::can_move(vector<Zombie> &zombies)
+void Pea::move()
 {
     int right_bound = WINDOW_WIDTH;
-    if (x_location > right_bound)
-        return false;
-    for (auto &zombie : zombies)
-        if (has_reached_zombie(zombie))
-            return false;
-    return true;
+    if (x_location <= right_bound)
+    {
+        if (!has_exploded())
+        {
+            x_location += PEA_DX;
+        }
+    }
 }
 
 /*
 Move the pea: For all pea:
     + If pea can move, its location += their speed.
 */
-void move_peas(vector<Pea> &peas, vector<Zombie> &zombies)
+void move_peas(vector<Pea> &peas)
 {
-    for (int i = 0; i < (int)peas.size(); i++)
+    for (auto &pea : peas)
     {
-        if (peas[i].can_move(zombies))
-        {
-            peas[i].x_location += PEA_DX;
-        }
-        else
-        {
-            peas.erase(peas.begin() + i);
-            i--;
-        }
+        pea.move();
     }
 }
 
@@ -169,4 +173,9 @@ void Pea::display()
         directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
         more_px += 25;
     win.draw_png_scale(directory_num, x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
+}
+
+void Pea::display_shadow()
+{
+    win.draw_png(PEA_SHADOW_DIRECTORY, x_location, cells[row][0].y2 - 13, 21, 9);
 }

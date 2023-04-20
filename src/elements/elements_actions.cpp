@@ -210,7 +210,7 @@ void handle_movements()
 {
     move_zombies(game_characters.zombies);
     move_suns(game_characters.suns);
-    move_peas(game_characters.peas, game_characters.zombies);
+    move_peas(game_characters.peas);
 }
 
 /*

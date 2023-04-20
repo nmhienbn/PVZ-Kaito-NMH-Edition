@@ -38,6 +38,8 @@ Zombie::Zombie(int _type, int level_num)
     {
     case NORMAL_TYPE:
     {
+        dir_width = 166;
+        dir_height = 144;
         health = *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin();
         directory_num = ZOMBIE_WALK_DIRECTORY;
         break;
@@ -45,6 +47,8 @@ Zombie::Zombie(int _type, int level_num)
 
     case FLAG_TYPE:
     {
+        dir_width = 166;
+        dir_height = 144;
         health = *ZOMBIE_HEALTH_LIMIT[FLAG_TYPE].rbegin();
         directory_num = FLAG_ZOMBIE_WALK_1_DIRECTORY;
         break;
@@ -52,6 +56,8 @@ Zombie::Zombie(int _type, int level_num)
 
     case CONE_TYPE:
     {
+        dir_width = 166;
+        dir_height = 144;
         health = *ZOMBIE_HEALTH_LIMIT[CONE_TYPE].rbegin();
         directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
         break;
@@ -59,8 +65,19 @@ Zombie::Zombie(int _type, int level_num)
 
     case BUCKET_TYPE:
     {
+        dir_width = 166;
+        dir_height = 144;
         health = *ZOMBIE_HEALTH_LIMIT[BUCKET_TYPE].rbegin();
         directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
+        break;
+    }
+
+    case DOOR_TYPE:
+    {
+        dir_width = 196;
+        dir_height = 197;
+        health = *ZOMBIE_HEALTH_LIMIT[DOOR_TYPE].rbegin();
+        directory_num = DOOR_ZOMBIE_WALK_1_DIRECTORY;
         break;
     }
 
@@ -115,7 +132,6 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
         {
             type = NORMAL_TYPE;
             dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, CONE_DROP_DIRECTORY));
-            directory_num = degrade_of[directory_num];
         }
         break;
     }
@@ -126,7 +142,17 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
         {
             type = NORMAL_TYPE;
             dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));
-            directory_num = degrade_of[directory_num];
+        }
+        break;
+    }
+
+    case DOOR_TYPE:
+    {
+        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
+        {
+            type = NORMAL_TYPE;
+            dir_width = 166;
+            dir_height = 144;
         }
         break;
     }
@@ -160,18 +186,18 @@ void Zombie::display(const int &_row)
         int sframe = frame / ZOMBIE_FRAME;
         int scol = sframe % all_img[directory_num].c_sheet;
         int srow = sframe / all_img[directory_num].c_sheet;
-        win.draw_png(directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow,
-                     ZOMBIE_WIDTH, ZOMBIE_HEIGHT,
+        win.draw_png(directory_num, dir_width * scol, dir_height * srow,
+                     dir_width, dir_height,
                      x_location, y_location,
-                     ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                     dir_width, dir_height);
 
         // zombie cold
         if (cold_time)
         {
-            win.draw_png(cold_of[directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow,
-                         ZOMBIE_WIDTH, ZOMBIE_HEIGHT,
+            win.draw_png(cold_of[directory_num], dir_width * scol, dir_height * srow,
+                         dir_width, dir_height,
                          x_location, y_location,
-                         ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                         dir_width, dir_height);
             if (check_status(game_state, IS_PAUSED) == false)
                 if (--cold_time == 0)
                 {
@@ -183,10 +209,10 @@ void Zombie::display(const int &_row)
         // zombie attacked
         if (attacked_time)
         {
-            win.draw_png(blink_of[directory_num], ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow,
-                         ZOMBIE_WIDTH, ZOMBIE_HEIGHT,
+            win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
+                         dir_width, dir_height,
                          x_location, y_location,
-                         ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                         dir_width, dir_height);
             if (check_status(game_state, IS_PAUSED) == false)
                 attacked_time--;
         }
@@ -210,10 +236,10 @@ void Zombie::display2(const int &_minus_x)
     int sframe = frame / ZOMBIE_FRAME / 2;
     int scol = sframe % all_img[directory_num].c_sheet;
     int srow = sframe / all_img[directory_num].c_sheet;
-    win.draw_png(directory_num, ZOMBIE_WIDTH * scol, ZOMBIE_HEIGHT * srow,
-                 ZOMBIE_WIDTH, ZOMBIE_HEIGHT,
+    win.draw_png(directory_num, dir_width * scol, dir_height * srow,
+                 dir_width, dir_height,
                  x_location - _minus_x, y_location,
-                 ZOMBIE_G_WIDTH, ZOMBIE_G_HEIGHT);
+                 dir_width, dir_height);
 
     // zombie next frame
     if (++frame >= 2 * ZOMBIE_FRAME * all_img[directory_num].n_sheet)
@@ -234,7 +260,7 @@ bool Zombie::operator<(const Zombie &other) const
 void Zombie::make_credit()
 {
     x_location = rand(WINDOW_WIDTH, 1300) - 50;
-    y_location = rand(0, WINDOW_HEIGHT - ZOMBIE_G_HEIGHT);
+    y_location = rand(0, WINDOW_HEIGHT - dir_height);
     switch (type)
     {
     case NORMAL_TYPE:
@@ -258,6 +284,12 @@ void Zombie::make_credit()
     case BUCKET_TYPE:
     {
         directory_num = rand(BUCKET_ZOMBIE_CREDIT1_DIRECTORY, BUCKET_ZOMBIE_CREDIT2_DIRECTORY);
+        break;
+    }
+
+    case DOOR_TYPE:
+    {
+        directory_num = rand(DOOR_ZOMBIE_CREDIT1_DIRECTORY, DOOR_ZOMBIE_CREDIT2_DIRECTORY);
         break;
     }
 

@@ -45,6 +45,7 @@ void start_level()
     if (check_status(game_state, IS_GAME_STARTED) == false)
     {
         display_credit();
+        clk = 1;
         return;
     }
     else
