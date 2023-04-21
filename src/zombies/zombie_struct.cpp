@@ -4,6 +4,8 @@ extern int game_state;
 extern Map cells;
 extern window win;
 
+#define ARM_FRAME 1
+
 /*Zombie constructor.
  */
 Zombie::Zombie()
@@ -88,6 +90,11 @@ Zombie::Zombie(int _type, int level_num)
     frame = rand(0, ZOMBIE_FRAME * all_img[directory_num].n_sheet - 1);
 }
 
+int Zombie::get_health()
+{
+    return health;
+}
+
 /*Change zombie eating status
 If is_moving is false, then the zombie must be eating.
 Else the zombie must be moving.
@@ -116,12 +123,17 @@ void Zombie::change_zombie_eating_status()
 /*Determine zombies's appearance depend on their health:
 Armor drop if necessary
 */
-void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
+void Zombie::determine_appearance(vector<ZombiePart> &zombie_parts)
 {
     // Degrade the zombie
     if (ZOMBIE_HEALTH_LIMIT[type].find(health) != ZOMBIE_HEALTH_LIMIT[type].end())
     {
         directory_num = degrade_of[directory_num];
+        if (health <= 5)
+        {
+            zombie_parts.push_back(ZombiePart(ZOMBIE_ARM_DIRECTORY, 1, row, x_location,
+                                              ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
+        }
     }
     // Armor drop if necessary
     switch (type)
@@ -131,7 +143,8 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
         if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
         {
             type = NORMAL_TYPE;
-            dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, CONE_DROP_DIRECTORY));
+            zombie_parts.push_back(ZombiePart(CONE_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME, row, x_location + 80,
+                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
         }
         break;
     }
@@ -141,7 +154,8 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
         if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
         {
             type = NORMAL_TYPE;
-            dead_zombies.push_back(DeadZombie(row, x_location, NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));
+            zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME, row, x_location + 80,
+                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
         }
         break;
     }
@@ -166,16 +180,26 @@ void Zombie::determine_appearance(vector<DeadZombie> &dead_zombies)
 Decrease zombie health and change their appearance if necessary.
 @return true if zombie die (health = 0).
 */
-bool Zombie::decrease_health(vector<DeadZombie> &dead_zombies)
+bool Zombie::decrease_health(vector<ZombiePart> &zombie_parts)
 {
     health--;
     attacked_time = MAX_TIME_BLINK;
-    determine_appearance(dead_zombies);
+    determine_appearance(zombie_parts);
     if (health == 0)
     {
         return true;
     }
     return false;
+}
+
+void Zombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
+{
+    zombie_parts.push_back(ZombiePart(ZOMBIE_DIE_DIRECTORY, ZOMBIE_DIE_FRAME,
+                                      row, x_location,
+                                      ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
+    zombie_parts.push_back(ZombiePart(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_FRAME,
+                                      row, x_location + 80,
+                                      HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, cold_time > 0));
 }
 
 void Zombie::display(const int &_row)
@@ -248,15 +272,6 @@ void Zombie::display2(const int &_minus_x)
     }
 }
 
-/*
-Compare zombie < zombie:
-    x < x
-*/
-bool Zombie::operator<(const Zombie &other) const
-{
-    return x_location < other.x_location;
-}
-
 void Zombie::make_credit()
 {
     x_location = rand(WINDOW_WIDTH, 1300) - 50;
@@ -298,19 +313,47 @@ void Zombie::make_credit()
     }
 }
 
-/*Dead constructor*/
-DeadZombie::DeadZombie(int _r, int _x, bool _cold)
+ZombiePart::ZombiePart(const int &_img_num, const int &_frame_clk,
+                       const int &_r, const int &_x,
+                       const int &_w, const int &_h, const bool &_cold)
 {
+    img_num = _img_num;
+    frame_clk = _frame_clk;
     row = _r;
     x_location = _x;
+    width = _w;
+    height = _h;
     is_cold = _cold;
 }
 
-/*Dead constructor with other body and head*/
-DeadZombie::DeadZombie(int _r, int _x, int _body, int _head)
+/*
+    @return 'true' if display finished
+*/
+bool ZombiePart::display(const int &_row)
 {
-    row = _r;
-    x_location = _x;
-    body = _body;
-    head = _head;
+    if (row == _row)
+    {
+        int y_location = cells[row][0].y1 - 50;
+        int sframe = frame / frame_clk;
+        int scol = sframe % all_img[img_num].c_sheet;
+        int srow = sframe / all_img[img_num].c_sheet;
+        win.draw_png(img_num, width * scol, height * srow,
+                     width, height,
+                     x_location, y_location,
+                     width, height);
+        if (is_cold)
+            win.draw_png(cold_of[img_num], width * scol, height * srow,
+                         width, height,
+                         x_location, y_location,
+                         width, height);
+
+        if (check_status(game_state, IS_PAUSED) == false)
+        {
+            if (++frame >= frame_clk * all_img[img_num].n_sheet)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }

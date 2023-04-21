@@ -92,7 +92,7 @@ void start_level()
             KEY_TO_WIN({
                 level.waves_finished = 1;
                 game_characters.zombies.clear();
-                game_characters.dead_zombies.clear();
+                game_characters.zombie_parts.clear();
             });
             if (check_status(game_state, IS_PAUSED) == false) {
                 if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_5))

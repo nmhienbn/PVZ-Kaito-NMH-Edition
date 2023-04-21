@@ -95,6 +95,7 @@ void set_default_alpha(int file_num, SDL_Texture *res)
         file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
         file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
 
+        file_num == ZOMBIE_ARM_COLD_DIRECTORY ||
         file_num == ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY ||
         file_num == ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY ||
         file_num == ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY ||

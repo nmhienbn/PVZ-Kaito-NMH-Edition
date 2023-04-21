@@ -25,7 +25,7 @@ using namespace std;
 #define FIRST_WAVE_CLK_COUNT 900         // Time appear of first wave of zombies
 #define ZOMBIE_CREATE_CLK_COUNT 2000     // Time between zombies' different groups
 #define BITE_CLK_COUNT 30                // Zombie bite plant frequency
-#define ZOMBIE_CLK_COUNT 15              // Zombie moving frequency
+#define ZOMBIE_CLK_COUNT 4               // Zombie moving frequency
 #define ANNOUNCER_CLK_COUNT 180
 #define SUN_CHANGE_COLOR_CLK_COUNT 6
 
@@ -54,7 +54,7 @@ using namespace std;
 Moving speed of some elements
 */
 #define ZOMBIE_INIT_X WINDOW_WIDTH
-#define ZOMBIE_DX 4
+#define ZOMBIE_DX 1
 #define ZOMBIE_COLD_DX 2
 #define PEA_DX 10
 #define SUN_DY 1

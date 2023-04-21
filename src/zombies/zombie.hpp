@@ -12,7 +12,7 @@ bool can_zombie_move(Zombie &zombie);
 void update_moving_status_for_zombies(vector<Zombie> &zombies);
 void move_zombies(vector<Zombie> &zombies);
 void display_zombies(vector<Zombie> &zombies, const int &_row);
-void display_dead_zombies(vector<DeadZombie> &dead_zombies, const int &_row);
+void display_zombie_parts(vector<ZombiePart> &zombie_parts, const int &_row);
 
 //------------------------------Zombie bite--------------------------------------
 void update_zombie_next_bite(vector<Zombie> &zombies);

@@ -44,13 +44,13 @@ bool CherryBomb::is_disappeared()
 }
 
 void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,
-                                 vector<DeadZombie> &dead_zombies)
+                                 vector<ZombiePart> &zombie_parts)
 {
     if (is_blow())
     {
         play_sound_effect(CHERRYBOMB_MUSIC_DIRECTORY);
         for (int j = 0; j < (int)zombies.size();)
-            if (!apply_hitting_zombie(zombies, j, dead_zombies))
+            if (!apply_hitting_zombie(zombies, j, zombie_parts))
             {
                 j++;
             }
@@ -61,12 +61,13 @@ void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,
 Apply cherrybomb explode the zombie. (change zombie into burnt one)
 */
 bool CherryBomb::apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
-                                      vector<DeadZombie> &dead_zombies)
+                                      vector<ZombiePart> &zombie_parts)
 {
     if (is_hit_zombie(zombies[z_ind]))
     {
-        DeadZombie tmp(zombies[z_ind].row, zombies[z_ind].x_location, ZOMBIE_BURNT_DIRECTORY, NULL_DIRECTORY);
-        dead_zombies.push_back(tmp);
+        zombie_parts.push_back(ZombiePart(ZOMBIE_BURNT_DIRECTORY, ZOMBIE_DIE_FRAME,
+                                          zombies[z_ind].row, zombies[z_ind].x_location,
+                                          ZOMBIE_WIDTH, ZOMBIE_HEIGHT));
         zombies.erase(zombies.begin() + z_ind);
         return true;
     }

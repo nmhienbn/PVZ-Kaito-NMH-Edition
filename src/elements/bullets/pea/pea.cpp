@@ -1,6 +1,5 @@
 #include "pea.hpp"
-#define PEA_WIDTH 25
-#define PEA_HEIGHT 25
+#include <algorithm>
 #define PEA_EXPLODE_TIME 15
 
 extern Map cells;
@@ -18,19 +17,28 @@ Pea::Pea(int _type, int _row, int _x)
     x_location = _x;
     if (type == 1)
     {
+        pea_width = 26;
+        pea_height = 25;
         directory_num = PEA_DIRECTORY;
     }
     else if (type == 2)
     {
+        pea_width = 36;
+        pea_height = 25;
         directory_num = SNOWZ_PEA_DIRECTORY;
     }
     explode = INF;
 }
 
+bool Pea::operator<(const Pea &other) const
+{
+    return x_location < other.x_location;
+}
+
 /*
 @return 'true' if pea reach the zombie
 */
-bool Pea::has_reached_zombie(Zombie &zombie)
+bool Pea::has_reached_zombie(const Zombie &zombie)
 {
     if (zombie.row == row &&
         x_location > zombie.x_location + 70)
@@ -42,8 +50,16 @@ bool Pea::has_reached_zombie(Zombie &zombie)
 For all pea and all zombie to check their collision.
 One pea hit only one zombies at a time.
 */
-void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies)
+void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<ZombiePart> &zombie_parts)
 {
+    vector<Zombie *> tmp;
+    for (int i = 0; i < (int)zombies.size(); i++)
+    {
+        tmp.push_back(&zombies[i]);
+    }
+    stable_sort(tmp.begin(), tmp.end(), [](const Zombie *a, const Zombie *b) -> bool
+                { return a->x_location == b->x_location ? a->cold_time < b->cold_time : a->x_location < b->x_location; });
+    sort(peas.begin(), peas.end());
     for (int i = 0; i < (int)peas.size(); i++)
     {
         if (peas[i].is_disappeared())
@@ -54,12 +70,16 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
         }
         if (peas[i].has_exploded())
             continue;
-        {
-        }
-        for (int j = 0; j < (int)zombies.size(); j++)
-            if (peas[i].apply_hitting_zombie(zombies, dead_zombies, j))
+        for (int j = 0; j < (int)tmp.size(); j++)
+            if (peas[i].apply_hitting_zombie(*tmp[j], zombie_parts))
             {
-                j--;
+                tmp.erase(tmp.begin() + j);
+                break;
+            }
+        for (int j = 0; j < (int)zombies.size(); j++)
+            if (zombies[j].get_health() == 0)
+            {
+                zombies.erase(zombies.begin() + j);
                 break;
             }
     }
@@ -71,18 +91,17 @@ If a pea collide with a zombie: apply it to hit the zombie:
     Snow pea will slow zombies at once.
     Zombie decrease health & blink.
     Add zombies' death.
-    Has some probabilities not hit zombie =))
 */
-bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead_zombies, const int &z_ind)
+bool Pea::apply_hitting_zombie(Zombie &zombie, vector<ZombiePart> &zombie_parts)
 {
-    if (has_reached_zombie(zombies[z_ind]))
+    if (has_reached_zombie(zombie))
     {
         // Sound effects
         if (type == 2)
         {
             play_sound_effect(SNOW_PEA_SPARKLES_DIRECTORY);
         }
-        if (zombies[z_ind].type == BUCKET_TYPE || zombies[z_ind].type == DOOR_TYPE)
+        if (zombie.type == BUCKET_TYPE || zombie.type == DOOR_TYPE)
         {
             play_sound_effect(SHIELD_HIT_MUSIC_DIRECTORY);
         }
@@ -91,15 +110,15 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
             play_sound_effect(PEA_CRASH_MUSIC_DIRECTORY);
         }
         // Snowz peas effects
-        if (type == 2 && (zombies[z_ind].type != DOOR_TYPE))
+        if (type == 2 && (zombie.type != DOOR_TYPE))
         {
             // If zombie is not cold, its next step and bite will be delay
-            if (!zombies[z_ind].cold_time)
+            if (!zombie.cold_time)
             {
-                zombies[z_ind].bite_time *= 2;
-                zombies[z_ind].next_step_time *= 2;
+                zombie.bite_time *= 2;
+                zombie.next_step_time *= 2;
             }
-            zombies[z_ind].cold_time = MAX_COLD_TIME;
+            zombie.cold_time = MAX_COLD_TIME;
         }
         // Pea explode
         if (directory_num == PEA_DIRECTORY ||
@@ -109,12 +128,10 @@ bool Pea::apply_hitting_zombie(vector<Zombie> &zombies, vector<DeadZombie> &dead
             explode = PEA_EXPLODE_TIME;
         }
         // Attack zombie
-        if (zombies[z_ind].decrease_health(dead_zombies))
+        if (zombie.decrease_health(zombie_parts))
         {
             play_sound_effect(ZOMBIE_FALLING_MUSIC_DIRECTORY);
-            DeadZombie tmp(zombies[z_ind].row, zombies[z_ind].x_location, zombies[z_ind].cold_time > 0);
-            dead_zombies.push_back(tmp);
-            zombies.erase(zombies.begin() + z_ind);
+            zombie.add_zombie_die(zombie_parts);
         }
         return true;
     }
@@ -172,7 +189,8 @@ void Pea::display()
     if (directory_num == PEA_EXPLODE_DIRECTORY ||
         directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
         more_px += 25;
-    win.draw_png_scale(directory_num, x_location, y_location, PEA_WIDTH + more_px, PEA_HEIGHT + more_px);
+    win.draw_png_scale(directory_num, x_location - more_px / 2, y_location - more_px / 2,
+                       pea_width + more_px, pea_height + more_px);
 }
 
 void Pea::display_shadow()

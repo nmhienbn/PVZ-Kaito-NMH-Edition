@@ -14,7 +14,7 @@ public:
     bool is_blow();
     bool is_disappeared();
     bool apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
-                              vector<DeadZombie> &dead_zombies);
+                              vector<ZombiePart> &zombie_parts);
     void hit_all_zombies(vector<Zombie> &zombies,
-                         vector<DeadZombie> &dead_zombies);
+                         vector<ZombiePart> &zombie_parts);
 };

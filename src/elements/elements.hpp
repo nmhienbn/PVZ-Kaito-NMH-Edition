@@ -24,7 +24,7 @@ struct Elements
     vector<Plants *> plants;
 
     vector<Zombie> zombies;
-    vector<DeadZombie> dead_zombies;
+    vector<ZombiePart> zombie_parts;
 
     vector<Sun> suns;
     vector<Pea> peas;

@@ -43,7 +43,7 @@ void Peashooter::determine_appearance(vector<Zombie> &zombies)
 {
     for (Zombie zombie : zombies)
         if (row == zombie.row &&
-            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - 70))
+            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
         {
             if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
             {

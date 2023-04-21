@@ -130,6 +130,8 @@ enum ImageType
     // NORMAL ZOMBIE---------------------------------------------------
     ZOMBIE_CREDIT1_DIRECTORY,
     ZOMBIE_CREDIT2_DIRECTORY,
+    ZOMBIE_ARM_DIRECTORY,
+    ZOMBIE_ARM_COLD_DIRECTORY,
 
     ZOMBIE_WALK1_DIRECTORY,
     ZOMBIE_WALK2_DIRECTORY,
@@ -523,6 +525,8 @@ const Image all_img[] = {
     // NORMAL ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Normal/Zombie_credit1.png", 22, 8),     // ZOMBIE_CREDIT1_DIRECTORY
     Image("./image/Zombie/Normal/Zombie_credit2.png", 22, 8),     // ZOMBIE_CREDIT2_DIRECTORY
+    Image("./image/Zombie/Normal/Zombie_arm.png", 30, 8),         // ZOMBIE_ARM_DIRECTORY
+    Image("./image/Zombie/Normal/Zombie_arm_cold.png", 30, 8),    // ZOMBIE_ARM_COLD_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk1.png", 46, 8),        // ZOMBIE_WALK1_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk2.png", 46, 8),        // ZOMBIE_WALK2_DIRECTORY
     Image("./image/Zombie/Normal/ZombieWalk1_blink.png", 46, 8),  // ZOMBIE_WALK1_BLINK_DIRECTORY
@@ -862,6 +866,7 @@ static map<int, int> cold_of = {
     {ZOMBIE_WALK2_DIRECTORY, ZOMBIE_WALK2_COLD_DIRECTORY},
     {ZOMBIE_EATING_DIRECTORY, ZOMBIE_EATING_COLD_DIRECTORY},
 
+    {ZOMBIE_ARM_DIRECTORY, ZOMBIE_ARM_COLD_DIRECTORY},
     {ARMLESS_ZOMBIE_WALK1_DIRECTORY, ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY},
     {ARMLESS_ZOMBIE_WALK2_DIRECTORY, ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY},
     {ARMLESS_ZOMBIE_EATING_DIRECTORY, ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY},

@@ -9,17 +9,32 @@
 #define ZOMBIE_WIDTH 166
 #define ZOMBIE_HEIGHT 144
 
-struct DeadZombie
+#define ZOMBIE_EATING_FRAME 10
+
+#define ZOMBIE_DIE_FRAME 4
+#define ZOMBIE_BURNT_FRAME 6
+#define DEAD_ZOMBIE_FRAMES 12
+
+#define HEAD_ZOMBIE_FRAME 6
+#define HEAD_ZOMBIE_WIDTH 125
+#define HEAD_ZOMBIE_HEIGHT 156
+
+class ZombiePart
 {
+private:
     int row;
     int x_location;
-    int body = ZOMBIE_DIE_DIRECTORY;
-    int head = ZOMBIE_HEAD_DIRECTORY;
+    int img_num;
     int frame = 0;
-    bool is_cold = false;
+    int frame_clk;
+    bool is_cold;
+    int width, height;
 
-    DeadZombie(int _r, int _x, bool _cold);
-    DeadZombie(int _r, int _x, int _body, int _head);
+public:
+    ZombiePart(const int &_img_num, const int &_frame_clk,
+               const int &_r, const int &_x,
+               const int &_w, const int &_h, const bool &_cold = false);
+    bool display(const int &_row);
 };
 /*
 @param row(int): The row of the zombie
@@ -51,11 +66,12 @@ public:
 
     Zombie();
     Zombie(int _type, int level_num);
+    int get_health();
     void change_zombie_eating_status();
-    void determine_appearance(vector<DeadZombie> &dead_zombies);
-    bool decrease_health(vector<DeadZombie> &dead_zombies);
+    void determine_appearance(vector<ZombiePart> &zombie_parts);
+    bool decrease_health(vector<ZombiePart> &zombie_parts);
+    void add_zombie_die(vector<ZombiePart> &zombie_parts);
     void display(const int &_row);
     void display2(const int &_minus_x);
-    bool operator<(const Zombie &other) const;
     void make_credit();
 };

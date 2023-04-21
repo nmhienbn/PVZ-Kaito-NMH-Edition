@@ -27,10 +27,10 @@ void handle_changes()
     update_moving_status_for_zombies(game_characters.zombies);
 
     // Check all bullets' moving status
-    handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.dead_zombies);
+    handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.zombie_parts);
 
     // Check all mowers' status
-    handle_mower_zombie_encounter(game_characters.zombies, game_characters.dead_zombies);
+    handle_mower_zombie_encounter(game_characters.zombies, game_characters.zombie_parts);
 
     // Create new wave of zombies. (if level has finised and that's time to create new wave)
     if (level.waves_finished == false &&
@@ -91,7 +91,7 @@ void handle_changes()
             auto tmp = dynamic_cast<CherryBomb *>(plant);
             if (tmp)
             {
-                tmp->hit_all_zombies(game_characters.zombies, game_characters.dead_zombies);
+                tmp->hit_all_zombies(game_characters.zombies, game_characters.zombie_parts);
                 if (tmp->is_disappeared())
                 {
                     cells[plant->get_row()][plant->get_col()].is_planted = false;

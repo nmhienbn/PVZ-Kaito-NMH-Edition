@@ -7,9 +7,22 @@ extern Level level;
 extern Player player;
 extern window win;
 
-bool cmp(const Zombie &x, const Zombie &y)
+void review_playground(vector<Zombie> &zombies, const int &i)
 {
-    return x.y_location < y.y_location;
+    win.clear_renderer();
+    win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
+    for (auto &zombie : zombies)
+    {
+        zombie.display2(i);
+    }
+    win.show_announcer_text();
+    win.update_screen();
+    HANDLE(
+        QUIT(quit = true; return;);
+        LOST_FOCUS(
+            set_status(game_state, IS_PAUSED, true);
+            Mix_PauseMusic();
+            Mix_Pause(-1););)
 }
 
 /*
@@ -33,57 +46,23 @@ void display_credit()
             tmp.push_back(t);
         }
     }
-    sort(tmp.begin(), tmp.end(), cmp);
-    for (int i = 0; i <= 1400 - WINDOW_WIDTH; i += 7)
-    {
-        win.clear_renderer();
-        win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
-        for (auto &zombie : tmp)
-        {
-            zombie.display2(i);
-        }
-        win.show_announcer_text();
-        win.update_screen();
-        HANDLE(
-            QUIT(quit = true; return;);
-            LOST_FOCUS(
-                set_status(game_state, IS_PAUSED, true);
-                Mix_PauseMusic();
-                Mix_Pause(-1););)
-    }
+    sort(tmp.begin(), tmp.end(), [](const Zombie &x, const Zombie &y) -> bool
+         { return x.y_location < y.y_location; });
     for (int i = 0; i <= 60; i++)
     {
-        win.clear_renderer();
-        win.draw_bg(level.background_directory, 1400 - WINDOW_WIDTH, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
-        for (auto &zombie : tmp)
-        {
-            zombie.display2(1400 - WINDOW_WIDTH);
-        }
-        win.show_announcer_text();
-        win.update_screen();
-        HANDLE(
-            QUIT(quit = true; return;);
-            LOST_FOCUS(
-                set_status(game_state, IS_PAUSED, true);
-                Mix_PauseMusic();
-                Mix_Pause(-1););)
+        review_playground(tmp, 0);
     }
-    for (int i = 1400 - WINDOW_WIDTH; i >= 0; i -= 7)
+    for (int i = 0; i <= 1400 - WINDOW_WIDTH; i += 10)
     {
-        win.clear_renderer();
-        win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
-        for (auto &zombie : tmp)
-        {
-            zombie.display2(i);
-        }
-        win.show_announcer_text();
-        win.update_screen();
-        HANDLE(
-            QUIT(quit = true; return;);
-            LOST_FOCUS(
-                set_status(game_state, IS_PAUSED, true);
-                Mix_PauseMusic();
-                Mix_Pause(-1););)
+        review_playground(tmp, i);
+    }
+    for (int i = 0; i <= 180; i++)
+    {
+        review_playground(tmp, 1400 - WINDOW_WIDTH);
+    }
+    for (int i = 1400 - WINDOW_WIDTH; i >= 0; i -= 10)
+    {
+        review_playground(tmp, i);
     }
     play_music(R_S_P_MUSIC_DIRECTORY);
     for (int clk = 0; clk <= 180; clk++)

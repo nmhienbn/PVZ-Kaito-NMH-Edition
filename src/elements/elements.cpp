@@ -97,5 +97,5 @@ void Elements::reset()
     peas.clear();
 
     zombies.clear();
-    dead_zombies.clear();
+    zombie_parts.clear();
 }

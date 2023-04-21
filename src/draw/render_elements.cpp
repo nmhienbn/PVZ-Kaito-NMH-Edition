@@ -203,8 +203,8 @@ void display_game_elements()
             plant->display(row);
 
         // Zombies
-        display_dead_zombies(game_characters.dead_zombies, row);
         display_zombies(game_characters.zombies, row);
+        display_zombie_parts(game_characters.zombie_parts, row);
 
         // Mowers
         display_mower(row);

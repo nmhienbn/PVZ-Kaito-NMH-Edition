@@ -18,7 +18,7 @@ Check if player won: no wave or zombie left.
 */
 bool has_player_won()
 {
-    if (level.waves_finished && game_characters.zombies.empty() && game_characters.dead_zombies.empty())
+    if (level.waves_finished && game_characters.zombies.empty() && game_characters.zombie_parts.empty())
         return true;
     return false;
 }

@@ -49,7 +49,7 @@ void display_mower(const int &_row)
 Handle mower vs zombie collision
 */
 void handle_mower_zombie_encounter(vector<Zombie> &zombies,
-                                   vector<DeadZombie> &dead_zombies)
+                                   vector<ZombiePart> &zombie_parts)
 {
     if (check_status(game_state, IS_PAUSED) == true)
         return;
@@ -77,7 +77,7 @@ void handle_mower_zombie_encounter(vector<Zombie> &zombies,
                 {
                     active_mower(zombies[i].row);
                 }
-                if (!apply_mower_hitting_zombie(zombies, j, mowers[i], dead_zombies))
+                if (!apply_mower_hitting_zombie(zombies, j, mowers[i], zombie_parts))
                 {
                     j++;
                 }
@@ -90,21 +90,19 @@ Apply mower explode the zombie. (chang zombie into burnt one)
 */
 bool apply_mower_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
                                 Mower &mower,
-                                vector<DeadZombie> &dead_zombies)
+                                vector<ZombiePart> &zombie_parts)
 {
     if (is_mower_hit_zombie(mower, zombies[z_ind]))
     {
-        dead_zombies.push_back(
-            DeadZombie(zombies[z_ind].row, zombies[z_ind].x_location,
-                       ZOMBIE_DIE_DIRECTORY, ZOMBIE_HEAD_DIRECTORY));
+        zombies[z_ind].add_zombie_die(zombie_parts);
         if (zombies[z_ind].type == CONE_TYPE)
-            dead_zombies.push_back(
-                DeadZombie(zombies[z_ind].row, zombies[z_ind].x_location,
-                           NULL_DIRECTORY, CONE_DROP_DIRECTORY));
+            zombie_parts.push_back(ZombiePart(CONE_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
+                                              zombies[z_ind].row, zombies[z_ind].x_location + 80,
+                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
         if (zombies[z_ind].type == BUCKET_TYPE)
-            dead_zombies.push_back(
-                DeadZombie(zombies[z_ind].row, zombies[z_ind].x_location,
-                           NULL_DIRECTORY, BUCKET_DROP_DIRECTORY));
+            zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
+                                              zombies[z_ind].row, zombies[z_ind].x_location + 80,
+                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
         zombies.erase(zombies.begin() + z_ind);
         return true;
     }
