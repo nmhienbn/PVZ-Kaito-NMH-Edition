@@ -19,8 +19,18 @@ void close_music();
 
 enum music_type
 {
-    BACKGROUND_MUSIC_DIRECTORY,
+    Brainiac_Maniac_DIRECTORY,
+    Grasswalk_DIRECTORY,
+    Loonboon_DIRECTORY,
+    Moongrains_DIRECTORY,
+    WateryGravesSlow_DIRECTORY,
+    UltimateBattle_DIRECTORY,
+    RigorMormist_DIRECTORY,
+    Cerebrawl_DIRECTORY,
+    GrazeTheRoof_DIRECTORY,
     OPENING_MUSIC_DIRECTORY,
+
+    ChooseYourSeeds_DIRECTORY,
     BUTTON_CLICK_MUSIC_DIRECTORY,
     EVIL_LAUGH_MUSIC_DIRECTORY,
     R_S_P_MUSIC_DIRECTORY,
@@ -60,8 +70,18 @@ enum music_type
 };
 
 const string music_directory[] = {
-    "./audio/Brainiac_Maniac.mp3",   // BACKGROUND_MUSIC_DIRECTORY
-    "./audio/opening.mp3",           // OPENING_MUSIC_DIRECTORY
+    "./audio/Brainiac_Maniac.mp3",  // Brainiac_Maniac_DIRECTORY
+    "./audio/Grasswalk.mp3",        // Grasswalk_DIRECTORY
+    "./audio/Loonboon.mp3",         // Loonboon_DIRECTORY
+    "./audio/Moongrains.mp3",       // Moongrains_DIRECTORY
+    "./audio/WateryGravesSlow.mp3", // WateryGravesSlow_DIRECTORY
+    "./audio/UltimateBattle.mp3",   // UltimateBattle_DIRECTORY
+    "./audio/RigorMormist.mp3",     // RigorMormist_DIRECTORY
+    "./audio/Cerebrawl.mp3",        // Cerebrawl_DIRECTORY
+    "./audio/GrazeTheRoof.mp3",     // GrazeTheRoof_DIRECTORY
+    "./audio/opening.mp3",          // OPENING_MUSIC_DIRECTORY
+
+    "./audio/ChooseYourSeeds.mp3",   // ChooseYourSeeds_DIRECTORY
     "./audio/button_click.mp3",      // BUTTON_CLICK_MUSIC_DIRECTORY
     "./audio/evil_laugh.mp3",        // EVIL_LAUGH_MUSIC_DIRECTORY
     "./audio/readysetplant.mp3",     // R_S_P_MUSIC_DIRECTORY
@@ -96,5 +116,22 @@ const string music_directory[] = {
     "./audio/buzzer.mp3",            // BUZZER_MUSIC_DIRECTORY
     "./audio/urf.mp3",               // URF_DIRECTORY
     "./audio/lawnmower.mp3",         // MOWER_DIRECTORY
+
+};
+
+const int BACKGROUND_MUSIC_DIR[] = {
+    Grasswalk_DIRECTORY,
+    Grasswalk_DIRECTORY,
+    Loonboon_DIRECTORY,
+    WateryGravesSlow_DIRECTORY,
+    RigorMormist_DIRECTORY,
+    Cerebrawl_DIRECTORY,
+    GrazeTheRoof_DIRECTORY,
+    Brainiac_Maniac_DIRECTORY,
+    Moongrains_DIRECTORY,
+    Moongrains_DIRECTORY,
+    RigorMormist_DIRECTORY,
+    Cerebrawl_DIRECTORY,
+    Brainiac_Maniac_DIRECTORY
 
 };

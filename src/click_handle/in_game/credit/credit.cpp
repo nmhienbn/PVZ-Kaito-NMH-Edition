@@ -33,6 +33,7 @@ Now game is really start
  */
 void display_credit()
 {
+    play_music(ChooseYourSeeds_DIRECTORY);
     set_status(game_state, IS_FAST, false);
     set_status(game_state, IS_PAUSED, false);
     win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 300);
@@ -64,7 +65,7 @@ void display_credit()
     {
         review_playground(tmp, i);
     }
-    play_music(R_S_P_MUSIC_DIRECTORY);
+    play_sound_effect(R_S_P_MUSIC_DIRECTORY);
     for (int clk = 0; clk <= 180; clk++)
     {
         win.clear_renderer();

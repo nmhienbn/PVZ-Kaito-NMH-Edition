@@ -169,7 +169,7 @@ void display_all_in_game()
     // Auto disable faster
     auto_disable_turbo();
     // Music and sound effect:
-    play_music(BACKGROUND_MUSIC_DIRECTORY);
+    play_music(BACKGROUND_MUSIC_DIR[level.level_num]);
     if (game_characters.zombies.size() && !rand(0, 500))
     {
         play_sound_effect(GROAN_MUSIC_DIRECTORY);
