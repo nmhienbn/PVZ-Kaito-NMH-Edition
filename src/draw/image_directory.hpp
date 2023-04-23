@@ -101,7 +101,6 @@ enum ImageType
     WINNING_MESSAGE_DIRECTORY,
 
     SUN_DIRECTORY,
-    SUN2_DIRECTORY,
     SUN_BAR_DIRECTORY,
     ICON_BAR_DIRECTORY,
     SHOVEL_BAR_DIRECTORY,
@@ -110,7 +109,8 @@ enum ImageType
     FLAG_METER_PROGRESS,
     FLAG_METER_PART,
 
-    MENU_ICON_DIRECTORY,
+    PAUSE_ICON_DIRECTORY,
+    PAUSE_ICON_A_DIRECTORY,
     TURBO_ICON_DIRECTORY,
     TURBO_ICON_A_DIRECTORY,
     MENU_DIRECTORY,
@@ -497,7 +497,6 @@ const Image all_img[] = {
     Image("./image/Background/Winning_Pic.png"),             // WINNING_MESSAGE_DIRECTORY
 
     Image("./image/Icons/sun.png"),                    // SUN_DIRECTORY
-    Image("./image/Icons/sun2.png"),                   // SUN2_DIRECTORY
     Image("./image/Icons/sun_bar.png"),                // SUN_BAR_DIRECTORY
     Image("./image/Icons/Item_Bar.png"),               // ICON_BAR_DIRECTORY
     Image("./image/Icons/Shovel.png"),                 // SHOVEL_BAR_DIRECTORY
@@ -505,7 +504,9 @@ const Image all_img[] = {
     Image("./image/Icons/FlagMeter.png"),              // FLAG_METER
     Image("./image/Icons/FlagMeterLevelProgress.png"), // FLAG_METER_PROGRESS
     Image("./image/Icons/FlagMeterParts.png"),         // FLAG_METER_PART
-    Image("./image/Icons/menu_icon.png"),              // MENU_ICON_DIRECTORY
+
+    Image("./image/Icons/Pause_Button.png"),           // PAUSE_ICON_DIRECTORY
+    Image("./image/Icons/Pause_Button_Activited.png"), // PAUSE_ICON_A_DIRECTORY
     Image("./image/Icons/Turbo_Button.png"),           // TURBO_ICON_DIRECTORY
     Image("./image/Icons/Turbo_Button_Activited.png"), // TURBO_ICON_A_DIRECTORY
     Image("./image/Icons/menu.png"),                   // MENU_DIRECTORY

@@ -101,7 +101,8 @@ void display_game_layout()
     display_game_elements();
 
     // Menu icon (to show pause menu)
-    display_button(MENU_ICON, MENU_ICON_DIRECTORY);
+    display_button(PAUSE_ICON, PAUSE_ICON_DIRECTORY);
+    display_button(TURBO_ICON, TURBO_ICON_DIRECTORY);
 
     // Progress bar
     display_progress_bar();
@@ -222,6 +223,7 @@ void display_game_paused_elements()
 {
     display_game_layout();
     display_game_elements();
+    display_button(PAUSE_ICON, PAUSE_ICON_A_DIRECTORY);
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
 }
 

@@ -69,6 +69,7 @@ int main(int argv, char **args)
             }
             else
             {
+                play_music(URF_DIRECTORY);
                 // win.clear_renderer();
                 handle_choosing_level_screen();
                 if (check_status(game_state, IS_LEVEL_CHOSEN))

@@ -85,7 +85,6 @@ void start_level()
         else
         {
             display_all_in_game();
-            MENU_ICON.blink();
         }
         HANDLE(
             QUIT(quit = true; return;);
@@ -126,7 +125,7 @@ void start_level()
                 }
                 else
                 {
-                    handle_menu_icon_click(mouse_x, mouse_y);
+                    handle_pause_icon_click(mouse_x, mouse_y);
                     handle_turbo_icon_click(mouse_x, mouse_y);
                     handle_user_click(mouse_x, mouse_y);
                 }

@@ -146,10 +146,6 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     {
         SDL_SetTextureAlphaMod(res, 120);
     }
-    else if (file_num == SUN2_DIRECTORY)
-    {
-        SDL_SetTextureAlphaMod(res, 200);
-    }
     else if (file_num == LEVEL_BLINK_DIRECTORY ||
              file_num == WHITE_SCREEN_DIRECTORY)
     {

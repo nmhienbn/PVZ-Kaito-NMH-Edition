@@ -48,9 +48,9 @@ void handle_menu_click(const int &mouse_x, const int &mouse_y)
 /*
 Handle player click on Menu icon to pause the game
 */
-void handle_menu_icon_click(const int &mouse_x, const int &mouse_y)
+void handle_pause_icon_click(const int &mouse_x, const int &mouse_y)
 {
-    if (MENU_ICON.is_mouse_in(mouse_x, mouse_y))
+    if (PAUSE_ICON.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_PAUSED, true);
         Mix_PauseMusic();
