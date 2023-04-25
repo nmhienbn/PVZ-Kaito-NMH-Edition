@@ -38,9 +38,12 @@ bool CherryBomb::is_blow()
     return frame == CHERRYBOMB_FRAME * 22;
 }
 
-bool CherryBomb::is_disappeared()
+void CherryBomb::disappear()
 {
-    return frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet;
+    if (frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
+    {
+        health = 0;
+    }
 }
 
 void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,

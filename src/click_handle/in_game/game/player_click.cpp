@@ -253,9 +253,7 @@ void remove_plant_if_clicked_on(vector<Plants *> &plants, const int &mouse_x, co
         if (is_click_made_in_element_block(plants[i]->get_row(), plants[i]->get_col(), mouse_x, mouse_y))
         {
             play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
-            cells[plants[i]->get_row()][plants[i]->get_col()].is_planted = false;
-            delete plants[i];
-            plants.erase(plants.begin() + i);
+            delete_plant(plants, i);
             return;
         }
     }

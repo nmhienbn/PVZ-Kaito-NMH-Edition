@@ -11,4 +11,5 @@ public:
     ~Walnut();
     void determine_appearance();
     void display(const int &_row) override;
+    void action() override;
 };

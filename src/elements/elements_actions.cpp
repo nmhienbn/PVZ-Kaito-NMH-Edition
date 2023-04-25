@@ -1,4 +1,5 @@
 #include "elements/elements_actions.hpp"
+#include "elements_actions.hpp"
 
 extern int clk;
 extern Level level;
@@ -9,22 +10,18 @@ extern Map cells;
 
 /*
 Handles all the changes to the game:
-    + Update all zombies' moving status.
+    + Create new wave of zombies.
     + Check all bullets' moving status.
-    + Create new wave of zombies. (if level has finised and that's time to create new wave)
-        + first wave
-        + there's no zombie
-        + long time no seen new zombies
-    + Make zombies' bite to plants and update the next time they can bite them.
-    + Fire all the bullets.
+    + Check all mowers' moving status.
+    + Update all plants' & zombies' status.
     + Generate suns from the sky (not same time). No sun at night.
-    + Generate suns from sunflowers (not same time).
     + Remove the suns that appear for a long time.
     + Update remaining time of each plant seed.
 */
 void handle_changes()
-{ // Update all zombies' moving status
-    update_moving_status_for_zombies(game_characters.zombies);
+{
+    // Create new wave of zombies.
+    update_new_wave_zombies();
 
     // Check all bullets' moving status
     handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.zombie_parts);
@@ -32,81 +29,10 @@ void handle_changes()
     // Check all mowers' status
     handle_mower_zombie_encounter(game_characters.zombies, game_characters.zombie_parts);
 
-    // Create new wave of zombies. (if level has finised and that's time to create new wave)
-    if (level.waves_finished == false &&
-        (clk == FIRST_WAVE_CLK_COUNT ||                                     // first wave
-         (clk > FIRST_WAVE_CLK_COUNT && game_characters.zombies.empty()) || // if there's no zombie
-         clk - level.last_clk_zombie_appear >= ZOMBIE_CREATE_CLK_COUNT))    // long time no seen new zombies
-        create_new_zombies();
-    else if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT)
-        level.announce_directory = NULL_DIRECTORY;
-
-    // Zombie bite plant
-    handle_zombie_plant_encounter(game_characters.zombies, game_characters.plants);
-
-    // Update next time for each zombie to bite plant
-    update_zombie_next_bite(game_characters.zombies);
-
-    for (int i = 0; i < (int)game_characters.plants.size(); i++)
-    {
-        auto plant = game_characters.plants[i];
-        switch (plant->get_type())
-        {
-        case PEASHOOTER_TYPE:
-        {
-            // Fire pea
-            auto tmp = dynamic_cast<Peashooter *>(plant);
-            if (tmp)
-            {
-                tmp->fire_pea(game_characters.zombies, game_characters.peas);
-            }
-            break;
-        }
-
-        case SUNFLOWER_TYPE:
-        {
-            // Generate suns from sunflowers.
-            auto tmp = dynamic_cast<Sunflower *>(plant);
-            if (tmp)
-            {
-                tmp->gen_sun_from_a_sunflower(game_characters.suns);
-            }
-            break;
-        }
-
-        case SNOWPEA_TYPE:
-        {
-            // Fire snowpea
-            auto tmp = dynamic_cast<Snowpea *>(plant);
-            if (tmp)
-            {
-                tmp->fire_pea(game_characters.zombies, game_characters.peas);
-            }
-            break;
-        }
-
-        case CHERRYBOMB_TYPE:
-        {
-            // Cherrybomb hit
-            auto tmp = dynamic_cast<CherryBomb *>(plant);
-            if (tmp)
-            {
-                tmp->hit_all_zombies(game_characters.zombies, game_characters.zombie_parts);
-                if (tmp->is_disappeared())
-                {
-                    cells[plant->get_row()][plant->get_col()].is_planted = false;
-                    delete plant;
-                    game_characters.plants.erase(game_characters.plants.begin() + i);
-                    i--;
-                }
-            }
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
+    // Update all plants' status
+    update_plants_status(game_characters.plants);
+    // Update all zombies' status
+    update_zombies_status(game_characters.zombies, game_characters.plants);
 
     // Generate suns from the sky. No sun at night.
     if (level.is_night == false && clk % SUN_GEN_SKY_CLK_COUNT == 0)
@@ -116,7 +42,7 @@ void handle_changes()
     remove_suns(game_characters.suns);
 
     // Update remaining time of each plant seed
-    update_remaining_time();
+    update_plant_seeds_remaining_time();
 }
 
 /*
@@ -203,6 +129,23 @@ void create_new_zombies()
 }
 
 /*
+    Create new wave of zombies. (if level has finised and that's time to create new wave)
+        + first wave
+        + there's no zombie
+        + long time no seen new zombies
+*/
+void update_new_wave_zombies()
+{
+    if (level.waves_finished == false &&
+        (clk == FIRST_WAVE_CLK_COUNT ||                                     // first wave
+         (clk > FIRST_WAVE_CLK_COUNT && game_characters.zombies.empty()) || // if there's no zombie
+         clk - level.last_clk_zombie_appear >= ZOMBIE_CREATE_CLK_COUNT))    // long time no seen new zombies
+        create_new_zombies();
+    else if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT)
+        level.announce_directory = NULL_DIRECTORY;
+}
+
+/*
 Handle all movement is happening: zombies, suns, peas.
 @param clk: the clock of game
 */
@@ -216,7 +159,7 @@ void handle_movements()
 /*
 Update icons remainning time
 */
-void update_remaining_time()
+void update_plant_seeds_remaining_time()
 {
     for (int i = 0; i < PLANT_COUNT; i++)
     {

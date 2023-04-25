@@ -156,14 +156,12 @@ bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p
         if (zombie.cold_time)
             zombie.bite_time += BITE_CLK_COUNT;
         plants[p_ind]->set_attacked_time(MAX_TIME_BLINK);
-        if (plants[p_ind]->decrease_health())
+        plants[p_ind]->decrease_health();
+        if (plants[p_ind]->is_died())
         {
             zombie.is_moving = true;
             zombie.bite_time = BITE_CLK_COUNT;
-            cells[plants[p_ind]->get_row()][plants[p_ind]->get_col()].is_planted = false;
-            delete plants[p_ind];
-            plants.erase(plants.begin() + p_ind);
-            p_ind--;
+            delete_plant(plants, p_ind);
         }
         return true;
     }
@@ -182,4 +180,20 @@ void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<Plants *> &pl
                 {
                     break;
                 }
+}
+
+/*
+    + Update all zombies' moving status.
+    + Make zombies' bite to plants and update the next time they can bite them.
+*/
+void update_zombies_status(vector<Zombie> &zombies, vector<Plants *> &plants)
+{
+    // Update all zombies' moving status
+    update_moving_status_for_zombies(zombies);
+
+    // Zombie bite plant
+    handle_zombie_plant_encounter(zombies, plants);
+
+    // Update next time for each zombie to bite plant
+    update_zombie_next_bite(zombies);
 }

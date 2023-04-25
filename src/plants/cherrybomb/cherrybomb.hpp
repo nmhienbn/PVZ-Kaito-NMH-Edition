@@ -10,9 +10,10 @@ public:
     CherryBomb(const int &_row, const int &_col);
     ~CherryBomb();
     void display(const int &_row) override;
+    void action() override;
     bool is_hit_zombie(Zombie &zombie);
     bool is_blow();
-    bool is_disappeared();
+    void disappear();
     bool apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
                               vector<ZombiePart> &zombie_parts);
     void hit_all_zombies(vector<Zombie> &zombies,

@@ -18,3 +18,6 @@ void display_zombie_parts(vector<ZombiePart> &zombie_parts, const int &_row);
 void update_zombie_next_bite(vector<Zombie> &zombies);
 bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p_ind);
 void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<Plants *> &plants);
+
+//------------------------------Zombie all status--------------------------------------
+void update_zombies_status(vector<Zombie> &zombies, vector<Plants *> &plants);

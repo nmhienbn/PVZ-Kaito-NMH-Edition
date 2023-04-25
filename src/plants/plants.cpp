@@ -17,6 +17,10 @@ int Plants::get_type()
     return type;
 }
 
+void Plants::action()
+{
+}
+
 int Plants::get_row()
 {
     return row;
@@ -32,7 +36,12 @@ void Plants::set_attacked_time(const int &_attacked_time)
     attacked_time = _attacked_time;
 }
 
-bool Plants::decrease_health()
+void Plants::decrease_health()
 {
-    return --health <= 0;
+    --health;
+}
+
+bool Plants::is_died()
+{
+    return health <= 0;
 }
