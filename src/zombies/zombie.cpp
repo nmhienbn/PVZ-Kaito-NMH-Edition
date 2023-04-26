@@ -75,11 +75,11 @@ bool can_zombie_move(Zombie &zombie)
 /*
 Update all zombies' moving status.
 */
-void update_moving_status_for_zombies(vector<Zombie> &zombies)
+void update_moving_status_for_zombies(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
     {
-        has_zombie_reached_any_plant(zombie);
+        has_zombie_reached_any_plant(*zombie);
     }
 }
 
@@ -88,21 +88,21 @@ Move the zombie: For all zombie:
     If zombie can move, its location -= their speed.
     Note that a zombie can be slow if it's cold.
 */
-void move_zombies(vector<Zombie> &zombies)
+void move_zombies(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
     {
-        if (zombie.next_step_time)
+        if (zombie->next_step_time)
         {
-            zombie.next_step_time--;
+            zombie->next_step_time--;
             continue;
         }
-        zombie.next_step_time = ZOMBIE_CLK_COUNT;
-        if (zombie.cold_time)
-            zombie.next_step_time += ZOMBIE_CLK_COUNT;
-        if (can_zombie_move(zombie))
+        zombie->next_step_time = ZOMBIE_CLK_COUNT;
+        if (zombie->cold_time)
+            zombie->next_step_time += ZOMBIE_CLK_COUNT;
+        if (can_zombie_move(*zombie))
         {
-            zombie.x_location -= ZOMBIE_DX;
+            zombie->x_location -= ZOMBIE_DX;
         }
     }
 }
@@ -110,11 +110,11 @@ void move_zombies(vector<Zombie> &zombies)
 /*
 Display zombie of exactly status.
 */
-void display_zombies(vector<Zombie> &zombies, const int &_row)
+void display_zombies(vector<Zombie *> &zombies, const int &_row)
 {
     for (auto &zombie : zombies)
     {
-        zombie.display(_row);
+        zombie->display(_row);
     }
 }
 
@@ -136,11 +136,11 @@ void display_zombie_parts(vector<ZombiePart> &zombie_parts, const int &_row)
 /*
 Update time for all zombies' next bite.
 */
-void update_zombie_next_bite(vector<Zombie> &zombies)
+void update_zombie_next_bite(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
-        if (zombie.bite_time)
-            zombie.bite_time--;
+        if (zombie->bite_time)
+            zombie->bite_time--;
 }
 /*
 If the zombie reached plant_type, apply its bites on the plant_type:
@@ -171,12 +171,12 @@ bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p
 /* Note to optimize after
 For all zombie and all plant_type: apply zombie's bite
 */
-void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<Plants *> &plants)
+void handle_zombie_plant_encounter(vector<Zombie *> &zombies, vector<Plants *> &plants)
 {
     for (auto &zombie : zombies)
-        if (zombie.bite_time == 0)
+        if (zombie->bite_time == 0)
             for (int i = 0; i < (int)plants.size(); i++)
-                if (apply_zombie_bite_on_plant(zombie, plants, i))
+                if (apply_zombie_bite_on_plant(*zombie, plants, i))
                 {
                     break;
                 }
@@ -186,7 +186,7 @@ void handle_zombie_plant_encounter(vector<Zombie> &zombies, vector<Plants *> &pl
     + Update all zombies' moving status.
     + Make zombies' bite to plants and update the next time they can bite them.
 */
-void update_zombies_status(vector<Zombie> &zombies, vector<Plants *> &plants)
+void update_zombies_status(vector<Zombie *> &zombies, vector<Plants *> &plants)
 {
     // Update all zombies' moving status
     update_moving_status_for_zombies(zombies);

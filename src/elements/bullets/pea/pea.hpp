@@ -27,5 +27,5 @@ public:
     void display_shadow();
 };
 
-void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<ZombiePart> &zombie_parts);
+void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie *> &zombies, vector<ZombiePart> &zombie_parts);
 void move_peas(vector<Pea> &peas);

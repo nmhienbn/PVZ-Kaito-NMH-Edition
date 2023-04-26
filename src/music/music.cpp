@@ -1,9 +1,11 @@
 #include "music.hpp"
+int music_volume = MIX_MAX_VOLUME / 2;
+int sfx_volume = MIX_MAX_VOLUME / 2;
 
 // The music that will be played
-static Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
-static Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
-static int now_music = -1;
+Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
+Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
+int now_music = -1;
 
 /*
 Init music
@@ -47,7 +49,7 @@ void play_music(int num_path, int repeat_times)
         }
         else
         {
-            Mix_VolumeMusic(128);
+            Mix_VolumeMusic(music_volume);
         }
         // Load music
         if (gMusic[num_path] == NULL)
@@ -72,8 +74,12 @@ Play sound effect
 */
 void play_sound_effect(int num_path)
 {
+    Mix_VolumeChunk(gChunk[num_path], sfx_volume);
     if (gChunk[num_path] == NULL)
+    {
         gChunk[num_path] = Mix_LoadWAV(music_directory[num_path].c_str());
+        Mix_VolumeChunk(gChunk[num_path], sfx_volume);
+    }
     if (gChunk[num_path] == NULL)
     {
         printf("Failed to load %s sound effect! SDL_mixer Error: %s\n", music_directory[num_path].c_str(), Mix_GetError());

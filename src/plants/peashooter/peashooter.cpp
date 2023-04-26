@@ -24,7 +24,7 @@ Peashooter::~Peashooter()
 {
 }
 
-void Peashooter::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)
+void Peashooter::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
 {
     if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_FRAME)
     {
@@ -39,11 +39,11 @@ Check if a peashooter need to attack or not.
 Peashooter is attack only if there are some zombies in the row.
 Updated: Zombie position > peashooter position
 */
-void Peashooter::determine_appearance(vector<Zombie> &zombies)
+void Peashooter::determine_appearance(vector<Zombie *> &zombies)
 {
-    for (Zombie zombie : zombies)
-        if (row == zombie.row &&
-            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
+    for (const auto &zombie : zombies)
+        if (row == zombie->row &&
+            is_in(cells[0][col].x2 - 140, zombie->x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
         {
             if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
             {

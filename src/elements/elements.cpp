@@ -5,21 +5,10 @@ Icons init
 */
 Icons::Icons()
 {
+    chosen_plant = PLANT_COUNT;
     for (int i = 0; i < PLANT_COUNT; i++)
     {
-        is_plant_chosen[i] = 0;
         plant_remaining_time[i] = 0;
-    }
-}
-
-/*
-Reset plant seed chosen status
-*/
-void Icons::reset_is_chosen()
-{
-    for (int i = 0; i < PLANT_COUNT; i++)
-    {
-        is_plant_chosen[i] = 0;
     }
 }
 

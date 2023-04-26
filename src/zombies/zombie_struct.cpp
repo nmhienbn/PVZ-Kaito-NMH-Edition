@@ -36,58 +36,13 @@ Zombie::Zombie(int _type, int level_num)
     bite_time = BITE_CLK_COUNT;
     next_step_time = 0;
 
-    switch (type)
-    {
-    case NORMAL_TYPE:
-    {
-        dir_width = 166;
-        dir_height = 144;
-        health = *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin();
-        directory_num = ZOMBIE_WALK_DIRECTORY;
-        break;
-    }
-
-    case FLAG_TYPE:
-    {
-        dir_width = 166;
-        dir_height = 144;
-        health = *ZOMBIE_HEALTH_LIMIT[FLAG_TYPE].rbegin();
-        directory_num = FLAG_ZOMBIE_WALK_1_DIRECTORY;
-        break;
-    }
-
-    case CONE_TYPE:
-    {
-        dir_width = 166;
-        dir_height = 144;
-        health = *ZOMBIE_HEALTH_LIMIT[CONE_TYPE].rbegin();
-        directory_num = CONE_ZOMBIE_WALK_1_DIRECTORY;
-        break;
-    }
-
-    case BUCKET_TYPE:
-    {
-        dir_width = 166;
-        dir_height = 144;
-        health = *ZOMBIE_HEALTH_LIMIT[BUCKET_TYPE].rbegin();
-        directory_num = BUCKET_ZOMBIE_WALK_1_DIRECTORY;
-        break;
-    }
-
-    case DOOR_TYPE:
-    {
-        dir_width = 196;
-        dir_height = 197;
-        health = *ZOMBIE_HEALTH_LIMIT[DOOR_TYPE].rbegin();
-        directory_num = DOOR_ZOMBIE_WALK_1_DIRECTORY;
-        break;
-    }
-
-    default:
-        break;
-    }
+    init();
     // Random first frame.
     frame = rand(0, ZOMBIE_FRAME * all_img[directory_num].n_sheet - 1);
+}
+
+Zombie::~Zombie()
+{
 }
 
 int Zombie::get_health()
@@ -120,6 +75,10 @@ void Zombie::change_zombie_eating_status()
     }
 }
 
+void Zombie::armor_drop(vector<ZombiePart> &zombie_parts)
+{
+}
+
 /*Determine zombies's appearance depend on their health:
 Armor drop if necessary
 */
@@ -136,44 +95,7 @@ void Zombie::determine_appearance(vector<ZombiePart> &zombie_parts)
         }
     }
     // Armor drop if necessary
-    switch (type)
-    {
-    case CONE_TYPE:
-    {
-        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
-        {
-            type = NORMAL_TYPE;
-            zombie_parts.push_back(ZombiePart(CONE_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME, row, x_location + 80,
-                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
-        }
-        break;
-    }
-
-    case BUCKET_TYPE:
-    {
-        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
-        {
-            type = NORMAL_TYPE;
-            zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME, row, x_location + 80,
-                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
-        }
-        break;
-    }
-
-    case DOOR_TYPE:
-    {
-        if (health == *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin())
-        {
-            type = NORMAL_TYPE;
-            dir_width = 166;
-            dir_height = 144;
-        }
-        break;
-    }
-
-    default:
-        break;
-    }
+    armor_drop(zombie_parts);
 }
 
 /*
@@ -269,47 +191,6 @@ void Zombie::display2(const int &_minus_x)
     if (++frame >= 2 * ZOMBIE_FRAME * all_img[directory_num].n_sheet)
     {
         frame = 0;
-    }
-}
-
-void Zombie::make_credit()
-{
-    x_location = rand(WINDOW_WIDTH, 1300) - 50;
-    y_location = rand(0, WINDOW_HEIGHT - dir_height);
-    switch (type)
-    {
-    case NORMAL_TYPE:
-    {
-        directory_num = rand(ZOMBIE_CREDIT1_DIRECTORY, ZOMBIE_CREDIT2_DIRECTORY);
-        break;
-    }
-
-    case FLAG_TYPE:
-    {
-        directory_num = rand(ZOMBIE_CREDIT1_DIRECTORY, ZOMBIE_CREDIT2_DIRECTORY);
-        break;
-    }
-
-    case CONE_TYPE:
-    {
-        directory_num = rand(CONE_ZOMBIE_CREDIT1_DIRECTORY, CONE_ZOMBIE_CREDIT2_DIRECTORY);
-        break;
-    }
-
-    case BUCKET_TYPE:
-    {
-        directory_num = rand(BUCKET_ZOMBIE_CREDIT1_DIRECTORY, BUCKET_ZOMBIE_CREDIT2_DIRECTORY);
-        break;
-    }
-
-    case DOOR_TYPE:
-    {
-        directory_num = rand(DOOR_ZOMBIE_CREDIT1_DIRECTORY, DOOR_ZOMBIE_CREDIT2_DIRECTORY);
-        break;
-    }
-
-    default:
-        break;
     }
 }
 

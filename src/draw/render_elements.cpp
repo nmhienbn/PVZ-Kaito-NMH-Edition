@@ -145,14 +145,14 @@ void display_icons_in_icon_bar()
     for (int i = 0; i <= num_plants; i++)
     {
         // Not enough sun or is chosen
-        if (player.sun_count < plant_sun_cost[i] || icons.is_plant_chosen[i] || icons.plant_remaining_time[i])
+        if (player.sun_count < plant_sun_cost[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
         {
             plant_seed_dir[i]++;
         }
         win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
         if (icons.plant_remaining_time[i] == 0)
         {
-            if (icons.is_plant_chosen[i] == false)
+            if (icons.chosen_plant != i)
                 plant_seed[i].blink();
             else
                 win.draw_png_scale(SEED_CHOSEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
@@ -179,9 +179,9 @@ void display_shadow()
             }
         }
     }
-    for (auto &zombie : game_characters.zombies)
+    for (const auto &zombie : game_characters.zombies)
     {
-        win.draw_png(SHADOW_DIRECTORY, zombie.x_location + 85, cells[zombie.row][0].y2 - 40, 96, 40);
+        win.draw_png(SHADOW_DIRECTORY, zombie->x_location + 85, cells[zombie->row][0].y2 - 40, 96, 40);
     }
     for (auto &pea : game_characters.peas)
     {
@@ -242,13 +242,10 @@ void display_chosen_plant()
     }
     _x -= ELEMENT_WIDTH >> 1;
     _y -= ELEMENT_HEIGHT >> 1;
-    for (int i = 0; i < PLANT_COUNT; i++)
+    if (PEASHOOTER_TYPE <= icons.chosen_plant && icons.chosen_plant < PLANT_COUNT)
     {
-        if (icons.is_plant_chosen[i])
-        {
-            win.draw_png_scale(PEASHOOTER_DIRECTORY + i, _x, _y,
-                               ELEMENT_WIDTH, ELEMENT_HEIGHT);
-        }
+        win.draw_png_scale(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y,
+                           ELEMENT_WIDTH, ELEMENT_HEIGHT);
     }
 }
 

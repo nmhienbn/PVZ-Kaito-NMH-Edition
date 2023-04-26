@@ -23,7 +23,7 @@ struct Elements
 {
     vector<Plants *> plants;
 
-    vector<Zombie> zombies;
+    vector<Zombie *> zombies;
     vector<ZombiePart> zombie_parts;
 
     vector<Sun> suns;
@@ -46,11 +46,10 @@ struct Player
 
 struct Icons
 {
-    bool is_plant_chosen[PLANT_COUNT];
+    int chosen_plant; // = PLANT_COUNT if no plant is chosen
     int plant_remaining_time[PLANT_COUNT];
 
     Icons();
-    void reset_is_chosen();
 };
 
 /*

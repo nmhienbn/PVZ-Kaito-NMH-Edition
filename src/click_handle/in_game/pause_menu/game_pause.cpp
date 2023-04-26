@@ -16,6 +16,7 @@ void display_game_pause()
     BACK_TO_GAME.blink();
     MAIN_MENU.blink();
     RESTART.blink();
+    display_slider();
 }
 
 /*

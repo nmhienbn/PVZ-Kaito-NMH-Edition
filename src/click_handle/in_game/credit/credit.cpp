@@ -7,13 +7,13 @@ extern Level level;
 extern Player player;
 extern window win;
 
-void review_playground(vector<Zombie> &zombies, const int &i)
+void review_playground(vector<Zombie *> &zombies, const int &i)
 {
     win.clear_renderer();
     win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
     for (auto &zombie : zombies)
     {
-        zombie.display2(i);
+        zombie->display2(i);
     }
     win.show_announcer_text();
     win.update_screen();
@@ -37,18 +37,18 @@ void display_credit()
     set_status(game_state, IS_FAST, false);
     set_status(game_state, IS_PAUSED, false);
     win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 300);
-    vector<Zombie> tmp;
+    vector<Zombie *> tmp;
     for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
     {
         for (int j = 0, _ = (int)(level.wave_zombie_count[i].back() + 1) / 2; j < _; j++)
         {
-            Zombie t = Zombie(i, level.level_num);
-            t.make_credit();
+            auto t = init(i, level.level_num);
+            t->make_credit();
             tmp.push_back(t);
         }
     }
-    sort(tmp.begin(), tmp.end(), [](const Zombie &x, const Zombie &y) -> bool
-         { return x.y_location < y.y_location; });
+    sort(tmp.begin(), tmp.end(), [](const Zombie *x, const Zombie *y) -> bool
+         { return x->y_location < y->y_location; });
     for (int i = 0; i <= 60; i++)
     {
         review_playground(tmp, 0);
@@ -65,6 +65,11 @@ void display_credit()
     {
         review_playground(tmp, i);
     }
+    for (auto &zombie : tmp)
+    {
+        delete zombie;
+    }
+    tmp.clear();
     play_sound_effect(R_S_P_MUSIC_DIRECTORY);
     for (int clk = 0; clk <= 180; clk++)
     {

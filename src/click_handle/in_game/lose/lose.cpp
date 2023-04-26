@@ -23,9 +23,9 @@ Check if player has lost: Any zombie go to the house
 */
 bool has_player_lost()
 {
-    for (auto &zombie : game_characters.zombies)
+    for (const auto &zombie : game_characters.zombies)
     {
-        if (zombie.x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - BLOCK_WIDTH)
+        if (zombie->x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - BLOCK_WIDTH)
             return true;
     }
     return false;

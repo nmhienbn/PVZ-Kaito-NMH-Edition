@@ -14,8 +14,8 @@ public:
     bool is_hit_zombie(Zombie &zombie);
     bool is_blow();
     void disappear();
-    bool apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
+    bool apply_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
                               vector<ZombiePart> &zombie_parts);
-    void hit_all_zombies(vector<Zombie> &zombies,
+    void hit_all_zombies(vector<Zombie *> &zombies,
                          vector<ZombiePart> &zombie_parts);
 };

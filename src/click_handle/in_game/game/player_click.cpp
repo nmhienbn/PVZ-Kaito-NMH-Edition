@@ -94,18 +94,17 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     }
     else
     {
-        icons.is_plant_chosen[i] ^= 1;
-        if (icons.is_plant_chosen[i])
+        if (icons.chosen_plant == i)
         {
+            icons.chosen_plant = PLANT_COUNT;
+        }
+        else
+        {
+            icons.chosen_plant = i;
             play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
             is_a_plant_chosen = true;
             player.is_shoveling = false;
         }
-        for (int j = 0; j < PLANT_COUNT; j++)
-            if (j != i)
-            {
-                icons.is_plant_chosen[j] = false;
-            }
     }
 }
 
@@ -185,7 +184,7 @@ Restore the status that player is not choosing a plant
 void remove_chosen_plant()
 {
     player.is_choosing_a_plant = false;
-    icons.reset_is_chosen();
+    icons.chosen_plant = PLANT_COUNT;
 }
 
 /*Plant the plant in the given row and col.
@@ -198,13 +197,19 @@ Play sound effect.
 template <class Plant_type>
 void plant_new_plant(const int &type, const int &row, const int &col)
 {
-    icons.is_plant_chosen[type] = false;
+    icons.chosen_plant = PLANT_COUNT;
     icons.plant_remaining_time[type] = plant_loading_time[type];
     game_characters.plants.push_back(new Plant_type(row, col));
     player.sun_count -= plant_sun_cost[type];
     cells[row][col].is_planted = 1;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }
+
+#define PLANT_PLANT_MACRO(type, enum_value)          \
+    if (icons.chosen_plant == enum_value)            \
+    {                                                \
+        plant_new_plant<type>(enum_value, row, col); \
+    }
 
 /*Find row and column then plant the plant.
     Cannot plant if the tile has planted.
@@ -221,27 +226,14 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
         remove_chosen_plant();
         return;
     }
-    if (icons.is_plant_chosen[PEASHOOTER_TYPE])
-    {
-        plant_new_plant<Peashooter>(PEASHOOTER_TYPE, row, col);
-    }
-    else if (icons.is_plant_chosen[SUNFLOWER_TYPE])
-    {
-        plant_new_plant<Sunflower>(SUNFLOWER_TYPE, row, col);
-    }
-    else if (icons.is_plant_chosen[WALNUT_TYPE])
-    {
-        plant_new_plant<Walnut>(WALNUT_TYPE, row, col);
-    }
-    else if (icons.is_plant_chosen[SNOWPEA_TYPE])
-    {
-        plant_new_plant<Snowpea>(SNOWPEA_TYPE, row, col);
-    }
-    else if (icons.is_plant_chosen[CHERRYBOMB_TYPE])
-    {
-        plant_new_plant<CherryBomb>(CHERRYBOMB_TYPE, row, col);
-    }
+    PLANT_PLANT_MACRO(Peashooter, PEASHOOTER_TYPE)
+    PLANT_PLANT_MACRO(Sunflower, SUNFLOWER_TYPE)
+    PLANT_PLANT_MACRO(Walnut, WALNUT_TYPE)
+    PLANT_PLANT_MACRO(Snowpea, SNOWPEA_TYPE)
+    PLANT_PLANT_MACRO(CherryBomb, CHERRYBOMB_TYPE)
 }
+
+#undef PLANT_PLANT_MACRO
 
 /*
 Remove plant if player is shoveling and has clicked on its tile

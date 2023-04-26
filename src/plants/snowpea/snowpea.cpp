@@ -24,7 +24,7 @@ Snowpea::~Snowpea()
 {
 }
 
-void Snowpea::fire_pea(vector<Zombie> &zombies, vector<Pea> &peas)
+void Snowpea::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
 {
     if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_FRAME)
     {
@@ -40,11 +40,11 @@ Check if a snowpea need to attack or not.
 Snowpea is attack only if there are some zombies in the row.
 Updated: Zombie position > snowpea position
 */
-void Snowpea::determine_appearance(vector<Zombie> &zombies)
+void Snowpea::determine_appearance(vector<Zombie *> &zombies)
 {
-    for (Zombie zombie : zombies)
-        if (row == zombie.row &&
-            is_in(cells[0][col].x2 - 140, zombie.x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
+    for (const auto &zombie : zombies)
+        if (row == zombie->row &&
+            is_in(cells[0][col].x2 - 140, zombie->x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
         {
             if (directory_num == SNOWPEA_SHEET_DIRECTORY)
             {

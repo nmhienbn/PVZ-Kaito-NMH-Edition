@@ -132,6 +132,7 @@ void start_level()
             });
 
         );
+        handle_volume_change();
     }
 
     if (check_status(game_state, IS_PAUSED) == false)

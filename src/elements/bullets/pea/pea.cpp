@@ -50,13 +50,9 @@ bool Pea::has_reached_zombie(const Zombie &zombie)
 For all pea and all zombie to check their collision.
 One pea hit only one zombies at a time.
 */
-void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vector<ZombiePart> &zombie_parts)
+void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie *> &zombies, vector<ZombiePart> &zombie_parts)
 {
-    vector<Zombie *> tmp;
-    for (int i = 0; i < (int)zombies.size(); i++)
-    {
-        tmp.push_back(&zombies[i]);
-    }
+    vector<Zombie *> tmp = zombies;
     stable_sort(tmp.begin(), tmp.end(), [](const Zombie *a, const Zombie *b) -> bool
                 { return a->x_location == b->x_location ? a->cold_time < b->cold_time : a->x_location < b->x_location; });
     sort(peas.begin(), peas.end());
@@ -77,8 +73,9 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie> &zombies, vec
                 break;
             }
         for (int j = 0; j < (int)zombies.size(); j++)
-            if (zombies[j].get_health() == 0)
+            if (zombies[j]->get_health() == 0)
             {
+                delete zombies[j];
                 zombies.erase(zombies.begin() + j);
                 break;
             }

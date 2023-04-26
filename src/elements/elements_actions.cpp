@@ -54,7 +54,7 @@ void handle_changes()
 */
 void create_new_zombies()
 {
-    Zombie temp;
+    Zombie *temp;
     if (level.waves_finished == false)
     {
         // This loop is to reduce the empty time between waves of zombies when all current zombies died.
@@ -84,7 +84,7 @@ void create_new_zombies()
                 // Random row of new zombie.
                 for (int i = 0; i < zombie_cnt; i++)
                 {
-                    temp = Zombie(typ, level.level_num);
+                    temp = init(typ, level.level_num);
                     game_characters.zombies.push_back(temp);
                 }
             }
@@ -106,7 +106,7 @@ void create_new_zombies()
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = FINAL_WAVE_DIRECTORY;
                     // Make flag zombies
-                    game_characters.zombies.push_back(Zombie(FLAG_TYPE, level.level_num));
+                    game_characters.zombies.push_back(init(FLAG_TYPE, level.level_num));
                     level.used_zombie_count++;
                 }
                 else if (level.is_huge_wave())
@@ -114,7 +114,7 @@ void create_new_zombies()
                     play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
                     level.announce_directory = HUGE_WAVE_DIRECTORY;
                     // Make flag zombies
-                    game_characters.zombies.push_back(Zombie(FLAG_TYPE, level.level_num));
+                    game_characters.zombies.push_back(init(FLAG_TYPE, level.level_num));
                     level.used_zombie_count++;
                 }
             }

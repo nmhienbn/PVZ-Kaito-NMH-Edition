@@ -46,7 +46,7 @@ void CherryBomb::disappear()
     }
 }
 
-void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,
+void CherryBomb::hit_all_zombies(vector<Zombie *> &zombies,
                                  vector<ZombiePart> &zombie_parts)
 {
     if (is_blow())
@@ -63,14 +63,15 @@ void CherryBomb::hit_all_zombies(vector<Zombie> &zombies,
 /*
 Apply cherrybomb explode the zombie. (change zombie into burnt one)
 */
-bool CherryBomb::apply_hitting_zombie(vector<Zombie> &zombies, const int &z_ind,
+bool CherryBomb::apply_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
                                       vector<ZombiePart> &zombie_parts)
 {
-    if (is_hit_zombie(zombies[z_ind]))
+    if (is_hit_zombie(*zombies[z_ind]))
     {
         zombie_parts.push_back(ZombiePart(ZOMBIE_BURNT_DIRECTORY, ZOMBIE_DIE_FRAME,
-                                          zombies[z_ind].row, zombies[z_ind].x_location,
+                                          zombies[z_ind]->row, zombies[z_ind]->x_location,
                                           ZOMBIE_WIDTH, ZOMBIE_HEIGHT));
+        delete zombies[z_ind];
         zombies.erase(zombies.begin() + z_ind);
         return true;
     }

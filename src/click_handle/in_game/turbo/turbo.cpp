@@ -12,9 +12,9 @@ If zombie to near the house, disable the turbo.
 */
 void auto_disable_turbo()
 {
-    for (auto &zombie : game_characters.zombies)
+    for (const auto &zombie : game_characters.zombies)
     {
-        if (is_in(cells[0][1].x2 - ZOMBIE_DX + 1, zombie.x_location + ZOMBIE_EXACT_LOCATION, cells[0][1].x2) &&
+        if (is_in(cells[0][1].x2 - ZOMBIE_DX + 1, zombie->x_location + ZOMBIE_EXACT_LOCATION, cells[0][1].x2) &&
             check_status(game_state, IS_FAST) == true)
         {
             game_state ^= IS_FAST;

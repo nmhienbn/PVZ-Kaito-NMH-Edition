@@ -49,7 +49,7 @@ public:
 */
 class Zombie
 {
-private:
+protected:
     int health;
     int directory_num;
     int frame;
@@ -66,12 +66,18 @@ public:
 
     Zombie();
     Zombie(int _type, int level_num);
+    virtual ~Zombie();
+    virtual void init(){};
+
     int get_health();
     void change_zombie_eating_status();
+    virtual void armor_drop(vector<ZombiePart> &zombie_parts);
     void determine_appearance(vector<ZombiePart> &zombie_parts);
     bool decrease_health(vector<ZombiePart> &zombie_parts);
     void add_zombie_die(vector<ZombiePart> &zombie_parts);
     void display(const int &_row);
     void display2(const int &_minus_x);
-    void make_credit();
+    virtual void make_credit(){};
+
+    friend Zombie *init(int _type, int level_num);
 };

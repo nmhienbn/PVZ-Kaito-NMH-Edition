@@ -1,4 +1,5 @@
 #pragma once
+#include "../volume/volume.hpp"
 #include "draw/render_elements.hpp"
 #include "music/music.hpp"
 
