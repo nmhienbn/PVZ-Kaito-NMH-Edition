@@ -336,4 +336,15 @@ void window::fade_out()
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
     clear_renderer();
+    delete_all_texture();
+}
+
+void window::delete_all_texture()
+{
+    for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
+        if (i != MOUSE_CURSOR_DIRECTORY)
+        {
+            SDL_DestroyTexture(texture_cache[i]);
+            texture_cache[i] = NULL;
+        }
 }

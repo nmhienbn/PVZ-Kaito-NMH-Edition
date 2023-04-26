@@ -73,6 +73,7 @@ public:
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh);
 	void draw_bg(int file_num, int x = 0, int y = 0);
+	void delete_all_texture();
 
 	void set_texture_alpha(int file_num, int a);
 	void fade_out();

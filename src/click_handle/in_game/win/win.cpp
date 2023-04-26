@@ -31,6 +31,7 @@ Handle when player win the game:
 */
 bool display_win()
 {
+    win.delete_all_texture();
     play_music(WIN_MUSIC_DIRECTORY, 0);
     set_status(game_state, IS_PAUSED, true);
     for (int i = 0;; i++)
