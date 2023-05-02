@@ -61,8 +61,8 @@ void display_choose_level(const bool &is_mouse_needed)
         else
         {
             win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, BLACK, HOUSEOFTERROR_TTF, 40);
-
             display_level_is_locked(LEVEL_BUTTON[i]);
+            win.draw_png(LOCK_DIRECTORY, 0, 0, 69, 88, LEVEL_BUTTON[i].x2 - 25, LEVEL_BUTTON[i].y1 - 10, 35, 44);
         }
     }
 }

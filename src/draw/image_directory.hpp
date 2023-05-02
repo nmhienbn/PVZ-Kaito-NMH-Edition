@@ -127,6 +127,7 @@ enum ImageType
     RESET_PROMPT_DIRECTORY,
     RESTART_PROMPT_DIRECTORY,
     SLIDER_DIRECTORY,
+    LOCK_DIRECTORY,
 
     // NORMAL ZOMBIE---------------------------------------------------
     ZOMBIE_CREDIT1_DIRECTORY,
@@ -524,6 +525,7 @@ const Image all_img[] = {
     Image("./image/Icons/reset_prompt.png"),           // RESET_PROMPT_DIRECTORY
     Image("./image/Icons/restart_prompt.png"),         // RESTART_PROMPT_DIRECTORY
     Image("./image/Icons/options_sliderknob2.png"),    // SLIDER_DIRECTORY
+    Image("./image/Icons/lock.png"),                   // LOCK_DIRECTORY
 
     // NORMAL ZOMBIE------------------------------------------------------------------------
     Image("./image/Zombie/Normal/Zombie_credit1.png", 22, 8),     // ZOMBIE_CREDIT1_DIRECTORY
