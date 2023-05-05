@@ -31,11 +31,13 @@ Handle player click on quit menu:
 */
 void handle_quit_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    // OK: Quit game
     if (OK_QUIT.is_mouse_in(mouse_x, mouse_y))
     {
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         exit(0);
     }
+    // CANCEL: return back choosing level screen
     if (CANCEL_QUIT.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_QUIT, false);

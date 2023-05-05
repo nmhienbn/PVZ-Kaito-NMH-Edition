@@ -8,8 +8,7 @@ extern Icons icons;
 extern Player player;
 extern Map cells;
 
-/*
-Handles all the changes to the game:
+/*Handles all the changes to the game:
     + Create new wave of zombies.
     + Check all bullets' moving status.
     + Check all mowers' moving status.
@@ -45,9 +44,8 @@ void handle_changes()
     update_plant_seeds_remaining_time();
 }
 
-/*
-- Create a new zombie on random row and at ZOMBIE_INIT_X
-- If the level has not finished:
+/*Create a new zombie on random row and at ZOMBIE_INIT_X.
+If the level has not finished:
     + Generate zombies for current wave and current second.
     + Then move to the next second and maybe next wave.
     + Reduce the empty time between waves of zombies when all current zombies died (while zombies.empty() loop).
@@ -128,8 +126,8 @@ void create_new_zombies()
     }
 }
 
-/*
-    Create new wave of zombies. (if level has finised and that's time to create new wave)
+/*Create new wave of zombies.
+If level has finised and that's time to create new wave:
         + first wave
         + there's no zombie
         + long time no seen new zombies
@@ -141,14 +139,11 @@ void update_new_wave_zombies()
          (clk > FIRST_WAVE_CLK_COUNT && game_characters.zombies.empty()) || // if there's no zombie
          clk - level.last_clk_zombie_appear >= ZOMBIE_CREATE_CLK_COUNT))    // long time no seen new zombies
         create_new_zombies();
-    else if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT)
+    else if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT) // remove announcer huge wave, final wave
         level.announce_directory = NULL_DIRECTORY;
 }
 
-/*
-Handle all movement is happening: zombies, suns, peas.
-@param clk: the clock of game
-*/
+/*Handle all movement is happening: zombies, suns, peas.*/
 void handle_movements()
 {
     move_zombies(game_characters.zombies);
@@ -156,16 +151,16 @@ void handle_movements()
     move_peas(game_characters.peas);
 }
 
-/*
-Update icons remainning time
-*/
+/*Update icons remainning time. Sun count blink*/
 void update_plant_seeds_remaining_time()
 {
+    // Update icons remainning time
     for (int i = 0; i < PLANT_COUNT; i++)
     {
         if (icons.plant_remaining_time[i])
             icons.plant_remaining_time[i]--;
     }
+    // Sun count blink
     if (player.sun_count_change_color_times)
     {
         if (player.sun_count_change_color_time)

@@ -39,19 +39,22 @@ Handle when player lose:
 */
 void display_lose()
 {
+    // Display losing message.
     display_losing_message();
     play_music(LOSE_MUSIC_DIRECTORY, 0);
     CONTINUE.blink();
     win.update_screen();
-    HANDLE(
+    HANDLE_SDL_EVENT(
         QUIT(quit = true);
+        // Check if player click 'continue'.
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
+                // Update some variables.
                 level.waves_finished = false;
                 set_status(game_state, IS_LEVEL_CHOSEN, false);
                 set_status(game_state, IS_PAUSED, false);
-                play_music(URF_DIRECTORY);
+                play_music(OPENING_MUSIC_DIRECTORY);
                 win.fade_out();
             }
         });

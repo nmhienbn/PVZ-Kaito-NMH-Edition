@@ -182,6 +182,10 @@ void print_error(SDL_Texture *res, const string &img)
     }
 }
 
+/*
+Get loaded texture.
+If has not loaded, create new texture.
+*/
 SDL_Texture *window::load_texture(int file_num)
 {
     SDL_Texture *res = texture_cache[file_num];
@@ -230,6 +234,7 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
         return;
     SDL_Texture *res = load_texture(file_num);
     int mWidth = 0, mHeight = 0;
+    // get width, height
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {x, y, width, width * mHeight / mWidth};
     SDL_RenderCopy(renderer, res, NULL, &r);
@@ -247,6 +252,7 @@ void window::draw_png_center(int file_num)
         return;
     SDL_Texture *res = load_texture(file_num);
     int mWidth = 0, mHeight = 0;
+    // get width, height
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {(WINDOW_WIDTH - mWidth) >> 1, (WINDOW_HEIGHT - mHeight) >> 1, mWidth, mHeight};
     SDL_RenderCopy(renderer, res, NULL, &r);
@@ -332,11 +338,17 @@ void window::fade_out()
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i));
         update_screen();
-        HANDLE(QUIT(quit = true; return;))
+        HANDLE_SDL_EVENT(QUIT(quit = true; return;))
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
     clear_renderer();
     delete_all_texture();
+}
+
+void window::delete_texture(const int &file_num)
+{
+    SDL_DestroyTexture(texture_cache[file_num]);
+    texture_cache[file_num] = NULL;
 }
 
 void window::delete_all_texture()
@@ -344,7 +356,6 @@ void window::delete_all_texture()
     for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
         if (i != MOUSE_CURSOR_DIRECTORY)
         {
-            SDL_DestroyTexture(texture_cache[i]);
-            texture_cache[i] = NULL;
+            delete_texture(i);
         }
 }

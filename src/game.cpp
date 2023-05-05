@@ -17,17 +17,18 @@ If a level is not chosen:
     Handle unlocking screen if necessary.
     Handle choosing level screen.
 Else: start level.
-
 */
-// #include <iomanip>
+#include <iomanip>
 int main(int argv, char **args)
 {
+    // Load all image to check image error
     // for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
     // {
     //     win.draw_png(i, 0, 0, 10, 10);
     //     cout << setw(2) << all_img[i].n_sheet << ' ' << all_img[i].c_sheet << ' ';
     //     cout << all_img[i].img_dir << '\n';
     // }
+
     // Init game & music.
     init_music();
     Mouse Mouse_cursor;
@@ -69,7 +70,7 @@ int main(int argv, char **args)
             }
             else
             {
-                play_music(URF_DIRECTORY);
+                play_music(OPENING_MUSIC_DIRECTORY);
                 // win.clear_renderer();
                 handle_choosing_level_screen();
                 if (check_status(game_state, IS_LEVEL_CHOSEN))

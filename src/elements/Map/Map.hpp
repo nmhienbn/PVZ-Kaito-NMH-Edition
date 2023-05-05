@@ -18,3 +18,5 @@ struct Block
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;
+int get_block_col(const int &x);
+int get_block_row(const int &y);

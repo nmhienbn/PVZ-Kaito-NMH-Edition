@@ -34,11 +34,13 @@ Then both return back choosing level screen.
 */
 void handle_reset_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    // OK: Reset game level.
     if (OK_RESET.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_RESET, false);
         reset_unlocked_level();
     }
+    // CANCEL: Do nothing.
     if (CANCEL_RESET.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_RESET, false);

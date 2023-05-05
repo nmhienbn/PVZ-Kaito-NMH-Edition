@@ -9,18 +9,20 @@ extern window win;
 
 /*Handle all user click:
     If player click on sun: handle sun click, then return;
-    Else if player is shoveling: handle remove plant.
     Else if player click on shovel: player is shoveling.
-    Else if player click on plant seed: find type of that plant, then return;
-    Else if player is choosing a plant and click on a tile: create a new plant there.
+    Else if player is choosing a plant and click on a tile:
+        specify plant type and create a new plant there.
 */
 void handle_user_click(const int &mouse_x, const int &mouse_y)
 {
+    // If player click on sun: handle sun click, then return;
     if (pick_sun_if_clicked_on(mouse_x, mouse_y))
     {
         play_sound_effect(SUN_CLICK_MUSIC_DIRECTORY);
         return;
     }
+
+    // Else if player is shoveling: handle remove plant.
     if (player.is_shoveling)
     {
         if (click_is_in_frontyard(mouse_x, mouse_y))
@@ -30,6 +32,8 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
         player.is_shoveling = false;
         return;
     }
+
+    // Else if player click on plant seed: find type of that plant, then return;
     if (Shovel_bar.is_mouse_in(mouse_x, mouse_y))
     {
         play_sound_effect(SHOVEL_MUSIC_DIRECTORY);
@@ -37,6 +41,9 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
         remove_chosen_plant();
         return;
     }
+
+    // Else if player is choosing a plant and click on a tile:
+    //     specify plant type and create a new plant there.
     if (is_a_plant_seed_clicked_on(mouse_x, mouse_y))
     {
         which_plant_is_chosen(mouse_y, player.is_choosing_a_plant);
@@ -56,7 +63,6 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
             return;
         }
     }
-    // remove a plant
 }
 
 /*
@@ -75,6 +81,12 @@ bool is_a_plant_seed_clicked_on(const int &mouse_x, const int &mouse_y)
     return false;
 }
 
+/*
+Change is_a_plant_chosen status and chosen plant
+    Show announcement when player has not enough sun or plant has not refresh.
+    Otherwise, determine which plant is chosen, play sound.
+        Note that double choose on a plant seed will cancel the selection.
+*/
 void change_chosen_status(const int &i, bool &is_a_plant_chosen)
 {
     if (level.level_num < level_unlock_new_plant[i])
@@ -82,6 +94,7 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     is_a_plant_chosen = false;
     if (player.sun_count < plant_sun_cost[i])
     {
+        // not enough sun
         remove_chosen_plant();
         player.sun_count_change_color_times = 4;
         play_sound_effect(BUZZER_MUSIC_DIRECTORY);
@@ -89,6 +102,7 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     }
     else if (icons.plant_remaining_time[i])
     {
+        // plant has not refresh
         remove_chosen_plant();
         win.show_announcer_text("YOU MUST WAIT FOR PLANT SEED TO REFRESH!");
     }
@@ -96,10 +110,12 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     {
         if (icons.chosen_plant == i)
         {
+            // double choose: remove chosen plant
             icons.chosen_plant = PLANT_COUNT;
         }
         else
         {
+            // specify chosen plant
             icons.chosen_plant = i;
             play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
             is_a_plant_chosen = true;
@@ -109,10 +125,8 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
 }
 
 /*Find which plant is chosen.
-    Show announcement when player has not enough sun or plant has not refresh.
-    Otherwise, determine which plant is chosen, play sound.
-        Note that double click on a plant seed will cancel the selection.
-*/
+For all plant seeds' coordinate.
+ */
 void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
 {
     for (int i = 0; i < PLANT_COUNT; i++)
@@ -127,7 +141,11 @@ void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
 }
 
 /*
-Check if mouse is in frontyard or not
+Check if mouse is in frontyard or not.
+Depend on level:
+    lv1: 1 row
+    lv2: 3 rows
+    lv > 3: 5 rows
 */
 bool click_is_in_frontyard(const int &mouse_x, const int &mouse_y)
 {
@@ -158,24 +176,12 @@ bool click_is_in_frontyard(const int &mouse_x, const int &mouse_y)
 
 /*
 Find which row and column is chosen by click
-Optimize to O(m + n) =))
+Optimize to O(1) =))
 */
 void determine_row_and_col_chosen_by_second_click(const int &mouse_x, const int &mouse_y, int &row, int &col)
 {
-    for (int y = 0; y < VERT_BLOCK_COUNT; y++)
-    {
-        if (mouse_y > cells[y][0].y1 && mouse_y < cells[y][0].y2)
-        {
-            row = y;
-            break;
-        }
-    }
-    for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
-        if (mouse_x > cells[0][x].x1 && mouse_x < cells[0][x].x2)
-        {
-            col = x;
-            break;
-        }
+    row = get_block_row(mouse_y);
+    col = get_block_col(mouse_x);
 }
 
 /*
@@ -220,7 +226,7 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
 {
     int row, col;
     determine_row_and_col_chosen_by_second_click(mouse_x, mouse_y, row, col);
-    if (cells[row][col].is_planted)
+    if (row >= 0 && col >= 0 && cells[row][col].is_planted)
     {
         win.show_announcer_text("YOU CANNOT PLANT ON A PLANTED TILE!");
         remove_chosen_plant();

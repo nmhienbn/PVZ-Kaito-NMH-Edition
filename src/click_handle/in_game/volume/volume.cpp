@@ -7,14 +7,23 @@ extern Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
 extern Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 extern int now_music;
 
+// Music volume limit
 Button MUSIC_VOLUME(MENU_X1 + 194, MENU_X1 + 334, MENU_Y1 + 139, MENU_Y1 + 168);
+// SFX volume limit
 Button SFX_VOLUME(MENU_X1 + 194, MENU_X1 + 334, MENU_Y1 + 168, MENU_Y1 + 197);
 
+// Music volume slider
 int music_x = (MUSIC_VOLUME.x1 + MUSIC_VOLUME.x2) / 2 - 11;
 int music_y = MUSIC_VOLUME.y1;
+
+// SFX volume slider
 int sfx_x = (SFX_VOLUME.x1 + SFX_VOLUME.x2) / 2 - 11;
 int sfx_y = SFX_VOLUME.y1;
 
+/*
+Handle player mouse down on slide to change the volume.
+Update all available music and sound effect.
+*/
 void handle_volume_change()
 {
     int mouse_x, mouse_y;
@@ -42,6 +51,9 @@ void handle_volume_change()
     }
 }
 
+/*
+Display the slider.
+*/
 void display_slider()
 {
     win.draw_png(SLIDER_DIRECTORY, music_x, music_y, 22, 29);

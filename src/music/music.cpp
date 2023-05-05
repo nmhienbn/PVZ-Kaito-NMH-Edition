@@ -7,9 +7,7 @@ Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
 Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 int now_music = -1;
 
-/*
-Init music
-*/
+/*Init music*/
 bool init_music()
 {
     // Initialization flag
@@ -29,28 +27,23 @@ bool init_music()
             printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
             success = false;
         }
+        // Change number of channels - number of sfx can be used at a time
         Mix_AllocateChannels(200);
     }
     return success;
 }
 
-/*
-Play music
-*/
+/*Play music*/
 void play_music(int num_path, int repeat_times)
 {
+    // If other music is playing
     if (now_music != num_path)
     {
+        // Stop playing music
         Mix_HaltMusic();
         now_music = num_path;
-        if (num_path == URF_DIRECTORY)
-        {
-            Mix_VolumeMusic(50);
-        }
-        else
-        {
-            Mix_VolumeMusic(music_volume);
-        }
+        // Set volume
+        Mix_VolumeMusic(music_volume);
         // Load music
         if (gMusic[num_path] == NULL)
         {
@@ -69,9 +62,7 @@ void play_music(int num_path, int repeat_times)
     }
 }
 
-/*
-Play sound effect
-*/
+/*Play sound effect*/
 void play_sound_effect(int num_path)
 {
     Mix_VolumeChunk(gChunk[num_path], sfx_volume);
@@ -87,9 +78,7 @@ void play_sound_effect(int num_path)
     Mix_PlayChannel(-1, gChunk[num_path], 0);
 }
 
-/*
-Close the music
-*/
+/*Close the music*/
 void close_music()
 {
     // Free the music

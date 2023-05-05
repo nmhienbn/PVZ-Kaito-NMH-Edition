@@ -1,8 +1,6 @@
-#include "elements/elements.hpp"
+#include "elements.hpp"
 
-/*
-Icons init
-*/
+/*Icons init*/
 Icons::Icons()
 {
     chosen_plant = PLANT_COUNT;
@@ -12,7 +10,7 @@ Icons::Icons()
     }
 }
 
-/*Check if this wave is huge*/
+/*@return true if this wave is huge*/
 bool Level::is_huge_wave()
 {
     int z_cnt = 0;
@@ -23,9 +21,7 @@ bool Level::is_huge_wave()
     return z_cnt >= 5;
 }
 
-/*
-Reset level
-*/
+/*Reset level: Clear all zombie waves' information*/
 void Level::reset()
 {
     wave_count = 0;
@@ -46,8 +42,12 @@ void Level::reset()
     wave_duration.clear();
 }
 
-/*
-Create 5 x 9 tiles
+/*Create 5 x 9 tiles
+0 1 2 3 4 5 6 7 8
+1
+2
+3
+4
 */
 Map create_a_collection_of_blocks()
 {
@@ -71,9 +71,7 @@ Map create_a_collection_of_blocks()
     return result;
 }
 
-/*
-Clear all elements
-*/
+/*Clear all elements*/
 void Elements::reset()
 {
     for (auto &plant : plants)

@@ -35,7 +35,7 @@ void leave_game()
     set_status(game_state, IS_GAME_STARTED, false);
     set_status(game_state, IS_LEVEL_CHOSEN, false);
     play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-    play_music(URF_DIRECTORY);
+    play_music(OPENING_MUSIC_DIRECTORY);
 }
 
 /*
@@ -45,12 +45,14 @@ Handle when player tends to leave to main menu:
 */
 void handle_leave_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    // OK to leave to main menu
     if (OK_LEAVE.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_LEAVE, false);
         leave_game();
         return;
     }
+    // CANCEL to return back to the pause-menu
     if (CANCEL_LEAVE.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_LEAVE, false);

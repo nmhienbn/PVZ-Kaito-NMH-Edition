@@ -427,6 +427,9 @@ struct Image
     Image(string _dir, int _n, int _c);
 };
 
+/*
+all image in game
+*/
 const Image all_img[] = {
     Image("./image/Plant_sheet/peashooter/Peashooter.png"), // PEASHOOTER_DIRECTORY
     Image("./image/Plant_sheet/sunflower/Sunflower.png"),   // SUNFLOWER_DIRECTORY
@@ -791,9 +794,7 @@ const Image all_img[] = {
 
 };
 
-/*
-Corresponding blink of image
-*/
+/*Corresponding blink of image*/
 static map<int, int> blink_of = {
     {PEASHOOTER_SHEET_DIRECTORY, PEASHOOTER_SHEET_BLINK_DIRECTORY},
     {PEASHOOTER_ATTACK_DIRECTORY, PEASHOOTER_ATTACK_BLINK_DIRECTORY},
@@ -862,9 +863,7 @@ static map<int, int> blink_of = {
 
 };
 
-/*
-Corresponding cold of image
-*/
+/*Corresponding cold of image*/
 static map<int, int> cold_of = {
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK1_COLD_DIRECTORY},
@@ -922,9 +921,7 @@ static map<int, int> cold_of = {
 
 };
 
-/*
-Corresponding eating of zombie walk image
-*/
+/*Corresponding eating of zombie walk image*/
 static map<int, int> eat_of = {
 
     {ZOMBIE_WALK1_DIRECTORY, ZOMBIE_EATING_DIRECTORY},
@@ -963,14 +960,10 @@ static map<int, int> eat_of = {
 
 };
 
-/*
-Corresponding walking of zombie eat image
-*/
+/*Corresponding walking of zombie eat image*/
 int walk_of(const int &img_dir);
 
-/*
-Corresponding walking of zombie eat image
-*/
+/*Corresponding walking of zombie eat image*/
 static map<int, int> degrade_of = {
     {ZOMBIE_WALK1_DIRECTORY, ARMLESS_ZOMBIE_WALK1_DIRECTORY},
     {ZOMBIE_WALK2_DIRECTORY, ARMLESS_ZOMBIE_WALK2_DIRECTORY},

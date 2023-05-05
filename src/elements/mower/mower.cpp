@@ -30,11 +30,16 @@ void display_mower(const int &_row)
     for (int i = 0, _ = mowers.size(); i < _; i++)
         if (mowers[i].row == _row)
         {
-            int frame = mowers[i].frame / MOWER_FRAME;
-            int scol = frame % all_img[MOWER_DIRECTORY].c_sheet;
-            int srow = frame / all_img[MOWER_DIRECTORY].c_sheet;
+            // current frame
+            int sframe = mowers[i].frame / MOWER_FRAME;
+            // current column in source image
+            int scol = sframe % all_img[MOWER_DIRECTORY].c_sheet;
+            // current row in source image
+            int srow = sframe / all_img[MOWER_DIRECTORY].c_sheet;
+            // display
             win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
                          mowers[i].x, cells[mowers[i].row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
+            // move to next frame
             if (mowers[i].status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
             {
                 if (++mowers[i].frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
@@ -53,6 +58,7 @@ void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
 {
     if (check_status(game_state, IS_PAUSED) == true)
         return;
+    // active mower if zombie touch
     for (auto &zombie : zombies)
     {
         if (zombie->x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - 30)
@@ -60,17 +66,21 @@ void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
             active_mower(zombie->row);
         }
     }
+    // mower action
     for (int i = 0; i < (int)mowers.size(); i++)
         if (mowers[i].status == MOWER_ACTIVE)
         {
+            // mower move
             mowers[i].x += MOWER_DX;
 
+            // mower gone
             if (++mowers[i].x >= WINDOW_WIDTH)
             {
                 mowers.erase(mowers.begin() + i);
                 i--;
                 continue;
             }
+            // mower hit zombie
             for (int j = 0; j < (int)zombies.size();)
             {
                 if (zombies[i]->x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - 30)
@@ -86,7 +96,7 @@ void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
 }
 
 /*
-Apply mower explode the zombie. (chang zombie into burnt one)
+Apply mower hit the zombies. (make zombie die immediately)
 */
 bool apply_mower_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
                                 Mower &mower,
@@ -94,7 +104,9 @@ bool apply_mower_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
 {
     if (is_mower_hit_zombie(mower, *zombies[z_ind]))
     {
+        // zombie die
         zombies[z_ind]->add_zombie_die(zombie_parts);
+        // armor drop
         if (zombies[z_ind]->type == CONE_TYPE)
             zombie_parts.push_back(ZombiePart(CONE_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
                                               zombies[z_ind]->row, zombies[z_ind]->x_location + 80,
@@ -103,6 +115,7 @@ bool apply_mower_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
             zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
                                               zombies[z_ind]->row, zombies[z_ind]->x_location + 80,
                                               HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
+        // delete zombie
         delete zombies[z_ind];
         zombies.erase(zombies.begin() + z_ind);
         return true;

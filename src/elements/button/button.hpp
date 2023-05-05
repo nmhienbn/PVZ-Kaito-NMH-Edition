@@ -9,6 +9,7 @@ This file contain in-game rectangles with their x1,x2,y1,y2
 #define ICON_WIDTH 105
 #define ICON_HEIGHT 65
 
+// A rectangle that may be clicked in
 struct Button
 {
     int x1, x2, y1, y2;

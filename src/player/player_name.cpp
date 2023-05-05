@@ -157,8 +157,9 @@ void display_get_name_player(const int &get_name_dir)
                 }
             });
         }
-
+        // display choosing level screen that not handle mouse over
         display_choose_level(false);
+        // dim
         win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
         if (is_new_user)

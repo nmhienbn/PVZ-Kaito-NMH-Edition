@@ -46,12 +46,14 @@ Handle when player tends to restart game.
 */
 void handle_restart_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    // OK to restart.
     if (OK_RESTART.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_RESTART, false);
         restart_game();
         return;
     }
+    // CANCEL to return back to Pause-Menu
     if (CANCEL_RESTART.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_RESTART, false);

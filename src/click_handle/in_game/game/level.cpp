@@ -10,10 +10,8 @@ extern window win;
 
 /*
 If game has not started:
-    0.5s: display "Ready"
-    0.5s: display "Set"
-    2s: display "Plant!"
-    Note that any mouse click has no effect.
+    display credit.
+    0.5s: display "Ready - Set - Plant": 0.5 - 0.5 - 2.
 
 Else: (game has started)
     If player lose: display lose message. Reset level.
@@ -22,28 +20,29 @@ Else: (game has started)
         check if is a new plant is unlocked or not.
         reset level.
     Else if player click restart: handle restart.
-    Else if player click main menu: handle main menu.
+    Else if player click leave: handle leave.
     Else if game is paused: handle pause.
     Else display gameplay.
 
 Handle key: 1,2,3,4,5: plant; s: shovel
 Handle window focus lose:
-Handle user click:
+Handle user event:
     Quit event.
     Key to win. //For developer.
-    If player is_restart: handle_restart_menu_click
-    Else player is_leave: handle_leave_menu_click
-    Else player is_paused: handle_leave_menu
-    Menu icon and menu click.
-    Turbo icon to speed up the game.
-    Player click on game.
+    Key to choose plant, shovel.
+    Lose keyboard focus: pause game
+    Player click: Player click on game.
+    Mouse event: Volume change.
 
 Move to next frame (clk++)
+Display frame: no display even frame if IS_FAST
 */
 void start_level()
 {
     if (check_status(game_state, IS_GAME_STARTED) == false)
     {
+        // display credit.
+        // 0.5s: display "Ready - Set - Plant": 0.5 - 0.5 - 2.
         display_credit();
         clk = 1;
         return;
@@ -52,12 +51,16 @@ void start_level()
     {
         if (has_player_lost())
         {
+            // display lose message. Reset level.
             display_lose();
             return;
         }
         if (has_player_won())
         {
+            // check if is a new plant is unlocked or not.
             bool is_newest_level = (level.level_num == player.unlocked_level);
+            // display win message.
+            // reset level.
             if (display_win() && is_newest_level)
             {
                 for (int i = 0; i < PLANT_COUNT; i++)
@@ -72,27 +75,35 @@ void start_level()
         }
         if (check_status(game_state, IS_RESTART) == true)
         {
+            // handle restart.
             display_game_restart();
         }
         else if (check_status(game_state, IS_LEAVE) == true)
         {
+            // handle leave.
             display_game_leave();
         }
         else if (check_status(game_state, IS_PAUSED) == true)
         {
+            // handle pause
             display_game_pause();
         }
         else
         {
+            // display gameplay
             display_all_in_game();
         }
-        HANDLE(
+        HANDLE_SDL_EVENT(
             QUIT(quit = true; return;);
+
+            // Key to win. //For developer.
             KEY_TO_WIN({
                 level.waves_finished = 1;
                 game_characters.zombies.clear();
                 game_characters.zombie_parts.clear();
             });
+
+            // Key to choose plant, shovel.
             if (check_status(game_state, IS_PAUSED) == false) {
                 if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_5))
                 {
@@ -105,11 +116,20 @@ void start_level()
                 });
             };
 
+            // Lose keyboard focus: pause game
             LOST_FOCUS(
                 set_status(game_state, IS_PAUSED, true);
                 Mix_PauseMusic();
                 Mix_Pause(-1););
 
+            /* Player click:
+                If player is_restart: handle_restart_menu_click
+                Else player is_leave: handle_leave_menu_click
+                Else player is_paused: handle_leave_menu
+                Menu icon and menu click.
+                Turbo icon to speed up the game.
+                Player click on game.
+                */
             LCLICK({
                 if (check_status(game_state, IS_RESTART) == true)
                 {
@@ -132,14 +152,18 @@ void start_level()
             });
 
         );
+        // Mouse event: Volume change.
         if (check_status(game_state, IS_PAUSED) == true)
         {
             handle_volume_change();
         }
     }
 
+    // Move to next frame
     if (check_status(game_state, IS_PAUSED) == false)
         clk++;
+
+    // Display frame: no display even frame if IS_FAST
     if (check_status(game_state, IS_PAUSED) == true || check_status(game_state, IS_FAST) == false || (clk & 1))
     {
         win.update_screen();
@@ -155,6 +179,7 @@ void display_all_in_game()
     win.clear_renderer();
     if (check_status(game_state, IS_FAST) == false || (!(clk & 1)))
     {
+        // no display even frame if IS_FAST
         display_game_layout();
         display_game_announce();
         win.show_announcer_text();
@@ -163,6 +188,7 @@ void display_all_in_game()
     }
     else
     {
+        // update all elements' state
         display_game_elements();
     }
     // Move:

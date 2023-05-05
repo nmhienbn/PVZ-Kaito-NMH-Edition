@@ -1,7 +1,7 @@
 #pragma once
 #include "music/music.hpp"
 #include "draw/rsdl.hpp"
-#include "zombies/zombie_struct.hpp"
+#include "elements/zombies/zombie_struct.hpp"
 
 class Pea
 {

@@ -2,8 +2,8 @@
 This file include game elements: Plants, Zombies, Player, Level, Icons (Plant seeds)
 */
 #pragma once
-#include "plants/plant_type.hpp"
-#include "zombies/zombie.hpp"
+#include "elements/plants/plant_type.hpp"
+#include "elements/zombies/zombie.hpp"
 
 /*--------------------------------------------------------------------
 Player and others

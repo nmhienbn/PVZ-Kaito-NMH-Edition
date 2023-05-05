@@ -27,17 +27,20 @@ Handle when player paused the game:
 */
 void handle_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    // BACK_TO_GAME to unpause
     if (BACK_TO_GAME.is_mouse_in(mouse_x, mouse_y))
     {
         unpause_game();
         return;
     }
+    // MAIN_MENU to leave to main menu
     if (MAIN_MENU.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_LEAVE, true);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
         return;
     }
+    // RESTART to restart game
     if (RESTART.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_RESTART, true);
@@ -53,6 +56,7 @@ void handle_pause_icon_click(const int &mouse_x, const int &mouse_y)
 {
     if (PAUSE_ICON.is_mouse_in(mouse_x, mouse_y))
     {
+        // Reset some variables
         set_status(game_state, IS_PAUSED, true);
         Mix_PauseMusic();
         Mix_Pause(-1);

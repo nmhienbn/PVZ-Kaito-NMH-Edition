@@ -1,7 +1,7 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "elements/Map/Map.hpp"
-#include "zombies/zombie_struct.hpp"
+#include "elements/zombies/zombie_struct.hpp"
 
 enum Mower_status
 {

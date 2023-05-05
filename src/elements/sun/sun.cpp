@@ -44,8 +44,10 @@ void move_suns(vector<Sun> &suns)
     {
         if (suns[i].is_clicked)
         {
+            // move sun to top left corner.
             suns[i].y_location -= CLICKED_SUN_D * suns[i].y_location / suns[i].x_location;
             suns[i].x_location -= CLICKED_SUN_D;
+            // remove sun.
             if (suns[i].x_location <= 0)
             {
                 suns.erase(suns.begin() + i);
@@ -53,6 +55,8 @@ void move_suns(vector<Sun> &suns)
             }
             continue;
         }
+        // If the sun has not reached the ground: move it.
+        // Else increase sun-wait time.
         int row = suns[i].final_row;
         int col = suns[i].final_col;
         int lower_limit = cells[row][col].y1 + 30;
@@ -64,7 +68,8 @@ void move_suns(vector<Sun> &suns)
 }
 
 /*
-Updated: If sun's waited seconds >= SUN_APPEAR_LIMIT * 3 / 4, then change its transparency.
+Set suns' transparency depend on their waiting time.
+Then display them.
 */
 void display_suns(vector<Sun> &suns)
 {

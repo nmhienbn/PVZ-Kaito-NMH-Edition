@@ -1,6 +1,6 @@
 #include "draw/render_elements.hpp"
 #define SUN_BAR_WIDTH 180
-#define SUN_BAR_HEIGHT 360
+#define SUN_BAR_HEIGHT 88
 
 extern Level level;
 extern Elements game_characters;
@@ -23,6 +23,7 @@ void display_choose_level(const bool &is_mouse_needed)
 {
     win.clear_renderer();
     win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    // Buttons
     display_button(RENAME_BUTTON, RENAME_DIRECTORY);
     display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
     display_button(QUIT_BUTTON, QUIT_DIRECTORY);
@@ -32,7 +33,7 @@ void display_choose_level(const bool &is_mouse_needed)
         RESET_LEVEL_BUTTON.blink();
         QUIT_BUTTON.blink();
     }
-
+    // Level appearance
     for (int i = 1; i <= LEVEL_COUNT; i++)
     {
         string lvl_txt = "LEVEL " + to_string(i);
@@ -67,8 +68,7 @@ void display_choose_level(const bool &is_mouse_needed)
     }
 }
 
-/*
-Display game layout:
+/*Display game layout:
     + Background (playground).
     + Sun and Player's sun count.
     + Shovel. (and key to choose)
@@ -108,8 +108,7 @@ void display_game_layout()
     display_progress_bar();
 }
 
-/*
-Display the plants' seed:
+/*Display the plants' seed:
     + Player hasn't unlocked yet: no display.
     + Display plant seed bar base on the number of plant.
     + Dim if player doesn't have enough sun or it is chosen.
@@ -167,6 +166,7 @@ void display_icons_in_icon_bar()
     }
 }
 
+/*Display shadow under: plants, zombies, bullets*/
 void display_shadow()
 {
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
@@ -189,9 +189,7 @@ void display_shadow()
     }
 }
 
-/*
-Display the game element: plants, zombies and the suns.
-*/
+/*Display the game element: plants, zombies and the suns.*/
 void display_game_elements()
 {
     // Shadows
@@ -216,9 +214,7 @@ void display_game_elements()
     display_suns(game_characters.suns);
 }
 
-/*
-Display the game when paused.
-*/
+/*Display the game when paused.*/
 void display_game_paused_elements()
 {
     display_game_layout();
@@ -227,9 +223,7 @@ void display_game_paused_elements()
     win.draw_bg(BLACK_SCREEN_DIRECTORY);
 }
 
-/*
-If any plant seed is chosen: render it (transparent) at the mouse position.
-*/
+/*If any plant seed is chosen: render it (transparent) at the mouse position.*/
 void display_chosen_plant()
 {
     int _x = 0, _y = 0;
@@ -282,22 +276,10 @@ void blink_row_and_col()
         _y > upper_bound && _y < lower_bound)
     {
         // Blink row
-        for (int y = 0; y < VERT_BLOCK_COUNT; y++)
-        {
-            if (_y > cells[y][0].y1 && _y < cells[y][0].y2)
-            {
-                win.draw_png(front_yard_r + y, 0, 0,
-                             WINDOW_WIDTH, WINDOW_HEIGHT);
-                break;
-            }
-        }
+        win.draw_png(front_yard_r + get_block_row(_y), 0, 0,
+                     WINDOW_WIDTH, WINDOW_HEIGHT);
         // Blink column
-        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
-            if (_x > cells[0][x].x1 && _x < cells[0][x].x2)
-            {
-                win.draw_png(front_yard_c + x, 0, 0,
-                             WINDOW_WIDTH, WINDOW_HEIGHT);
-                break;
-            }
+        win.draw_png(front_yard_c + get_block_col(_x), 0, 0,
+                     WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }

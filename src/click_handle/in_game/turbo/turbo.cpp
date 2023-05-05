@@ -17,6 +17,7 @@ void auto_disable_turbo()
         if (is_in(cells[0][1].x2 - ZOMBIE_DX + 1, zombie->x_location + ZOMBIE_EXACT_LOCATION, cells[0][1].x2) &&
             check_status(game_state, IS_FAST) == true)
         {
+            // disable the turbo & dim screen
             game_state ^= IS_FAST;
             dim_screen_time = MAX_DIM_SCREEN_TIME;
             return;

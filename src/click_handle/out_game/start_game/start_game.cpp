@@ -27,10 +27,12 @@ Handle player click on TAP_TO_START
 */
 void display_starting_screen()
 {
+    play_music(OPENING_MUSIC_DIRECTORY);
     bool game_started = false;
     bool quit = false;
     while (!quit && !game_started)
     {
+        // Change color when mouse over TAP_TO_START
         int _x = 0, _y = 0;
         SDL_GetMouseState(&_x, &_y);
         if (TAP_TO_START.is_mouse_in(_x, _y))
@@ -41,8 +43,9 @@ void display_starting_screen()
         {
             win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }
-        HANDLE(
+        HANDLE_SDL_EVENT(
             QUIT(quit = true; exit(0););
+            // Handle player click on TAP_TO_START
             LCLICK({
                 if (TAP_TO_START.is_mouse_in(mouse_x, mouse_y))
                     game_started = true;
@@ -52,7 +55,6 @@ void display_starting_screen()
 
         win.update_screen();
     }
-    play_music(URF_DIRECTORY);
     win.fade_out();
     win.clear_renderer();
 }

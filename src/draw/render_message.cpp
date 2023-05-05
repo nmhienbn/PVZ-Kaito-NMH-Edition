@@ -20,9 +20,8 @@ void display_ready_set_plant(const int &image_num)
     win.draw_png_center(image_num);
     win.show_announcer_text();
 }
-/*
-Display announcement: huge wave
-*/
+
+/*Display announcement: huge wave, final wave*/
 void display_game_announce()
 {
     win.draw_png_center(level.announce_directory);

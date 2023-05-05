@@ -4,7 +4,8 @@
 using namespace std;
 
 /*
-Get the TTF_Font pointer of a font
+Get the TTF_Font pointer of a font.
+If font has not loaded, create new TTF_Font.
 */
 TTF_Font *window::get_font(string font_addr, const int &size)
 {
@@ -23,6 +24,7 @@ TTF_Font *window::get_font(string font_addr, const int &size)
 /* Show the text at (x; y)
     Load: Font, Surface -> Texture
 Fixed: cannot show many texts.
+Runtime: Solid < Shaded < Blended
 */
 void window::show_text(const string &input, const int &x, const int &y,
                        const RGB &color, string font_addr, const int &size)
@@ -39,7 +41,7 @@ void window::show_text(const string &input, const int &x, const int &y,
         font = TTF_OpenFont(font_addr.c_str(), size);
         fonts_cache[font_addr + ":" + ss.str()] = font;
     }
-    SDL_Surface *textSurface = TTF_RenderText_Solid(font, input.c_str(), textColor);
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font, input.c_str(), textColor);
     SDL_Texture *text = SDL_CreateTextureFromSurface(renderer, textSurface);
     SDL_Rect renderQuad = {x, y, textSurface->w, textSurface->h};
     SDL_RenderCopy(renderer, text, NULL, &renderQuad);
@@ -83,7 +85,7 @@ void window::set_style(const string &font_addr, const int &size, const int &styl
 }
 
 /*
-Set a font outline.
+Set a font outline - make "net chu" bigger
 */
 void window::set_outline(const string &font_addr, const int &size, const int &outline)
 {
@@ -91,6 +93,10 @@ void window::set_outline(const string &font_addr, const int &size, const int &ou
     TTF_SetFontOutline(font, outline);
 }
 
+/*
+Show text shadowed by render it's outline (set font outline).
+Then render it.
+*/
 void window::show_text_shadowed(const string &input, const int &x, const int &y,
                                 const RGB &color, string font_addr, const int &size)
 {
@@ -99,6 +105,7 @@ void window::show_text_shadowed(const string &input, const int &x, const int &y,
     set_outline(font_addr, size, 0);
     show_text(input, x, y, color, font_addr, size);
 }
+
 /* Show the utf 8 text at (x; y)
     Load: Font, Surface -> Texture
 Fixed: cannot show many texts.

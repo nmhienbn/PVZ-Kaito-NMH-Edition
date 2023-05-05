@@ -25,14 +25,14 @@ void unlock_plant(const int &_plant_type)
     play_music(NEW_PLANT_MUSIC_DIRECTORY, 0);
     CONTINUE.blink();
     win.update_screen();
-    HANDLE(
+    HANDLE_SDL_EVENT(
         QUIT(quit = true);
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {
+                play_music(OPENING_MUSIC_DIRECTORY);
                 win.fade_out();
                 set_status(game_state, IS_UNLOCKING_PLANT, false);
-                play_music(URF_DIRECTORY);
             }
         });
 

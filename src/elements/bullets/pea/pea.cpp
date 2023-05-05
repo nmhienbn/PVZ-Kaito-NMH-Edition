@@ -30,9 +30,12 @@ Pea::Pea(int _type, int _row, int _x)
     explode = INF;
 }
 
+/*
+x_location > other.x_location
+*/
 bool Pea::operator<(const Pea &other) const
 {
-    return x_location < other.x_location;
+    return x_location > other.x_location;
 }
 
 /*
@@ -52,12 +55,15 @@ One pea hit only one zombies at a time.
 */
 void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie *> &zombies, vector<ZombiePart> &zombie_parts)
 {
+    // sort zombies -> just find the first zombie to attack
     vector<Zombie *> tmp = zombies;
     stable_sort(tmp.begin(), tmp.end(), [](const Zombie *a, const Zombie *b) -> bool
                 { return a->x_location == b->x_location ? a->cold_time < b->cold_time : a->x_location < b->x_location; });
+    // sort peas -> farthest pea will hit first
     sort(peas.begin(), peas.end());
     for (int i = 0; i < (int)peas.size(); i++)
     {
+        // Remove disappeared pea
         if (peas[i].is_disappeared())
         {
             peas.erase(peas.begin() + i);
@@ -66,6 +72,7 @@ void handle_pea_zombie_encounter(vector<Pea> &peas, vector<Zombie *> &zombies, v
         }
         if (peas[i].has_exploded())
             continue;
+        // Apply pea hit zombie & delete died zombies
         for (int j = 0; j < (int)tmp.size(); j++)
             if (peas[i].apply_hitting_zombie(*tmp[j], zombie_parts))
             {
@@ -135,11 +142,19 @@ bool Pea::apply_hitting_zombie(Zombie &zombie, vector<ZombiePart> &zombie_parts)
     return false;
 }
 
+/*
+check if a pea has exploded or not.
+initialized pea will explode after PEA_EXPLODE_TIME.
+*/
 bool Pea::has_exploded()
 {
     return explode <= PEA_EXPLODE_TIME;
 }
 
+/*
+Check if a pea disappeared
+A pea will disappear if it exploded or moved out the screen
+*/
 bool Pea::is_disappeared()
 {
     int right_bound = WINDOW_WIDTH;
@@ -190,6 +205,9 @@ void Pea::display()
                        pea_width + more_px, pea_height + more_px);
 }
 
+/*
+Display the shadow under the pea
+*/
 void Pea::display_shadow()
 {
     win.draw_png(PEA_SHADOW_DIRECTORY, x_location, cells[row][0].y2 - 13, 21, 9);
