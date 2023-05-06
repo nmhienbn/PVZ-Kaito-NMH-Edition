@@ -18,14 +18,11 @@ Bước 1: Clone repo này về. Hoặc Chọn Code -> Download Zip (Khoảng 80
 
 Bước 2: Cài MinGW-W64-builds-4.3.5.
 
-Bước 3: Cài đặt thư viện SDL 2: SDL2, SDL2_image, SDL2_mixer, SDL2_ttf.</br>
-Copy hết tất cả các thư mục include và lib vào thư mục chứa file Makefile
+Bước 3: Cài GNU make
 
-Bước 4: Cài GNU make
+Bước 4: Mở cmd trong thư mục chứa Makefile và gõ lệnh make.
 
-Bước 5: Mở cmd trong thư mục chứa Makefile và gõ lệnh make.
-
-Bước 6: Bật pvz.exe và chơi 
+Bước 5: Bật pvz.exe và chơi 
 
 # 1.	Bắt đầu game
 Click vào nút “CLICK TO START!” để bắt đầu chơi game.
