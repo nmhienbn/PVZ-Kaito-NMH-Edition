@@ -227,8 +227,15 @@ TOTAL now: 4 plants and 3 zombies available.
 	Zombie door: Snow peas cannot slow him until he lost his door.
 	Fix bug of pea: 2 times erase()
 
-has_zombie_reached_plant 45 loops --> 1
-row, col blink --> 1 loop
+21-23/04/2023:
+	Zombie OOP.
+	Update some textures.
+	
+May 2023: 
+	has_zombie_reached_plant 45 loops --> 1
+	row, col blink --> 1 loop
+	git lfs --> upload SDL library.
+	Update readme.md
 
 Dim = Exposue - 3.20
 
