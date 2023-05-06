@@ -12,8 +12,8 @@ Plants versus Zombie là 1 game thuộc thể loại tower defense. Đắm mình
   * [a.   Các loại cây](#acác-loại-cây)
   * [b.   Các loại zombie](#bcác-loại-zombie)
 - [5. Chiến thắng và thất bại](#5-chiến-thắng-và-thất-bại)
--[Về đồ họa của game:](#về-đồ-họa-của-game)
--[Về source code game](#về-source-code-game)
+- [Về đồ họa của game:](#về-đồ-họa-của-game)
+- [Về source code game](#về-source-code-game)
 
 
 
