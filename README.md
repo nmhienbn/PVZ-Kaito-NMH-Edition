@@ -12,7 +12,8 @@ Plants versus Zombie là 1 game thuộc thể loại tower defense. Đắm mình
   * [a.   Các loại cây](#acác-loại-cây)
   * [b.   Các loại zombie](#bcác-loại-zombie)
 - [5. Chiến thắng và thất bại](#5-chiến-thắng-và-thất-bại)
-    + [Về đồ họa của game:](#về-đồ-họa-của-game)
+-[Về đồ họa của game:](#về-đồ-họa-của-game)
+-[Về source code game](#về-source-code-game)
 
 
 
@@ -167,6 +168,47 @@ Có 5 loại cây, lần lượt theo thứ tự có thể nhận được trong
 
 ---
 ### Về đồ họa của game:
-Các bộ phận của từng plants (mắt, lá, đầu, thân, ...), zombies (mắt, tóc, đầu, răng, thân, tay, chân, ...) và các thành phần khác được lấy tại [fandom](https://plantsvszombies.fandom.com/wiki/Main_Page)<br/>
-Các bộ phận đó được ghép lại bằng Adobe Animate, và được chỉnh sửa bởi Adobe Photoshop --> Tạo thành file gif.<br/>
-Để tạo thành sprite sheet, sử dụng trang https://onlinegiftools.com/convert-gif-to-sprite-sheet để chuyển đổi từ gif. <br/>
+- Các bộ phận của từng plants (mắt, lá, đầu, thân, ...), zombies (mắt, tóc, đầu, răng, thân, tay, chân, ...) và các thành phần khác được lấy tại [fandom](https://plantsvszombies.fandom.com/wiki/Main_Page)<br/>
+- Các bộ phận đó được ghép lại bằng Adobe Animate, và được chỉnh sửa bởi Adobe Photoshop --> Tạo thành file gif.<br/>
+- Để tạo thành sprite sheet, sử dụng trang https://onlinegiftools.com/convert-gif-to-sprite-sheet để chuyển đổi từ gif. <br/>
+
+### Về source code game:
+- Folder draw:
+    * khởi tạo window và renderer
+    * chứa tất cả các ảnh trong game (được đánh số)
+    * chứa hầu hết các câu lệnh của SDL2, SDL2_image, SDL2_ttf, sử dụng để vẽ load ảnh, chữ và vẽ lên renderer, window.
+- Folder elements: Chứa tất cả các thành phần của game:
+    * bullets: các loại đạn
+    * button: các loại nút trong game (có thể nhấn được hoặc không)
+    * Map: chứa hàm random và khởi tạo bảng 5 x 9 cho màn chơi.
+    * mower: máy cắt cỏ (Cán zombie)
+    * plants: chứa tất cả các loại plant (được kế thừa từ class Plants)
+    * zombies: chứa tất cả các loại zombies (được kế thừa từ class Zombie)
+    * elements: gom lại các loại plants và zombies.
+    * elements_actions:
+        + chứa hầu hết các tương tác giữa các thành phần game với nhau, và với màn chơi.
+        + tạo ngẫu nhiên zombie
+        + cập nhật tất cả các thay đổi của game theo từng khung hình
+- Folder events: Xử lý các sự kiện trong game (sự kiện chuột, bàn phím)
+    * in_game: xử lý các sự kiện khi đang trong một màn chơi
+        + credit: phần giới thiệu các loại zombie & ready-set-plant
+        + game: tất cả các sự kiện trong một màn chơi
+        + lose: xử lý khi thua
+        + main_menu: xử lý khi người chơi muốn trở lại phần chọn màn chơi
+        + pause_menu: xử lý khi người chơi dừng game (nút dừng hoặc click ra ngoài game)
+        + restart_menu: xử lý khi người chơi muốn chơi lại màn chơi
+        + turbo: xử lý nút tăng tốc game
+        + volume: xử lý nút điều chỉnh âm lượng nhạc nền và hiệu ứng.
+        + win: xử lý khi chiến thắng trò chơi.
+    * mouse_cursor: xử lý con trỏ chuột
+    * out_game: xử lý các sự kiện ngoài màn chơi
+       + choose_level: xử lý chọn màn chơi
+       + quit_menu: xử lý nút quit game: tắt game
+       + reset_level: xử lý nút reset level: xóa tiến trình chơi
+       + start_game: xử lý nút "Click to start" để bắt đầu vào game.
+       + unlock_plant: xử lý mở khóa plant mới.
+- Folder level: xử lý phần lấy dữ liệu ván chơi.
+- Folder music: xử lý phần âm thanh của game - SDL2_mixer
+- Folder player: xử lý phần dữ liệu người chơi. Bao gồm việc lấy và thay đổi tên, tiến trình.
+- game_stats.hpp: chứa tất cả thông số game
+- game.hpp và game.cpp: hàm main() của trò chơi.
