@@ -1,6 +1,20 @@
-# PVZ-Kaito-NMH-Edition
+# Plants Versus Zombie - Kaito-NMH-Edition
 # Giới thiệu game
 Plants versus Zombie là 1 game thuộc thể loại tower defense. Đắm mình vào cuộc chiến giữa cây cối và zombie, bạn hãy cố gắng hết sức để bảo vệ ngôi nhà của mình chỉ bằng những loại cây cối kì dị. Trồng cây và thu hoạch ngay kết quả là việc tiêu diệt các loại zombie đang bao vây ngôi nhà.
+
+- [0. Cách tải game](#0-c-ch-t-i-game)
+  * [a. Cách 1: Không bao gồm code.](#a-c-ch-1--kh-ng-bao-g-m-code)
+  * [b. Cách 2: Bao gồm code và có thể biên dịch.](#b-c-ch-2--bao-g-m-code-v--c--th--bi-n-d-ch)
+- [1.    Bắt đầu game](#1----b-t---u-game)
+- [2.    Chọn level](#2----ch-n-level)
+- [3.     Các thành phần trong game:](#3-----c-c-th-nh-ph-n-trong-game-)
+- [4.     Cách chơi](#4-----c-ch-ch-i)
+  * [a.   Các loại cây](#a---c-c-lo-i-c-y)
+  * [b.   Các loại zombie](#b---c-c-lo-i-zombie)
+- [5. Chiến thắng và thất bại](#5-chi-n-th-ng-v--th-t-b-i)
+    + [Về đồ họa của game:](#v-----h-a-c-a-game-)
+
+
 
 # 0. Cách tải game
 ## a. Cách 1: Không bao gồm code.
