@@ -163,7 +163,7 @@ There are 5 types of plants, in order of availability in the game:
 - These parts are assembled using Adobe Animate and edited by Adobe Photoshop to create a gif file.<br/>
 - To create a sprite sheet, use the website https://onlinegiftools.com/convert-gif-to-sprite-sheet to convert from gif. <br/>
 
-###About the game's source code:
+### About the game's source code:
 
 - Folder "draw":
     * initializes window and renderer
