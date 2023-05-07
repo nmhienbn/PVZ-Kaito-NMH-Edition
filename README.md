@@ -1,3 +1,4 @@
+[[English]](README_en.md)
 # Plants Versus Zombie - Kaito-NMH-Edition
 # Giới thiệu game
 Plants versus Zombie là 1 game thuộc thể loại tower defense. Đắm mình vào cuộc chiến giữa cây cối và zombie, bạn hãy cố gắng hết sức để bảo vệ ngôi nhà của mình chỉ bằng những loại cây cối kì dị. Trồng cây và thu hoạch ngay kết quả là việc tiêu diệt các loại zombie đang bao vây ngôi nhà.
@@ -81,8 +82,8 @@ Khi vào game, có 2 loại level mà mọi người sẽ gặp: buổi sáng (b
 
  ![image](https://user-images.githubusercontent.com/65478890/235644138-5a1078e7-c457-4f9a-8c1f-14ff6f799d73.png)
 
-●	Buổi sáng thì thi thoảng sẽ có sun (mặt trời) từ trên trời rơi xuống.
-●	Còn buổi tối thì không có, vậy nên game sẽ khó hơn một chút.
+-	Buổi sáng thì thi thoảng sẽ có sun (mặt trời) từ trên trời rơi xuống.
+-	Còn buổi tối thì không có, vậy nên game sẽ khó hơn một chút.
 
 Trước khi bắt đầu game, bạn sẽ được biết trước có những loại zombie gì sẽ xuất hiện.
 
