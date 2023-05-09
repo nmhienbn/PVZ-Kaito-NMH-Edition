@@ -3,7 +3,7 @@ int music_volume = MIX_MAX_VOLUME / 2;
 int sfx_volume = MIX_MAX_VOLUME / 2;
 
 // The music that will be played
-Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
+Mix_Music *gMusic;
 Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 int now_music = -1;
 
@@ -41,15 +41,15 @@ void play_music(int num_path, int repeat_times)
     {
         // Stop playing music
         Mix_HaltMusic();
+        // Free the music
+        Mix_FreeMusic(gMusic);
+        // Update current music
         now_music = num_path;
         // Set volume
         Mix_VolumeMusic(music_volume);
         // Load music
-        if (gMusic[num_path] == NULL)
-        {
-            gMusic[num_path] = Mix_LoadMUS(music_directory[num_path].c_str());
-        }
-        if (gMusic[num_path] == NULL)
+        gMusic = Mix_LoadMUS(music_directory[num_path].c_str());
+        if (gMusic == NULL)
         {
             printf("Failed to load %s! SDL_mixer Error: %s\n", music_directory[num_path].c_str(), Mix_GetError());
         }
@@ -57,7 +57,7 @@ void play_music(int num_path, int repeat_times)
         if (Mix_PlayingMusic() == 0)
         {
             // Play the music
-            Mix_PlayMusic(gMusic[num_path], repeat_times);
+            Mix_PlayMusic(gMusic, repeat_times);
         }
     }
 }
@@ -82,10 +82,11 @@ void play_sound_effect(int num_path)
 void close_music()
 {
     // Free the music
+    Mix_FreeMusic(gMusic);
+    gMusic = NULL;
+    // Free the chunks
     for (int i = 0; i < COUNT_MUSIC_DIRECTORY; i++)
     {
-        Mix_FreeMusic(gMusic[i]);
-        gMusic[i] = NULL;
         Mix_FreeChunk(gChunk[i]);
         gChunk[i] = NULL;
     }
