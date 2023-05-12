@@ -44,7 +44,7 @@ void display_starting_screen()
             win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         }
         HANDLE_SDL_EVENT(
-            QUIT(quit = true; exit(0););
+            QUIT();
             // Handle player click on TAP_TO_START
             LCLICK({
                 if (TAP_TO_START.is_mouse_in(mouse_x, mouse_y))

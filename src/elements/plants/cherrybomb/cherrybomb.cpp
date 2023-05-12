@@ -41,7 +41,7 @@ bool CherryBomb::is_hit_zombie(Zombie &zombie)
     int right_limit = cells[row][col].x2 + BLOCK_WIDTH;
     int left_limit = cells[row][col].x1 - BLOCK_WIDTH;
     if (is_in(row - 1, zombie.row, row + 1) &&
-        is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION, right_limit))
+        is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION + 15, right_limit))
         return true;
     return false;
 }

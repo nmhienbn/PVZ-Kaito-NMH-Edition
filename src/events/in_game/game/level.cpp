@@ -94,7 +94,7 @@ void start_level()
             display_all_in_game();
         }
         HANDLE_SDL_EVENT(
-            QUIT(quit = true; return;);
+            QUIT();
 
             // Key to win. //For developer.
             KEY_TO_WIN({

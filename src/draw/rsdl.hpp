@@ -77,6 +77,7 @@ public:
 	void delete_all_texture();
 
 	void set_texture_alpha(int file_num, int a);
+	void set_texture_color(int file_num, int r, int g, int b);
 	void fade_out();
 
 	// draw text
@@ -116,10 +117,10 @@ private:
 	{                              \
 		A                          \
 	}
-#define QUIT(Code)          \
+#define QUIT()              \
 	if (e.type == SDL_QUIT) \
 	{                       \
-		Code;               \
+		exit(0);            \
 	}
 #define LOST_FOCUS(Code)                                                           \
 	if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_FOCUS_LOST) \

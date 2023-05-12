@@ -145,10 +145,14 @@ void Zombie::display(const int &_row)
         // zombie cold
         if (cold_time)
         {
-            win.draw_png(cold_of[directory_num], dir_width * scol, dir_height * srow,
+            win.set_texture_color(blink_of[directory_num], 0, 75, 255);
+            win.set_texture_alpha(blink_of[directory_num], 120);
+            win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
                          dir_width, dir_height,
                          x_location, y_location,
                          dir_width, dir_height);
+            win.set_texture_color(blink_of[directory_num], 255, 255, 255);
+            win.set_texture_alpha(blink_of[directory_num], 70);
             if (check_status(game_state, IS_PAUSED) == false)
                 if (--cold_time == 0)
                 {
@@ -239,10 +243,16 @@ bool ZombiePart::display(const int &_row)
                      width, height);
         // cold
         if (is_cold)
-            win.draw_png(cold_of[img_num], width * scol, height * srow,
+        {
+            win.set_texture_color(blink_of[img_num], 0, 75, 255);
+            win.set_texture_alpha(blink_of[img_num], 120);
+            win.draw_png(blink_of[img_num], width * scol, height * srow,
                          width, height,
                          x_location, y_location,
                          width, height);
+            win.set_texture_color(blink_of[img_num], 255, 255, 255);
+            win.set_texture_alpha(blink_of[img_num], 70);
+        }
         // next frame
         if (check_status(game_state, IS_PAUSED) == false)
         {

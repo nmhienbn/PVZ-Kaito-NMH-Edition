@@ -30,7 +30,7 @@ void handle_choosing_level_screen()
     }
     win.update_screen();
     HANDLE_SDL_EVENT(
-        QUIT(quit = true; exit(0););
+        QUIT();
         LCLICK({
             // Going to quit
             if (check_status(game_state, IS_QUIT) == true)

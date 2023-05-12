@@ -43,7 +43,7 @@ bool display_win()
             }
             win.update_screen();
             HANDLE_SDL_EVENT(
-                QUIT(quit = true; return true);
+                QUIT();
                 LCLICK({
                     // Handle continue click After 23th winning frame
                     if (i >= 23 && CONTINUE.is_mouse_in(mouse_x, mouse_y))

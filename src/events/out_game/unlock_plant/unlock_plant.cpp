@@ -26,7 +26,7 @@ void unlock_plant(const int &_plant_type)
     CONTINUE.blink();
     win.update_screen();
     HANDLE_SDL_EVENT(
-        QUIT(quit = true);
+        QUIT();
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
             {

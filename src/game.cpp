@@ -24,7 +24,7 @@ int main(int argv, char **args)
     // Load all image to check image error
     // for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
     // {
-    //     win.draw_png(i, 0, 0, 10, 10);
+    //     win.load_texture(i);
     //     cout << setw(2) << all_img[i].n_sheet << ' ' << all_img[i].c_sheet << ' ';
     //     cout << all_img[i].img_dir << '\n';
     // }

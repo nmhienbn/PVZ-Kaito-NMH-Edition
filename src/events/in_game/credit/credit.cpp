@@ -24,7 +24,7 @@ void review_playground(vector<Zombie *> &zombies, const int &i)
     win.show_announcer_text();
     win.update_screen();
     HANDLE_SDL_EVENT(
-        QUIT(quit = true; return;);
+        QUIT();
         LOST_FOCUS(
             set_status(game_state, IS_PAUSED, true);
             Mix_PauseMusic();
@@ -86,7 +86,7 @@ void display_credit()
     }
     tmp.clear();
 
-    for (int i = ZOMBIE_CREDIT1_DIRECTORY; i <= DOOR_ZOMBIE_EATING_3_COLD_DIRECTORY; i++)
+    for (int i = ZOMBIE_CREDIT1_DIRECTORY; i <= DOOR_ZOMBIE_EATING_3_BLINK_DIRECTORY; i++)
         if (i != MOUSE_CURSOR_DIRECTORY)
         {
             win.delete_texture(i);
@@ -115,7 +115,7 @@ void display_credit()
         }
         win.update_screen();
         HANDLE_SDL_EVENT(
-            QUIT(quit = true; return;);
+            QUIT();
             LOST_FOCUS(
                 set_status(game_state, IS_PAUSED, true);
                 Mix_PauseMusic();

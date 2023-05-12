@@ -90,62 +90,6 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     {
         SDL_SetTextureAlphaMod(res, 70);
     }
-    else if (
-        file_num == ZOMBIE_WALK1_COLD_DIRECTORY ||
-        file_num == ZOMBIE_WALK2_COLD_DIRECTORY ||
-        file_num == ZOMBIE_EATING_COLD_DIRECTORY ||
-
-        file_num == ZOMBIE_ARM_COLD_DIRECTORY ||
-        file_num == ARMLESS_ZOMBIE_WALK1_COLD_DIRECTORY ||
-        file_num == ARMLESS_ZOMBIE_WALK2_COLD_DIRECTORY ||
-        file_num == ARMLESS_ZOMBIE_EATING_COLD_DIRECTORY ||
-
-        file_num == FLAG_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_EATING_1_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_EATING_2_COLD_DIRECTORY ||
-        file_num == FLAG_ZOMBIE_EATING_3_COLD_DIRECTORY ||
-
-        file_num == ZOMBIE_HEAD_COLD_DIRECTORY ||
-        file_num == ZOMBIE_DIE1_COLD_DIRECTORY ||
-        file_num == ZOMBIE_DIE2_COLD_DIRECTORY ||
-
-        file_num == CONE_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_EATING_1_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_EATING_2_COLD_DIRECTORY ||
-        file_num == CONE_ZOMBIE_EATING_3_COLD_DIRECTORY ||
-
-        file_num == BUCKET_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_EATING_1_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_EATING_2_COLD_DIRECTORY ||
-        file_num == BUCKET_ZOMBIE_EATING_3_COLD_DIRECTORY ||
-
-        file_num == DOOR_ZOMBIE_WALK1_1_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_WALK2_1_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_WALK1_2_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_WALK2_2_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_WALK1_3_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_WALK2_3_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_EATING_1_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_EATING_2_COLD_DIRECTORY ||
-        file_num == DOOR_ZOMBIE_EATING_3_COLD_DIRECTORY)
-    {
-        SDL_SetTextureAlphaMod(res, 120);
-    }
     else if (file_num == LEVEL_BLINK_DIRECTORY ||
              file_num == WHITE_SCREEN_DIRECTORY)
     {
@@ -186,6 +130,7 @@ void print_error(SDL_Texture *res, const string &img)
 Get loaded texture.
 If has not loaded, create new texture.
 */
+double total_mem = 0;
 SDL_Texture *window::load_texture(int file_num)
 {
     SDL_Texture *res = texture_cache[file_num];
@@ -195,6 +140,15 @@ SDL_Texture *window::load_texture(int file_num)
         print_error(res, all_img[file_num].img_dir);
         set_default_alpha(file_num, res);
         texture_cache[file_num] = res;
+
+        // query size of texture
+        // int texture_width, texture_height, texture_access;
+        // Uint32 texture_format;
+        // SDL_QueryTexture(res, &texture_format, &texture_access, &texture_width, &texture_height);
+        // int texture_bytes_per_pixel = SDL_BYTESPERPIXEL(texture_format);
+        // int texture_size_in_bytes = texture_width * texture_height * texture_bytes_per_pixel;
+        // total_mem += texture_size_in_bytes * 1e-6;
+        // cout << all_img[file_num].img_dir << ' ' << texture_size_in_bytes * 1e-6 << ' ' << total_mem << '\n';
     }
     return res;
 }
@@ -327,6 +281,17 @@ void window::set_texture_alpha(int file_num, int a)
     }
 }
 
+/*
+Set texture RGB mod
+*/
+void window::set_texture_color(int file_num, int r, int g, int b)
+{
+    if (file_num != NULL_DIRECTORY && texture_cache[file_num] != NULL)
+    {
+        SDL_SetTextureColorMod(texture_cache[file_num], r, g, b);
+    }
+}
+
 extern bool quit;
 /*
 Fade out effect
@@ -338,7 +303,7 @@ void window::fade_out()
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         set_texture_alpha(BLACK_SCREEN_DIRECTORY, (i));
         update_screen();
-        HANDLE_SDL_EVENT(QUIT(quit = true; return;))
+        HANDLE_SDL_EVENT(QUIT())
     }
     set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
     clear_renderer();

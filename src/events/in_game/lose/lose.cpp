@@ -45,7 +45,7 @@ void display_lose()
     CONTINUE.blink();
     win.update_screen();
     HANDLE_SDL_EVENT(
-        QUIT(quit = true);
+        QUIT();
         // Check if player click 'continue'.
         LCLICK({
             if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
