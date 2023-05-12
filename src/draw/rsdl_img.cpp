@@ -310,12 +310,21 @@ void window::fade_out()
     delete_all_texture();
 }
 
+/*
+Delete a game texture
+*/
 void window::delete_texture(const int &file_num)
 {
-    SDL_DestroyTexture(texture_cache[file_num]);
-    texture_cache[file_num] = NULL;
+    if (texture_cache[file_num] != NULL)
+    {
+        SDL_DestroyTexture(texture_cache[file_num]);
+        texture_cache[file_num] = NULL;
+    }
 }
 
+/*
+Delete all game textures except the mouse cursor
+*/
 void window::delete_all_texture()
 {
     for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
