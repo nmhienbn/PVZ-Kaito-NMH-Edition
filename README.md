@@ -1,5 +1,8 @@
 [[English]](README_en.md)
 # Plants Versus Zombie - Kaito-NMH-Edition
+- Thử nghiệm game: https://youtu.be/EyTwTOWr5zU
+- Phá đảo game: https://youtu.be/0RQHeCaz4sg
+
 # Giới thiệu game
 Plants versus Zombie là 1 game thuộc thể loại tower defense. Đắm mình vào cuộc chiến giữa cây cối và zombie, bạn hãy cố gắng hết sức để bảo vệ ngôi nhà của mình chỉ bằng những loại cây cối kì dị. Trồng cây và thu hoạch ngay kết quả là việc tiêu diệt các loại zombie đang bao vây ngôi nhà.
 
@@ -169,9 +172,7 @@ Có 5 loại cây, lần lượt theo thứ tự có thể nhận được trong
 
 ---
 ### Về đồ họa của game:
-- Các bộ phận của từng plants (mắt, lá, đầu, thân, ...), zombies (mắt, tóc, đầu, răng, thân, tay, chân, ...) và các thành phần khác được lấy tại [fandom](https://plantsvszombies.fandom.com/wiki/Main_Page)<br/>
-- Các bộ phận đó được ghép lại bằng Adobe Animate, và được chỉnh sửa bởi Adobe Photoshop --> Tạo thành file gif.<br/>
-- Để tạo thành sprite sheet, sử dụng trang https://onlinegiftools.com/convert-gif-to-sprite-sheet để chuyển đổi từ gif. <br/>
+[[Cách làm hiệu ứng từng cây, zombie trong game]](about_graphics.md)
 
 ### Về source code game:
 - Folder draw:

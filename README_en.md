@@ -1,5 +1,8 @@
 [[Tiếng Việt]](README.md)
-# Plants Versus Zombies - Kaito-NMH-Edition
+# Plants Versus Zombie - Kaito-NMH-Edition
+- Game demo: https://youtu.be/EyTwTOWr5zU
+- Game playthrough: https://youtu.be/0RQHeCaz4sg
+
 # Game Introduction
 Plants versus Zombies is a tower defense game that immerses players in a battle between plants and zombies. Players must do their best to protect their house using only strange types of plants. By planting and harvesting these plants, players can destroy the various types of zombies that are attacking their house.
 
@@ -159,9 +162,7 @@ There are 5 types of plants, in order of availability in the game:
 
 ---
 ### About the game's graphics:
-- The parts of each plant (eyes, leaves, head, stem, etc.), zombies (eyes, hair, head, teeth, body, arms, legs, etc.), and other components are taken from [fandom](https://plantsvszombies.fandom.com/wiki/Main_Page).<br/>
-- These parts are assembled using Adobe Animate and edited by Adobe Photoshop to create a gif file.<br/>
-- To create a sprite sheet, use the website https://onlinegiftools.com/convert-gif-to-sprite-sheet to convert from gif. <br/>
+[[Game's graphics]](about_graphics.md)
 
 ### About the game's source code:
 
