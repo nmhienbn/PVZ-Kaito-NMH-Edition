@@ -93,6 +93,7 @@ enum ImageType
     STARTING_SCREEN_CLICKED_DIRECTORY,
     CHOOSE_LEVELS_DIRECTORY,
     LEVEL_BLINK_DIRECTORY,
+    BACKGROUND_LV0_DIRECTORY,
     BACKGROUND_LV1_DIRECTORY,
     BACKGROUND_LV2_DIRECTORY,
     BACKGROUND_DIRECTORY,
@@ -365,6 +366,8 @@ enum ImageType
 
     SHADOW_DIRECTORY,
     PEA_SHADOW_DIRECTORY,
+    SOD_ROLL,
+    SOD_ROLL_CAP,
 
     COUNT_USED_DIRECTORY
 };
@@ -450,6 +453,7 @@ const Image all_img[] = {
     Image("./image/Background/Starting_Screen_clicked.png"), // STARTING_SCREEN_CLICKED_DIRECTORY
     Image("./image/Background/Choose_levels.png"),           // CHOOSE_LEVELS_DIRECTORY
     Image("./image/Background/level_blink.png"),             // LEVEL_BLINK_DIRECTORY
+    Image("./image/Background/Frontyard_LV0.jpg"),           // BACKGROUND_LV0_DIRECTORY
     Image("./image/Background/Frontyard_LV1.png"),           // BACKGROUND_LV1_DIRECTORY
     Image("./image/Background/Frontyard_LV2.png"),           // BACKGROUND_LV2_DIRECTORY
     Image("./image/Background/Frontyard.png"),               // BACKGROUND_DIRECTORY
@@ -705,6 +709,9 @@ const Image all_img[] = {
 
     Image("./image/Shadow/plantshadow.png"), // SHADOW_DIRECTORY
     Image("./image/Shadow/pea_shadows.png"), // PEA_SHADOW_DIRECTORY
+
+    Image("./image/Background/SodRoll.png"),    // SOD_ROLL
+    Image("./image/Background/SodRollCap.png"), // SOD_ROLL_CAP
 
 };
 

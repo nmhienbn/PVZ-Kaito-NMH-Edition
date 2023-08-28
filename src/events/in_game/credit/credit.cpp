@@ -14,7 +14,20 @@ void review_playground(vector<Zombie *> &zombies, const int &i)
 {
     win.clear_renderer();
     // Background
-    win.draw_bg(level.background_directory, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
+    int bground = level.background_directory;
+    switch (level.level_num)
+    {
+    case 1:
+        bground = BACKGROUND_LV0_DIRECTORY;
+        break;
+    case 2:
+        bground = BACKGROUND_LV1_DIRECTORY;
+        break;
+    case 3:
+        bground = BACKGROUND_LV2_DIRECTORY;
+        break;
+    }
+    win.draw_bg(bground, i, 0); //, WINDOW_WIDTH, WINDOW_HEIGHT);
     // Zombies
     for (auto &zombie : zombies)
     {
@@ -91,6 +104,7 @@ void display_credit()
         {
             win.delete_texture(i);
         }
+    display_sod_roll();
     // ready - set - plant
     play_sound_effect(R_S_P_MUSIC_DIRECTORY);
     for (int clk = 0; clk <= 180; clk++)
@@ -120,5 +134,64 @@ void display_credit()
                 set_status(game_state, IS_PAUSED, true);
                 Mix_PauseMusic();
                 Mix_Pause(-1););)
+    }
+}
+
+void sod_roll(int row, int pos, int clk)
+{
+    int sod_width = max(45 * (180 - clk) / 180, 20);
+    int cap_width = sod_width + 4;
+    if (pos >= 255 && pos <= 975)
+    {
+        win.draw_png(SOD_ROLL, pos - sod_width / 2, cells[row][0].y1 - 5, sod_width, cells[row][0].y2 - cells[row][0].y1 + 10);
+        win.draw_png(SOD_ROLL_CAP, pos - cap_width / 2, cells[row][0].y2 - cap_width / 2, cap_width, cap_width, 8 * clk);
+    }
+}
+
+void display_sod_roll()
+{
+    if (level.level_num <= 3)
+    {
+        int now_bg = BACKGROUND_DIRECTORY;
+        if (level.level_num == 1)
+        {
+            now_bg = BACKGROUND_LV1_DIRECTORY;
+        }
+        else if (level.level_num == 2)
+        {
+            now_bg = BACKGROUND_LV2_DIRECTORY;
+        }
+        for (int clk = 0; clk <= 180; clk++)
+        {
+            win.clear_renderer();
+            int pos = WINDOW_WIDTH * clk / 180;
+            win.draw_png(now_bg,
+                         0, 0, pos, WINDOW_HEIGHT,
+                         0, 0, pos, WINDOW_HEIGHT);
+            win.draw_png(now_bg - 1,
+                         pos, 0, WINDOW_WIDTH - pos, WINDOW_HEIGHT,
+                         pos, 0, WINDOW_WIDTH - pos, WINDOW_HEIGHT);
+            if (level.level_num == 1)
+            {
+                sod_roll(2, pos, clk);
+            }
+            else if (level.level_num == 2)
+            {
+                sod_roll(1, pos, clk);
+                sod_roll(3, pos, clk);
+            }
+            else
+            {
+                sod_roll(0, pos, clk);
+                sod_roll(4, pos, clk);
+            }
+            win.update_screen();
+            HANDLE_SDL_EVENT(
+                QUIT();
+                LOST_FOCUS(
+                    set_status(game_state, IS_PAUSED, true);
+                    Mix_PauseMusic();
+                    Mix_Pause(-1););)
+        }
     }
 }
