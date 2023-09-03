@@ -137,10 +137,13 @@ void display_credit()
     }
 }
 
+/*
+Draw sod roll and sod roll cap
+*/
 void sod_roll(int row, int pos, int clk)
 {
-    int sod_width = max(45 * (180 - clk) / 180, 20);
-    int cap_width = sod_width + 4;
+    int sod_width = 30 + 40 * (180 - clk) / 180;
+    int cap_width = sod_width + 2;
     if (pos >= 255 && pos <= 975)
     {
         win.draw_png(SOD_ROLL, pos - sod_width / 2, cells[row][0].y1 - 5, sod_width, cells[row][0].y2 - cells[row][0].y1 + 10);
@@ -148,6 +151,9 @@ void sod_roll(int row, int pos, int clk)
     }
 }
 
+/*
+Display sod roll's positions base on level
+*/
 void display_sod_roll()
 {
     if (level.level_num <= 3)

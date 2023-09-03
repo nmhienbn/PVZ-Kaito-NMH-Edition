@@ -4,4 +4,5 @@
 
 void init_game();
 
+void display_loading_screen();
 void display_starting_screen();

@@ -182,7 +182,7 @@ Load & draw with scale: height = width * mHeight / mWidth
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
 */
-void window::draw_png_scale(int file_num, int x, int y, int width, int height)
+void window::draw_png_scale(int file_num, int x, int y, int width, int height, int angle)
 {
     if (file_num == NULL_DIRECTORY || width <= 0)
         return;
@@ -191,7 +191,7 @@ void window::draw_png_scale(int file_num, int x, int y, int width, int height)
     // get width, height
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     SDL_Rect r = {x, y, width, width * mHeight / mWidth};
-    SDL_RenderCopy(renderer, res, NULL, &r);
+    SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
 }
 
 /*
@@ -245,14 +245,14 @@ Load & draw with scale: from source SDL_Rect(sx, sy, sw, sh) to destination SDL_
     Load: Texture
     Draw: SDL_RenderCopy
 */
-void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
+void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip)
 {
     if (file_num == NULL_DIRECTORY || sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0)
         return;
     SDL_Texture *res = load_texture(file_num);
     SDL_Rect src = {sx, sy, sw, sh};
     SDL_Rect dst = {dx, dy, dw, sh * dw / sw};
-    SDL_RenderCopy(renderer, res, &src, &dst);
+    SDL_RenderCopyEx(renderer, res, &src, &dst, 0, NULL, flip);
 }
 
 /*

@@ -130,6 +130,7 @@ bool Pea::apply_hitting_zombie(Zombie &zombie, vector<ZombiePart> &zombie_parts)
         {
             directory_num++; // Make the pea explode
             explode = PEA_EXPLODE_TIME;
+            angle = rand(0, 360);
         }
         // Attack zombie
         if (zombie.decrease_health(zombie_parts))
@@ -202,7 +203,7 @@ void Pea::display()
         directory_num == SNOWZ_PEA_EXPLODE_DIRECTORY)
         more_px += 25;
     win.draw_png_scale(directory_num, x_location - more_px / 2, y_location - more_px / 2,
-                       pea_width + more_px, pea_height + more_px);
+                       pea_width + more_px, pea_height + more_px, angle);
 }
 
 /*

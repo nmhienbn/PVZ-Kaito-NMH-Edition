@@ -90,7 +90,11 @@ enum ImageType
     SNOWZ_PEA_EXPLODE_DIRECTORY,
 
     STARTING_SCREEN_DIRECTORY,
-    STARTING_SCREEN_CLICKED_DIRECTORY,
+    LOAD_BAR_DIRT_DIRECTORY,
+    LOAD_BAR_GRASS_DIRECTORY,
+    LOAD_BAR_SPROUT_DIRECTORY,
+    LOAD_BAR_ZOMBIEHEAD_DIRECTORY,
+
     CHOOSE_LEVELS_DIRECTORY,
     LEVEL_BLINK_DIRECTORY,
     BACKGROUND_LV0_DIRECTORY,
@@ -449,17 +453,21 @@ const Image all_img[] = {
     Image("./image/Bullets/Snowz_pea/snowz_pea.png"),         // SNOWZ_PEA_DIRECTORY
     Image("./image/Bullets/Snowz_pea/snowz_pea_explode.png"), // SNOWZ_PEA_EXPLODE_DIRECTORY
 
-    Image("./image/Background/Starting_Screen.png"),         // STARTING_SCREEN_DIRECTORY
-    Image("./image/Background/Starting_Screen_clicked.png"), // STARTING_SCREEN_CLICKED_DIRECTORY
-    Image("./image/Background/Choose_levels.png"),           // CHOOSE_LEVELS_DIRECTORY
-    Image("./image/Background/level_blink.png"),             // LEVEL_BLINK_DIRECTORY
-    Image("./image/Background/Frontyard_LV0.jpg"),           // BACKGROUND_LV0_DIRECTORY
-    Image("./image/Background/Frontyard_LV1.png"),           // BACKGROUND_LV1_DIRECTORY
-    Image("./image/Background/Frontyard_LV2.png"),           // BACKGROUND_LV2_DIRECTORY
-    Image("./image/Background/Frontyard.png"),               // BACKGROUND_DIRECTORY
-    Image("./image/Background/Frontyard_night.png"),         // BACKGROUND_NIGHT_DIRECTORY
-    Image("./image/Background/ZombiesWon.png"),              // LOSING_MESSAGE_DIRECTORY
-    Image("./image/Background/Winning_Pic.png"),             // WINNING_MESSAGE_DIRECTORY
+    Image("./image/Background/titlescreen.png"),                        // STARTING_SCREEN_DIRECTORY
+    Image("./image/Background/loadbar/LoadBar_dirt.png"),               // LOAD_BAR_DIRT_DIRECTORY
+    Image("./image/Background/loadbar/LoadBar_grass.png"),              // LOAD_BAR_GRASS_DIRECTORY
+    Image("./image/Background/loadbar/LoadBar_sprout.png", 18, 18),     // LOAD_BAR_SPROUT_DIRECTORY
+    Image("./image/Background/loadbar/LoadBar_zombiehead.png", 18, 18), // LOAD_BAR_ZOMBIEHEAD_DIRECTORY
+
+    Image("./image/Background/Choose_levels.png"),   // CHOOSE_LEVELS_DIRECTORY
+    Image("./image/Background/level_blink.png"),     // LEVEL_BLINK_DIRECTORY
+    Image("./image/Background/Frontyard_LV0.jpg"),   // BACKGROUND_LV0_DIRECTORY
+    Image("./image/Background/Frontyard_LV1.png"),   // BACKGROUND_LV1_DIRECTORY
+    Image("./image/Background/Frontyard_LV2.png"),   // BACKGROUND_LV2_DIRECTORY
+    Image("./image/Background/Frontyard.png"),       // BACKGROUND_DIRECTORY
+    Image("./image/Background/Frontyard_night.png"), // BACKGROUND_NIGHT_DIRECTORY
+    Image("./image/Background/ZombiesWon.png"),      // LOSING_MESSAGE_DIRECTORY
+    Image("./image/Background/Winning_Pic.png"),     // WINNING_MESSAGE_DIRECTORY
 
     Image("./image/Icons/sun.png"),                    // SUN_DIRECTORY
     Image("./image/Icons/sun_bar.png"),                // SUN_BAR_DIRECTORY

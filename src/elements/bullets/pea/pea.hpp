@@ -12,6 +12,7 @@ private:
     int directory_num;
     int explode;
     int pea_width, pea_height;
+    int angle;
 
     bool has_reached_zombie(const Zombie &zombie);
 

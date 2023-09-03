@@ -23,7 +23,7 @@ void display_button(const Button &button, const int &button_directory);
 void display_level_is_locked(const Button &button);
 
 const Button Shovel_bar(ICON_BAR_X1, ICON_BAR_X1 + 75, 500, 575);
-const Button TAP_TO_START(230, 796, 520, 585);
+const Button TAP_TO_START(204, 846, 490, 596);
 
 #define LEVEL_COUNT 12
 const Button LEVEL_BUTTON[] = {
