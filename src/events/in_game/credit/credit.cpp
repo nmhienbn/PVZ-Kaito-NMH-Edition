@@ -142,7 +142,7 @@ Draw sod roll and sod roll cap
 */
 void sod_roll(int row, int pos, int clk)
 {
-    int sod_width = 30 + 40 * (180 - clk) / 180;
+    int sod_width = 10 + 45 * (180 - clk) / 180;
     int cap_width = sod_width + 2;
     if (pos >= 255 && pos <= 975)
     {

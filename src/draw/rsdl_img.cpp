@@ -200,7 +200,7 @@ Load & draw in the center of window
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
 */
-void window::draw_png_center(int file_num)
+void window::draw_png_center(int file_num, double ratio)
 {
     if (file_num == NULL_DIRECTORY)
         return;
@@ -208,6 +208,8 @@ void window::draw_png_center(int file_num)
     int mWidth = 0, mHeight = 0;
     // get width, height
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
+    mWidth = mWidth * ratio;
+    mHeight = mHeight * ratio;
     SDL_Rect r = {(WINDOW_WIDTH - mWidth) >> 1, (WINDOW_HEIGHT - mHeight) >> 1, mWidth, mHeight};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }

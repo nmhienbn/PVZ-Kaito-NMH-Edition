@@ -69,7 +69,7 @@ public:
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);
 	void draw_png_scale(int file_num, int x, int y, int width, int height, int angle = 0);
-	void draw_png_center(int file_num);
+	void draw_png_center(int file_num, double ratio = 1.0);
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void draw_bg(int file_num, int x = 0, int y = 0);

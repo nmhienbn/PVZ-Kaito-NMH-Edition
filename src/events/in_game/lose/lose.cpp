@@ -12,8 +12,14 @@ If player lose, display this.
 void display_losing_message()
 {
     set_status(game_state, IS_PAUSED, true);
-    win.draw_bg(level.background_directory);
-    display_game_paused_elements();
+    for (int clk = 1; clk <= 120; clk++)
+    {
+        win.draw_bg(level.background_directory);
+        display_game_paused_elements();
+        win.draw_png_center(LOSING_MESSAGE_DIRECTORY, double(clk) / 120);
+        win.update_screen();
+        HANDLE_SDL_EVENT(QUIT(););
+    }
     win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
     win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
 }
@@ -40,8 +46,8 @@ Handle when player lose:
 void display_lose()
 {
     // Display losing message.
-    display_losing_message();
     play_music(LOSE_MUSIC_DIRECTORY, 0);
+    display_losing_message();
     CONTINUE.blink();
     win.update_screen();
     HANDLE_SDL_EVENT(
