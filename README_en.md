@@ -47,9 +47,8 @@ Some notes: <br/>
 **Step 5:** Run pvz.exe and start playing.
 
 # 1. Starting the game
-Click on the "CLICK TO START!" button to start playing the game.
-
-![image](https://user-images.githubusercontent.com/65478890/235644003-664c5a3f-65e3-4f55-a308-1388f379226f.png)
+Wait a few seconds and then click on the "CLICK TO START!" button to start playing the game.
+![ezgif com-video-to-gif](https://github.com/nmhienbn/PVZ-Kaito-NMH-Edition/assets/65478890/5177b26c-74aa-4100-834d-1886ea53460f)
 
 When entering the game for the first time, players should enter their name to start the game. Then click "OK" or press Enter to continue.
 
