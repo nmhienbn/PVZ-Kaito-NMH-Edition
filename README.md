@@ -1,6 +1,6 @@
 [[English]](README_en.md)
 # Plants Versus Zombie - Kaito-NMH-Edition
-- Thử nghiệm game: https://youtu.be/EyTwTOWr5zU
+- Thử nghiệm game: [https://youtu.be/EyTwTOWr5zU](https://youtu.be/EziCb7U9UbU)
 - Phá đảo game: https://youtu.be/0RQHeCaz4sg
 
 # Giới thiệu game
