@@ -3,6 +3,16 @@ Game animations cost me a 2/3 time making the game.<br/>
 
 # For pvz 1 sprite sheets:
 download .fla files here: https://drive.google.com/file/d/1zztUOZWna5Hy2xI3tju1d7Hjtp59J4dI/view
+Zombie.fla:
+	credit1: 1-22
+	credit2: 23-44
+	walk1: 45-91
+	walk2: 92-138
+	walk3 (exactly dance): 455-504
+	eat: 139-178
+	die1: 179-217
+	die2: 218-250
+	die3: 293-429
 
 # For pvz 2: 
 
@@ -21,9 +31,10 @@ Simple Sprite Splitter Tool: split texture to images<br/>
 
 # Make GIF
 Now we get the .fla files<br/>
-Open .fla by Adobe Animate<br/>
+Open .fla by Adobe Animate and you can export them to GIFs<br/>
 
 For .fla pvz 2: get the texture decomposited into many images, then copy them to library of the .fla. After that, copy all layers from Object A_main to the main. Then hide the animation layer. delete all costume if necessary. export to gif and enjoy.
 
 # Make sprite sheets from GIFs
 To create a sprite sheet, use the website https://onlinegiftools.com/convert-gif-to-sprite-sheet to convert from gif.
+_blink, _cold files created by photoshop
