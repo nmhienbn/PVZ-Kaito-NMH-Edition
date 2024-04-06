@@ -1,23 +1,22 @@
 #pragma once
-#include "music/music.hpp"
 #include "draw/rsdl.hpp"
-#include "game_stats.hpp"
 #include "elements/Map/Map.hpp"
+#include "game_stats.hpp"
+#include "music/music.hpp"
 
-#define ZOMBIE_FRAME 3
-#define ZOMBIE_EXACT_LOCATION 70
-#define ZOMBIE_WIDTH 166
-#define ZOMBIE_HEIGHT 144
+extern const int ZOMBIE_FRAME;
+extern const int ZOMBIE_EXACT_LOCATION;
+extern const int ZOMBIE_WIDTH;
+extern const int ZOMBIE_HEIGHT;
 
-#define ZOMBIE_EATING_FRAME 10
+extern const int ZOMBIE_EATING_FRAME;
+extern const int ZOMBIE_DIE_FRAME;
+extern const int ZOMBIE_BURNT_FRAME;
 
-#define ZOMBIE_DIE_FRAME 4
-#define ZOMBIE_BURNT_FRAME 6
-#define DEAD_ZOMBIE_FRAMES 12
-
-#define HEAD_ZOMBIE_FRAME 6
-#define HEAD_ZOMBIE_WIDTH 125
-#define HEAD_ZOMBIE_HEIGHT 156
+extern const int HEAD_ZOMBIE_FRAME;
+extern const int HEAD_ZOMBIE_WIDTH;
+extern const int HEAD_ZOMBIE_HEIGHT;
+extern const int ARM_ZOMBIE_FRAME;
 
 class ZombiePart
 {

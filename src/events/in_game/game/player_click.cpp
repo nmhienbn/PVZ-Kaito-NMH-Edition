@@ -92,7 +92,7 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     if (level.level_num < level_unlock_new_plant[i])
         return;
     is_a_plant_chosen = false;
-    if (player.sun_count < plant_sun_cost[i])
+    if (player.sun_count < PLANT_SUN_COST[i])
     {
         // not enough sun
         remove_chosen_plant();
@@ -204,9 +204,9 @@ template <class Plant_type>
 void plant_new_plant(const int &type, const int &row, const int &col)
 {
     icons.chosen_plant = PLANT_COUNT;
-    icons.plant_remaining_time[type] = plant_loading_time[type];
+    icons.plant_remaining_time[type] = PLANT_LOADING_TIME[type];
     game_characters.plants.push_back(new Plant_type(row, col));
-    player.sun_count -= plant_sun_cost[type];
+    player.sun_count -= PLANT_SUN_COST[type];
     cells[row][col].is_planted = 1;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }

@@ -3,62 +3,80 @@ This file contains the game parameter.
 Change this to make game more beautiful, faster or easier, harder or easier.
 */
 #pragma once
-#include <iostream>
-#include <vector>
-#include <set>
-#include <string>
 #include <fstream>
+#include <iostream>
+#include <set>
 #include <stdlib.h>
+#include <string>
 #include <time.h>
+#include <vector>
 using namespace std;
 
-#define INF 1000000000
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+// WINDOW size
+extern const int WINDOW_WIDTH;
+extern const int WINDOW_HEIGHT;
+
+// Playground elements size
+extern const int BLOCK_WIDTH;
+extern const int BLOCK_HEIGHT;
+extern const int HORIZ_BLOCK_COUNT;
+extern const int VERT_BLOCK_COUNT;
+
+extern const int X_UPPER_LEFT;
+extern const int Y_UPPER_LEFT;
+
+extern const int ELEMENT_WIDTH;
+extern const int ELEMENT_HEIGHT;
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Speed properties: increase or decrease the following 9 define values to speed up or speed down entities in the game
-// CLK meaning : clock
-#define FPS 60
-#define ticks_per_frame 1000 / FPS
+extern const int FPS;
+// ticks per frame
+extern const int TICKS_PER_FRAME;
+// Sun from sky frequency
+extern const int SUN_GEN_SKY_CLK_COUNT;
+// Sun from sunflower frequency
+extern const int SUN_GEN_SUNFLOWER_CLK_COUNT;
+// Time appear of first wave of zombies
+extern const int FIRST_WAVE_CLK_COUNT;
+// Time between zombies' different groups
+extern const int ZOMBIE_CREATE_CLK_COUNT;
+// Zombie bite plant frequency
+extern const int BITE_CLK_COUNT;
+// Zombie moving frequency
+extern const int ZOMBIE_CLK_COUNT;
 
-#define SUN_GEN_SKY_CLK_COUNT 1500       // Sun from sky frequency
-#define SUN_GEN_SUNFLOWER_CLK_COUNT 1440 // Sun from sunflower frequency
-#define FIRST_WAVE_CLK_COUNT 900         // Time appear of first wave of zombies
-#define ZOMBIE_CREATE_CLK_COUNT 2000     // Time between zombies' different groups
-#define BITE_CLK_COUNT 30                // Zombie bite plant frequency
-#define ZOMBIE_CLK_COUNT 4               // Zombie moving frequency
-#define ANNOUNCER_CLK_COUNT 180
-#define SUN_CHANGE_COLOR_CLK_COUNT 6
+// Announcer appear time
+extern const int ANNOUNCER_CLK_COUNT;
+// Sun change color frequency
+extern const int SUN_CHANGE_COLOR_CLK_COUNT;
+// Max time blink when attack
+extern const int MAX_TIME_BLINK;
+// Max time being cold (10s)
+extern const int MAX_COLD_TIME;
+// Max time that a sun can appear
+extern const int SUN_APPEAR_LIMIT;
 
-#define PEASHOOTER_LOADING 450  // Peashooter loading
-#define SUNFLOWER_LOADING 450   // Sunflower loading
-#define WALNUT_LOADING 1800     // Walnut loading
-#define SNOWPEA_LOADING 450     // SnowPea loading
-#define CHERRYBOMB_LOADING 6000 // Cherrybomb loading
-#define MAX_TIME_BLINK 10       // time blink when attack
-#define MAX_COLD_TIME 600       // time being cold = 10s
-#define SUN_APPEAR_LIMIT 600    // Max time that a sun can appear.
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+// Initial sun count and normal sun value
+extern const int INIT_SUN_COUNT;
+extern const int NORMAL_SUN_VALUE;
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-// Alter the 4 define values bellow to increase or decrease the price of plants and the initial sun count
-#define INIT_SUN_COUNT 100
-#define NORMAL_SUN_VALUE 50
-#define PEASHOOTER_PRICE 100
-#define SUNFLOWER_PRICE 50
-#define WALNUT_PRICE 50
-#define SNOWPEA_PRICE 150
-#define CHERRYBOMB_PRICE 150
+extern const int INF;
+
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 /*
 Moving speed of some elements
 */
-#define ZOMBIE_INIT_X WINDOW_WIDTH
-#define ZOMBIE_DX 1
-#define ZOMBIE_COLD_DX 2
-#define PEA_DX 10
-#define SUN_DY 1
-#define CLICKED_SUN_D 50
+extern const int ZOMBIE_INIT_X;
+extern const int ZOMBIE_DX;
+extern const int ZOMBIE_COLD_DX;
+extern const int PEA_DX;
+extern const int SUN_DY;
+extern const int CLICKED_SUN_D;
 
 enum PlantType
 {
@@ -83,43 +101,11 @@ enum ZombieType
     COUNT_ZOMBIE_TYPE,
 };
 
-/*Health of plants*/
-const int PLANT_HEALTH_LIMIT[] = {
-    6,   // SUNFLOWER
-    6,   // PEASHOOTER
-    72,  // WALNUT
-    6,   // SNOWPEA
-    9999 // CHERRYBOMB
+extern const vector<int> PLANT_SUN_COST;
+extern const vector<int> PLANT_LOADING_TIME;
+extern const vector<int> PLANT_HEALTH_LIMIT;
 
-};
-
-/*Health of zombies*/
-const set<int> ZOMBIE_HEALTH_LIMIT[] = {
-    {5, 10},             // NORMAL
-    {3, 6, 9, 12},       // FLAG
-    {5, 10, 16, 22, 28}, // CONE
-    {5, 10, 25, 45, 65}, // BUCKET
-    {5, 10, 25, 45, 65}  // DOOR
-
-};
-
-/*
-WINDOW size
-*/
-#define WINDOW_WIDTH 1050
-#define WINDOW_HEIGHT 600
-
-/*Playground elements size*/
-#define BLOCK_WIDTH 81
-#define BLOCK_HEIGHT 101
-#define HORIZ_BLOCK_COUNT 9
-#define VERT_BLOCK_COUNT 5
-
-#define X_UPPER_LEFT 250
-#define Y_UPPER_LEFT 70
-
-#define ELEMENT_WIDTH 90
-#define ELEMENT_HEIGHT 90
+extern const vector<set<int>> ZOMBIE_HEALTH_LIMIT;
 
 enum Game_State
 {

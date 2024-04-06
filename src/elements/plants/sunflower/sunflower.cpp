@@ -1,10 +1,11 @@
 #include "sunflower.hpp"
-#define SUNFLOWER_WIDTH 90
-#define SUNFLOWER_HEIGHT 100
-#define SUNFLOWER_FRAME 2
 
-#define SUNFLOWER_G_WIDTH 90
-#define SUNFLOWER_G_HEIGHT 100
+static ifstream f("./image/json/sunflower.json");
+json sunflower_data = json::parse(f);
+
+auto SUNFLOWER_ASSET = PlantAssets(sunflower_data["frame"], sunflower_data["img_width"], sunflower_data["img_height"],
+                                   sunflower_data["game_width"], sunflower_data["game_height"],
+                                   sunflower_data["x_alias"], sunflower_data["y_alias"]);
 
 extern int game_state;
 extern Map cells;
@@ -37,7 +38,7 @@ Sunflower::~Sunflower()
 */
 bool Sunflower::is_gen_sun()
 {
-    return directory_num == SUNFLOWER_HAPPY_DIRECTORY && frame == 30 * SUNFLOWER_FRAME;
+    return directory_num == SUNFLOWER_HAPPY_DIRECTORY && frame == 30 * SUNFLOWER_ASSET.frame;
 }
 
 /*
@@ -67,7 +68,7 @@ void Sunflower::determine_appearance()
             }
         }
     }
-    if (frame >= SUNFLOWER_FRAME * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
+    if (frame >= SUNFLOWER_ASSET.frame * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
     {
         frame = 0;
     }
@@ -106,36 +107,6 @@ Display sunflower in row
 */
 void Sunflower::display(const int &_row)
 {
-
     if (row == _row)
-    {
-        // current frame
-        int sframe = frame / SUNFLOWER_FRAME;
-        // current column in source image
-        int scol = sframe % all_img[SUNFLOWER_SHEET_DIRECTORY].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[SUNFLOWER_SHEET_DIRECTORY].c_sheet;
-        // Sunflower
-        win.draw_png(directory_num, SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
-                     SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
-                     cells[row][col].x1 - 3, cells[row][col].y1 - 11,
-                     SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-        // Blink
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num],
-                         SUNFLOWER_WIDTH * scol, SUNFLOWER_HEIGHT * srow,
-                         SUNFLOWER_WIDTH, SUNFLOWER_HEIGHT,
-                         cells[row][col].x1 - 3, cells[row][col].y1 - 11,
-                         SUNFLOWER_G_WIDTH, SUNFLOWER_G_HEIGHT);
-            if (check_status(game_state, IS_PAUSED) == false)
-                attacked_time--;
-        }
-        // Next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-            if (++frame >= SUNFLOWER_FRAME * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
-            {
-                frame = 0;
-            }
-    }
+        Plants::display(SUNFLOWER_ASSET);
 }

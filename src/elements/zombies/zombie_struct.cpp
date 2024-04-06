@@ -1,10 +1,26 @@
 #include "zombie_struct.hpp"
+#include <nlohmann/json.hpp>
+using namespace nlohmann;
+
+static ifstream f("./image/json/zombie.json");
+static json zombie = json::parse(f);
+
+extern const int ZOMBIE_FRAME = zombie["zombie_frame"];
+extern const int ZOMBIE_EXACT_LOCATION = zombie["zombie_exact_location"];
+extern const int ZOMBIE_WIDTH = zombie["zombie_width"];
+extern const int ZOMBIE_HEIGHT = zombie["zombie_height"];
+
+extern const int ZOMBIE_EATING_FRAME = zombie["zombie_eating_frame"];
+extern const int ZOMBIE_DIE_FRAME = zombie["zombie_die_frame"];
+extern const int ZOMBIE_BURNT_FRAME = zombie["zombie_burnt_frame"];
+
+extern const int HEAD_ZOMBIE_FRAME = zombie["head_zombie_frame"];
+extern const int HEAD_ZOMBIE_WIDTH = zombie["head_zombie_width"];
+extern const int HEAD_ZOMBIE_HEIGHT = zombie["head_zombie_height"];
 
 extern int game_state;
 extern Map cells;
 extern window win;
-
-#define ARM_FRAME 1
 
 /*Zombie constructor.
  */

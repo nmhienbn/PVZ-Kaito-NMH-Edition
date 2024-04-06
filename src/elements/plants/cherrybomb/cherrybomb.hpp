@@ -1,7 +1,4 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "music/music.hpp"
-#include "elements/zombies/zombie_struct.hpp"
 #include "../plants.hpp"
 
 class CherryBomb : public Plants
@@ -18,4 +15,5 @@ public:
                               vector<ZombiePart> &zombie_parts);
     void hit_all_zombies(vector<Zombie *> &zombies,
                          vector<ZombiePart> &zombie_parts);
+    void next_frame(const PlantAssets &assets);
 };

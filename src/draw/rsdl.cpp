@@ -1,5 +1,5 @@
-#include <iostream>
 #include "rsdl.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -59,7 +59,7 @@ void window::update_screen()
 {
     SDL_RenderPresent(renderer);
     int now_time = SDL_GetTicks() - previous_time;
-    int delay_time = std::max(5, ticks_per_frame - now_time);
+    int delay_time = std::max(5, TICKS_PER_FRAME - now_time);
     DELAY(delay_time);
     previous_time = SDL_GetTicks();
 }

@@ -1,9 +1,11 @@
 #include "snowpea.hpp"
-#define SNOWPEA_FRAME 4
-#define SNOWPEA_WIDTH 115
-#define SNOWPEA_HEIGHT 98
-#define SNOWPEA_G_WIDTH 115
-#define SNOWPEA_G_HEIGHT 98
+
+static ifstream f("./image/json/snowpea.json");
+json snowpea_data = json::parse(f);
+
+auto SNOWPEA_ASSET = PlantAssets(snowpea_data["frame"], snowpea_data["img_width"], snowpea_data["img_height"],
+                                 snowpea_data["game_width"], snowpea_data["game_height"],
+                                 snowpea_data["x_alias"], snowpea_data["y_alias"]);
 
 extern int game_state;
 extern Map cells;
@@ -36,7 +38,7 @@ Create new pea from a snow pea.
 */
 void Snowpea::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
 {
-    if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_FRAME)
+    if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
         Pea temp(2, row, cells[row][col].x2 - 10);
@@ -82,33 +84,5 @@ Display snow pea in row
 void Snowpea::display(const int &_row)
 {
     if (row == _row)
-    {
-        // current frame
-        int sframe = frame / SNOWPEA_FRAME;
-        // current column in source image
-        int scol = sframe % all_img[directory_num].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[directory_num].c_sheet;
-        // Snow Pea
-        win.draw_png(directory_num, SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
-                     SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                     cells[row][col].x1 - 10, cells[row][col].y1 - 5,
-                     SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-        // Blink
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num], SNOWPEA_WIDTH * scol, SNOWPEA_HEIGHT * srow,
-                         SNOWPEA_WIDTH, SNOWPEA_HEIGHT,
-                         cells[row][col].x1 - 10, cells[row][col].y1 - 5,
-                         SNOWPEA_G_WIDTH, SNOWPEA_G_HEIGHT);
-            if (check_status(game_state, IS_PAUSED) == false)
-                attacked_time--;
-        }
-        // Next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-            if (++frame >= SNOWPEA_FRAME * all_img[directory_num].n_sheet)
-            {
-                frame = 0;
-            }
-    }
+        Plants::display(SNOWPEA_ASSET);
 }

@@ -1,7 +1,6 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/sun/sun.hpp"
 #include "../plants.hpp"
+#include "elements/sun/sun.hpp"
 
 class Sunflower : public Plants
 {

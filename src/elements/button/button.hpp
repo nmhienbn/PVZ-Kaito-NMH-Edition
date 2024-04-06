@@ -2,8 +2,8 @@
 This file contain in-game rectangles with their x1,x2,y1,y2
 */
 #pragma once
-#include "game_stats.hpp"
 #include "draw/rsdl.hpp"
+#include "game_stats.hpp"
 #define ICON_BAR_X1 20
 #define ICON_BAR_WIDTH 120
 #define ICON_WIDTH 105
@@ -52,8 +52,6 @@ const Button plant_seed[] = {
     {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 380, 380 + ICON_HEIGHT}, // Cherry Bomb
 
 };
-const int plant_sun_cost[] = {100, 50, 50, 150, 150};
-const int plant_loading_time[] = {400, 350, 1300, 350, 2000};
 
 const Button ICON_BAR_LV[] = {
     {20, 125, 100, 170},

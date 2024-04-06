@@ -1,9 +1,11 @@
 #include "walnut.hpp"
-#define WALNUT_WIDTH 68
-#define WALNUT_HEIGHT 84
-#define WALNUT_G_WIDTH 68
-#define WALNUT_G_HEIGHT 84
-#define WALNUT_FRAME 6
+
+static ifstream f("./image/json/walnut.json");
+json walnut_data = json::parse(f);
+
+auto WALNUT_ASSET = PlantAssets(walnut_data["frame"], walnut_data["img_width"], walnut_data["img_height"],
+                                walnut_data["game_width"], walnut_data["game_height"],
+                                walnut_data["x_alias"], walnut_data["y_alias"]);
 
 extern int game_state;
 extern Map cells;
@@ -44,7 +46,7 @@ void Walnut::determine_appearance()
         if (health <= PLANT_HEALTH_LIMIT[WALNUT_TYPE] * i / 5)
         {
             directory_num = WALNUT_1_DIRECTORY + 5 - i;
-            if (frame >= WALNUT_FRAME * all_img[directory_num].n_sheet)
+            if (frame >= WALNUT_ASSET.frame * all_img[directory_num].n_sheet)
             {
                 frame = 0;
             }
@@ -61,34 +63,6 @@ void Walnut::display(const int &_row)
     if (row == _row)
     {
         determine_appearance();
-        // current frame
-        int sframe = frame / WALNUT_FRAME;
-        // current row in source image
-        int srow = sframe / all_img[directory_num].c_sheet;
-        // current column in source image
-        int scol = sframe % all_img[directory_num].c_sheet;
-        // Wall-nut
-        win.draw_png(directory_num, WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
-                     WALNUT_WIDTH, WALNUT_HEIGHT,
-                     cells[row][col].x1 + 5, cells[row][col].y1 + 3,
-                     WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
-        // Blink
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num], WALNUT_WIDTH * scol, WALNUT_HEIGHT * srow,
-                         WALNUT_WIDTH, WALNUT_HEIGHT,
-                         cells[row][col].x1 + 5, cells[row][col].y1 + 3,
-                         WALNUT_G_WIDTH, WALNUT_G_HEIGHT);
-            if (check_status(game_state, IS_PAUSED) == false)
-                attacked_time--;
-        }
-        // Next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-        {
-            if (++frame >= WALNUT_FRAME * all_img[directory_num].n_sheet)
-            {
-                frame = 0;
-            }
-        }
+        Plants::display(WALNUT_ASSET);
     }
 }

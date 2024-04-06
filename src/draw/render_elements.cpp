@@ -144,7 +144,7 @@ void display_icons_in_icon_bar()
     for (int i = 0; i <= num_plants; i++)
     {
         // Not enough sun or is chosen
-        if (player.sun_count < plant_sun_cost[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
+        if (player.sun_count < PLANT_SUN_COST[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
         {
             plant_seed_dir[i]++;
         }
@@ -160,7 +160,7 @@ void display_icons_in_icon_bar()
         {
             // Remaining time
             win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
-                         icons.plant_remaining_time[i] * ICON_HEIGHT / plant_loading_time[i]);
+                         icons.plant_remaining_time[i] * ICON_HEIGHT / PLANT_LOADING_TIME[i]);
         }
         win.show_text_shadowed(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
     }

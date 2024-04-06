@@ -21,13 +21,13 @@ INCS =
 SRC = $(call rwildcard,src,*.cpp)
 #NODIR_SRC = $(notdir $(SRC))
 OBJS = $(addprefix $(DIR_OBJ)/, $(SRC:cpp=o)) # obj/xxx.o obj/folder/xxx .o
-INC_DIRS = -Isrc -I$(SDL2_path)\include\SDL2 -I.\src
+INC_DIRS = -Isrc -I$(SDL2_path)\include\SDL2 -I$(SDL2_path)\include -I.\src
 
 LIBS = 
 LIB_DIRS = 
 #* SDL flags
 LIB_DIRS += -L$(SDL2_path)\lib
-LIBS     += -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -mwindows
+LIBS     += -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer #-mwindows
 
 
 .PHONY: all 

@@ -1,9 +1,10 @@
 #include "cherrybomb.hpp"
-#define CHERRYBOMB_FRAME 5
-#define CHERRYBOMB_WIDTH 105
-#define CHERRYBOMB_HEIGHT 95
-#define CHERRYBOMB_G_WIDTH 105
-#define CHERRYBOMB_G_HEIGHT 95
+static ifstream f("./image/json/cherrybomb.json");
+json cherrybomb_data = json::parse(f);
+
+auto CHERRYBOMB_ASSET = PlantAssets(cherrybomb_data["frame"], cherrybomb_data["img_width"], cherrybomb_data["img_height"],
+                                    cherrybomb_data["game_width"], cherrybomb_data["game_height"],
+                                    cherrybomb_data["x_alias"], cherrybomb_data["y_alias"]);
 
 extern int game_state;
 extern Map cells;
@@ -51,7 +52,7 @@ bool CherryBomb::is_hit_zombie(Zombie &zombie)
 */
 bool CherryBomb::is_blow()
 {
-    return frame == CHERRYBOMB_FRAME * 22;
+    return frame == CHERRYBOMB_ASSET.frame * 22;
 }
 
 /*
@@ -59,7 +60,7 @@ bool CherryBomb::is_blow()
 */
 void CherryBomb::disappear()
 {
-    if (frame >= CHERRYBOMB_FRAME * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
+    if (frame >= CHERRYBOMB_ASSET.frame * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
     {
         health = 0;
     }
@@ -106,30 +107,11 @@ Display cherry bomb in row
 void CherryBomb::display(const int &_row)
 {
     if (row == _row)
-    {
-        // current frame
-        int sframe = frame / CHERRYBOMB_FRAME;
-        // current column in source image
-        int scol = sframe % all_img[directory_num].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[directory_num].c_sheet;
-        // Cherry Bomb
-        win.draw_png(directory_num, CHERRYBOMB_WIDTH * scol,
-                     CHERRYBOMB_HEIGHT * srow, CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
-                     cells[row][col].x1, cells[row][col].y1 + 5,
-                     CHERRYBOMB_G_WIDTH, CHERRYBOMB_G_HEIGHT);
-        // Blink
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num], CHERRYBOMB_WIDTH * scol, CHERRYBOMB_HEIGHT * srow,
-                         CHERRYBOMB_WIDTH, CHERRYBOMB_HEIGHT,
-                         cells[row][col].x1, cells[row][col].y1 + 5,
-                         CHERRYBOMB_G_WIDTH, CHERRYBOMB_G_HEIGHT);
-            if (check_status(game_state, IS_PAUSED) == false)
-                attacked_time--;
-        }
-        // Next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-            ++frame;
-    }
+        Plants::display(CHERRYBOMB_ASSET);
+}
+
+void CherryBomb::next_frame(const PlantAssets &assets)
+{
+    if (check_status(game_state, IS_PAUSED) == false)
+        ++frame;
 }

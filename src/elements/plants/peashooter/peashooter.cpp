@@ -1,9 +1,10 @@
 #include "peashooter.hpp"
-#define PEASHOOTER_FRAME 2
-#define PEASHOOTER_WIDTH 85
-#define PEASHOOTER_HEIGHT 81
-#define PEASHOOTER_G_WIDTH 85
-#define PEASHOOTER_G_HEIGHT 81
+static ifstream f("./image/json/peashooter.json");
+json peashooter_data = json::parse(f);
+
+auto PEASHOOTER_ASSET = PlantAssets(peashooter_data["frame"], peashooter_data["img_width"], peashooter_data["img_height"],
+                                    peashooter_data["game_width"], peashooter_data["game_height"],
+                                    peashooter_data["x_alias"], peashooter_data["y_alias"]);
 
 extern int game_state;
 extern Map cells;
@@ -36,7 +37,7 @@ Create new pea from a peashooter.
 */
 void Peashooter::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
 {
-    if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_FRAME)
+    if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
         Pea temp(1, row, cells[row][col].x2 - 10);
@@ -82,33 +83,5 @@ Display peashooters in row
 void Peashooter::display(const int &_row)
 {
     if (row == _row)
-    {
-        // current frame
-        int sframe = frame / PEASHOOTER_FRAME;
-        // current column in source image
-        int scol = sframe % all_img[directory_num].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[directory_num].c_sheet;
-        // Peashooter
-        win.draw_png(directory_num, PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
-                     PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
-                     cells[row][col].x1 + 5, cells[row][col].y1 + 5,
-                     PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
-        // Blink
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num], PEASHOOTER_WIDTH * scol, PEASHOOTER_HEIGHT * srow,
-                         PEASHOOTER_WIDTH, PEASHOOTER_HEIGHT,
-                         cells[row][col].x1 + 5, cells[row][col].y1 + 5,
-                         PEASHOOTER_G_WIDTH, PEASHOOTER_G_HEIGHT);
-            if (check_status(game_state, IS_PAUSED) == false)
-                attacked_time--;
-        }
-        // Next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-            if (++frame >= PEASHOOTER_FRAME * all_img[directory_num].n_sheet)
-            {
-                frame = 0;
-            }
-    }
+        Plants::display(PEASHOOTER_ASSET);
 }
