@@ -110,14 +110,14 @@ void display_logo()
     const int FADE_IN_TIME = 30;
     for (int clk = 0; clk <= FADE_IN_TIME; clk++)
     {
-        // Fade in starting screen
-        int alpha = 255 * clk / FADE_IN_TIME;
-        win.draw_bg(BLACK_SCREEN_DIRECTORY);
-        win.set_texture_alpha(STARTING_SCREEN_DIRECTORY, alpha);
-        win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        // Fade in loading bar
+        // Starting screen
+        win.draw_bg(STARTING_SCREEN_DIRECTORY);
+        // Fly in loading bar
         int dy = 490 + (WINDOW_HEIGHT - 490) * (FADE_IN_TIME - clk) / FADE_IN_TIME;
         win.draw_png(LOAD_BAR_DIRT_DIRECTORY, 204, dy, 642, 106);
+        // Update screen
+        HANDLE_SDL_EVENT(
+            QUIT(););
         win.update_screen();
     }
 }
