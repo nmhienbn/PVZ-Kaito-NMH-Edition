@@ -1,5 +1,5 @@
-#include <iostream>
 #include "rsdl.hpp"
+#include <iostream>
 using namespace std;
 
 /*
@@ -112,6 +112,12 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     {
         SDL_SetTextureAlphaMod(res, 120);
     }
+    else if (file_num == POPCAP_LOGO_DIRECTORY ||
+             file_num == EA_LOGO_DIRECTORY ||
+             file_num == STARTING_SCREEN_DIRECTORY)
+    {
+        SDL_SetTextureAlphaMod(res, 0);
+    }
 }
 
 /*
@@ -200,7 +206,7 @@ Load & draw in the center of window
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
 */
-void window::draw_png_center(int file_num, double ratio)
+void window::draw_png_center(int file_num, double ratio, int x1, int y1)
 {
     if (file_num == NULL_DIRECTORY)
         return;
@@ -210,7 +216,11 @@ void window::draw_png_center(int file_num, double ratio)
     SDL_QueryTexture(res, NULL, NULL, &mWidth, &mHeight);
     mWidth = mWidth * ratio;
     mHeight = mHeight * ratio;
-    SDL_Rect r = {(WINDOW_WIDTH - mWidth) >> 1, (WINDOW_HEIGHT - mHeight) >> 1, mWidth, mHeight};
+    if (x1 == -1)
+        x1 = (WINDOW_WIDTH - mWidth) >> 1;
+    if (y1 == -1)
+        y1 = (WINDOW_HEIGHT - mHeight) >> 1;
+    SDL_Rect r = {x1, y1, mWidth, mHeight};
     SDL_RenderCopy(renderer, res, NULL, &r);
 }
 

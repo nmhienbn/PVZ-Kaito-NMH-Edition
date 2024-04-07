@@ -43,7 +43,7 @@ public:
     void decrease_health();
     bool is_died();
     void display(const PlantAssets &assets);
-    void next_frame(const PlantAssets &assets);
+    virtual void next_frame(const PlantAssets &assets);
 };
 
 void delete_plant(vector<Plants *> &plants, int &ind);

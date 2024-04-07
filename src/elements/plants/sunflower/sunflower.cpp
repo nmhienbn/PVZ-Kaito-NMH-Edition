@@ -1,7 +1,7 @@
 #include "sunflower.hpp"
 
-static ifstream f("./image/json/sunflower.json");
-json sunflower_data = json::parse(f);
+static ifstream sunflower("./image/json/sunflower.json");
+json sunflower_data = json::parse(sunflower);
 
 auto SUNFLOWER_ASSET = PlantAssets(sunflower_data["frame"], sunflower_data["img_width"], sunflower_data["img_height"],
                                    sunflower_data["game_width"], sunflower_data["game_height"],

@@ -1,22 +1,8 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "elements/Map/Map.hpp"
-#include "game_stats.hpp"
+#include "game_param.hpp"
 #include "music/music.hpp"
-
-extern const int ZOMBIE_FRAME;
-extern const int ZOMBIE_EXACT_LOCATION;
-extern const int ZOMBIE_WIDTH;
-extern const int ZOMBIE_HEIGHT;
-
-extern const int ZOMBIE_EATING_FRAME;
-extern const int ZOMBIE_DIE_FRAME;
-extern const int ZOMBIE_BURNT_FRAME;
-
-extern const int HEAD_ZOMBIE_FRAME;
-extern const int HEAD_ZOMBIE_WIDTH;
-extern const int HEAD_ZOMBIE_HEIGHT;
-extern const int ARM_ZOMBIE_FRAME;
 
 class ZombiePart
 {
@@ -83,3 +69,22 @@ public:
 
     friend Zombie *init(int _type, int level_num);
 };
+
+#include <nlohmann/json.hpp>
+using namespace nlohmann;
+
+static ifstream f("./image/json/zombie.json");
+static json zombie = json::parse(f);
+
+const int ZOMBIE_FRAME = zombie["zombie_frame"];
+const int ZOMBIE_EXACT_LOCATION = zombie["zombie_exact_location"];
+const int ZOMBIE_WIDTH = zombie["zombie_width"];
+const int ZOMBIE_HEIGHT = zombie["zombie_height"];
+
+const int ZOMBIE_EATING_FRAME = zombie["zombie_eating_frame"];
+const int ZOMBIE_DIE_FRAME = zombie["zombie_die_frame"];
+const int ZOMBIE_BURNT_FRAME = zombie["zombie_burnt_frame"];
+
+const int HEAD_ZOMBIE_FRAME = zombie["head_zombie_frame"];
+const int HEAD_ZOMBIE_WIDTH = zombie["head_zombie_width"];
+const int HEAD_ZOMBIE_HEIGHT = zombie["head_zombie_height"];

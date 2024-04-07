@@ -3,7 +3,7 @@ This file contain in-game rectangles with their x1,x2,y1,y2
 */
 #pragma once
 #include "draw/rsdl.hpp"
-#include "game_stats.hpp"
+#include "game_param.hpp"
 #define ICON_BAR_X1 20
 #define ICON_BAR_WIDTH 120
 #define ICON_WIDTH 105

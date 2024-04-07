@@ -1,6 +1,6 @@
 #include "peashooter.hpp"
-static ifstream f("./image/json/peashooter.json");
-json peashooter_data = json::parse(f);
+static ifstream peashooter("./image/json/peashooter.json");
+json peashooter_data = json::parse(peashooter);
 
 auto PEASHOOTER_ASSET = PlantAssets(peashooter_data["frame"], peashooter_data["img_width"], peashooter_data["img_height"],
                                     peashooter_data["game_width"], peashooter_data["game_height"],

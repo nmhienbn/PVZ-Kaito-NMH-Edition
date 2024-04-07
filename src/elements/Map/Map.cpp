@@ -1,5 +1,5 @@
 #include "Map.hpp"
-#include "game_stats.hpp"
+#include "game_param.hpp"
 
 /*
 random int in [L;R]

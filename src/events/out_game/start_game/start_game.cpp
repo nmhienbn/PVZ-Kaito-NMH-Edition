@@ -7,6 +7,9 @@ extern Player player;
 extern Map cells;
 extern window win;
 
+const int LOADING_TIME = 250;
+const int DISPLAY_LOGO_TIME = 200;
+
 const int NUM_SPROUT = 5;
 const int SPROUT[] = {240, 300, 410, 530, 650};
 const SDL_RendererFlip SPROUT_FLIP[] = {SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_NONE};
@@ -56,6 +59,7 @@ void display_starting_screen()
         string loading = "CLICK TO START!";
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
+        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_BOLD);
         if (TAP_TO_START.is_mouse_in(_x, _y))
         {
             win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, TAPPED, BRIANNE_TTF, 40);
@@ -64,6 +68,7 @@ void display_starting_screen()
         {
             win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40);
         }
+        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_NORMAL);
         HANDLE_SDL_EVENT(
             QUIT();
             // Handle player click on TAP_TO_START
@@ -80,14 +85,52 @@ void display_starting_screen()
     win.clear_renderer();
 }
 
+void display_logo()
+{
+    for (int clk = 0; clk < DISPLAY_LOGO_TIME; clk++)
+    {
+        int alpha = 510 * (clk <= (DISPLAY_LOGO_TIME / 2) ? clk : DISPLAY_LOGO_TIME - clk) / DISPLAY_LOGO_TIME;
+        win.draw_bg(BLACK_SCREEN_DIRECTORY);
+        // EA logo
+        win.set_texture_alpha(EA_LOGO_DIRECTORY, alpha);
+        win.draw_png_center(EA_LOGO_DIRECTORY, 1, 150);
+        // Popcap logo
+        win.set_texture_alpha(POPCAP_LOGO_DIRECTORY, alpha);
+        win.draw_png_center(POPCAP_LOGO_DIRECTORY, 1, 600);
+        // Nguyen Minh Hien Edition
+        int w = 0, h = 0;
+        auto edition = "NGUYEN MINH HIEN Edition";
+        TTF_SizeText(win.get_font(HOUSEOFTERROR_TTF, 60), edition, &w, &h);
+        win.show_text(edition, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, HOUSEOFTERROR_TTF, 60, alpha);
+        // Update screen
+        HANDLE_SDL_EVENT(
+            QUIT(););
+        win.update_screen();
+    }
+    const int FADE_IN_TIME = 30;
+    for (int clk = 0; clk <= FADE_IN_TIME; clk++)
+    {
+        // Fade in starting screen
+        int alpha = 255 * clk / FADE_IN_TIME;
+        win.draw_bg(BLACK_SCREEN_DIRECTORY);
+        win.set_texture_alpha(STARTING_SCREEN_DIRECTORY, alpha);
+        win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        // Fade in loading bar
+        int dy = 490 + (WINDOW_HEIGHT - 490) * (FADE_IN_TIME - clk) / FADE_IN_TIME;
+        win.draw_png(LOAD_BAR_DIRT_DIRECTORY, 204, dy, 642, 106);
+        win.update_screen();
+    }
+}
+
 /*
 Display loading screen.
 */
 void display_loading_screen()
 {
     play_music(OPENING_MUSIC_DIRECTORY);
+    display_logo();
     string loading = "LOADING.";
-    for (int clk = 1; clk <= 450; clk++)
+    for (int clk = 1; clk <= LOADING_TIME; clk++)
     {
         if (clk % 45 == 15)
             loading = "LOADING..";
@@ -102,13 +145,15 @@ void display_loading_screen()
         // Loading text
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
+        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_BOLD);
         win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40);
+        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_NORMAL);
         // Loading grass
-        int dx = 628 * clk / 450;
+        int dx = 628 * clk / LOADING_TIME;
         win.draw_png(LOAD_BAR_GRASS_DIRECTORY, 0, 0, dx / 2, 33, 200, 455, dx, 66);
         // Loading roll cap
         int pos = dx + 200;
-        int cap_width = 75 + 50 * (450 - clk) / 450;
+        int cap_width = 75 + 50 * (LOADING_TIME - clk) / LOADING_TIME;
         win.draw_png(SOD_ROLL_CAP, pos - cap_width / 2, 515 - cap_width, cap_width, cap_width, 4 * clk);
         // Loading sprout
         int j = 0;

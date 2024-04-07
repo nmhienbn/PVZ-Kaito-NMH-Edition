@@ -7,6 +7,7 @@ public:
     CherryBomb(const int &_row, const int &_col);
     ~CherryBomb();
     void display(const int &_row) override;
+    void display(const PlantAssets &assets);
     void action() override;
     bool is_hit_zombie(Zombie &zombie);
     bool is_blow();

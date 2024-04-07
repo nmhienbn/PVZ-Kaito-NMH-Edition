@@ -62,7 +62,8 @@ void display_credit()
     vector<Zombie *> tmp;
     for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
     {
-        for (int j = 0, _ = (int)(level.wave_zombie_count[i].back() + 1) / 2; j < _; j++)
+        int cnt = min((accumulate(level.wave_zombie_count[i].begin(), level.wave_zombie_count[i].end(), 0) + 1) / 2, 5);
+        for (int j = 0; j < cnt; j++)
         {
             auto t = init(i, level.level_num);
             t->make_credit();

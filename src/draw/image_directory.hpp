@@ -1,6 +1,6 @@
 #pragma once
-#include <string>
 #include <map>
+#include <string>
 using namespace std;
 
 #define ZOMBIE_WALK_DIRECTORY rand(ZOMBIE_WALK1_DIRECTORY, ZOMBIE_WALK2_DIRECTORY)
@@ -29,6 +29,9 @@ Contain all image used for SDL
 enum ImageType
 {
     NULL_DIRECTORY = -1,
+
+    POPCAP_LOGO_DIRECTORY,
+    EA_LOGO_DIRECTORY,
 
     PEASHOOTER_DIRECTORY,
     SUNFLOWER_DIRECTORY,
@@ -394,6 +397,9 @@ struct Image
 all image in game
 */
 const Image all_img[] = {
+    Image("./icon/PopCap.png"), // POPCAP_LOGO_DIRECTORY
+    Image("./icon/EA.png"),     // EA_LOGO_DIRECTORY
+
     Image("./image/Plant_sheet/peashooter/Peashooter.png"), // PEASHOOTER_DIRECTORY
     Image("./image/Plant_sheet/sunflower/Sunflower.png"),   // SUNFLOWER_DIRECTORY
     Image("./image/Plant_sheet/walnut/Walnut.png"),         // WALNUT_DIRECTORY

@@ -1,13 +1,13 @@
 #pragma once
+#include "game_param.hpp"
+#include "image_directory.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include <string>
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <map>
-#include "game_stats.hpp"
-#include "image_directory.hpp"
+#include <string>
 #define FONTS_DIRECTORY "./fonts/"
 #define FREESANS_TTF "FreeSans.ttf"
 #define CONTM_TTF "contm.ttf"
@@ -69,7 +69,7 @@ public:
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);
 	void draw_png_scale(int file_num, int x, int y, int width, int height, int angle = 0);
-	void draw_png_center(int file_num, double ratio = 1.0);
+	void draw_png_center(int file_num, double ratio = 1.0, int x1 = -1, int y1 = -1);
 	void draw_png(int file_num, int x, int y, int width, int height, int angle);
 	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void draw_bg(int file_num, int x = 0, int y = 0);
@@ -87,7 +87,7 @@ public:
 
 	TTF_Font *get_font(string font_addr, const int &size);
 	void show_text(const string &input, const int &x = 0, const int &y = 0,
-				   const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
+				   const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24, const int &aplha = 255);
 	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
 							const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24);
 	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);

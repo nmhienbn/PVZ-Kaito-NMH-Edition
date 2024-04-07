@@ -1,7 +1,7 @@
 #include "walnut.hpp"
 
-static ifstream f("./image/json/walnut.json");
-json walnut_data = json::parse(f);
+static ifstream walnut("./image/json/walnut.json");
+json walnut_data = json::parse(walnut);
 
 auto WALNUT_ASSET = PlantAssets(walnut_data["frame"], walnut_data["img_width"], walnut_data["img_height"],
                                 walnut_data["game_width"], walnut_data["game_height"],

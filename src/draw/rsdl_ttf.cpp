@@ -1,6 +1,6 @@
+#include "rsdl.hpp"
 #include <iostream>
 #include <sstream>
-#include "rsdl.hpp"
 using namespace std;
 
 /*
@@ -27,7 +27,7 @@ Fixed: cannot show many texts.
 Runtime: Solid < Shaded < Blended
 */
 void window::show_text(const string &input, const int &x, const int &y,
-                       const RGB &color, string font_addr, const int &size)
+                       const RGB &color, string font_addr, const int &size, const int &alpha)
 {
     if (input == "")
         return;
@@ -42,6 +42,7 @@ void window::show_text(const string &input, const int &x, const int &y,
         fonts_cache[font_addr + ":" + ss.str()] = font;
     }
     SDL_Surface *textSurface = TTF_RenderText_Blended(font, input.c_str(), textColor);
+    SDL_SetSurfaceAlphaMod(textSurface, alpha);
     SDL_Texture *text = SDL_CreateTextureFromSurface(renderer, textSurface);
     SDL_Rect renderQuad = {x, y, textSurface->w, textSurface->h};
     SDL_RenderCopy(renderer, text, NULL, &renderQuad);

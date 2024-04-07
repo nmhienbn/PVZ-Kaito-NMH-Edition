@@ -1,6 +1,6 @@
 #include "cherrybomb.hpp"
-static ifstream f("./image/json/cherrybomb.json");
-json cherrybomb_data = json::parse(f);
+static ifstream cherrybomb("./image/json/cherrybomb.json");
+json cherrybomb_data = json::parse(cherrybomb);
 
 auto CHERRYBOMB_ASSET = PlantAssets(cherrybomb_data["frame"], cherrybomb_data["img_width"], cherrybomb_data["img_height"],
                                     cherrybomb_data["game_width"], cherrybomb_data["game_height"],

@@ -1,3 +1,9 @@
+# USE make -j to compile faster
+# USE make -j4 or make -j8 to compile faster in limited threads
+# USE make run to run the program
+# USE make clean to clean the object files
+
+
 SHELL := pwsh.exe
 
 TARGET = pvz

@@ -1,9 +1,9 @@
 #pragma once
-#include "game_stats.hpp"
-#include "music/music.hpp"
 #include "draw/rsdl.hpp"
-#include "zombie_type.hpp"
 #include "elements/plants/plant_type.hpp"
+#include "game_param.hpp"
+#include "music/music.hpp"
+#include "zombie_type.hpp"
 
 bool has_zombie_reached_block(const Zombie &zombie, const int &row, const int &col);
 bool has_zombie_reached_plant(Zombie &zombie);
