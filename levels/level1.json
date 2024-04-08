@@ -41,7 +41,6 @@
         {
             "num": 4,
             "delay_time": 2000,
-            "has_flag": true,
             "zombies": [
                     {
                         "type": "normal",

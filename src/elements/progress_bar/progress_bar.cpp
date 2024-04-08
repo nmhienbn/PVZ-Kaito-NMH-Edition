@@ -47,7 +47,7 @@ void display_progress_bar()
                  PROGRESS_TXT_WIDTH, PROGRESS_TXT_HEIGHT);
     // Level flag
     int z_cnt = 0;
-    if (level.level_num <= 2)
+    if (level.level_num <= 3)
     {
         for (int i = 0; i < level.wave_count; i++)
         {

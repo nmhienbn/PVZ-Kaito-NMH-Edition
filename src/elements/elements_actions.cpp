@@ -197,7 +197,7 @@ If level has finised and that's time to create new wave:
 */
 void update_new_wave_zombies()
 {
-    if (level.level_num <= 2)
+    if (level.level_num <= 3)
     {
         if (--level.next_wave_clk <= 0 ||                            // next wave
             (level.cur_wave > 0 && game_characters.zombies.empty())) // if there's no zombie

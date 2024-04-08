@@ -201,7 +201,7 @@ Init mower.
 */
 void load_level()
 {
-    if (level.level_num <= 2)
+    if (level.level_num <= 3)
     {
         load_level1();
         return;

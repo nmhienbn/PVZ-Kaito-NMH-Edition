@@ -70,7 +70,7 @@ void display_credit()
             tmp.push_back(t);
         }
     }
-    if (level.level_num <= 2)
+    if (level.level_num <= 3)
         for (int i = NORMAL_TYPE; i <= COUNT_ZOMBIE_TYPE; i++)
         {
             int cnt = min(level.count_zombie_type[i] / 2, 5);
