@@ -3,7 +3,7 @@ This file include game elements: Plants, Zombies, Player, Level, Icons (Plant se
 */
 #pragma once
 #include "elements/plants/plant_type.hpp"
-#include "elements/zombies/zombie.hpp"
+#include "elements/zombies/wave.hpp"
 
 /*--------------------------------------------------------------------
 Player and others
@@ -66,13 +66,14 @@ Information about level:
 */
 struct Level
 {
-    int level_num; // level num
-    int map_type;  // type of map: day, night
-    bool is_night; // true if map is night
+    int level_num;         // level num
+    int map_type;          // type of map: day, night
+    bool has_sun_from_sky; // true if has sun from the sky
 
     int wave_count;      // number of wave
     int cur_wave;        // current wave
     int cur_sec;         // current second
+    int final_wave;      // final wave
     bool waves_finished; // true if waves has finished
 
     bool zombie_has_coming;     // true if any zombie has appeared
@@ -80,12 +81,17 @@ struct Level
     int used_zombie_count;      // appeared zombies
     int last_clk_zombie_appear; // last clk new zombies appeared
 
+    int next_wave_clk; // next wave clk
+
     int background_directory = BACKGROUND_DIRECTORY;
     int announce_directory = NULL_DIRECTORY;
 
     vector<vector<int>> zombie_distr_for_wave[COUNT_ZOMBIE_TYPE];
     vector<int> wave_zombie_count[COUNT_ZOMBIE_TYPE];
     vector<int> wave_duration;
+
+    vector<Wave> waves;
+    vector<int> count_zombie_type;
 
     bool is_huge_wave();
     void reset();

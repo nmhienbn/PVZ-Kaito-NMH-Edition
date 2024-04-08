@@ -70,6 +70,17 @@ void display_credit()
             tmp.push_back(t);
         }
     }
+    if (level.level_num <= 2)
+        for (int i = NORMAL_TYPE; i <= COUNT_ZOMBIE_TYPE; i++)
+        {
+            int cnt = min(level.count_zombie_type[i] / 2, 5);
+            for (int j = 0; j < cnt; j++)
+            {
+                auto t = init(i, level.level_num);
+                t->make_credit();
+                tmp.push_back(t);
+            }
+        }
     sort(tmp.begin(), tmp.end(), [](const Zombie *x, const Zombie *y) -> bool
          { return x->y_location < y->y_location; });
 

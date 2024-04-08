@@ -4,7 +4,7 @@
 Init a new zombie with its type.
 Depend on level num
 */
-Zombie *init(int _type, int level_num)
+Zombie *init(int _type, int level_num, const int &x_bias)
 {
     Zombie *res = nullptr;
     switch (_type)
@@ -43,7 +43,10 @@ Zombie *init(int _type, int level_num)
     else
         res->row = rand(0, 4);
     // Random delay time to appear
-    res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + rand(10, 100);
+    if (_type == FLAG_TYPE)
+        res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + 10;
+    else
+        res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + rand(10, 200) + x_bias;
     res->y_location = cells[res->row][0].y1 - 50;
     // Set init status
     res->is_moving = true;
