@@ -7,44 +7,43 @@
 extern int game_state;
 extern window win;
 extern Map cells;
-vector<Mower> mowers;
+vector<Mower *> mowers;
 
 /*
 Init the mower from l_row to r_row
 */
 void init_mower(int l_row, int r_row)
 {
-    mowers.clear();
+    mowers.assign(VERT_BLOCK_COUNT, nullptr);
     for (int row = l_row; row <= r_row; row++)
     {
-        Mower tmp(cells[0][0].x1 - 55 - row * 2, row, 0, MOWER_INACTIVE);
-        mowers.push_back(tmp);
+        mowers[row] = new Mower(cells[0][0].x1 - 55 - row * 2, row, 0, MOWER_INACTIVE);
     }
 }
 
 /*
-Display the mower inactive/active
+Display the mowers (both inactive and active)
 */
-void display_mower(const int &_row)
+void display_mowers()
 {
-    for (int i = 0, _ = mowers.size(); i < _; i++)
-        if (mowers[i].row == _row)
+    for (auto &mower : mowers)
+        if (mower != nullptr)
         {
             // current frame
-            int sframe = mowers[i].frame / MOWER_FRAME;
+            int sframe = mower->frame / MOWER_FRAME;
             // current column in source image
             int scol = sframe % all_img[MOWER_DIRECTORY].c_sheet;
             // current row in source image
             int srow = sframe / all_img[MOWER_DIRECTORY].c_sheet;
             // display
             win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
-                         mowers[i].x, cells[mowers[i].row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
+                         mower->x, cells[mower->row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
             // move to next frame
-            if (mowers[i].status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
+            if (mower->status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
             {
-                if (++mowers[i].frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
+                if (++mower->frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
                 {
-                    mowers[i].frame = 0;
+                    mower->frame = 0;
                 }
             }
         }
@@ -68,26 +67,22 @@ void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
     }
     // mower action
     for (int i = 0; i < (int)mowers.size(); i++)
-        if (mowers[i].status == MOWER_ACTIVE)
+        if (mowers[i] != nullptr && mowers[i]->status == MOWER_ACTIVE)
         {
             // mower move
-            mowers[i].x += MOWER_DX;
+            mowers[i]->x += MOWER_DX;
 
             // mower gone
-            if (++mowers[i].x >= WINDOW_WIDTH)
+            if (++mowers[i]->x >= WINDOW_WIDTH)
             {
-                mowers.erase(mowers.begin() + i);
-                i--;
+                mowers[i] = nullptr;
                 continue;
             }
+
             // mower hit zombie
             for (int j = 0; j < (int)zombies.size();)
             {
-                if (zombies[i]->x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - 30)
-                {
-                    active_mower(zombies[i]->row);
-                }
-                if (!apply_mower_hitting_zombie(zombies, j, mowers[i], zombie_parts))
+                if (!apply_mower_hitting_zombie(zombies, j, *mowers[i], zombie_parts))
                 {
                     j++;
                 }
@@ -139,14 +134,10 @@ Return true if can active a mower in given row
 */
 bool active_mower(int row)
 {
-    for (auto &mower : mowers)
+    if (mowers[row] != nullptr && mowers[row]->status == MOWER_INACTIVE)
     {
-        if (mower.row == row && mower.status == MOWER_INACTIVE)
-        {
-            play_sound_effect(MOWER_MUSIC_DIRECTORY);
-            mower.status = MOWER_ACTIVE;
-            return true;
-        }
+        mowers[row]->status = MOWER_ACTIVE;
+        return true;
     }
     return false;
 }

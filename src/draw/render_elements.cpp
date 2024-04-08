@@ -194,6 +194,7 @@ void display_game_elements()
 {
     // Shadows
     display_shadow();
+    display_mowers();
 
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
     {
@@ -204,9 +205,6 @@ void display_game_elements()
         // Zombies
         display_zombies(game_characters.zombies, row);
         display_zombie_parts(game_characters.zombie_parts, row);
-
-        // Mowers
-        display_mower(row);
     }
     // Others
     for (auto &pea : game_characters.peas)

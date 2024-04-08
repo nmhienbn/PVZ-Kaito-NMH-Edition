@@ -5,6 +5,7 @@ extern bool quit;
 extern Level level;
 extern Elements game_characters;
 extern window win;
+static bool has_display_lost = false;
 
 /*
 If player lose, display this.
@@ -22,6 +23,7 @@ void display_losing_message()
     }
     win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
     win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
+    has_display_lost = true;
 }
 
 /*
@@ -47,23 +49,28 @@ void display_lose()
 {
     // Display losing message.
     play_music(LOSE_MUSIC_DIRECTORY, 0);
-    display_losing_message();
+    if (!has_display_lost)
+        display_losing_message();
     CONTINUE.blink();
     win.update_screen();
-    HANDLE_SDL_EVENT(
-        QUIT();
-        // Check if player click 'continue'.
-        LCLICK({
-            if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
-            {
-                // Update some variables.
-                level.waves_finished = false;
-                set_status(game_state, IS_LEVEL_CHOSEN, false);
-                set_status(game_state, IS_PAUSED, false);
-                play_music(OPENING_MUSIC_DIRECTORY);
-                win.fade_out();
-            }
-        });
+    while (has_display_lost)
+    {
+        HANDLE_SDL_EVENT(
+            QUIT();
+            // Check if player click 'continue'.
+            LCLICK({
+                if (CONTINUE.is_mouse_in(mouse_x, mouse_y))
+                {
+                    // Update some variables.
+                    level.waves_finished = false;
+                    set_status(game_state, IS_LEVEL_CHOSEN, false);
+                    set_status(game_state, IS_PAUSED, false);
+                    play_music(OPENING_MUSIC_DIRECTORY);
+                    win.fade_out();
+                }
+                has_display_lost = false;
+            });
 
-    );
+        );
+    }
 }
