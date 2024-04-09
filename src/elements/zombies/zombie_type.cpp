@@ -79,3 +79,8 @@ Zombie *init(int _type, int level_num, const int &x_bias)
     res->frame = rand(0, ZOMBIE_FRAME * all_img[res->directory_num].n_sheet - 1);
     return res;
 }
+
+Zombie *init(int _type, int level_num)
+{
+    return init(_type, level_num, 0);
+}

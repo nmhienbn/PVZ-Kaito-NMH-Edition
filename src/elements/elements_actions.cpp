@@ -1,4 +1,3 @@
-#include "elements/elements_actions.hpp"
 #include "elements_actions.hpp"
 
 extern int clk;
@@ -7,6 +6,7 @@ extern Elements game_characters;
 extern Icons icons;
 extern Player player;
 extern Map cells;
+Wave current_wave;
 
 /*Handles all the changes to the game:
     + Create new wave of zombies.
@@ -43,6 +43,38 @@ void handle_changes()
     // Update remaining time of each plant seed
     update_plant_seeds_remaining_time();
 }
+
+void add_zombies_from_level_data()
+{
+    // First wave of zombie: sound effect "The zombies are coming".
+    if (level.zombie_has_coming == false)
+    {
+        play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
+        level.zombie_has_coming = true;
+    }
+
+    // Add zombies from level data to game characters.
+    for (const auto &zombie : current_wave.zombies)
+        game_characters.zombies.push_back(zombie);
+
+    // Number of zombies for this wave.
+    level.used_zombie_count += current_wave.zombies.size();
+}
+
+void go_to_next_wave()
+{
+    // Next wave
+    if (level.cur_wave + 1 < level.wave_count)
+    {
+        level.cur_wave++;
+        level.next_wave_clk = level.waves[level.cur_wave].delay_time;
+        level.zombie_delay_state = NO_DELAY;
+    }
+    // waves finished
+    else
+        level.waves_finished = true;
+}
+
 /*Create a new zombie on random row and at ZOMBIE_INIT_X.
 If the level has not finished:
     + Generate zombies for current wave and current second.
@@ -51,59 +83,70 @@ If the level has not finished:
 */
 void create_new_zombies()
 {
-    if (level.waves_finished == false)
+    // Get zombies for current wave.
+    current_wave = level.waves[level.cur_wave];
+    if (level.cur_wave > 0 && game_characters.zombies.empty())
+        level.next_wave_clk = 0;
+    if (level.next_wave_clk > 0)
     {
-        // This loop is to reduce the empty time between waves of zombies when all current zombies died.
-        do
-        {
-            if (game_characters.zombies.size() >= 10)
-            {
-                break;
-            }
-            level.last_clk_zombie_appear = clk;
-
-            // Get zombies for current wave.
-            auto wave = level.waves[level.cur_wave];
-
-            for (const auto &zombie : wave.zombies)
-                game_characters.zombies.push_back(zombie);
-
-            // Number of zombies for this wave.
-            level.used_zombie_count += wave.zombies.size();
-
-            // First wave of zombie: sound effect "The zombies are coming".
-            if (level.zombie_has_coming == false)
-            {
-                play_sound_effect(ZOMBIE_COMING_MUSIC_DIRECTORY);
-                level.zombie_has_coming = true;
-            }
-            // Final wave sound
-            else if (level.cur_wave == level.final_wave)
-            {
-                play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
-                level.announce_directory = FINAL_WAVE_DIRECTORY;
-            }
-            // Huge wave sound
-            else if (wave.has_flag)
-            {
-                play_sound_effect(HUGE_WAVE_MUSIC_DIRECTORY);
-                level.announce_directory = HUGE_WAVE_DIRECTORY;
-            }
-
-            // Next wave
-            if (level.cur_wave + 1 < level.wave_count)
-            {
-                level.cur_wave++;
-                level.next_wave_clk = level.waves[level.cur_wave].delay_time;
-            }
-            // waves finished
-            else
-            {
-                level.waves_finished = true;
-                break;
-            }
-        } while (game_characters.zombies.empty());
+        level.next_wave_clk--;
+        return;
     }
+    if (level.zombie_delay_state == FINAL_WAVE)
+    {
+        if (game_characters.zombies.empty())
+        {
+            if (level.announcer.state == ANNOUNCED)
+            {
+                level.announcer = Announcer(HUGE_WAVE_DIRECTORY, HUGE_WAVE_MUSIC_DIRECTORY);
+            }
+        }
+        else
+            return;
+        if (level.announcer.state == ANNOUNCING && level.announcer.is_finished())
+        {
+            level.zombie_delay_state = HUGE_WAVE;
+            level.announcer = Announcer(FINAL_WAVE_DIRECTORY, HUGE_WAVE_MUSIC_DIRECTORY);
+        }
+        return;
+    }
+
+    if (level.zombie_delay_state == HUGE_WAVE)
+    {
+        if (game_characters.zombies.empty())
+        {
+            if (level.announcer.state == ANNOUNCED)
+            {
+                level.announcer = Announcer(HUGE_WAVE_DIRECTORY, HUGE_WAVE_MUSIC_DIRECTORY);
+            }
+        }
+        else
+            return;
+        if (level.announcer.state == ANNOUNCING && level.announcer.is_finished())
+        {
+            level.zombie_delay_state = AFTER_ANNOUNCE;
+            level.announcer.state = ANNOUNCED;
+        }
+    }
+
+    // Final wave
+    if (level.zombie_delay_state == NO_DELAY)
+    {
+        if (level.cur_wave == level.final_wave)
+        {
+            level.zombie_delay_state = FINAL_WAVE;
+            return;
+        }
+        // Huge wave
+        else if (current_wave.has_flag)
+        {
+            level.zombie_delay_state = HUGE_WAVE;
+            return;
+        }
+    }
+
+    add_zombies_from_level_data();
+    go_to_next_wave();
 }
 
 /*Create new wave of zombies.
@@ -114,11 +157,10 @@ If level has finised and that's time to create new wave:
 */
 void update_new_wave_zombies()
 {
-    if (--level.next_wave_clk <= 0 ||                            // next wave
-        (level.cur_wave > 0 && game_characters.zombies.empty())) // if there's no zombie
-        create_new_zombies();
-    if (clk - level.last_clk_zombie_appear == ANNOUNCER_CLK_COUNT) // remove announcer huge wave, final wave
-        level.announce_directory = NULL_DIRECTORY;
+    if (level.waves_finished)
+        return;
+
+    create_new_zombies();
     return;
 }
 

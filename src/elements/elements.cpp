@@ -10,20 +10,10 @@ Icons::Icons()
     }
 }
 
-/*@return true if this wave is huge*/
-bool Level::is_huge_wave()
-{
-    int z_cnt = 0;
-    for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
-    {
-        z_cnt += wave_zombie_count[i][cur_wave];
-    }
-    return z_cnt >= 5;
-}
-
 /*Reset level: Clear all zombie waves' information*/
 void Level::reset()
 {
+    announcer.state = ANNOUNCED;
     wave_count = 0;
     cur_wave = 0;
     cur_sec = 0;
@@ -31,15 +21,6 @@ void Level::reset()
     zombie_has_coming = false;
     zombie_count = 0;
     used_zombie_count = 0;
-
-    announce_directory = NULL_DIRECTORY;
-
-    for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
-    {
-        zombie_distr_for_wave[i].clear();
-        wave_zombie_count[i].clear();
-    }
-    wave_duration.clear();
 }
 
 /*Create 5 x 9 tiles

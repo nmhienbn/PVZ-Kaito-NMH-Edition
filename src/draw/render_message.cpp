@@ -20,5 +20,5 @@ void display_ready_set_plant(const int &image_num)
 /*Display announcement: huge wave, final wave*/
 void display_game_announce()
 {
-    win.draw_png_center(level.announce_directory);
+    level.announcer.display();
 }

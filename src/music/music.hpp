@@ -19,6 +19,8 @@ void close_music();
 
 enum music_type
 {
+    NULL_MUSIC_DIRECTORY = -1,
+
     Brainiac_Maniac_DIRECTORY,
     Grasswalk_DIRECTORY,
     Loonboon_DIRECTORY,

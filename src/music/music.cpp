@@ -36,6 +36,10 @@ bool init_music()
 /*Play music*/
 void play_music(int num_path, int repeat_times)
 {
+    if (num_path == NULL_MUSIC_DIRECTORY)
+    {
+        return;
+    }
     // If other music is playing
     if (now_music != num_path)
     {
@@ -65,6 +69,10 @@ void play_music(int num_path, int repeat_times)
 /*Play sound effect*/
 void play_sound_effect(int num_path)
 {
+    if (num_path == NULL_MUSIC_DIRECTORY)
+    {
+        return;
+    }
     Mix_VolumeChunk(gChunk[num_path], sfx_volume);
     if (gChunk[num_path] == NULL)
     {

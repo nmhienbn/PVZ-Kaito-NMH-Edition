@@ -42,7 +42,7 @@ Display frame: no display even frame if IS_FAST
 */
 void start_level()
 {
-    if (check_status(game_state, IS_GAME_STARTED) == false)
+    if (!check_status(game_state, IS_GAME_STARTED))
     {
         // display credit.
         // 0.5s: display "Ready - Set - Plant": 0.5 - 0.5 - 2.

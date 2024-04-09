@@ -2,6 +2,7 @@
 This file include game elements: Plants, Zombies, Player, Level, Icons (Plant seeds)
 */
 #pragma once
+#include "elements/announcer/announcer.hpp"
 #include "elements/plants/plant_type.hpp"
 #include "elements/zombies/wave.hpp"
 
@@ -52,6 +53,14 @@ struct Icons
     Icons();
 };
 
+enum ZOMBIE_DELAY_STATE
+{
+    NO_DELAY = 1,
+    HUGE_WAVE = 2,
+    FINAL_WAVE = 4,
+    AFTER_ANNOUNCE = 8
+};
+
 /*
 Information about level:
 @param level_num;
@@ -76,24 +85,21 @@ struct Level
     int final_wave;      // final wave
     bool waves_finished; // true if waves has finished
 
-    bool zombie_has_coming;     // true if any zombie has appeared
-    int zombie_count;           // total level zombies
-    int used_zombie_count;      // appeared zombies
-    int last_clk_zombie_appear; // last clk new zombies appeared
+    bool zombie_has_coming; // true if any zombie has appeared
+    int zombie_count;       // total level zombies
+    int used_zombie_count;  // appeared zombies
 
     int next_wave_clk; // next wave clk
 
     int background_directory = BACKGROUND_DIRECTORY;
-    int announce_directory = NULL_DIRECTORY;
 
-    vector<vector<int>> zombie_distr_for_wave[COUNT_ZOMBIE_TYPE];
-    vector<int> wave_zombie_count[COUNT_ZOMBIE_TYPE];
-    vector<int> wave_duration;
+    Announcer announcer = Announcer(NULL_DIRECTORY, NULL_MUSIC_DIRECTORY);
+
+    ZOMBIE_DELAY_STATE zombie_delay_state;
 
     vector<Wave> waves;
     vector<int> count_zombie_type;
 
-    bool is_huge_wave();
     void reset();
 };
 
