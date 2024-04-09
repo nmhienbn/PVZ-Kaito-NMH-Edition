@@ -1,7 +1,0 @@
-level map: 3
-waves: 8
-wave length: 1 2 2 2 3 3 3 2
-normal zombies: 1 2 3 8 8 14 14 10
-conehead zombies: 0 1 1 2 8 8 10 10
-buckethead zombies: 0 0 0 2 4 6 8 6
-door zombies: 0 0 0 0 0 0 0 0

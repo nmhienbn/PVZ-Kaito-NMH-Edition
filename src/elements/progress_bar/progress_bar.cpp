@@ -47,59 +47,30 @@ void display_progress_bar()
                  PROGRESS_TXT_WIDTH, PROGRESS_TXT_HEIGHT);
     // Level flag
     int z_cnt = 0;
-    if (level.level_num <= 3)
+    for (int i = 0; i < level.wave_count; i++)
     {
-        for (int i = 0; i < level.wave_count; i++)
+        int tmp_width = PROGRESS_BAR_WIDTH_1 + z_cnt * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
+        // cout << z_cnt << ' ' << level.zombie_count << endl;
+        int tmp_cnt = level.waves[i].zombie_count();
+        if (level.waves[i].has_flag)
         {
-            int tmp_width = PROGRESS_BAR_WIDTH_1 + z_cnt * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
-            // cout << z_cnt << ' ' << level.zombie_count << endl;
-            int tmp_cnt = level.waves[i].zombie_count();
-            if (level.waves[i].has_flag)
+            if (z_cnt < level.used_zombie_count)
             {
-                if (z_cnt < level.used_zombie_count)
-                {
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 4, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 10, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                }
-                else
-                {
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 2,
-                                 PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                }
+                win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
+                             dx + tmp_width, dy - 4, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
+                win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
+                             dx + tmp_width, dy - 10, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
             }
-            z_cnt += tmp_cnt;
+            else
+            {
+                win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
+                             dx + tmp_width, dy - 2,
+                             PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
+            }
         }
+        z_cnt += tmp_cnt;
     }
-    else
-        for (int i = 0; i < level.wave_count; i++)
-        {
-            int tmp_width = PROGRESS_BAR_WIDTH_1 + z_cnt * PROGRESS_BAR_WIDTH_2 / level.zombie_count;
-            // cout << z_cnt << ' ' << level.zombie_count << endl;
-            int tmp_cnt = 0;
-            for (int typ = NORMAL_TYPE; typ < COUNT_ZOMBIE_TYPE; typ++)
-                tmp_cnt += level.wave_zombie_count[typ][i];
-            if (tmp_cnt >= 5 || i == level.wave_count - 1)
-            {
-                tmp_cnt++; // huge wave
-                if (z_cnt < level.used_zombie_count)
-                {
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 4, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 10, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                }
-                else
-                {
-                    win.draw_png(FLAG_METER_PART, PROGRESS_PART_WIDTH * 2, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
-                                 dx + tmp_width, dy - 2,
-                                 PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
-                }
-            }
-            z_cnt += tmp_cnt;
-        }
+
     // Zombie head
     win.draw_png(FLAG_METER_PART, 0, 0, PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT,
                  dx + now_progress - PROGRESS_PART_WIDTH / 2, dy,

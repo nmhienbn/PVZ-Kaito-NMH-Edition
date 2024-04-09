@@ -60,9 +60,10 @@ void display_credit()
     win.show_announcer_text(player.name + "\'S TRIP TO PLANTS VS. ZOMBIES", 300);
     // random credit zombies from final waves
     vector<Zombie *> tmp;
-    for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
+
+    for (int i = NORMAL_TYPE; i <= COUNT_ZOMBIE_TYPE; i++)
     {
-        int cnt = min((accumulate(level.wave_zombie_count[i].begin(), level.wave_zombie_count[i].end(), 0) + 1) / 2, 5);
+        int cnt = min(level.count_zombie_type[i] / 2, 7);
         for (int j = 0; j < cnt; j++)
         {
             auto t = init(i, level.level_num);
@@ -70,17 +71,6 @@ void display_credit()
             tmp.push_back(t);
         }
     }
-    if (level.level_num <= 3)
-        for (int i = NORMAL_TYPE; i <= COUNT_ZOMBIE_TYPE; i++)
-        {
-            int cnt = min(level.count_zombie_type[i] / 2, 5);
-            for (int j = 0; j < cnt; j++)
-            {
-                auto t = init(i, level.level_num);
-                t->make_credit();
-                tmp.push_back(t);
-            }
-        }
     sort(tmp.begin(), tmp.end(), [](const Zombie *x, const Zombie *y) -> bool
          { return x->y_location < y->y_location; });
 

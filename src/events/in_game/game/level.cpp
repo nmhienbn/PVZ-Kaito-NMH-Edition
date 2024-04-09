@@ -8,6 +8,9 @@ extern Elements game_characters;
 extern Player player;
 extern window win;
 
+const int TIME_FOR_WIN = 180;
+int delay_for_win = INF;
+
 /*
 If game has not started:
     display credit.
@@ -57,21 +60,29 @@ void start_level()
         }
         if (has_player_won())
         {
-            // check if is a new plant is unlocked or not.
-            bool is_newest_level = (level.level_num == player.unlocked_level);
-            // display win message.
-            // reset level.
-            if (display_win() && is_newest_level)
+            if (delay_for_win == INF)
             {
-                for (int i = 0; i < PLANT_COUNT; i++)
+                delay_for_win = TIME_FOR_WIN;
+            }
+            if (--delay_for_win <= 0)
+            {
+                delay_for_win = INF;
+                // check if is a new plant is unlocked or not.
+                bool is_newest_level = (level.level_num == player.unlocked_level);
+                // display win message.
+                // reset level.
+                if (display_win() && is_newest_level)
                 {
-                    if (level.level_num == level_unlock_new_plant[i] - 1 || level.level_num == 12)
+                    for (int i = 0; i < PLANT_COUNT; i++)
                     {
-                        set_status(game_state, IS_UNLOCKING_PLANT, true);
+                        if (level.level_num == level_unlock_new_plant[i] - 1 || level.level_num == 12)
+                        {
+                            set_status(game_state, IS_UNLOCKING_PLANT, true);
+                        }
                     }
                 }
+                return;
             }
-            return;
         }
         if (check_status(game_state, IS_RESTART) == true)
         {

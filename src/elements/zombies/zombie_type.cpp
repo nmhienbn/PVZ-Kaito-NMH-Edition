@@ -1,5 +1,7 @@
 #include "zombie_type.hpp"
 
+static int last_zombie_row = -1;
+
 /*
 Init a new zombie with its type.
 Depend on level num
@@ -39,9 +41,27 @@ Zombie *init(int _type, int level_num, const int &x_bias)
     if (level_num == 1)
         res->row = 2;
     else if (level_num == 2)
-        res->row = rand(1, 3);
+    {
+        int new_row = rand(1, 3);
+        while (new_row == last_zombie_row)
+        {
+            new_row = rand(1, 3);
+        }
+
+        res->row = new_row;
+        last_zombie_row = new_row;
+    }
     else
-        res->row = rand(0, 4);
+    {
+        int new_row = rand(0, 4);
+        while (new_row == last_zombie_row)
+        {
+            new_row = rand(0, 4);
+        }
+
+        res->row = new_row;
+        last_zombie_row = new_row;
+    }
     // Random delay time to appear
     if (_type == FLAG_TYPE)
         res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + 10;
