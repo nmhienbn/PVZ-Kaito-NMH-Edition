@@ -372,7 +372,7 @@ enum ImageType
     MOWER_DIRECTORY,
 
     SHADOW_DIRECTORY,
-    PEA_SHADOW_DIRECTORY,
+    BULLET_SHADOW_DIRECTORY,
     SOD_ROLL,
     SOD_ROLL_CAP,
 
@@ -722,7 +722,7 @@ const Image all_img[] = {
     Image("./image/Icons/mower.png", 17, 8),            // MOWER_DIRECTORY
 
     Image("./image/Shadow/plantshadow.png"), // SHADOW_DIRECTORY
-    Image("./image/Shadow/pea_shadows.png"), // PEA_SHADOW_DIRECTORY
+    Image("./image/Shadow/pea_shadows.png"), // BULLET_SHADOW_DIRECTORY
 
     Image("./image/Background/SodRoll.png"),    // SOD_ROLL
     Image("./image/Background/SodRollCap.png"), // SOD_ROLL_CAP

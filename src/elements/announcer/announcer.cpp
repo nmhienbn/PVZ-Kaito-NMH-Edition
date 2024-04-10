@@ -1,7 +1,7 @@
 #include "announcer.hpp"
 
 extern window win;
-const int CAP_ANNOUNCER_CLK_COUNT = 70;
+const int CAP_ANNOUNCER_CLK_COUNT = 30;
 
 Announcer::Announcer(const int &img_directory, const int &sound_directory)
 {
@@ -18,7 +18,7 @@ void Announcer::display()
         return;
     int alpha = 255;
     double ratio = 1.0;
-    double t = 0.1;
+    double t = (1.0 - 3 * (ANNOUNCER_CLK_COUNT - CAP_ANNOUNCER_CLK_COUNT)) / CAP_ANNOUNCER_CLK_COUNT;
     if (remain_time > ANNOUNCER_CLK_COUNT - CAP_ANNOUNCER_CLK_COUNT)
     {
         alpha = 255 * (ANNOUNCER_CLK_COUNT - remain_time) / CAP_ANNOUNCER_CLK_COUNT;
@@ -26,6 +26,8 @@ void Announcer::display()
     }
     win.set_texture_alpha(img_directory, alpha);
     win.draw_png_center(img_directory, ratio);
+    if (remain_time == ANNOUNCER_CLK_COUNT)
+        cout << remain_time << ' ' << ratio << endl;
     remain_time--;
 }
 

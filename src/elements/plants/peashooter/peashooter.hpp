@@ -10,5 +10,5 @@ public:
     void determine_appearance(vector<Zombie *> &zombies);
     void display(const int &_row) override;
     void action() override;
-    void fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas);
+    void fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets);
 };

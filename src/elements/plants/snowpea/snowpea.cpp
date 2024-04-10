@@ -36,13 +36,12 @@ Snowpea::~Snowpea()
 /*
 Create new pea from a snow pea.
 */
-void Snowpea::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
+void Snowpea::fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets)
 {
     if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-        Pea temp(2, row, cells[row][col].x2 - 10);
-        peas.push_back(temp);
+        bullets.push_back(new SnowzPea(row, cells[row][col].x2 - 10));
     }
     determine_appearance(zombies);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "draw/rsdl.hpp"
+#include "elements/collision/BulletVsZombie.hpp"
 #include "elements/elements.hpp"
 #include "elements/mower/mower.hpp"
 

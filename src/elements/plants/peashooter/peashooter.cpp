@@ -35,13 +35,12 @@ Peashooter::~Peashooter()
 /*
 Create new pea from a peashooter.
 */
-void Peashooter::fire_pea(vector<Zombie *> &zombies, vector<Pea> &peas)
+void Peashooter::fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets)
 {
     if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-        Pea temp(1, row, cells[row][col].x2 - 10);
-        peas.push_back(temp);
+        bullets.push_back(new Pea(row, cells[row][col].x2 - 10));
     }
     determine_appearance(zombies);
 }

@@ -114,7 +114,9 @@ void set_default_alpha(int file_num, SDL_Texture *res)
     }
     else if (file_num == POPCAP_LOGO_DIRECTORY ||
              file_num == EA_LOGO_DIRECTORY ||
-             file_num == STARTING_SCREEN_DIRECTORY)
+             file_num == STARTING_SCREEN_DIRECTORY ||
+             file_num == HUGE_WAVE_DIRECTORY ||
+             file_num == FINAL_WAVE_DIRECTORY)
     {
         SDL_SetTextureAlphaMod(res, 0);
     }

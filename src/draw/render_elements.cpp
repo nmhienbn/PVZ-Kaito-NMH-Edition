@@ -183,9 +183,9 @@ void display_shadow()
     {
         win.draw_png(SHADOW_DIRECTORY, zombie->x_location + 85, cells[zombie->row][0].y2 - 40, 96, 40);
     }
-    for (auto &pea : game_characters.peas)
+    for (auto &bullet : game_characters.bullets)
     {
-        pea.display_shadow();
+        bullet->display_shadow();
     }
 }
 
@@ -207,8 +207,8 @@ void display_game_elements()
         display_zombie_parts(game_characters.zombie_parts, row);
     }
     // Others
-    for (auto &pea : game_characters.peas)
-        pea.display();
+    for (auto &bullet : game_characters.bullets)
+        bullet->display();
     display_suns(game_characters.suns);
 }
 

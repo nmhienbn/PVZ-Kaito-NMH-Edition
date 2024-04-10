@@ -62,7 +62,7 @@ void Elements::reset()
     plants.clear();
 
     suns.clear();
-    peas.clear();
+    bullets.clear();
 
     zombies.clear();
     zombie_parts.clear();

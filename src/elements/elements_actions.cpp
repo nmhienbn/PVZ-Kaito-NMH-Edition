@@ -23,7 +23,7 @@ void handle_changes()
     update_new_wave_zombies();
 
     // Check all bullets' moving status
-    handle_pea_zombie_encounter(game_characters.peas, game_characters.zombies, game_characters.zombie_parts);
+    handle_bullet_encounter_zombie(game_characters.bullets, game_characters.zombies, game_characters.zombie_parts);
 
     // Check all mowers' status
     handle_mower_zombie_encounter(game_characters.zombies, game_characters.zombie_parts);
@@ -69,6 +69,7 @@ void go_to_next_wave()
         level.cur_wave++;
         level.next_wave_clk = level.waves[level.cur_wave].delay_time;
         level.zombie_delay_state = NO_DELAY;
+        level.announcer.state = ANNOUNCED;
     }
     // waves finished
     else
@@ -169,7 +170,7 @@ void handle_movements()
 {
     move_zombies(game_characters.zombies);
     move_suns(game_characters.suns);
-    move_peas(game_characters.peas);
+    move_bullets(game_characters.bullets);
 }
 
 /*Update icons remainning time. Sun count blink*/

@@ -23,12 +23,12 @@ Contain vector of all plants and zombies:
 struct Elements
 {
     vector<Plants *> plants;
+    vector<Bullet *> bullets;
 
     vector<Zombie *> zombies;
     vector<ZombiePart> zombie_parts;
 
     vector<Sun> suns;
-    vector<Pea> peas;
 
     void reset();
 };

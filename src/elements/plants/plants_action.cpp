@@ -9,7 +9,7 @@ Peashooter's action: fire pea
 */
 void Peashooter::action()
 {
-    fire_pea(game_characters.zombies, game_characters.peas);
+    fire_pea(game_characters.zombies, game_characters.bullets);
 }
 
 /*
@@ -32,7 +32,7 @@ Snow Pea's action: fire snow pea
 */
 void Snowpea::action()
 {
-    fire_pea(game_characters.zombies, game_characters.peas);
+    fire_pea(game_characters.zombies, game_characters.bullets);
 }
 
 /*
