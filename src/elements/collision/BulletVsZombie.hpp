@@ -1,3 +1,4 @@
+#pragma once
 #include "../bullets/bullet.hpp"
 #include "../zombies/zombie_struct.hpp"
 

@@ -1,3 +1,4 @@
+#pragma once
 #include "../plants/plants.hpp"
 #include "../zombies/zombie_struct.hpp"
 

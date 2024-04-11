@@ -1,3 +1,4 @@
+#pragma once
 #include "AttackPlantVsZombie.hpp"
 
 void apply_instance_plant_hit_zombie(Plants &plant, vector<Zombie *> &zombies,

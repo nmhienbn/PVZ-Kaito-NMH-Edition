@@ -1,6 +1,5 @@
 #pragma once
 #include "draw/rsdl.hpp"
-#include "elements/plants/plant_type.hpp"
 #include "game_param.hpp"
 #include "music/music.hpp"
 #include "zombie_type.hpp"
@@ -13,11 +12,3 @@ void update_moving_status_for_zombies(vector<Zombie *> &zombies);
 void move_zombies(vector<Zombie *> &zombies);
 void display_zombies(vector<Zombie *> &zombies, const int &_row);
 void display_zombie_parts(vector<ZombiePart> &zombie_parts, const int &_row);
-
-//------------------------------Zombie bite--------------------------------------
-void update_zombie_next_bite(vector<Zombie *> &zombies);
-bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p_ind);
-void handle_zombie_plant_encounter(vector<Zombie *> &zombies, vector<Plants *> &plants);
-
-//------------------------------Zombie all status--------------------------------------
-void update_zombies_status(vector<Zombie *> &zombies, vector<Plants *> &plants);
