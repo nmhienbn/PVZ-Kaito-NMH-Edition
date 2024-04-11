@@ -13,16 +13,13 @@ extern window win;
 /*
 Peashooter constructor
 */
-Peashooter::Peashooter(const int &_row, const int &_col)
+Peashooter::Peashooter(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = PEASHOOTER_TYPE;
-    row = _row;
-    col = _col;
     health = PLANT_HEALTH_LIMIT[PEASHOOTER_TYPE];
     sec_for_prepare = 1;
     directory_num = PEASHOOTER_SHEET_DIRECTORY;
-    frame = 0;
-    attacked_time = 0;
+    attack_range = ONE_ROW_AHEAD;
 }
 
 /*
@@ -35,14 +32,13 @@ Peashooter::~Peashooter()
 /*
 Create new pea from a peashooter.
 */
-void Peashooter::fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets)
+void Peashooter::fire_pea(vector<Bullet *> &bullets)
 {
     if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
         bullets.push_back(new Pea(row, cells[row][col].x2 - 10));
     }
-    determine_appearance(zombies);
 }
 
 /*
@@ -50,28 +46,28 @@ Change peashooter's appearance if a peashooter need to attack or not.
 (Peashooter is attack only if there are some zombies in the row.)
 Updated: Zombie position > peashooter position
 */
-void Peashooter::determine_appearance(vector<Zombie *> &zombies)
+void Peashooter::determine_appearance(bool check_zombie_in_attack_range)
 {
     // Attack
-    for (const auto &zombie : zombies)
-        if (row == zombie->row &&
-            is_in(cells[0][col].x2 - 140, zombie->x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
-        {
-            if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
-            {
-                if (frame == 0)
-                {
-                    directory_num = PEASHOOTER_ATTACK_DIRECTORY;
-                }
-            }
-            return;
-        }
-    // No attack
-    if (directory_num == PEASHOOTER_ATTACK_DIRECTORY)
+    if (check_zombie_in_attack_range)
     {
-        if (frame == 0)
+        if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
         {
-            directory_num = PEASHOOTER_SHEET_DIRECTORY;
+            if (frame == 0)
+            {
+                directory_num = PEASHOOTER_ATTACK_DIRECTORY;
+            }
+        }
+    }
+    // No attack
+    else
+    {
+        if (directory_num == PEASHOOTER_ATTACK_DIRECTORY)
+        {
+            if (frame == 0)
+            {
+                directory_num = PEASHOOTER_SHEET_DIRECTORY;
+            }
         }
     }
 }

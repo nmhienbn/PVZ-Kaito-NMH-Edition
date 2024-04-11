@@ -21,6 +21,15 @@ Plants::~Plants()
 {
 }
 
+Plants::Plants(const int &_row, const int &_col)
+{
+    row = _row;
+    col = _col;
+    attacked_time = 0;
+    frame = 0;
+    attack_range = NO_ATTACK;
+}
+
 /*
 Plant display: nothing
 */
@@ -32,7 +41,7 @@ void Plants::display(const int &_row)
 Plant geter
 @return plant's type
 */
-int Plants::get_type()
+int Plants::get_type() const
 {
     return type;
 }
@@ -44,11 +53,16 @@ void Plants::action()
 {
 }
 
+AttackRange Plants::get_attack_range() const
+{
+    return attack_range;
+}
+
 /*
 Plant geter
 @return plant's row
 */
-int Plants::get_row()
+int Plants::get_row() const
 {
     return row;
 }
@@ -57,7 +71,7 @@ int Plants::get_row()
 Plant geter
 @return plant's column
 */
-int Plants::get_col()
+int Plants::get_col() const
 {
     return col;
 }

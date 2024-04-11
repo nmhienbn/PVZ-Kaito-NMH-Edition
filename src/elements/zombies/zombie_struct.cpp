@@ -43,6 +43,11 @@ Zombie::~Zombie()
 {
 }
 
+int Zombie::get_row() const
+{
+    return row;
+}
+
 int Zombie::get_health()
 {
     return health;

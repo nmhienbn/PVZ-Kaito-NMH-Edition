@@ -14,16 +14,13 @@ extern window win;
 /*
 Snow Pea constructor
 */
-Snowpea::Snowpea(const int &_row, const int &_col)
+Snowpea::Snowpea(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = SNOWPEA_TYPE;
-    row = _row;
-    col = _col;
     health = PLANT_HEALTH_LIMIT[SNOWPEA_TYPE];
     sec_for_prepare = 1;
     directory_num = SNOWPEA_SHEET_DIRECTORY;
-    frame = 0;
-    attacked_time = 0;
+    attack_range = ONE_ROW_AHEAD;
 }
 
 /*
@@ -36,14 +33,13 @@ Snowpea::~Snowpea()
 /*
 Create new pea from a snow pea.
 */
-void Snowpea::fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets)
+void Snowpea::fire_pea(vector<Bullet *> &bullets)
 {
     if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
         bullets.push_back(new SnowzPea(row, cells[row][col].x2 - 10));
     }
-    determine_appearance(zombies);
 }
 
 /*
@@ -51,28 +47,28 @@ Change snow pea's appearance if a snow pea need to attack or not.
 (Snow Pea is attack only if there are some zombies in the row.)
 Updated: Zombie position > snow pea position
 */
-void Snowpea::determine_appearance(vector<Zombie *> &zombies)
+void Snowpea::determine_appearance(bool check_zombie_in_attack_range)
 {
     // Attack
-    for (const auto &zombie : zombies)
-        if (row == zombie->row &&
-            is_in(cells[0][col].x2 - 140, zombie->x_location, ZOMBIE_INIT_X - ZOMBIE_EXACT_LOCATION - 20))
-        {
-            if (directory_num == SNOWPEA_SHEET_DIRECTORY)
-            {
-                if (frame == 0)
-                {
-                    directory_num = SNOWPEA_ATTACK_DIRECTORY;
-                }
-            }
-            return;
-        }
-    // No attack
-    if (directory_num == SNOWPEA_ATTACK_DIRECTORY)
+    if (check_zombie_in_attack_range)
     {
-        if (frame == 0)
+        if (directory_num == SNOWPEA_SHEET_DIRECTORY)
         {
-            directory_num = SNOWPEA_SHEET_DIRECTORY;
+            if (frame == 0)
+            {
+                directory_num = SNOWPEA_ATTACK_DIRECTORY;
+            }
+        }
+    }
+    // No attack
+    else
+    {
+        if (directory_num == SNOWPEA_ATTACK_DIRECTORY)
+        {
+            if (frame == 0)
+            {
+                directory_num = SNOWPEA_SHEET_DIRECTORY;
+            }
         }
     }
 }

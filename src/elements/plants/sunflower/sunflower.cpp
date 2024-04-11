@@ -14,16 +14,12 @@ extern window win;
 /*
 Sunflower constructor
 */
-Sunflower::Sunflower(const int &_row, const int &_col)
+Sunflower::Sunflower(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = SUNFLOWER_TYPE;
-    row = _row;
-    col = _col;
     health = PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE];
     sec_for_prepare = SUN_GEN_SUNFLOWER_CLK_COUNT;
     directory_num = SUNFLOWER_SHEET_DIRECTORY;
-    frame = 0;
-    attacked_time = 0;
 }
 
 /*

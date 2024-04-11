@@ -59,6 +59,7 @@ public:
     /*Make zombie's armor drop*/
     virtual void armor_drop(vector<ZombiePart> &zombie_parts){};
 
+    int get_row() const;
     int get_health();
     void change_zombie_eating_status();
     void determine_appearance(vector<ZombiePart> &zombie_parts);

@@ -1,12 +1,18 @@
 #pragma once
 #include "draw/rsdl.hpp"
-#include "elements/zombies/zombie_struct.hpp"
 #include "music/music.hpp"
 #include "plants.hpp"
 #include <nlohmann/json.hpp>
 #include <vector>
 using namespace std;
 using namespace nlohmann;
+
+enum AttackRange
+{
+    NO_ATTACK,
+    ONE_ROW_AHEAD,
+    THREE_X_THREE
+};
 
 struct PlantAssets
 {
@@ -30,19 +36,24 @@ protected:
     int directory_num;
     int frame = 0;
     int attacked_time = 0;
+    AttackRange attack_range;
 
 public:
     Plants();
-    virtual ~Plants();
-    virtual void display(const int &_row);
-    virtual void action();
-    int get_type();
-    int get_row();
-    int get_col();
+    Plants(const int &_row, const int &_col);
+
+    AttackRange get_attack_range() const;
+    int get_type() const;
+    int get_row() const;
+    int get_col() const;
     void set_attacked_time(const int &_attacked_time);
     void decrease_health();
     bool is_died();
     void display(const PlantAssets &assets);
+
+    virtual ~Plants();
+    virtual void display(const int &_row);
+    virtual void action();
     virtual void next_frame(const PlantAssets &assets);
 };
 

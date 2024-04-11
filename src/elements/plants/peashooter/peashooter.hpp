@@ -7,8 +7,8 @@ class Peashooter : public Plants
 public:
     Peashooter(const int &_row, const int &_col);
     ~Peashooter();
-    void determine_appearance(vector<Zombie *> &zombies);
+    void determine_appearance(bool check_zombie_in_attack_range);
     void display(const int &_row) override;
     void action() override;
-    void fire_pea(vector<Zombie *> &zombies, vector<Bullet *> &bullets);
+    void fire_pea(vector<Bullet *> &bullets);
 };

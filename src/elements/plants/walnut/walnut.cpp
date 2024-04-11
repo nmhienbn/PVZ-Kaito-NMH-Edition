@@ -8,21 +8,16 @@ auto WALNUT_ASSET = PlantAssets(walnut_data["frame"], walnut_data["img_width"], 
                                 walnut_data["x_alias"], walnut_data["y_alias"]);
 
 extern int game_state;
-extern Map cells;
 extern window win;
 
 /*
 Wall-nut constructor
 */
-Walnut::Walnut(const int &_row, const int &_col)
+Walnut::Walnut(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = WALNUT_TYPE;
-    row = _row;
-    col = _col;
     health = PLANT_HEALTH_LIMIT[WALNUT_TYPE];
     directory_num = WALNUT_1_DIRECTORY;
-    frame = 0;
-    attacked_time = 0;
 }
 
 /*
