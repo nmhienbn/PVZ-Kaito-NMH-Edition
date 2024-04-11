@@ -55,6 +55,8 @@ enum music_type
     SNOW_PEA_SPARKLES_DIRECTORY,
     ZOMBIE_COMING_MUSIC_DIRECTORY,
     HUGE_WAVE_MUSIC_DIRECTORY,
+    FINAL_WAVE_MUSIC_DIRECTORY,
+    SIREN_MUSIC_DIRECTORY,
     ZOMBIE_EATING1_MUSIC_DIRECTORY,
     ZOMBIE_EATING2_MUSIC_DIRECTORY,
     ZOMBIE_FALLING_1_MUSIC_DIRECTORY,
@@ -66,6 +68,8 @@ enum music_type
     PAUSE_MUSIC_DIRECTORY,
     BUZZER_MUSIC_DIRECTORY, // player have not enough sun
     MOWER_MUSIC_DIRECTORY,
+    LOADINGBAR_FLOWER_DIRECTORY,
+    LOADINGBAR_ZOMBIE_DIRECTORY,
 
     COUNT_MUSIC_DIRECTORY
 };
@@ -105,6 +109,8 @@ const string music_directory[] = {
     "./audio/snow_pea_sparkles.mp3", // SNOW_PEA_SPARKLES_DIRECTORY
     "./audio/zombie_coming.mp3",     // ZOMBIE_COMING_MUSIC_DIRECTORY
     "./audio/hugewave.mp3",          // HUGE_WAVE_MUSIC_DIRECTORY
+    "./audio/finalwave.mp3",         // FINAL_WAVE_MUSIC_DIRECTORY
+    "./audio/siren.mp3",             // SIREN_MUSIC_DIRECTORY
     "./audio/zombie_eating1.mp3",    // ZOMBIE_EATING1_MUSIC_DIRECTORY
     "./audio/zombie_eating2.mp3",    // ZOMBIE_EATING2_MUSIC_DIRECTORY
     "./audio/zombie_falling_1.mp3",  // ZOMBIE_EATING1_MUSIC_DIRECTORY
@@ -116,6 +122,8 @@ const string music_directory[] = {
     "./audio/pause.mp3",             // PAUSE_MUSIC_DIRECTORY
     "./audio/buzzer.mp3",            // BUZZER_MUSIC_DIRECTORY
     "./audio/lawnmower.mp3",         // MOWER_DIRECTORY
+    "./audio/loadingbar_flower.mp3", // LOADINGBAR_FLOWER_DIRECTORY
+    "./audio/loadingbar_zombie.mp3"  // LOADINGBAR_ZOMBIE_DIRECTORY
 
 };
 

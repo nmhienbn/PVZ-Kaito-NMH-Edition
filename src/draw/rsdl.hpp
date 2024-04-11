@@ -13,6 +13,7 @@
 #define CONTM_TTF "contm.ttf"
 #define BRIANNE_TTF "Brianne_s_hand.ttf"
 #define HOUSEOFTERROR_TTF "HouseofTerror.ttf"
+#define PVZUI_TTF "PVZUI.ttf"
 #define MAX_TIME_ANNOUNCE 180
 
 class RGB

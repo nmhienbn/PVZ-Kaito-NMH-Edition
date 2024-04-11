@@ -119,11 +119,11 @@ void display_game_layout()
 void display_icons_in_icon_bar()
 {
     int plant_seed_dir[] = {
-        PEASHOOTER_ICON_BRIGHT_DIRECTORY,
-        SUNFLOWER_ICON_BRIGHT_DIRECTORY,
-        WALNUT_ICON_BRIGHT_DIRECTORY,
-        SNOWPEA_ICON_BRIGHT_DIRECTORY,
-        CHERRYBOMB_ICON_BRIGHT_DIRECTORY,
+        PEASHOOTER_ICON_DIRECTORY,
+        SUNFLOWER_ICON_DIRECTORY,
+        WALNUT_ICON_DIRECTORY,
+        SNOWPEA_ICON_DIRECTORY,
+        CHERRYBOMB_ICON_DIRECTORY,
     };
     // Count number of unlocked plant.
     int num_plants = 0;
@@ -143,12 +143,13 @@ void display_icons_in_icon_bar()
     // Plant seed
     for (int i = 0; i <= num_plants; i++)
     {
+        win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
         // Not enough sun or is chosen
         if (player.sun_count < PLANT_SUN_COST[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
         {
-            plant_seed_dir[i]++;
+            win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
         }
-        win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
+
         if (icons.plant_remaining_time[i] == 0)
         {
             if (icons.chosen_plant != i)
@@ -163,6 +164,16 @@ void display_icons_in_icon_bar()
                          icons.plant_remaining_time[i] * ICON_HEIGHT / PLANT_LOADING_TIME[i]);
         }
         win.show_text_shadowed(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
+
+        int w, h;
+        int fsize = 30;
+        TTF_SizeText(win.get_font(PVZUI_TTF, fsize), to_string(PLANT_SUN_COST[i]).c_str(), &w, &h);
+        w = plant_seed[i].x1 + ICON_WIDTH - 4 - w;
+        h = plant_seed[i].y1 + ICON_HEIGHT - h;
+        win.show_text(to_string(PLANT_SUN_COST[i]),
+                      w + 2, h + 3, BLACK, PVZUI_TTF, fsize);
+        win.show_text_shadowed(to_string(PLANT_SUN_COST[i]),
+                               w, h, WHITE, PVZUI_TTF, fsize);
     }
 }
 
@@ -194,7 +205,7 @@ void display_game_elements()
 {
     // Shadows
     display_shadow();
-    display_mowers();
+    display_mowers(game_characters.mowers);
 
     for (int row = 0; row < VERT_BLOCK_COUNT; row++)
     {

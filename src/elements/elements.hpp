@@ -3,6 +3,7 @@ This file include game elements: Plants, Zombies, Player, Level, Icons (Plant se
 */
 #pragma once
 #include "elements/announcer/announcer.hpp"
+#include "elements/mower/mower.hpp"
 #include "elements/plants/plant_type.hpp"
 #include "elements/zombies/wave.hpp"
 
@@ -24,6 +25,7 @@ struct Elements
 {
     vector<Plants *> plants;
     vector<Bullet *> bullets;
+    vector<Mower *> mowers;
 
     vector<Zombie *> zombies;
     vector<ZombiePart> zombie_parts;
@@ -81,7 +83,6 @@ struct Level
 
     int wave_count;      // number of wave
     int cur_wave;        // current wave
-    int cur_sec;         // current second
     int final_wave;      // final wave
     bool waves_finished; // true if waves has finished
 

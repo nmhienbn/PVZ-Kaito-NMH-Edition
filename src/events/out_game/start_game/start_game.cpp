@@ -16,6 +16,7 @@ const SDL_RendererFlip SPROUT_FLIP[] = {SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_
 int F_SPROUT[NUM_SPROUT];
 int W_SPROUT[] = {54, 70, 45, 60, 104};
 int H_SPROUT[] = {80, 104, 67, 89, 122};
+bool has_played_music[NUM_SPROUT];
 
 const RGB UNTAP(225, 187, 34);
 const RGB TAPPED(255, 33, 4);
@@ -161,6 +162,11 @@ void display_loading_screen()
         {
             if (pos >= SPROUT[j] + cap_width / 2)
             {
+                if (!has_played_music[j])
+                {
+                    has_played_music[j] = true;
+                    play_sound_effect(LOADINGBAR_FLOWER_DIRECTORY);
+                }
                 win.draw_png(LOAD_BAR_SPROUT_DIRECTORY, 27 * F_SPROUT[j], 0, 27, 40, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j], SPROUT_FLIP[j]);
                 if (F_SPROUT[j] < 17 && (clk % 4 == 0))
                     F_SPROUT[j]++;
@@ -169,6 +175,11 @@ void display_loading_screen()
         // Loading zombie head
         if (pos >= SPROUT[j])
         {
+            if (!has_played_music[j])
+            {
+                has_played_music[j] = true;
+                play_sound_effect(LOADINGBAR_ZOMBIE_DIRECTORY);
+            }
             win.draw_png(LOAD_BAR_ZOMBIEHEAD_DIRECTORY, 52 * F_SPROUT[j], 0, 52, 61, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j]);
             if (F_SPROUT[j] < 17 && (clk % 4 == 0))
                 F_SPROUT[j]++;

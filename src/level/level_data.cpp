@@ -60,9 +60,8 @@ void read_level()
     // Number of zombie in each wave
     decide_zombie_each_wave(level.waves, jwaves);
 
-    // Reset cur wave & cur sec
+    // Reset cur wave
     level.cur_wave = 0;
-    level.cur_sec = 0;
     level.waves_finished = false;
 }
 
@@ -119,11 +118,11 @@ void load_level()
     // cout << level.level_num << '\n';
 
     if (level.level_num == 1)
-        init_mower(2, 2);
+        init_mower(game_characters.mowers, 2, 2);
     else if (level.level_num == 2)
-        init_mower(1, 3);
+        init_mower(game_characters.mowers, 1, 3);
     else
-        init_mower(0, 4);
+        init_mower(game_characters.mowers, 0, 4);
     player.sun_count = INIT_SUN_COUNT;
     player.is_choosing_a_plant = false;
     player.is_shoveling = false;

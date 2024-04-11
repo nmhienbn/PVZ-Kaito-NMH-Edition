@@ -1,7 +1,11 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "elements/Map/Map.hpp"
-#include "elements/zombies/zombie_struct.hpp"
+#include "music/music.hpp"
+#define MOWER_WIDTH 70
+#define MOWER_HEIGHT 57
+#define MOWER_FRAME 5
+#define MOWER_DX 3
 
 enum Mower_status
 {
@@ -17,14 +21,10 @@ struct Mower
 
     Mower();
     Mower(int _x, int _row, int _frame, Mower_status _status);
+    void display();
+    bool active();
 };
 
-void init_mower(int l_row, int r_row);
-void display_mowers();
-void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
-                                   vector<ZombiePart> &zombie_parts);
-bool apply_mower_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
-                                Mower &mower,
-                                vector<ZombiePart> &zombie_parts);
-bool is_mower_hit_zombie(Mower &mower, Zombie &zombie);
-bool active_mower(int row);
+void init_mower(vector<Mower *> &mowers, int l_row, int r_row);
+void display_mowers(const vector<Mower *> &mowers);
+bool active_mower(vector<Mower *> &mowers, int row);

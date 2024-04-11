@@ -250,7 +250,7 @@ Dim = Exposue - 3.20
 06/04/2024:
 	Use json files for some game parameters.
 	Found that "make -j" is faster than "make" (multithread) 
-	but you must use it 2 times.
+	but you must "make -j compile" and then "make run"
 
 08/04/2024:
 	Fix mowers, lost screen.

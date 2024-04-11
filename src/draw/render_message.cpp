@@ -12,7 +12,6 @@ void display_ready_set_plant(const int &image_num)
 {
     win.clear_renderer();
     display_game_layout();
-    display_mowers();
     win.draw_png_center(image_num);
     win.show_announcer_text();
 }

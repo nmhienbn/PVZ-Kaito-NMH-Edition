@@ -26,7 +26,7 @@ void handle_changes()
     handle_bullet_encounter_zombie(game_characters.bullets, game_characters.zombies, game_characters.zombie_parts);
 
     // Check all mowers' status
-    handle_mower_zombie_encounter(game_characters.zombies, game_characters.zombie_parts);
+    handle_mower_zombie_encounter(game_characters.mowers, game_characters.zombies, game_characters.zombie_parts);
 
     // Update all plants' status
     update_plants_status(game_characters.plants);
@@ -95,7 +95,7 @@ void create_new_zombies()
     }
     if (level.zombie_delay_state == FINAL_WAVE)
     {
-        if (game_characters.zombies.empty())
+        if (game_characters.zombies.size() < 10)
         {
             if (level.announcer.state == ANNOUNCED)
             {
@@ -107,14 +107,15 @@ void create_new_zombies()
         if (level.announcer.state == ANNOUNCING && level.announcer.is_finished())
         {
             level.zombie_delay_state = HUGE_WAVE;
-            level.announcer = Announcer(FINAL_WAVE_DIRECTORY, HUGE_WAVE_MUSIC_DIRECTORY);
+            level.announcer = Announcer(FINAL_WAVE_DIRECTORY, FINAL_WAVE_MUSIC_DIRECTORY);
+            play_sound_effect(SIREN_MUSIC_DIRECTORY);
         }
         return;
     }
 
     if (level.zombie_delay_state == HUGE_WAVE)
     {
-        if (game_characters.zombies.empty())
+        if (game_characters.zombies.size() < 10)
         {
             if (level.announcer.state == ANNOUNCED)
             {

@@ -1,146 +1,8 @@
 #include "mower.hpp"
-#define MOWER_WIDTH 70
-#define MOWER_HEIGHT 57
-#define MOWER_FRAME 5
-#define MOWER_DX 3
 
 extern int game_state;
 extern window win;
 extern Map cells;
-vector<Mower *> mowers;
-
-/*
-Init the mower from l_row to r_row
-*/
-void init_mower(int l_row, int r_row)
-{
-    mowers.assign(VERT_BLOCK_COUNT, nullptr);
-    for (int row = l_row; row <= r_row; row++)
-    {
-        mowers[row] = new Mower(cells[0][0].x1 - 55 - row * 2, row, 0, MOWER_INACTIVE);
-    }
-}
-
-/*
-Display the mowers (both inactive and active)
-*/
-void display_mowers()
-{
-    for (auto &mower : mowers)
-        if (mower != nullptr)
-        {
-            // current frame
-            int sframe = mower->frame / MOWER_FRAME;
-            // current column in source image
-            int scol = sframe % all_img[MOWER_DIRECTORY].c_sheet;
-            // current row in source image
-            int srow = sframe / all_img[MOWER_DIRECTORY].c_sheet;
-            // display
-            win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
-                         mower->x, cells[mower->row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
-            // move to next frame
-            if (mower->status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
-            {
-                if (++mower->frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
-                {
-                    mower->frame = 0;
-                }
-            }
-        }
-}
-
-/*
-Handle mower vs zombie collision
-*/
-void handle_mower_zombie_encounter(vector<Zombie *> &zombies,
-                                   vector<ZombiePart> &zombie_parts)
-{
-    if (check_status(game_state, IS_PAUSED) == true)
-        return;
-    // active mower if zombie touch
-    for (auto &zombie : zombies)
-    {
-        if (zombie->x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - 30)
-        {
-            active_mower(zombie->row);
-        }
-    }
-    // mower action
-    for (int i = 0; i < (int)mowers.size(); i++)
-        if (mowers[i] != nullptr && mowers[i]->status == MOWER_ACTIVE)
-        {
-            // mower move
-            mowers[i]->x += MOWER_DX;
-
-            // mower gone
-            if (++mowers[i]->x >= WINDOW_WIDTH)
-            {
-                mowers[i] = nullptr;
-                continue;
-            }
-
-            // mower hit zombie
-            for (int j = 0; j < (int)zombies.size();)
-            {
-                if (!apply_mower_hitting_zombie(zombies, j, *mowers[i], zombie_parts))
-                {
-                    j++;
-                }
-            }
-        }
-}
-
-/*
-Apply mower hit the zombies. (make zombie die immediately)
-*/
-bool apply_mower_hitting_zombie(vector<Zombie *> &zombies, const int &z_ind,
-                                Mower &mower,
-                                vector<ZombiePart> &zombie_parts)
-{
-    if (is_mower_hit_zombie(mower, *zombies[z_ind]))
-    {
-        // zombie die
-        zombies[z_ind]->add_zombie_die(zombie_parts);
-        // armor drop
-        if (zombies[z_ind]->type == CONE_TYPE)
-            zombie_parts.push_back(ZombiePart(CONE_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
-                                              zombies[z_ind]->row, zombies[z_ind]->x_location + 80,
-                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
-        if (zombies[z_ind]->type == BUCKET_TYPE)
-            zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME,
-                                              zombies[z_ind]->row, zombies[z_ind]->x_location + 80,
-                                              HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
-        // delete zombie
-        delete zombies[z_ind];
-        zombies.erase(zombies.begin() + z_ind);
-        return true;
-    }
-    return false;
-}
-
-/*
-@return 'true' if mower hit the zombie
-*/
-bool is_mower_hit_zombie(Mower &mower, Zombie &zombie)
-{
-    if (zombie.row == mower.row &&
-        zombie.x_location <= mower.x)
-        return true;
-    return false;
-}
-
-/*
-Return true if can active a mower in given row
-*/
-bool active_mower(int row)
-{
-    if (mowers[row] != nullptr && mowers[row]->status == MOWER_INACTIVE)
-    {
-        mowers[row]->status = MOWER_ACTIVE;
-        return true;
-    }
-    return false;
-}
 
 /*
 Mower constructor
@@ -158,4 +20,68 @@ Mower::Mower(int _x, int _row, int _frame, Mower_status _status)
     row = _row;
     frame = _frame;
     status = _status;
+}
+
+void Mower::display()
+{
+    // current frame
+    int sframe = frame / MOWER_FRAME;
+    // current column in source image
+    int scol = sframe % all_img[MOWER_DIRECTORY].c_sheet;
+    // current row in source image
+    int srow = sframe / all_img[MOWER_DIRECTORY].c_sheet;
+    // display
+    win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
+                 x, cells[row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
+    // move to next frame
+    if (status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
+    {
+        if (++frame >= MOWER_FRAME * all_img[MOWER_DIRECTORY].n_sheet)
+        {
+            frame = 0;
+        }
+    }
+}
+
+bool Mower::active()
+{
+    if (status == MOWER_INACTIVE)
+    {
+        status = MOWER_ACTIVE;
+        play_sound_effect(MOWER_MUSIC_DIRECTORY);
+        return true;
+    }
+    return false;
+}
+
+/*
+Init the mower from l_row to r_row
+*/
+void init_mower(vector<Mower *> &mowers, int l_row, int r_row)
+{
+    mowers.assign(VERT_BLOCK_COUNT, nullptr);
+    for (int row = l_row; row <= r_row; row++)
+    {
+        mowers[row] = new Mower(cells[0][0].x1 - 55 - row * 2, row, 0, MOWER_INACTIVE);
+    }
+}
+
+/*
+Display the mowers (both inactive and active)
+*/
+void display_mowers(const vector<Mower *> &mowers)
+{
+    for (auto &mower : mowers)
+        if (mower != nullptr)
+            mower->display();
+}
+
+/*
+Return true if can active a mower in given row
+*/
+bool active_mower(vector<Mower *> &mowers, int row)
+{
+    if (mowers[row] != nullptr)
+        return mowers[row]->active();
+    return false;
 }
