@@ -22,7 +22,7 @@ extern Window win;
 void display_choose_level(const bool &is_mouse_needed)
 {
     win.clear_renderer();
-    win.draw_png_scale(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    win.draw_png_height_scaled(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH);
     // Buttons
     display_button(RENAME_BUTTON, RENAME_DIRECTORY);
     display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
@@ -83,7 +83,7 @@ void display_game_layout()
     win.draw_bg(level.background_directory);
 
     // Sun bar and player's sun count
-    win.draw_png_scale(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH, SUN_BAR_HEIGHT);
+    win.draw_png_height_scaled(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH);
     win.set_style(CONTM_TTF, 24, TTF_STYLE_BOLD);
     win.show_text(to_string(player.sun_count), 90, 33, (player.sun_count_change_color_times & 1 ? RED : BLACK), CONTM_TTF);
 
@@ -119,11 +119,11 @@ void display_game_layout()
 void display_icons_in_icon_bar()
 {
     int plant_seed_dir[] = {
-        PEASHOOTER_ICON_DIRECTORY,
-        SUNFLOWER_ICON_DIRECTORY,
-        WALNUT_ICON_DIRECTORY,
-        SNOWPEA_ICON_DIRECTORY,
-        CHERRYBOMB_ICON_DIRECTORY,
+        PEASHOOTER_DIRECTORY,
+        SUNFLOWER_DIRECTORY,
+        WALNUT_DIRECTORY,
+        SNOWPEA_DIRECTORY,
+        CHERRYBOMB_DIRECTORY,
     };
     // Count number of unlocked plant.
     int num_plants = 0;
@@ -139,11 +139,16 @@ void display_icons_in_icon_bar()
         }
     }
     // Plant seed bar
-    win.draw_png(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, plant_seed[num_plants].y2 - 80);
+    // win.draw_png(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, plant_seed[num_plants].y2 - 80);
     // Plant seed
     for (int i = 0; i <= num_plants; i++)
     {
-        win.draw_png_scale(plant_seed_dir[i], plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
+        win.draw_png_height_scaled(SEED_PACKET_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH);
+        win.set_texture_alpha(plant_seed_dir[i], 255);
+        win.draw_png_width_scaled(plant_seed_dir[i], plant_seed[i].x1 + 8, plant_seed[i].y1 + 2, ICON_HEIGHT - 3);
+        win.set_texture_alpha(plant_seed_dir[i], 200);
+        win.draw_png_height_scaled(SUN_TAG_DIRECTORY, plant_seed[i].x1 + 58, plant_seed[i].y1 + 25, 41);
+        win.draw_png_height_scaled(SEED_PACKET_BOT_BORDER_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1 + 60, ICON_WIDTH);
         // Not enough sun or is chosen
         if (player.sun_count < PLANT_SUN_COST[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
         {
@@ -155,7 +160,7 @@ void display_icons_in_icon_bar()
             if (icons.chosen_plant != i)
                 plant_seed[i].blink();
             else
-                win.draw_png_scale(SEED_CHOSEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
+                win.draw_png_height_scaled(SEED_CHOSEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH);
         }
         else
         {
@@ -239,16 +244,14 @@ void display_chosen_plant()
     SDL_GetMouseState(&_x, &_y);
     if (player.is_shoveling)
     {
-        win.draw_png_scale(SHOVEL_DIRECTORY, _x, _y - ELEMENT_HEIGHT,
-                           ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png_height_scaled(SHOVEL_DIRECTORY, _x, _y - ELEMENT_HEIGHT, ELEMENT_WIDTH);
         return;
     }
     _x -= ELEMENT_WIDTH >> 1;
     _y -= ELEMENT_HEIGHT >> 1;
     if (PEASHOOTER_TYPE <= icons.chosen_plant && icons.chosen_plant < PLANT_COUNT)
     {
-        win.draw_png_scale(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y,
-                           ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png_height_scaled(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y, ELEMENT_WIDTH);
     }
 }
 

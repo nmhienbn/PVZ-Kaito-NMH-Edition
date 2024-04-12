@@ -99,10 +99,10 @@ Show text shadowed by render it's outline (set font outline).
 Then render it.
 */
 void Window::show_text_shadowed(const string &input, const int &x, const int &y,
-                                const RGB &color, string font_addr, const int &size)
+                                const RGB &color, string font_addr, const int &size, const int &outline_weight)
 {
-    set_outline(font_addr, size, 2);
-    show_text(input, x - 2, y - 2, BLACK, font_addr, size);
+    set_outline(font_addr, size, outline_weight);
+    show_text(input, x - outline_weight, y - outline_weight, BLACK, font_addr, size);
     set_outline(font_addr, size, 0);
     show_text(input, x, y, color, font_addr, size);
 }

@@ -39,8 +39,8 @@ void Pea::display()
     int more_px = 0;
     if (directory_num == PEA_EXPLODE_DIRECTORY)
         more_px += 25;
-    win.draw_png_scale(directory_num, x_location - more_px / 2, y_location - more_px / 2,
-                       width + more_px, height + more_px, angle);
+    win.draw_png_height_scaled(directory_num, x_location - more_px / 2, y_location - more_px / 2,
+                               width + more_px, angle);
 }
 
 void Pea::crash_effect()

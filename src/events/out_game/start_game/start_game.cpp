@@ -51,26 +51,23 @@ void display_starting_screen()
         // Change color when mouse over TAP_TO_START
         int _x = 0, _y = 0;
         SDL_GetMouseState(&_x, &_y);
-        win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        win.draw_png_height_scaled(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH);
         win.draw_png(LOAD_BAR_DIRT_DIRECTORY, 204, 490, 642, 106);
         win.draw_png(LOAD_BAR_GRASS_DIRECTORY, 200, 455, 628, 66);
-        int j = 0;
         for (auto &sprout : sprouts)
             sprout.display(INF);
         zom_head.display(INF);
         string loading = "CLICK TO START!";
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
-        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_BOLD);
         if (TAP_TO_START.is_mouse_in(_x, _y))
         {
-            win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, TAPPED, BRIANNE_TTF, 40);
+            win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, TAPPED, BRIANNE_TTF, 40, 1);
         }
         else
         {
-            win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40);
+            win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
         }
-        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_NORMAL);
         HANDLE_SDL_EVENT(
             QUIT();
             // Handle player click on TAP_TO_START
@@ -141,15 +138,13 @@ void display_loading_screen()
         else if (clk % 45 == 0)
             loading = "LOADING.";
         // Loading screen
-        win.draw_png_scale(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        win.draw_png_height_scaled(STARTING_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH);
         // Loading dirt
         win.draw_png(LOAD_BAR_DIRT_DIRECTORY, 204, 490, 642, 106);
         // Loading text
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
-        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_BOLD);
-        win.show_text(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40);
-        win.set_style(BRIANNE_TTF, 40, TTF_STYLE_NORMAL);
+        win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
         // Loading grass
         int dx = 628 * clk / LOADING_TIME;
         win.draw_png(LOAD_BAR_GRASS_DIRECTORY, 0, 0, dx / 2, 33, 200, 455, dx, 66);

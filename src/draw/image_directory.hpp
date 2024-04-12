@@ -67,13 +67,12 @@ enum ImageType
 
     CHERRYBOMB_SHEET_DIRECTORY,
     CHERRYBOMB_SHEET_BLINK_DIRECTORY,
+    CHERRYBOMB_EXPLOSION_DIRECTORY,
 
     SEED_CHOSEN_DIRECTORY,
-    PEASHOOTER_ICON_DIRECTORY,
-    SUNFLOWER_ICON_DIRECTORY,
-    WALNUT_ICON_DIRECTORY,
-    SNOWPEA_ICON_DIRECTORY,
-    CHERRYBOMB_ICON_DIRECTORY,
+    SEED_PACKET_DIRECTORY,
+    SUN_TAG_DIRECTORY,
+    SEED_PACKET_BOT_BORDER_DIRECTORY,
 
     SUNFLOWER_TROPHY_DIRECTORY,
     NEW_PEASHOOTER_DIRECTORY,
@@ -425,15 +424,14 @@ const Image all_img[] = {
     Image("./image/Plant_sheet/snowpea/snowpea_attack.png", 30, 8),       // SNOWPEA_ATTACK_DIRECTORY
     Image("./image/Plant_sheet/snowpea/snowpea_attack_blink.png", 30, 8), // SNOWPEA_ATTACK_BLINK_DIRECTORY
 
-    Image("./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", 24, 8),       // CHERRYBOMB_SHEET_DIRECTORY
-    Image("./image/Plant_sheet/cherrybomb/cherrybomb_sheet_blink.png", 24, 8), // CHERRYBOMB_SHEET_BLINK_DIRECTORY
+    Image("./image/Plant_sheet/cherrybomb/cherrybomb_sheet.png", 21, 8),       // CHERRYBOMB_SHEET_DIRECTORY
+    Image("./image/Plant_sheet/cherrybomb/cherrybomb_sheet_blink.png", 21, 8), // CHERRYBOMB_SHEET_BLINK_DIRECTORY
+    Image("./image/Plant_sheet/cherrybomb/cherrybomb_explosion.png", 84, 8),   // CHERRYBOMB_EXPLOSION_DIRECTORY
 
-    Image("./image/Plant_seed/Seedpacketselect.png"),       // SEED_CHOSEN_DIRECTORY
-    Image("./image/Plant_seed/Peashooter_Seed_Packet.png"), // PEASHOOTER_ICON_DIRECTORY
-    Image("./image/Plant_seed/Sunflower_Seed_Packet.png"),  // SUNFLOWER_ICON_DIRECTORY
-    Image("./image/Plant_seed/Walnut_Seed_Packet.png"),     // WALNUT_ICON_DIRECTORY
-    Image("./image/Plant_seed/Snowpea_Seed_Packet.png"),    // SNOWPEA_ICON_DIRECTORY
-    Image("./image/Plant_seed/Cherrybomb_Seed_Packet.png"), // CHERRYBOMB_ICON_DIRECTORY
+    Image("./image/Plant_seed/Seed_Packet_Select.png"),    // SEED_CHOSEN_DIRECTORY
+    Image("./image/Plant_seed/Seed_Packet.png"),           // SEED_PACKET_DIRECTORY
+    Image("./image/Plant_seed/Sun_Tag.png"),               // SUN_TAG_DIRECTORY
+    Image("./image/Plant_seed/Seed_Packet_BotBorder.png"), // SEED_PACKET_BOT_BORDER_DIRECTORY
 
     Image("./image/New_plant/Golden_Sunflower_Trophy.png"), // SUNFLOWER_TROPHY_DIRECTORY
     Image("./image/New_plant/new_peashooter.png"),          // NEW_PEASHOOTER_DIRECTORY

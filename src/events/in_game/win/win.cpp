@@ -38,7 +38,7 @@ bool display_win()
             // Display continue After 23th winning frame
             if (i >= 23)
             {
-                win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
+                win.draw_png_height_scaled(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH);
                 CONTINUE.blink();
             }
             win.update_screen();

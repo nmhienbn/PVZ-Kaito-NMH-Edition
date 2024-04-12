@@ -3,6 +3,9 @@
 
 class CherryBomb : public Plants
 {
+private:
+    bool has_exploded;
+
 public:
     CherryBomb(const int &_row, const int &_col);
     ~CherryBomb();

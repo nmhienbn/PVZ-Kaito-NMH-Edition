@@ -16,7 +16,7 @@ enum AttackRange
 
 struct PlantAssets
 {
-    int frame;
+    int frame; // How many frame for a state in sprite sheet
     int img_width;
     int img_height;
     int game_width;

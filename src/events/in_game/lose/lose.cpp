@@ -22,7 +22,7 @@ void display_losing_message()
         HANDLE_SDL_EVENT(QUIT(););
     }
     win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
-    win.draw_png_scale(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH, CONTINUE_HEIGHT);
+    win.draw_png_height_scaled(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH);
     has_display_lost = true;
 }
 

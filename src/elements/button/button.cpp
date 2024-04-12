@@ -58,5 +58,5 @@ Display transparent black when level is locked
 */
 void display_level_is_locked(const Button &button)
 {
-    win.draw_png_scale(BLACK_SCREEN_DIRECTORY, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+    win.draw_png_height_scaled(BLACK_SCREEN_DIRECTORY, button.x1, button.y1, button.x2 - button.x1);
 }

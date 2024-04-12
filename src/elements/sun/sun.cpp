@@ -85,6 +85,6 @@ void display_suns(vector<Sun> &suns)
         {
             win.set_texture_alpha(SUN_DIRECTORY, 255);
         }
-        win.draw_png_scale(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH, ELEMENT_HEIGHT);
+        win.draw_png_height_scaled(SUN_DIRECTORY, sun.x_location, sun.y_location, ELEMENT_WIDTH);
     }
 }
