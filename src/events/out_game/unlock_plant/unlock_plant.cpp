@@ -4,7 +4,7 @@ extern int game_state;
 extern bool quit;
 extern Level level;
 extern Elements game_characters;
-extern window win;
+extern Window win;
 
 /*
 If player unlock a new plant, display this

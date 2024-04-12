@@ -2,7 +2,7 @@
 #define INIT_SUN_Y 5
 
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*
 Random final row (0-4) and column (0-8) for sun from the sky

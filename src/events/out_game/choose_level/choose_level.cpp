@@ -4,7 +4,7 @@ extern int game_state;
 extern bool quit;
 extern Level level;
 extern Player player;
-extern window win;
+extern Window win;
 
 /*
 Handle choosing level screen:

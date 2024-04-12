@@ -2,7 +2,7 @@
 #include <algorithm>
 
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*Construct new pea*/
 Pea::Pea(int _row, int _x) : Bullet(PEA, _row, _x)

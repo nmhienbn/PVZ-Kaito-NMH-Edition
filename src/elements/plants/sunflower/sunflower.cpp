@@ -9,7 +9,7 @@ auto SUNFLOWER_ASSET = PlantAssets(sunflower_data["frame"], sunflower_data["img_
 
 extern int game_state;
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*
 Sunflower constructor

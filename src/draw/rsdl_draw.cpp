@@ -3,7 +3,7 @@
 /*
 SDL set color
 */
-void window::set_color(RGB color)
+void Window::set_color(RGB color)
 {
     SDL_SetRenderDrawColor(renderer, color.red, color.green, color.blue, 255);
 }
@@ -11,7 +11,7 @@ void window::set_color(RGB color)
 /*
 SDL draw filled rectangle
 */
-void window::fill_rect(int x, int y, int width, int height, RGB color)
+void Window::fill_rect(int x, int y, int width, int height, RGB color)
 {
     set_color(color);
     SDL_Rect r;
@@ -25,7 +25,7 @@ void window::fill_rect(int x, int y, int width, int height, RGB color)
 /*
 SDL draw line
 */
-void window::draw_line(int x1, int y1, int x2, int y2, RGB color)
+void Window::draw_line(int x1, int y1, int x2, int y2, RGB color)
 {
     set_color(color);
     SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
@@ -34,7 +34,7 @@ void window::draw_line(int x1, int y1, int x2, int y2, RGB color)
 /*
 SDL draw point
 */
-void window::draw_point(int x, int y, RGB color)
+void Window::draw_point(int x, int y, RGB color)
 {
     set_color(color);
     SDL_RenderDrawPoint(renderer, x, y);
@@ -43,7 +43,7 @@ void window::draw_point(int x, int y, RGB color)
 /*
 SDL draw unfilled rectangle
 */
-void window::draw_rect(int x, int y, int width, int height, RGB color)
+void Window::draw_rect(int x, int y, int width, int height, RGB color)
 {
     draw_line(x, y, x + width, y, color);
     draw_line(x, y, x, y + height, color);

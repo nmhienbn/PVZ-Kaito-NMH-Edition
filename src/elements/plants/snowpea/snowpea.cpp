@@ -9,7 +9,7 @@ auto SNOWPEA_ASSET = PlantAssets(snowpea_data["frame"], snowpea_data["img_width"
 
 extern int game_state;
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*
 Snow Pea constructor

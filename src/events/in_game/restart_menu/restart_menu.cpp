@@ -12,7 +12,7 @@ extern int game_state;
 extern int game_state;
 extern int clk;
 extern Level level;
-extern window win;
+extern Window win;
 
 /*
 Display all needed elements when player tends to restart.

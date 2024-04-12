@@ -4,7 +4,7 @@ extern int game_state;
 extern bool quit;
 extern Level level;
 extern Elements game_characters;
-extern window win;
+extern Window win;
 static bool has_display_lost = false;
 
 /*

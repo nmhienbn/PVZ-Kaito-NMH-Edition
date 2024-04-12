@@ -8,7 +8,7 @@ auto PEASHOOTER_ASSET = PlantAssets(peashooter_data["frame"], peashooter_data["i
 
 extern int game_state;
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*
 Peashooter constructor

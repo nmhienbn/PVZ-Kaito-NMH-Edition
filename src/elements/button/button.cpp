@@ -1,6 +1,6 @@
 #include "elements/button/button.hpp"
 
-extern window win;
+extern Window win;
 
 /*Button constructor*/
 Button::Button()

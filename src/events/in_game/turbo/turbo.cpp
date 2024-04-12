@@ -2,7 +2,7 @@
 #define MAX_DIM_SCREEN_TIME 10
 
 extern int game_state;
-extern window win;
+extern Window win;
 extern Map cells;
 extern Elements game_characters;
 int dim_screen_time = 0;

@@ -8,7 +8,7 @@
 #define PROGRESS_PART_WIDTH 25
 #define PROGRESS_PART_HEIGHT 25
 
-extern window win;
+extern Window win;
 extern Level level;
 int now_progress = 0;
 const int dx = WINDOW_WIDTH - PROGRESS_BAR_WIDTH - 25;

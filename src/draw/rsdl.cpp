@@ -6,7 +6,7 @@ using namespace std;
 /*
 Init window
 */
-void window::init()
+void Window::init()
 {
     if (SDL_Init(0) < 0)
         printf("SDL Init Fail\n");
@@ -24,7 +24,7 @@ void window::init()
 /*
 Create window and renderer with width, height and title
 */
-window::window(int width, int height, string title)
+Window::Window(int width, int height, string title)
 {
     init();
     win = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
@@ -43,7 +43,7 @@ window::window(int width, int height, string title)
 /*
 Destroy window
 */
-window::~window()
+Window::~Window()
 {
     SDL_DestroyWindow(win);
     if (TTF_WasInit())
@@ -55,7 +55,7 @@ window::~window()
 /*
 Show everything on renderer to screen.
 */
-void window::update_screen()
+void Window::update_screen()
 {
     SDL_RenderPresent(renderer);
     int now_time = SDL_GetTicks() - previous_time;
@@ -67,7 +67,7 @@ void window::update_screen()
 /*
 Clear renderer
 */
-void window::clear_renderer()
+void Window::clear_renderer()
 {
     SDL_RenderClear(renderer);
 }

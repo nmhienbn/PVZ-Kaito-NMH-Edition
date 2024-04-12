@@ -8,7 +8,7 @@ auto WALNUT_ASSET = PlantAssets(walnut_data["frame"], walnut_data["img_width"], 
                                 walnut_data["x_alias"], walnut_data["y_alias"]);
 
 extern int game_state;
-extern window win;
+extern Window win;
 
 /*
 Wall-nut constructor

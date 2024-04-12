@@ -8,7 +8,7 @@ Elements game_characters;
 Icons icons;
 Player player;
 Map cells;
-window win(WINDOW_WIDTH, WINDOW_HEIGHT);
+Window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 /*
 Init game & music. Set mouse cursor

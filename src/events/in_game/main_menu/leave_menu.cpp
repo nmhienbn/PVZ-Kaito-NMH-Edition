@@ -11,7 +11,7 @@ const Button CANCEL_LEAVE(LEAVE_X1 + 210, LEAVE_X1 + 365, LEAVE_Y1 + 280, LEAVE_
 extern int game_state;
 extern bool quit;
 extern Level level;
-extern window win;
+extern Window win;
 
 /*
 Display this when player tends to leave to main menu

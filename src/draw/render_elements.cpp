@@ -7,7 +7,7 @@ extern Elements game_characters;
 extern Icons icons;
 extern Player player;
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*Display choosing level screen:
     Rename player

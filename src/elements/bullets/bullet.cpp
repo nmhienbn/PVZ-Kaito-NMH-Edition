@@ -2,7 +2,7 @@
 #include <algorithm>
 
 extern Map cells;
-extern window win;
+extern Window win;
 
 Bullet::Bullet()
 {

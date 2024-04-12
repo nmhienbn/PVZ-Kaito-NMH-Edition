@@ -1,7 +1,7 @@
 #include "mower.hpp"
 
 extern int game_state;
-extern window win;
+extern Window win;
 extern Map cells;
 
 /*

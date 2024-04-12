@@ -1,6 +1,6 @@
 #include "volume.hpp"
 
-extern window win;
+extern Window win;
 extern int music_volume;
 extern int sfx_volume;
 extern Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];

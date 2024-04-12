@@ -1,7 +1,7 @@
 #include "snowzpea.hpp"
 
 extern Map cells;
-extern window win;
+extern Window win;
 
 SnowzPea::SnowzPea(int _row, int _x) : Bullet(SNOWZPEA, _row, _x)
 {

@@ -6,7 +6,7 @@ extern int clk;
 extern Level level;
 extern Elements game_characters;
 extern Player player;
-extern window win;
+extern Window win;
 
 const int TIME_FOR_WIN = 180;
 int delay_for_win = INF;

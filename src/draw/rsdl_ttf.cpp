@@ -7,7 +7,7 @@ using namespace std;
 Get the TTF_Font pointer of a font.
 If font has not loaded, create new TTF_Font.
 */
-TTF_Font *window::get_font(string font_addr, const int &size)
+TTF_Font *Window::get_font(string font_addr, const int &size)
 {
     font_addr = FONTS_DIRECTORY + font_addr;
     stringstream ss;
@@ -26,7 +26,7 @@ TTF_Font *window::get_font(string font_addr, const int &size)
 Fixed: cannot show many texts.
 Runtime: Solid < Shaded < Blended
 */
-void window::show_text(const string &input, const int &x, const int &y,
+void Window::show_text(const string &input, const int &x, const int &y,
                        const RGB &color, string font_addr, const int &size, const int &alpha)
 {
     if (input == "")
@@ -53,7 +53,7 @@ void window::show_text(const string &input, const int &x, const int &y,
 /*
 Set game announce and remaining time of announce
 */
-void window::show_announcer_text(const string &announcer, const int &time_a)
+void Window::show_announcer_text(const string &announcer, const int &time_a)
 {
     announce = announcer;
     time_announce = time_a;
@@ -62,7 +62,7 @@ void window::show_announcer_text(const string &announcer, const int &time_a)
 /*
 Draw announcer.
 */
-void window::show_announcer_text()
+void Window::show_announcer_text()
 {
     if (time_announce > 0)
     {
@@ -79,7 +79,7 @@ void window::show_announcer_text()
 /*
 Set a font style.
 */
-void window::set_style(const string &font_addr, const int &size, const int &style)
+void Window::set_style(const string &font_addr, const int &size, const int &style)
 {
     TTF_Font *font = get_font(font_addr, size);
     TTF_SetFontStyle(font, style);
@@ -88,7 +88,7 @@ void window::set_style(const string &font_addr, const int &size, const int &styl
 /*
 Set a font outline - make "net chu" bigger
 */
-void window::set_outline(const string &font_addr, const int &size, const int &outline)
+void Window::set_outline(const string &font_addr, const int &size, const int &outline)
 {
     TTF_Font *font = get_font(font_addr, size);
     TTF_SetFontOutline(font, outline);
@@ -98,7 +98,7 @@ void window::set_outline(const string &font_addr, const int &size, const int &ou
 Show text shadowed by render it's outline (set font outline).
 Then render it.
 */
-void window::show_text_shadowed(const string &input, const int &x, const int &y,
+void Window::show_text_shadowed(const string &input, const int &x, const int &y,
                                 const RGB &color, string font_addr, const int &size)
 {
     set_outline(font_addr, size, 2);
@@ -111,7 +111,7 @@ void window::show_text_shadowed(const string &input, const int &x, const int &y,
     Load: Font, Surface -> Texture
 Fixed: cannot show many texts.
 */
-void window::show_text_utf8(const string &input, const int &x, const int &y,
+void Window::show_text_utf8(const string &input, const int &x, const int &y,
                             const RGB &color, string font_addr, const int &size)
 {
     if (input == "")

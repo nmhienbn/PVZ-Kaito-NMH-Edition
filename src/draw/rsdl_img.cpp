@@ -139,7 +139,7 @@ Get loaded texture.
 If has not loaded, create new texture.
 */
 double total_mem = 0;
-SDL_Texture *window::load_texture(int file_num)
+SDL_Texture *Window::load_texture(int file_num)
 {
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
@@ -166,7 +166,7 @@ Load & draw bmp:
     Load: Surface -> Texture
     Draw: SDL_RenderCopy
 */
-void window::draw_bmp(int file_num, int x, int y, int width, int height)
+void Window::draw_bmp(int file_num, int x, int y, int width, int height)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
@@ -190,7 +190,7 @@ Load & draw with scale: height = width * mHeight / mWidth
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
 */
-void window::draw_png_scale(int file_num, int x, int y, int width, int height, int angle)
+void Window::draw_png_scale(int file_num, int x, int y, int width, int height, int angle)
 {
     if (file_num == NULL_DIRECTORY || width <= 0)
         return;
@@ -208,7 +208,7 @@ Load & draw in the center of window
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
 */
-void window::draw_png_center(int file_num, double ratio, int x1, int y1)
+void Window::draw_png_center(int file_num, double ratio, int x1, int y1)
 {
     if (file_num == NULL_DIRECTORY)
         return;
@@ -231,7 +231,7 @@ Load & draw in the SDL_Rect(x, y, width, height)
     Load: Texture
     Draw: SDL_RenderCopy
 */
-void window::draw_png(int file_num, int x, int y, int width, int height)
+void Window::draw_png(int file_num, int x, int y, int width, int height)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
@@ -245,7 +245,7 @@ Load & draw in the SDL_Rect(x, y, width, height) and rotation of angle
     Load: Texture
     Draw: SDL_RenderCopyEx
 */
-void window::draw_png(int file_num, int x, int y, int width, int height, int angle)
+void Window::draw_png(int file_num, int x, int y, int width, int height, int angle)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
@@ -259,7 +259,7 @@ Load & draw with scale: from source SDL_Rect(sx, sy, sw, sh) to destination SDL_
     Load: Texture
     Draw: SDL_RenderCopy
 */
-void window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip)
+void Window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip)
 {
     if (file_num == NULL_DIRECTORY || sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0)
         return;
@@ -274,7 +274,7 @@ Load & draw image to all window:
     Load: Texture
     Draw: SDL_RenderCopy
 */
-void window::draw_bg(int file_num, int x, int y)
+void Window::draw_bg(int file_num, int x, int y)
 {
     if (file_num == NULL_DIRECTORY)
         return;
@@ -287,7 +287,7 @@ void window::draw_bg(int file_num, int x, int y)
 /*
 Set texture alpha mod
 */
-void window::set_texture_alpha(int file_num, int a)
+void Window::set_texture_alpha(int file_num, int a)
 {
     if (file_num != NULL_DIRECTORY && texture_cache[file_num] != NULL)
     {
@@ -298,7 +298,7 @@ void window::set_texture_alpha(int file_num, int a)
 /*
 Set texture RGB mod
 */
-void window::set_texture_color(int file_num, int r, int g, int b)
+void Window::set_texture_color(int file_num, int r, int g, int b)
 {
     if (file_num != NULL_DIRECTORY && texture_cache[file_num] != NULL)
     {
@@ -310,7 +310,7 @@ extern bool quit;
 /*
 Fade out effect
 */
-void window::fade_out()
+void Window::fade_out()
 {
     for (int i = 0; i <= 64; i++)
     {
@@ -327,7 +327,7 @@ void window::fade_out()
 /*
 Delete a game texture
 */
-void window::delete_texture(const int &file_num)
+void Window::delete_texture(const int &file_num)
 {
     if (texture_cache[file_num] != NULL)
     {
@@ -339,7 +339,7 @@ void window::delete_texture(const int &file_num)
 /*
 Delete all game textures except the mouse cursor
 */
-void window::delete_all_texture()
+void Window::delete_all_texture()
 {
     for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
         if (i != MOUSE_CURSOR_DIRECTORY)

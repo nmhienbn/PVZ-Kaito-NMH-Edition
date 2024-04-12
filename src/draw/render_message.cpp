@@ -2,7 +2,7 @@
 
 extern Level level;
 extern Player player;
-extern window win;
+extern Window win;
 
 /*
 Display announcement: Ready - Set - Plant.

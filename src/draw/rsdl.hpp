@@ -45,13 +45,13 @@ const RGB YELLOW_A(226, 189, 98);
 void print_error(SDL_Texture *res, const string &img);
 void set_default_alpha(int file_num, SDL_Texture *res);
 
-class window
+class Window
 {
 public:
 	// global window & renderer
 
-	window(int width = 800, int height = 400, string title = "PVZ - Kaito NMH Edition");
-	~window();
+	Window(int width = 800, int height = 400, string title = "PVZ - Kaito NMH Edition");
+	~Window();
 	void update_screen();
 	void clear_renderer();
 

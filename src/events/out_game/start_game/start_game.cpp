@@ -1,22 +1,23 @@
 #include "start_game.hpp"
+#include "LoadSprout.hpp"
+#include "LoadZomHead.hpp"
 
 extern bool quit;
 extern Level level;
 extern Elements game_characters;
 extern Player player;
 extern Map cells;
-extern window win;
+extern Window win;
 
 const int LOADING_TIME = 250;
 const int DISPLAY_LOGO_TIME = 200;
 
-const int NUM_SPROUT = 5;
-const int SPROUT[] = {240, 300, 410, 530, 650};
-const SDL_RendererFlip SPROUT_FLIP[] = {SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_NONE, SDL_FLIP_HORIZONTAL, SDL_FLIP_NONE};
-int F_SPROUT[NUM_SPROUT];
-int W_SPROUT[] = {54, 70, 45, 60, 104};
-int H_SPROUT[] = {80, 104, 67, 89, 122};
-bool has_played_music[NUM_SPROUT];
+vector<LoadSprout> sprouts{
+    LoadSprout(240, SDL_FLIP_NONE, 80, 54),
+    LoadSprout(300, SDL_FLIP_HORIZONTAL, 104, 70),
+    LoadSprout(410, SDL_FLIP_NONE, 67, 45),
+    LoadSprout(530, SDL_FLIP_HORIZONTAL, 89, 60)};
+LoadZomHead zom_head(650, SDL_FLIP_NONE, 122, 104);
 
 const RGB UNTAP(225, 187, 34);
 const RGB TAPPED(255, 33, 4);
@@ -54,9 +55,9 @@ void display_starting_screen()
         win.draw_png(LOAD_BAR_DIRT_DIRECTORY, 204, 490, 642, 106);
         win.draw_png(LOAD_BAR_GRASS_DIRECTORY, 200, 455, 628, 66);
         int j = 0;
-        for (; j < NUM_SPROUT - 1; j++)
-            win.draw_png(LOAD_BAR_SPROUT_DIRECTORY, 27 * 17, 0, 27, 40, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j], SPROUT_FLIP[j]);
-        win.draw_png(LOAD_BAR_ZOMBIEHEAD_DIRECTORY, 52 * 17, 0, 52, 61, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j]);
+        for (auto &sprout : sprouts)
+            sprout.display(INF);
+        zom_head.display(INF);
         string loading = "CLICK TO START!";
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
@@ -156,34 +157,11 @@ void display_loading_screen()
         int pos = dx + 200;
         int cap_width = 75 + 50 * (LOADING_TIME - clk) / LOADING_TIME;
         win.draw_png(SOD_ROLL_CAP, pos - cap_width / 2, 515 - cap_width, cap_width, cap_width, 4 * clk);
-        // Loading sprout
-        int j = 0;
-        for (; j < NUM_SPROUT - 1; j++)
-        {
-            if (pos >= SPROUT[j] + cap_width / 2)
-            {
-                if (!has_played_music[j])
-                {
-                    has_played_music[j] = true;
-                    play_sound_effect(LOADINGBAR_FLOWER_DIRECTORY);
-                }
-                win.draw_png(LOAD_BAR_SPROUT_DIRECTORY, 27 * F_SPROUT[j], 0, 27, 40, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j], SPROUT_FLIP[j]);
-                if (F_SPROUT[j] < 17 && (clk % 4 == 0))
-                    F_SPROUT[j]++;
-            }
-        }
-        // Loading zombie head
-        if (pos >= SPROUT[j])
-        {
-            if (!has_played_music[j])
-            {
-                has_played_music[j] = true;
-                play_sound_effect(LOADINGBAR_ZOMBIE_DIRECTORY);
-            }
-            win.draw_png(LOAD_BAR_ZOMBIEHEAD_DIRECTORY, 52 * F_SPROUT[j], 0, 52, 61, SPROUT[j], 510 - H_SPROUT[j], W_SPROUT[j], H_SPROUT[j]);
-            if (F_SPROUT[j] < 17 && (clk % 4 == 0))
-                F_SPROUT[j]++;
-        }
+        // Loading sprout & zombie head
+        for (auto &sprout : sprouts)
+            sprout.display(pos - cap_width / 2);
+        zom_head.display(pos);
+
         HANDLE_SDL_EVENT(
             QUIT(););
 

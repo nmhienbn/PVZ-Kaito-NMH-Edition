@@ -1,6 +1,6 @@
 #include "announcer.hpp"
 
-extern window win;
+extern Window win;
 const int CAP_ANNOUNCER_CLK_COUNT = 30;
 
 Announcer::Announcer(const int &img_directory, const int &sound_directory)

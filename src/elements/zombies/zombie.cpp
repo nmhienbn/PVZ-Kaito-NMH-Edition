@@ -3,7 +3,7 @@
 
 extern int game_state;
 extern Map cells;
-extern window win;
+extern Window win;
 /*
 Check if Zombie is in query tile or not to change its status.
 @param zombie: query zombie

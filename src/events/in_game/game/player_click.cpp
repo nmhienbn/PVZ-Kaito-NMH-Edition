@@ -5,7 +5,7 @@ extern Elements game_characters;
 extern Icons icons;
 extern Player player;
 extern Map cells;
-extern window win;
+extern Window win;
 
 /*Handle all user click:
     If player click on sun: handle sun click, then return;

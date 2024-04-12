@@ -7,7 +7,7 @@ auto CHERRYBOMB_ASSET = PlantAssets(cherrybomb_data["frame"], cherrybomb_data["i
                                     cherrybomb_data["x_alias"], cherrybomb_data["y_alias"]);
 
 extern int game_state;
-extern window win;
+extern Window win;
 
 /*
 Cherry Bomb constructor

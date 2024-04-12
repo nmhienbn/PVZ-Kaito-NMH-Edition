@@ -13,7 +13,7 @@ const Button OK2(GET_NAME_MENU_X + 45, GET_NAME_MENU_X + 630, GET_NAME_MENU_Y + 
 
 extern bool quit;
 extern Player player;
-extern window win;
+extern Window win;
 
 /*
 Change player's name in data file.

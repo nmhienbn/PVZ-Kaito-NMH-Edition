@@ -5,7 +5,7 @@ extern int game_state;
 extern bool quit;
 extern Level level;
 extern Player player;
-extern window win;
+extern Window win;
 
 /*
 Display zombies outside playground

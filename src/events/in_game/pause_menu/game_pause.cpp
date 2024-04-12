@@ -3,7 +3,7 @@
 extern int game_state;
 extern bool quit;
 extern Level level;
-extern window win;
+extern Window win;
 
 /*
 Display all elements when player paused the game
