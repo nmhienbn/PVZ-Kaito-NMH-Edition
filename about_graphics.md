@@ -1,40 +1,94 @@
-It's a nightmare to find to sprite sheet for this game before I know this.<br/>
-Game animations cost me a 2/3 time making the game.<br/>
+- [PVZ 1 sprite sheets](#pvz-1-sprite-sheets)
+  * [Giải thích ý nghĩa file](#gi-i-th-ch---ngh-a-file)
+  * [Cách lấy](#c-ch-l-y)
+- [Với PVZ 2 sprite sheet](#v-i-pvz-2-sprite-sheet)
+  * [Giải thích ý nghĩa file](#gi-i-th-ch---ngh-a-file-1)
+  * [Một số tool hữu ích](#m-t-s--tool-h-u--ch)
+    + [SPC-Util](#spc-util)
+    + [8A Gaming](#8a-gaming)
+    + [TreToolKit](#tretoolkit)
+- [Tạo GIF](#t-o-gif)
+- [Tạo sprite sheets từ GIF](#t-o-sprite-sheets-t--gif)
 
-# For pvz 1 sprite sheets:
-download .fla files here: https://drive.google.com/file/d/1zztUOZWna5Hy2xI3tju1d7Hjtp59J4dI/view
-Zombie.fla:
-	credit1: 1-22
-	credit2: 23-44
-	walk1: 45-91
-	walk2: 92-138
-	walk3 (exactly dance): 455-504
-	eat: 139-178
-	die1: 179-217
-	die2: 218-250
-	die3: 293-429
+Mãi mới biết mấy cái này =((. Làm hiệu ứng tốn 80% thời gian làm game.<br/>
+Trong đó, tìm game asset trên mạng tốn 60% :v
 
-# For pvz 2: 
+Ở dưới đây --> có nghĩa là giải nén thành
 
-## Method 1:
-https://www.youtube.com/watch?v=RvYLWEBOPG0<br/>
-use SPCUtil to decode .obb (which contains all graphics in game). Now you can get:<br/>
-	.rton: use SPCUtil to decode to .json (contains game stats, the way to split sprite sheets)<br/>
-	.rsgp: contains sprite sheets, animations in game<br/>
+# PVZ 1 sprite sheets
+## Giải thích ý nghĩa file
+Bản chất, khi tải 1 game pvz trên PC bản full (có thể dùng bản portable) sẽ có 1 file **.pak**<br/>
+- **.pak** --> **.png**, **.jpg**, **.compiled**.
+- **.compiled** --> **.fla**, **.jsfl**, **.xml**
 
-## Method 2: 
-Thanks for [8A Gaming - Youtube](https://www.youtube.com/@8AGamingOfficial/featured) with his free web: https://8auniverse.com/ and his useful tools to extract game.<br/>
-MANIFESTGROUP tool: download the .json to split a texture to images<br/>
-Texture Downloader Tool: download the texture<br/>
-Simple Sprite Splitter Tool: split texture to images<br/>
-1BSR2PNGTool: .obb to textures.<br/>
+Chi tiết các file:
+- **.png**, **.jpg** là ảnh thì ai cũng biết rồi. **.png** thường có nền trong suốt vì là 1 bộ phận của cái gì đó.
+- **.fla** sẽ ghép cái bộ phận đó lại (mở bằng Adobe Animate)
+- **.xml** tương tự **.fla** nhưng hiệu ứng đơn giản hơn (thường chỉ gồm 1 ảnh) (nhưng chưa biết dùng ntn) hoặc các thông số game.
+- **.jsfl** sẽ giúp compile ngược lại **.fla** và **.xml** trở lại **.compiled**
 
-# Make GIF
-Now we get the .fla files<br/>
-Open .fla by Adobe Animate and you can export them to GIFs<br/>
+Về mặt lý thuyết chỉ cần decompile lại đến mức các file **.compiled** là được, không cần đến **.pak**
+## Cách lấy
+Công cụ giải nén và nén lại có nhiều trên mạng (bao gồm **PVZUtils**, [chi tiết](https://plantsvszombies.fandom.com/wiki/Modify_Plants_vs._Zombies))
 
-For .fla pvz 2: get the texture decomposited into many images, then copy them to library of the .fla. After that, copy all layers from Object A_main to the main. Then hide the animation layer. delete all costume if necessary. export to gif and enjoy.
+Nói hơi dài nhưng chỉ cần **.fla** files là đủ. Trên [mạng](https://drive.google.com/file/d/1zztUOZWna5Hy2xI3tju1d7Hjtp59J4dI/view) cũng có sẵn luôn để tải, khỏi mất công giải nén.
 
-# Make sprite sheets from GIFs
-To create a sprite sheet, use the website https://onlinegiftools.com/convert-gif-to-sprite-sheet to convert from gif.
-_blink, _cold files created by photoshop
+Ở đây tôi chỉ dùng sprite sheet của zombie (vì chưa kịp chuyển hết sang pvz 2 cho đẹp)
+
+Chi tiết lấy trong file *Zombie.fla*:
+* 	credit1: 1-22
+* 	credit2: 23-44
+* 	walk1: 45-91
+* 	walk2: 92-138
+* 	walk3 (exactly dance): 455-504
+* 	eat: 139-178
+* 	die1: 179-217
+* 	die2: 218-250
+* 	die3: 293-429
+
+# Với PVZ 2 sprite sheet
+## Giải thích ý nghĩa file
+Giải nén:
+- **.obb** / **.rsb** (Đều là dạng file binary để mã hóa) --> **.rsgp**, **.rton**
+- **.rton**, **.dat** --> **.json**
+- **resource.json** --> các **.json** (cho việc tách texture)
+- **.rsgp** --> 
+    - **.ptx** + **StructInfo.json** (nếu đuôi là _768, _1536; StructInfo.json là thông tin để giải nén)
+    - **.PAM** (nếu đuôi là _common)
+    - **.BNK** (nếu đuôi là _audio)
+- **.ptx** + **StructInfo.json** --> **.png** (ở mức 1 texture)
+- **.PAM** --> **.xfl**  + **LIBRARY** (để nhét các assets support cho .xfl) + **OtherInfo.json** (để xem đổi tên assets phù hợp)
+- **.BNK** --> **.WEM** (một loại file audio)
+
+Chú ý:
+- **.xfl** + **LIBRARY** = **.fla**
+- **.png** (ở mức 1 texture) + **.json** (tương ứng) --> **.PNG**s (các assets cho **LIBRARY**).
+Ví dụ: *PlantCherryBomb_1536.png* + *PlantCherryBomb_1536.json*
+
+## Một số tool hữu ích
+Tham khảo rất nhiều tool tại [đây](https://ernestoam.fandom.com/wiki/Plants_vs._Zombies_2_Hacking_Tools).
+### SPC-Util
+[SPC-Util](https://www.youtube.com/watch?v=RvYLWEBOPG0)<br/>
+Đồng tác giả với PVZ-Util
+Chỉ cần kéo thả file cần giải nén (hoặc nén) vào file **SPCUtils.exe** (tên file có thể kèm tên tác giả nên có thể khác) và chọn option phù hợp (thường là 3 option cuối)
+
+### 8A Gaming 
+Các [tool](https://8auniverse.com/) của [8A Gaming - Youtube](https://www.youtube.com/@8AGamingOfficial/featured).<br/>
+* MANIFESTGROUP tool: download resource.json để tách texture<br/>
+* Texture Downloader Tool: download textures<br/>
+* Simple Sprite Splitter Tool: tách texture<br/>
+* 1BSR2PNGTool: .obb thành textures.<br/>
+
+### TreToolKit
+Tương tự SPCUtils, nhưng dễ dùng hơn.
+Link: [Github](https://github.com/twinkles-twinstar/TwinStar.ToolKit), [Download](https://mega.nz/folder/vFNi2aKD#vpzZz9g0BAu7AcdO-CVEGg), [Youtube](https://www.youtube.com/watch?v=opBGagu4LOo&t=0s).
+Chỉ cần kéo thả file cần giải nén (hoặc nén) vào file **SPCUtils.exe** (tên file có thể kèm tên tác giả nên có thể khác) và chọn option phù hợp
+
+# Tạo GIF
+**.fla** hoặc **.xfl + LIBRARY** có thể export được thành **.gif** với **Adobe Animate**(Chú ý Ctrl + J để chỉnh kích thước, và Export GIF nền và viền bao quanh trong suốt)
+
+Chú ý với **.xfl + LIBRARY** của PVZ 2: cần copy các **.PNG** (assets) vào **LIBRARY** với tên phù hợp. Sau đó, copy tất cả layer từ Object **A_main** vào **main**. Nhớ ẩn các layer ở main. PVZ 2 tuy lằng nhằng hơn PVZ 1 nhưng **.xfl** có đánh dấu vị trí để biết animation từ frame nào đến frame nào.
+
+# Tạo sprite sheets từ GIF
+Sử dụng tool online [convert gif to spritesheet](https://onlinegiftools.com/convert-gif-to-sprite-sheet).
+Các file **_blink** thì tạo bởi photoshop.
