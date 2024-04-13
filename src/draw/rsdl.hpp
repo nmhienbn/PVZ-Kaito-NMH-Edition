@@ -13,6 +13,7 @@
 #define CONTM_TTF "contm.ttf"
 #define BRIANNE_TTF "Brianne_s_hand.ttf"
 #define HOUSEOFTERROR_TTF "HouseofTerror.ttf"
+#define DWARVESC_TTF "Dwarvesc.ttf"
 #define PVZUI_TTF "PVZUI.ttf"
 #define MAX_TIME_ANNOUNCE 180
 
@@ -89,9 +90,16 @@ public:
 
 	TTF_Font *get_font(string font_addr, const int &size);
 	void show_text(const string &input, const int &x = 0, const int &y = 0,
-				   const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24, const int &aplha = 255);
+				   const RGB &color = WHITE, string font_addr = FREESANS_TTF,
+				   const int &size = 24, const int &aplha = 255);
 	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
-							const RGB &color = WHITE, string font_addr = FREESANS_TTF, const int &size = 24, const int &outline_weight = 2);
+							const RGB &color = WHITE, string font_addr = FREESANS_TTF,
+							const int &size = 24, const int &outline_weight = 2,
+							const RGB &outline_color = BLACK);
+	void show_text_center(const string &input, int x = -1, int y = -1,
+						  const RGB &color = WHITE, string font_addr = FREESANS_TTF,
+						  const int &size = 24, const int &style = TTF_STYLE_NORMAL,
+						  const int &outline_weight = 0, const RGB &outline_color = BLACK);
 	void show_announcer_text(const string &announcer, const int &time_a = MAX_TIME_ANNOUNCE);
 	void show_announcer_text();
 	void set_style(const string &font_addr, const int &size, const int &style);

@@ -84,8 +84,10 @@ void display_game_layout()
 
     // Sun bar and player's sun count
     win.draw_png_height_scaled(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH);
-    win.set_style(CONTM_TTF, 24, TTF_STYLE_BOLD);
-    win.show_text(to_string(player.sun_count), 90, 33, (player.sun_count_change_color_times & 1 ? RED : BLACK), CONTM_TTF);
+    win.set_style(PVZUI_TTF, 26, TTF_STYLE_BOLD);
+    win.show_text(to_string(player.sun_count), 90, 33,
+                  (player.sun_count_change_color_times & 1 ? RED : BLACK),
+                  PVZUI_TTF, 26);
 
     // Shovel
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);

@@ -84,12 +84,7 @@ enum ImageType
     SEED_PACKET_BOT_BORDER_DIRECTORY,
 
     SUNFLOWER_TROPHY_DIRECTORY,
-    NEW_PEASHOOTER_DIRECTORY,
-    NEW_SUNFLOWER_DIRECTORY,
-    NEW_WALLNUT_DIRECTORY,
-    NEW_SNOWPEA_DIRECTORY,
-    NEW_CHERRYBOMB_DIRECTORY,
-    NEW_POTATOMINE_DIRECTORY,
+    AWARD_SCREEN_DIRECTORY,
 
     PEA_DIRECTORY,
     PEA_EXPLODE_DIRECTORY,
@@ -458,13 +453,8 @@ const Image all_img[] = {
     Image("./image/Plant_seed/Sun_Tag.png"),               // SUN_TAG_DIRECTORY
     Image("./image/Plant_seed/Seed_Packet_BotBorder.png"), // SEED_PACKET_BOT_BORDER_DIRECTORY
 
-    Image("./image/New_plant/Golden_Sunflower_Trophy.png"), // SUNFLOWER_TROPHY_DIRECTORY
-    Image("./image/New_plant/new_peashooter.png"),          // NEW_PEASHOOTER_DIRECTORY
-    Image("./image/New_plant/new_sunflower.png"),           // NEW_SUNFLOWER_DIRECTORY
-    Image("./image/New_plant/new_walnut.png"),              // NEW_WALLNUT_DIRECTORY
-    Image("./image/New_plant/new_snowpea.png"),             // NEW_SNOWPEA_DIRECTORY
-    Image("./image/New_plant/new_cherrybomb.png"),          // NEW_CHERRYBOMB_DIRECTORY
-    Image("./image/New_plant/new_potatomine.png"),          // NEW_POTATOMINE_DIRECTORY
+    Image("./image/New_plant/Sunflower_trophy.png"), // SUNFLOWER_TROPHY_DIRECTORY
+    Image("./image/New_plant/AwardScreen.png"),      // AWARD_SCREEN_DIRECTORY
 
     Image("./image/Bullets/Pea/pea.png"),                     // PEA_DIRECTORY
     Image("./image/Bullets/Pea/pea_explode.png"),             // PEA_EXPLODE_DIRECTORY

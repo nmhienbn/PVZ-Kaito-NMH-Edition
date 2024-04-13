@@ -99,12 +99,33 @@ Show text shadowed by render it's outline (set font outline).
 Then render it.
 */
 void Window::show_text_shadowed(const string &input, const int &x, const int &y,
-                                const RGB &color, string font_addr, const int &size, const int &outline_weight)
+                                const RGB &color, string font_addr,
+                                const int &size, const int &outline_weight, const RGB &outline_color)
 {
     set_outline(font_addr, size, outline_weight);
-    show_text(input, x - outline_weight, y - outline_weight, BLACK, font_addr, size);
+    show_text(input, x - outline_weight, y - outline_weight, outline_color, font_addr, size);
     set_outline(font_addr, size, 0);
     show_text(input, x, y, color, font_addr, size);
+}
+
+/*
+If x = -1, show text at center by x (by width)
+If y = -1, show text at center by y (by height)
+*/
+void Window::show_text_center(const string &input, int x, int y,
+                              const RGB &color, string font_addr,
+                              const int &size, const int &style,
+                              const int &outline_weight, const RGB &outline_color)
+{
+    int w = 0, h = 0;
+    TTF_SizeText(get_font(font_addr, size), input.c_str(), &w, &h);
+    if (x == -1)
+        x = (WINDOW_WIDTH - w) / 2;
+    if (y == -1)
+        y = (WINDOW_HEIGHT - h) / 2;
+
+    set_style(font_addr, size, style);
+    show_text_shadowed(input, x, y, color, font_addr, size, outline_weight, outline_color);
 }
 
 /* Show the utf 8 text at (x; y)

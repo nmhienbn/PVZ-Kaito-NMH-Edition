@@ -112,7 +112,9 @@ void Window::draw_png_width_scaled(int file_num, int x, int y, int height, int a
 }
 
 /*
-Load & draw in the center of window
+Load & draw in the center of window:
+    If x1 = -1, center by x (width)
+    If y1 = -1, center by y (height)
     Load: Texture
     Draw: SDL_RenderCopy
     mHeight, mWidth: SDL_QueryTexture
