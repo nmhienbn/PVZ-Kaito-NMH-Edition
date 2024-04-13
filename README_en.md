@@ -226,12 +226,12 @@ There are 5 types of plants, in order of availability in the game:
 
 |                                                                             | Plant Name  | Function                                                                                              |
 |-----------------------------------------------------------------------------|-------------|-------------------------------------------------------------------------------------------------------|
-| <img src="image/Plant_sheet/peashooter/Peashooter.png" height=50 width=50>  | Peashooter  | Shoots peas at zombies.                                                                               |
-| <img src="image/Plant_sheet/sunflower/Sunflower.png" height=50 width=44>    | Sunflower   | Produces suns that can be used to plant more plants.                                                  |
-| <img src="image/Plant_sheet/walnut/Walnut.png" height=50 width=42>          | Wall-nut    | Takes a lot of hits before breaking, protecting other plants.                                         |
-| <img src="image/Plant_sheet/snowpea/SnowPea.png" height=50 width=52>        | Snow Pea    | Shoots frozen peas that slow down zombies and reduce their attack speed, but don't deal extra damage. |
-| <img src="image/Plant_sheet/potatomine/Potato_Mine.png" height=50 width=56> | Potato Mine | Explode on contact, but they take time to arm                                                         |
-| <img src="image/Plant_sheet/cherrybomb/Cherrybomb.png" height=50 width=48>  | Cherry Bomb | Explodes and kills all zombies in a 3x3 area.                                                         |
+| <img src="image/Plant_sheet/peashooter/Peashooter.png" width=50>  | Peashooter  | Shoots peas at zombies.                                                                               |
+| <img src="image/Plant_sheet/sunflower/Sunflower.png" width=44>    | Sunflower   | Produces suns that can be used to plant more plants.                                                  |
+| <img src="image/Plant_sheet/walnut/Walnut.png" width=42>          | Wall-nut    | Takes a lot of hits before breaking, protecting other plants.                                         |
+| <img src="image/Plant_sheet/snowpea/SnowPea.png" width=52>        | Snow Pea    | Shoots frozen peas that slow down zombies and reduce their attack speed, but don't deal extra damage. |
+| <img src="image/Plant_sheet/potatomine/Potato_Mine.png" width=56> | Potato Mine | Explode on contact, but they take time to arm                                                         |
+| <img src="image/Plant_sheet/cherrybomb/Cherrybomb.png" width=48>  | Cherry Bomb | Explodes and kills all zombies in a 3x3 area.                                                         |
 
 ## b. Types of zombies
 
