@@ -4,10 +4,6 @@
 extern Map cells;
 extern Window win;
 
-Bullet::Bullet()
-{
-}
-
 /*Construct new pea*/
 Bullet::Bullet(int _type, int _row, int _x)
 {
@@ -18,6 +14,7 @@ Bullet::Bullet(int _type, int _row, int _x)
     x_location = _x;
     explode = INF;
     slow_down_rate = 1;
+    angle = 0;
 }
 
 Bullet::~Bullet()

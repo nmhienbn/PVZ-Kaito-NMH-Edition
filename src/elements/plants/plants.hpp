@@ -11,7 +11,8 @@ enum AttackRange
 {
     NO_ATTACK,
     ONE_ROW_AHEAD,
-    THREE_X_THREE
+    THREE_X_THREE,
+    ONE_X_ONE
 };
 
 struct PlantAssets

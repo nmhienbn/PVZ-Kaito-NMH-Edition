@@ -12,14 +12,7 @@ Player and others
 --------------------------------------------------------------------*/
 
 /*
-Contain vector of all plants and zombies:
-@param sun
-@param zombie
-@param peashooter
-@param pea
-@param sunflower
-@param peashooter
-@param walnut
+Contain vector of all plants and zombies
 */
 struct Elements
 {

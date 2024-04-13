@@ -26,7 +26,6 @@ public:
     int slow_down_rate;
 
 public:
-    Bullet();
     Bullet(int _type, int _row, int _x);
 
     bool operator<(const Bullet &other) const;

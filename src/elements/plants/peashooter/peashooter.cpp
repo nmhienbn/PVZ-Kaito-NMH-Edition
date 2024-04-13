@@ -53,10 +53,7 @@ void Peashooter::determine_appearance(bool check_zombie_in_attack_range)
     {
         if (directory_num == PEASHOOTER_SHEET_DIRECTORY)
         {
-            if (frame == 0)
-            {
-                directory_num = PEASHOOTER_ATTACK_DIRECTORY;
-            }
+            directory_num = PEASHOOTER_ATTACK_DIRECTORY;
         }
     }
     // No attack

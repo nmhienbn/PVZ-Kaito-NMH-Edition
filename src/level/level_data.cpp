@@ -24,6 +24,7 @@ void reset_level()
         for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
         {
             cells[y][x].is_planted = false;
+            cells[y][x].is_potate_mine = false;
         }
     }
     icons = Icons();
@@ -79,7 +80,7 @@ void decide_zombie_each_wave(vector<Wave> &waves, json &jwaves)
         int x_bias_zombie = 0;
         if (waves[i].has_flag)
         {
-            Zombie *zombie = init(FLAG_TYPE, level.level_num);
+            Zombie *zombie = init_zombie(FLAG_TYPE, level.level_num);
             waves[i].add_zombie(zombie);
             level.final_wave = i;
 
@@ -91,7 +92,7 @@ void decide_zombie_each_wave(vector<Wave> &waves, json &jwaves)
             for (int j = 0; j < z["count"]; j++)
             {
                 int typ = zombie_type_map.at(z["type"]);
-                Zombie *zombie = init(typ, level.level_num, x_bias_zombie);
+                Zombie *zombie = init_zombie(typ, level.level_num, x_bias_zombie);
                 level.count_zombie_type[typ]++;
                 waves[i].add_zombie(zombie);
             }

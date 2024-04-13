@@ -27,7 +27,7 @@ Else: (game has started)
     Else if game is paused: handle pause.
     Else display gameplay.
 
-Handle key: 1,2,3,4,5: plant; s: shovel
+Handle key: 1,2,3,4,5,6: plant; s: shovel
 Handle window focus lose:
 Handle user event:
     Quit event.
@@ -116,7 +116,7 @@ void start_level()
 
             // Key to choose plant, shovel.
             if (check_status(game_state, IS_PAUSED) == false) {
-                if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_5))
+                if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_1 + PLANT_COUNT - 1))
                 {
                     change_chosen_status(e.key.keysym.sym - SDLK_1, player.is_choosing_a_plant);
                 }

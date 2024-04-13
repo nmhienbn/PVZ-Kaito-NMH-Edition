@@ -28,6 +28,6 @@ void BucketZombie::armor_drop(vector<ZombiePart> &zombie_parts)
     {
         type = NORMAL_TYPE;
         zombie_parts.push_back(ZombiePart(BUCKET_DROP_DIRECTORY, HEAD_ZOMBIE_FRAME, row, x_location + 80,
-                                          HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT));
+                                          HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, cold_time > 0));
     }
 }

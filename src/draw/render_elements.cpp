@@ -121,10 +121,10 @@ void display_icons_in_icon_bar()
     int plant_seed_dir[] = {
         PEASHOOTER_DIRECTORY,
         SUNFLOWER_DIRECTORY,
-        WALNUT_DIRECTORY,
+        WALLNUT_DIRECTORY,
         SNOWPEA_DIRECTORY,
-        CHERRYBOMB_DIRECTORY,
-    };
+        POTATOMINE_DIRECTORY,
+        CHERRYBOMB_DIRECTORY};
     // Count number of unlocked plant.
     int num_plants = 0;
     for (int i = 0; i < PLANT_COUNT; i++)
@@ -244,14 +244,14 @@ void display_chosen_plant()
     SDL_GetMouseState(&_x, &_y);
     if (player.is_shoveling)
     {
-        win.draw_png_height_scaled(SHOVEL_DIRECTORY, _x, _y - ELEMENT_HEIGHT, ELEMENT_WIDTH);
+        win.draw_png_width_scaled(SHOVEL_DIRECTORY, _x, _y - ICON_HEIGHT, ICON_HEIGHT);
         return;
     }
-    _x -= ELEMENT_WIDTH >> 1;
-    _y -= ELEMENT_HEIGHT >> 1;
     if (PEASHOOTER_TYPE <= icons.chosen_plant && icons.chosen_plant < PLANT_COUNT)
     {
-        win.draw_png_height_scaled(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y, ELEMENT_WIDTH);
+        _x -= ICON_WIDTH >> 2;
+        _y -= ICON_HEIGHT >> 1;
+        win.draw_png_width_scaled(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y, ICON_HEIGHT);
     }
 }
 

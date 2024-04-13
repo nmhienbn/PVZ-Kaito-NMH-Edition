@@ -6,7 +6,7 @@ static int last_zombie_row = -1;
 Init a new zombie with its type.
 Depend on level num
 */
-Zombie *init(int _type, int level_num, const int &x_bias)
+Zombie *init_zombie(int _type, int level_num, const int &x_bias)
 {
     Zombie *res = nullptr;
     switch (_type)
@@ -80,7 +80,7 @@ Zombie *init(int _type, int level_num, const int &x_bias)
     return res;
 }
 
-Zombie *init(int _type, int level_num)
+Zombie *init_zombie(int _type, int level_num)
 {
-    return init(_type, level_num, 0);
+    return init_zombie(_type, level_num, 0);
 }

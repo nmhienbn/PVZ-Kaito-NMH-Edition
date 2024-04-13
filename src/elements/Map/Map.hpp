@@ -1,7 +1,7 @@
 #pragma once
-#include <random>
 #include <chrono>
 #include <ctime>
+#include <random>
 using namespace std;
 
 static mt19937 rd(chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -15,6 +15,7 @@ struct Block
     int x1, x2;
     int y1, y2;
     bool is_planted = false;
+    bool is_potate_mine = false;
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;

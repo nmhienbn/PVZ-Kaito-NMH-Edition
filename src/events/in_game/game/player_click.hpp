@@ -5,7 +5,7 @@
 #include "music/music.hpp"
 
 void handle_user_click(const int &mouse_x, const int &mouse_y);
-void remove_element_if_clicked_on(const int &mouse_x, const int &mouse_y);
+void remove_plant_if_clicked_on(vector<Plants *> &plants, const int &mouse_x, const int &mouse_y);
 bool pick_sun_if_clicked_on(const int &mouse_x, const int &mouse_y);
 
 /*

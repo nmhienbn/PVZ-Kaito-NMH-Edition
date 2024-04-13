@@ -1,4 +1,5 @@
 #include "player_click.hpp"
+#include "elements/plants/plant_type.hpp"
 
 extern Level level;
 extern Elements game_characters;
@@ -27,7 +28,7 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
     {
         if (click_is_in_frontyard(mouse_x, mouse_y))
         {
-            remove_element_if_clicked_on(mouse_x, mouse_y);
+            remove_plant_if_clicked_on(game_characters.plants, mouse_x, mouse_y);
         }
         player.is_shoveling = false;
         return;
@@ -54,7 +55,6 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
         if (click_is_in_frontyard(mouse_x, mouse_y))
         {
             create_new_plant(mouse_x, mouse_y);
-            player.is_choosing_a_plant = false;
             return;
         }
         else
@@ -71,11 +71,16 @@ Depend on level.
 */
 bool is_a_plant_seed_clicked_on(const int &mouse_x, const int &mouse_y)
 {
+    // Now, just y2 of the last plant seed is not known.
+    // x1, x2, y1 are known.
+    if (!is_in(plant_seed[0].x1, mouse_x, plant_seed[0].x2) ||
+        mouse_y < plant_seed[0].y1)
+        return false;
     for (int i = PLANT_COUNT - 1; i >= 0; i--)
     {
         if (level.level_num >= level_unlock_new_plant[i])
         {
-            return ICON_BAR_LV[i].is_mouse_in(mouse_x, mouse_y);
+            return (mouse_y <= plant_seed[i].y2);
         }
     }
     return false;
@@ -200,22 +205,19 @@ Decrease player's sun count.
 Tick that the tile is planted.
 Play sound effect.
 */
-template <class Plant_type>
-void plant_new_plant(const int &type, const int &row, const int &col)
+void plant_new_plant(int type, const int &row, const int &col)
 {
-    icons.chosen_plant = PLANT_COUNT;
+    remove_chosen_plant();
+    if (type < 0 || type >= PLANT_COUNT)
+        return;
     icons.plant_remaining_time[type] = PLANT_LOADING_TIME[type];
-    game_characters.plants.push_back(new Plant_type(row, col));
+    game_characters.plants.push_back(init_plant(type, row, col));
     player.sun_count -= PLANT_SUN_COST[type];
-    cells[row][col].is_planted = 1;
+    cells[row][col].is_planted = true;
+    if (type == POTATOMINE_TYPE)
+        cells[row][col].is_potate_mine = true;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }
-
-#define PLANT_PLANT_MACRO(type, enum_value)          \
-    if (icons.chosen_plant == enum_value)            \
-    {                                                \
-        plant_new_plant<type>(enum_value, row, col); \
-    }
 
 /*Find row and column then plant the plant.
     Cannot plant if the tile has planted.
@@ -232,14 +234,8 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
         remove_chosen_plant();
         return;
     }
-    PLANT_PLANT_MACRO(Peashooter, PEASHOOTER_TYPE)
-    PLANT_PLANT_MACRO(Sunflower, SUNFLOWER_TYPE)
-    PLANT_PLANT_MACRO(Walnut, WALNUT_TYPE)
-    PLANT_PLANT_MACRO(Snowpea, SNOWPEA_TYPE)
-    PLANT_PLANT_MACRO(CherryBomb, CHERRYBOMB_TYPE)
+    plant_new_plant(icons.chosen_plant, row, col);
 }
-
-#undef PLANT_PLANT_MACRO
 
 /*
 Remove plant if player is shoveling and has clicked on its tile
@@ -255,14 +251,6 @@ void remove_plant_if_clicked_on(vector<Plants *> &plants, const int &mouse_x, co
             return;
         }
     }
-}
-
-/*
-Find the type of plant to remove.
-*/
-void remove_element_if_clicked_on(const int &mouse_x, const int &mouse_y)
-{
-    remove_plant_if_clicked_on(game_characters.plants, mouse_x, mouse_y);
 }
 
 /*

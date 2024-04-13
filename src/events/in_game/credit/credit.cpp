@@ -66,7 +66,7 @@ void display_credit()
         int cnt = min(level.count_zombie_type[i] / 2, 7);
         for (int j = 0; j < cnt; j++)
         {
-            auto t = init(i, level.level_num);
+            auto t = init_zombie(i, level.level_num);
             t->make_credit();
             tmp.push_back(t);
         }

@@ -68,8 +68,8 @@ public:
     void display(const int &_row);
     void display_credited(const int &_minus_x);
 
-    friend Zombie *init(int _type, int level_num);
-    friend Zombie *init(int _type, int level_num, const int &x_bias);
+    friend Zombie *init_zombie(int _type, int level_num);
+    friend Zombie *init_zombie(int _type, int level_num, const int &x_bias);
 };
 
 #include <nlohmann/json.hpp>

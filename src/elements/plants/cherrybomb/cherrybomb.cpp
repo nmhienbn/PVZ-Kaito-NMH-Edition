@@ -44,7 +44,6 @@ bool CherryBomb::is_blow()
 {
     if (!has_exploded && frame >= CHERRYBOMB_ASSET.frame * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
     {
-        cout << 1 << endl;
         directory_num = CHERRYBOMB_EXPLOSION_DIRECTORY;
         has_exploded = true;
         frame = 0;

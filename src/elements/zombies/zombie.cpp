@@ -33,6 +33,8 @@ bool has_zombie_reached_plant(Zombie &zombie)
     {
         if (cells[zombie.row][col].is_planted && has_zombie_reached_block(zombie, zombie.row, col))
         {
+            if (cells[zombie.row][col].is_potate_mine)
+                return true;
             zombie.is_moving = false;
             zombie.change_zombie_eating_status();
             return true;

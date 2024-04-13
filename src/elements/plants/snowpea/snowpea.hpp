@@ -2,11 +2,11 @@
 #include "../plants.hpp"
 #include "elements/bullets/snowpea/snowzpea.hpp"
 
-class Snowpea : public Plants
+class SnowPea : public Plants
 {
 public:
-    Snowpea(const int &_row, const int &_col);
-    ~Snowpea();
+    SnowPea(const int &_row, const int &_col);
+    ~SnowPea();
     void determine_appearance(bool check_zombie_in_attack_range);
     void display(const int &_row) override;
     void action() override;

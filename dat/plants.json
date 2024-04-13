@@ -23,6 +23,13 @@
         "health": 6,
         "loading_time": 400
     },
+    "potatomine": {
+        "id": 6,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 1800,
+        "armed_time": 900
+    },
     "cherrybomb": {
         "id": 5,
         "cost": 150,

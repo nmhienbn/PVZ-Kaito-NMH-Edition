@@ -46,10 +46,19 @@ Image::Image(string _dir)
     img_dir = _dir;
     n_sheet = 0;
     c_sheet = 0;
+    alpha = 255;
 }
 Image::Image(string _dir, int _n, int _c)
 {
     img_dir = _dir;
     n_sheet = _n;
     c_sheet = _c;
+    alpha = 255;
+}
+Image::Image(string _dir, int _n, int _c, int _a)
+{
+    img_dir = _dir;
+    n_sheet = _n;
+    c_sheet = _c;
+    alpha = _a;
 }

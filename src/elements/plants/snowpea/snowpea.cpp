@@ -14,7 +14,7 @@ extern Window win;
 /*
 Snow Pea constructor
 */
-Snowpea::Snowpea(const int &_row, const int &_col) : Plants(_row, _col)
+SnowPea::SnowPea(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = SNOWPEA_TYPE;
     health = PLANT_HEALTH_LIMIT[SNOWPEA_TYPE];
@@ -26,14 +26,14 @@ Snowpea::Snowpea(const int &_row, const int &_col) : Plants(_row, _col)
 /*
 Snow Pea destructor
 */
-Snowpea::~Snowpea()
+SnowPea::~SnowPea()
 {
 }
 
 /*
 Create new pea from a snow pea.
 */
-void Snowpea::fire_pea(vector<Bullet *> &bullets)
+void SnowPea::fire_pea(vector<Bullet *> &bullets)
 {
     if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_ASSET.frame)
     {
@@ -47,17 +47,14 @@ Change snow pea's appearance if a snow pea need to attack or not.
 (Snow Pea is attack only if there are some zombies in the row.)
 Updated: Zombie position > snow pea position
 */
-void Snowpea::determine_appearance(bool check_zombie_in_attack_range)
+void SnowPea::determine_appearance(bool check_zombie_in_attack_range)
 {
     // Attack
     if (check_zombie_in_attack_range)
     {
         if (directory_num == SNOWPEA_SHEET_DIRECTORY)
         {
-            if (frame == 0)
-            {
-                directory_num = SNOWPEA_ATTACK_DIRECTORY;
-            }
+            directory_num = SNOWPEA_ATTACK_DIRECTORY;
         }
     }
     // No attack
@@ -76,7 +73,7 @@ void Snowpea::determine_appearance(bool check_zombie_in_attack_range)
 /*
 Display snow pea in row
 */
-void Snowpea::display(const int &_row)
+void SnowPea::display(const int &_row)
 {
     if (row == _row)
         Plants::display(SNOWPEA_ASSET);

@@ -64,6 +64,7 @@ enum music_type
     SHIELD_HIT1_MUSIC_DIRECTORY, // buckethead
     SHIELD_HIT2_MUSIC_DIRECTORY, // buckethead
     CHERRYBOMB_MUSIC_DIRECTORY,
+    POTATOMINE_MUSIC_DIRECTORY,
     NEW_PLANT_MUSIC_DIRECTORY,
     PAUSE_MUSIC_DIRECTORY,
     BUZZER_MUSIC_DIRECTORY, // player have not enough sun
@@ -118,6 +119,7 @@ const string music_directory[] = {
     "./audio/shieldhit1.mp3",        // SHIELD_HIT1_MUSIC_DIRECTORY
     "./audio/shieldhit2.mp3",        // SHIELD_HIT2_MUSIC_DIRECTORY
     "./audio/cherrybomb.mp3",        // CHERRYBOMB_MUSIC_DIRECTORY
+    "./audio/potato_mine.mp3",       // POTATOMINE_MUSIC_DIRECTORY
     "./audio/new_plant.mp3",         // NEW_PLANT_MUSIC_DIRECTORY
     "./audio/pause.mp3",             // PAUSE_MUSIC_DIRECTORY
     "./audio/buzzer.mp3",            // BUZZER_MUSIC_DIRECTORY

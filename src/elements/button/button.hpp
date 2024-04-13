@@ -5,6 +5,7 @@ This file contain in-game rectangles with their x1,x2,y1,y2
 #include "draw/rsdl.hpp"
 #include "game_param.hpp"
 #define ICON_BAR_X1 20
+#define ICON_BAR_Y1 90
 #define ICON_BAR_WIDTH 120
 #define ICON_WIDTH 105
 #define ICON_HEIGHT 65
@@ -43,22 +44,31 @@ const Button LEVEL_BUTTON[] = {
 
 };
 
-const int level_unlock_new_plant[] = {1, 2, 4, 6, 9};
-const Button plant_seed[] = {
-    {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 100, 100 + ICON_HEIGHT}, // Peashooter
-    {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 170, 170 + ICON_HEIGHT}, // Sunflower
-    {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 240, 240 + ICON_HEIGHT}, // Wall-nut
-    {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 310, 310 + ICON_HEIGHT}, // Snow Pea
-    {ICON_BAR_X1 + 3, ICON_BAR_X1 + 3 + ICON_WIDTH, 380, 380 + ICON_HEIGHT}, // Cherry Bomb
+const int level_unlock_new_plant[] = {1, 2, 4, 6, 8, 10};
+const vector<Button> plant_seed = []()
+{
+    vector<Button> buttons;
+    buttons.reserve(PLANT_COUNT);
+    int y_start = ICON_BAR_Y1 + 1;
 
-};
+    for (int i = 0; i < PLANT_COUNT; ++i)
+    {
+        buttons.push_back({ICON_BAR_X1, ICON_BAR_X1 + ICON_WIDTH, y_start, y_start + ICON_HEIGHT});
+        y_start += ICON_HEIGHT;
+    }
 
-const Button ICON_BAR_LV[] = {
-    {20, 125, 100, 170},
-    {20, 125, 100, 240},
-    {20, 125, 100, 310},
-    {20, 125, 100, 380},
-    {20, 125, 100, 450}};
+    return buttons;
+}();
+
+// const vector<Button> ICON_BAR_LV = []()
+// {
+//     vector<Button> buttons(plant_seed.size(), plant_seed[0]);
+//     for (int i = 0, _ = buttons.size(); i < _; ++i)
+//     {
+//         buttons[i].y2 = plant_seed[i].y2;
+//     }
+//     return buttons;
+// }();
 
 const Button PAUSE_ICON(1000, 1045, 0, 45);
 const Button TURBO_ICON(955, 1000, 0, 45);

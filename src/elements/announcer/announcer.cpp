@@ -26,8 +26,6 @@ void Announcer::display()
     }
     win.set_texture_alpha(img_directory, alpha);
     win.draw_png_center(img_directory, ratio);
-    if (remain_time == ANNOUNCER_CLK_COUNT)
-        cout << remain_time << ' ' << ratio << endl;
     remain_time--;
 }
 
