@@ -56,7 +56,6 @@ const int SUN_APPEAR_LIMIT = param_json["SUN_APPEAR_LIMIT"];
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Initial sun count and normal sun value
-const int INIT_SUN_COUNT = param_json["INIT_SUN_COUNT"];
 const int NORMAL_SUN_VALUE = param_json["NORMAL_SUN_VALUE"];
 const int INF = param_json["INF"];
 

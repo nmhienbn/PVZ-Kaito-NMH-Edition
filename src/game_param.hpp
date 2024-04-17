@@ -117,7 +117,6 @@ extern const int SUN_APPEAR_LIMIT;
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Initial sun count and normal sun value
-extern const int INIT_SUN_COUNT;
 extern const int NORMAL_SUN_VALUE;
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 

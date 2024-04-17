@@ -1,4 +1,7 @@
 #include "draw/render_elements.hpp"
+#include "events/out_game/choose_level/LevelSelector.hpp"
+#include <deque>
+using namespace std;
 #define SUN_BAR_WIDTH 180
 #define SUN_BAR_HEIGHT 88
 
@@ -8,6 +11,7 @@ extern Elements game_characters;
 extern Player player;
 extern Map cells;
 extern Window win;
+extern deque<int> shown_level;
 
 /*Display choosing level screen:
     Rename player
@@ -22,48 +26,71 @@ extern Window win;
 void display_choose_level(const bool &is_mouse_needed)
 {
     win.clear_renderer();
-    win.draw_png_height_scaled(CHOOSE_LEVELS_DIRECTORY, 0, 0, WINDOW_WIDTH);
+    win.draw_png_height_scaled(LevelSelector::BACKGROUND_CHOOSE_LEVEL, 0, 0, WINDOW_WIDTH);
+    win.draw_png(DAY_DIRECTORY, 239, 435, 101, 76);
+    win.draw_png(NIGHT_DIRECTORY, 345, 443, 124, 58);
+    if (LevelSelector::TYPE_LEVEL == DAY_LIT_DIRECTORY)
+        win.draw_png(DAY_LIT_DIRECTORY, 239, 435, 101, 76);
+    else
+        win.draw_png(NIGHT_LIT_DIRECTORY, 345, 443, 124, 58);
     // Buttons
     display_button(RENAME_BUTTON, RENAME_DIRECTORY);
     display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
     display_button(QUIT_BUTTON, QUIT_DIRECTORY);
+    if (shown_level[0] != 1)
+        display_button(PREV_PAGE_BUTTON, BACK_BUTTON_DIRECTORY);
+    if (shown_level.back() != LEVEL_COUNT)
+        display_button(NEXT_PAGE_BUTTON, BACK_BUTTON_DIRECTORY, 0, SDL_FLIP_HORIZONTAL);
     if (is_mouse_needed)
     {
         RENAME_BUTTON.blink();
         RESET_LEVEL_BUTTON.blink();
         QUIT_BUTTON.blink();
+
+        int _x = 0, _y = 0;
+        SDL_GetMouseState(&_x, &_y);
+        if (PREV_PAGE_BUTTON.is_mouse_in(_x, _y) && shown_level[0] != 1)
+            display_button(PREV_PAGE_BUTTON, BACK_PRESS_BUTTON_DIRECTORY);
+        if (NEXT_PAGE_BUTTON.is_mouse_in(_x, _y) && shown_level.back() != LEVEL_COUNT)
+            display_button(NEXT_PAGE_BUTTON, BACK_PRESS_BUTTON_DIRECTORY, 0, SDL_FLIP_HORIZONTAL);
     }
     // Level appearance
-    for (int i = 1; i <= LEVEL_COUNT; i++)
+    for (int i, _ = shown_level.size(); i < _; ++i)
     {
-        string lvl_txt = "LEVEL " + to_string(i);
-        int w, h;
-        TTF_SizeText(win.get_font(HOUSEOFTERROR_TTF, 40), lvl_txt.c_str(), &w, &h);
-        int kc = (LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1 - w) / 2;
-        if (player.unlocked_level >= i)
+        auto level_now = LevelSelector(shown_level[i]);
+        const int &x = LEVEL_BUTTON[i].x;
+        const int &y = LEVEL_BUTTON[i].y;
+        if (player.unlocked_level >= shown_level[i])
         {
             if (is_mouse_needed)
             {
                 int _x = 0, _y = 0;
                 SDL_GetMouseState(&_x, &_y);
-                if (LEVEL_BUTTON[i].is_mouse_in(_x, _y))
+                if (level_now.is_mouse_in(_x, _y, x, y))
                 {
-
-                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, GREEN, HOUSEOFTERROR_TTF, 40);
-                    win.draw_png(WHITE_SCREEN_DIRECTORY, LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y1,
-                                 LEVEL_BUTTON[i].x2 - LEVEL_BUTTON[i].x1, LEVEL_BUTTON[i].y2 - LEVEL_BUTTON[i].y1);
+                    level_now.display(x, y, GREEN);
+                    level_now.display_blink(x, y);
+                    if (shown_level[i] >= 8)
+                    {
+                        LevelSelector::BACKGROUND_CHOOSE_LEVEL = CHOOSE_LEVELS_2_DIRECTORY;
+                        LevelSelector::TYPE_LEVEL = NIGHT_LIT_DIRECTORY;
+                    }
+                    else
+                    {
+                        LevelSelector::BACKGROUND_CHOOSE_LEVEL = CHOOSE_LEVELS_1_DIRECTORY;
+                        LevelSelector::TYPE_LEVEL = DAY_LIT_DIRECTORY;
+                    }
                 }
                 else
-                    win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, WHITE, HOUSEOFTERROR_TTF, 40);
+                    level_now.display(x, y, WHITE);
             }
             else
-                win.show_text_shadowed(lvl_txt, LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, WHITE, HOUSEOFTERROR_TTF, 40);
+                level_now.display(x, y, WHITE);
         }
         else
         {
-            win.show_text("Level " + to_string(i), LEVEL_BUTTON[i].x1 + kc, LEVEL_BUTTON[i].y1 + 120, BLACK, HOUSEOFTERROR_TTF, 40);
-            display_level_is_locked(LEVEL_BUTTON[i]);
-            win.draw_png(LOCK_DIRECTORY, 0, 0, 69, 88, LEVEL_BUTTON[i].x2 - 25, LEVEL_BUTTON[i].y1 - 10, 35, 44);
+            level_now.display(x, y, BLACK);
+            level_now.display_locked(x, y);
         }
     }
 }

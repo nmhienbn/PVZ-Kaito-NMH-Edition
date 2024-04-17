@@ -13,6 +13,16 @@ static const map<string, int> zombie_type_map = {
     {"buckethead", BUCKET_TYPE},
     {"door", DOOR_TYPE}};
 
+json get_lv_json(int lv_id)
+{
+    string file_name = LEVELS_DIRECTORY;
+    file_name += "level";          // levels folder
+    file_name += to_string(lv_id); // level num
+    file_name += ".json";          // level extension
+    ifstream myfile(file_name);
+    return json::parse(myfile);
+}
+
 /*Reset all things of level.*/
 void reset_level()
 {
@@ -50,18 +60,14 @@ Updated: number and type of zombie each wave.
 void read_level()
 {
     string map_typ, wave_cnt, zombie_seq, wave_dur, temp;
-    string file_name = LEVELS_DIRECTORY;
-    file_name += "level";                    // levels folder
-    file_name += to_string(level.level_num); // level num
-    file_name += ".json";                    // level extension
-    ifstream myfile(file_name);
-    auto j = json::parse(myfile);
+    auto j = get_lv_json(level.level_num);
 
     // Map type
     auto objects = j["objects"];
     level.map_type = objects["map_type"];
     --level.map_type;
     level.has_sun_from_sky = objects["has_sun_from_sky"];
+    player.sun_count = objects["init_sun"];
 
     // Number of wave
     auto jwaves = j["waves"];
@@ -76,6 +82,7 @@ void read_level()
 }
 
 #include "elements/zombies/wave.hpp"
+#include "level_data.hpp"
 /*Random number of zombie appear in each second of the wave.*/
 void decide_zombie_each_wave(vector<Wave> &waves, json &jwaves)
 {
@@ -133,7 +140,6 @@ void load_level()
         init_mower(game_characters.mowers, 1, 3);
     else
         init_mower(game_characters.mowers, 0, 4);
-    player.sun_count = INIT_SUN_COUNT;
     player.is_shoveling = false;
     level.zombie_has_coming = false;
 }

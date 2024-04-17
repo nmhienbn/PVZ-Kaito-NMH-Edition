@@ -156,13 +156,13 @@ Load & draw in the SDL_Rect(x, y, width, height) and rotation of angle
     Load: Texture
     Draw: SDL_RenderCopyEx
 */
-void Window::draw_png(int file_num, int x, int y, int width, int height, int angle)
+void Window::draw_png(int file_num, int x, int y, int width, int height, int angle, SDL_RendererFlip flip)
 {
     if (file_num == NULL_DIRECTORY || width <= 0 || height <= 0)
         return;
     SDL_Texture *res = load_texture(file_num);
     SDL_Rect r = {x, y, width, height};
-    SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, res, NULL, &r, angle, NULL, flip);
 }
 
 /*

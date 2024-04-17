@@ -1,10 +1,42 @@
 #include "choose_level.hpp"
+#include "LevelSelector.hpp"
+#include <deque>
+using namespace std;
 
 extern int game_state;
 extern bool quit;
 extern Level level;
 extern Player player;
 extern Window win;
+extern deque<int> shown_level;
+
+deque<int> get_prev_page(deque<int> shown_level)
+{
+    for (int i = 1; i <= 6; i++)
+    {
+        if (shown_level[0] > 1)
+            shown_level.push_front(shown_level[0] - 1);
+        else
+            break;
+    }
+    while (shown_level.size() > 6)
+        shown_level.pop_back();
+    return shown_level;
+}
+
+deque<int> get_next_page(deque<int> shown_level)
+{
+    for (int i = 1; i <= 6; i++)
+    {
+        if (shown_level.back() < LEVEL_COUNT)
+            shown_level.push_back(shown_level.back() + 1);
+        else
+            break;
+    }
+    while (shown_level.size() > 6)
+        shown_level.pop_front();
+    return shown_level;
+}
 
 /*
 Handle choosing level screen:
@@ -65,11 +97,25 @@ void handle_choosing_level_screen()
                 set_status(game_state, IS_QUIT, true);
                 break;
             }
+            //
+            if (PREV_PAGE_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
+                shown_level = get_prev_page(shown_level);
+                break;
+            }
+            if (NEXT_PAGE_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
+                shown_level = get_next_page(shown_level);
+                break;
+            }
             // Level choosing
-            for (int i = 1; i <= LEVEL_COUNT; i++)
-                if (player.unlocked_level >= i && LEVEL_BUTTON[i].is_mouse_in(mouse_x, mouse_y))
+            for (int i = 0, _ = shown_level.size(); i < _; i++)
+                if (player.unlocked_level >= shown_level[i] &&
+                    LevelSelector(shown_level[i]).is_mouse_in(mouse_x, mouse_y, LEVEL_BUTTON[i].x, LEVEL_BUTTON[i].y))
                 {
-                    level.level_num = i;
+                    level.level_num = shown_level[i];
                     load_level();
                     level.background_directory = BACKGROUND_LV1_DIRECTORY + level.map_type;
                     set_status(game_state, IS_LEVEL_CHOSEN, true);

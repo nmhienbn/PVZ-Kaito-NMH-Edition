@@ -1,4 +1,5 @@
 #include "progress_bar.hpp"
+#include "level/level_data.hpp"
 #define PROGRESS_BAR_WIDTH 158
 #define PROGRESS_BAR_WIDTH_1 7
 #define PROGRESS_BAR_WIDTH_2 144
@@ -76,9 +77,10 @@ void display_progress_bar()
                  dx + now_progress - PROGRESS_PART_WIDTH / 2, dy,
                  PROGRESS_PART_WIDTH, PROGRESS_PART_HEIGHT);
     // Level num
-    string LEVEL_NUMBER = "Level " + to_string(level.level_num);
-    int w = 1, h = 1;
-    TTF_SizeText(win.get_font(CONTM_TTF, 24), LEVEL_NUMBER.c_str(), &w, &h);
-
-    win.show_text_shadowed(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, CONTM_TTF, 24);
+    string LEVEL_NUMBER = get_lv_json(level.level_num)["#comment"];
+    int w, h;
+    TTF_SizeText(win.get_font(PVZUI_TTF, 24), LEVEL_NUMBER.c_str(), &w, &h);
+    win.set_style(PVZUI_TTF, 24, TTF_STYLE_BOLD);
+    win.show_text_shadowed(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, PVZUI_TTF, 24);
+    win.set_style(PVZUI_TTF, 24, TTF_STYLE_NORMAL);
 }

@@ -48,9 +48,9 @@ void Button::blink() const
 /*
 Display Game Buttons
 */
-void display_button(const Button &button, const int &button_directory)
+void display_button(const Button &button, const int &button_directory, int angle, SDL_RendererFlip flip)
 {
-    win.draw_png(button_directory, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1);
+    win.draw_png(button_directory, button.x1, button.y1, button.x2 - button.x1, button.y2 - button.y1, angle, flip);
 }
 
 /*

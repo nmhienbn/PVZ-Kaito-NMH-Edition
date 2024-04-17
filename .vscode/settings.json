@@ -71,6 +71,7 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "valarray": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "filesystem": "cpp"
     }
 }

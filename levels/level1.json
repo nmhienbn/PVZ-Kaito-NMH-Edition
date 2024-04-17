@@ -2,7 +2,11 @@
     "#comment": "Day 1",
     "objects": {
         "map_type": 1,
-        "has_sun_from_sky": true
+        "has_sun_from_sky": true,
+        "display_zombie": "normal",
+        "init_sun": 100,
+        "unlocked_plant": "sunflower"
+        
     },
     "waves": [
         {

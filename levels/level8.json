@@ -2,7 +2,9 @@
     "#comment": "Night 1",
     "objects": {
         "map_type": 4,
-        "has_sun_from_sky": false
+        "has_sun_from_sky": false,
+        "display_zombie": "normal",
+        "init_sun": 50
     },
     "waves": [
         {

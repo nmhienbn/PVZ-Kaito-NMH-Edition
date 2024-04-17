@@ -1,4 +1,6 @@
 #include "game.hpp"
+#include <deque>
+using namespace std;
 
 int game_state = 0;
 bool quit = false;
@@ -7,6 +9,7 @@ Level level;
 Elements game_characters;
 Player player;
 Map cells;
+deque<int> shown_level{1, 2, 3, 4, 5, 6};
 Window win(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 /*

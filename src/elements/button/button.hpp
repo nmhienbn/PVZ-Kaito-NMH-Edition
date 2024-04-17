@@ -20,29 +20,11 @@ struct Button
     bool is_mouse_in(int mouse_x, int mouse_y) const;
     void blink() const;
 };
-void display_button(const Button &button, const int &button_directory);
+void display_button(const Button &button, const int &button_directory, int angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 void display_level_is_locked(const Button &button);
 
 const Button Shovel_bar(ICON_BAR_X1, ICON_BAR_X1 + 75, 500, 575);
 const Button TAP_TO_START(204, 846, 490, 596);
-
-#define LEVEL_COUNT 12
-const Button LEVEL_BUTTON[] = {
-    {0, 0, 0, 0},         // LV NULL
-    {15, 240, 40, 205},   // LV 1
-    {260, 485, 40, 205},  // LV 2
-    {505, 730, 40, 205},  // LV 3
-    {750, 975, 40, 205},  // LV 4
-    {15, 240, 230, 395},  // LV 5
-    {260, 485, 230, 395}, // LV 6
-    {505, 730, 230, 395}, // LV 7
-    {750, 975, 230, 395}, // LV 8
-    {15, 240, 420, 585},  // LV 9
-    {260, 485, 420, 585}, // LV 10
-    {505, 730, 420, 585}, // LV 11
-    {750, 975, 420, 585}  // LV 12
-
-};
 
 const vector<Button> plant_seed = []()
 {
@@ -89,3 +71,6 @@ const Button CONTINUE((WINDOW_WIDTH - CONTINUE_WIDTH) / 2, (WINDOW_WIDTH + CONTI
 const Button RENAME_BUTTON(0, 91, 0, 37);
 const Button RESET_LEVEL_BUTTON(WINDOW_WIDTH - 162, WINDOW_WIDTH, 0, 37);
 const Button QUIT_BUTTON((WINDOW_WIDTH - 140) / 2, (WINDOW_WIDTH + 140) / 2, 0, 37);
+
+const Button PREV_PAGE_BUTTON(15, 65, 125, 175);
+const Button NEXT_PAGE_BUTTON(985, 1035, 125, 175);

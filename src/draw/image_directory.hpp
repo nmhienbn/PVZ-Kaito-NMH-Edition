@@ -97,8 +97,28 @@ enum ImageType
     LOAD_BAR_SPROUT_DIRECTORY,
     LOAD_BAR_ZOMBIEHEAD_DIRECTORY,
 
-    CHOOSE_LEVELS_DIRECTORY,
-    LEVEL_BLINK_DIRECTORY,
+    CHOOSE_LEVELS_1_DIRECTORY,
+    CHOOSE_LEVELS_2_DIRECTORY,
+    BACK_BUTTON_DIRECTORY,
+    BACK_PRESS_BUTTON_DIRECTORY,
+    COMPLETED_DIRECTORY,
+    CONTAINER_DIRECTORY,
+    DAY_DIRECTORY,
+    DAY_LIT_DIRECTORY,
+    NAME_DIRECTORY,
+    NIGHT_DIRECTORY,
+    NIGHT_LIT_DIRECTORY,
+    SELECTOR_DIRECTORY,
+    SELECTOR_BLINK_DIRECTORY,
+    STONE_DIRECTORY,
+    THUMB_BG_DAY_DIRECTORY,
+    THUMB_BG_NIGHT_DIRECTORY,
+    NORMAL_DIRECTORY,
+    FLAG_DIRECTORY,
+    CONE_DIRECTORY,
+    BUCKET_DIRECTORY,
+    DOOR_DIRECTORY,
+
     BACKGROUND_LV0_DIRECTORY,
     BACKGROUND_LV1_DIRECTORY,
     BACKGROUND_LV2_DIRECTORY,
@@ -467,15 +487,35 @@ const Image all_img[] = {
     Image("./image/Background/loadbar/LoadBar_sprout.png", 18, 18),     // LOAD_BAR_SPROUT_DIRECTORY
     Image("./image/Background/loadbar/LoadBar_zombiehead.png", 18, 18), // LOAD_BAR_ZOMBIEHEAD_DIRECTORY
 
-    Image("./image/Background/Choose_levels.png"),         // CHOOSE_LEVELS_DIRECTORY
-    Image("./image/Background/level_blink.png", 0, 0, 70), // LEVEL_BLINK_DIRECTORY
-    Image("./image/Background/Frontyard_LV0.jpg"),         // BACKGROUND_LV0_DIRECTORY
-    Image("./image/Background/Frontyard_LV1.png"),         // BACKGROUND_LV1_DIRECTORY
-    Image("./image/Background/Frontyard_LV2.png"),         // BACKGROUND_LV2_DIRECTORY
-    Image("./image/Background/Frontyard.png"),             // BACKGROUND_DIRECTORY
-    Image("./image/Background/Frontyard_night.png"),       // BACKGROUND_NIGHT_DIRECTORY
-    Image("./image/Background/ZombiesWon.png"),            // LOSING_MESSAGE_DIRECTORY
-    Image("./image/Background/Winning_Pic.png"),           // WINNING_MESSAGE_DIRECTORY
+    Image("./image/Choose_level/pvz_levelselection_bg.png"),    // CHOOSE_LEVELS_1_DIRECTORY
+    Image("./image/Choose_level/pvz_levelselection2_bg.png"),   // CHOOSE_LEVELS_2_DIRECTORY
+    Image("./image/Choose_level/back.png"),                     // BACK_BUTTON_DIRECTORY
+    Image("./image/Choose_level/back_press.png"),               // BACK_PRESS_BUTTON_DIRECTORY
+    Image("./image/Choose_level/completed.png"),                // COMPLETED_DIRECTORY
+    Image("./image/Choose_level/container.png"),                // CONTAINER_DIRECTORY
+    Image("./image/Choose_level/day.png"),                      // DAY_DIRECTORY
+    Image("./image/Choose_level/day_lit.png"),                  //  DAY_LIT_DIRECTORY
+    Image("./image/Choose_level/name.png"),                     // NAME_DIRECTORY
+    Image("./image/Choose_level/night.png"),                    //  NIGHT_DIRECTORY
+    Image("./image/Choose_level/night_lit.png"),                // NIGHT_LIT_DIRECTORY
+    Image("./image/Choose_level/selector.png"),                 // SELECTOR_DIRECTORY
+    Image("./image/Choose_level/selector_blink.png", 0, 0, 70), // SELECTOR_BLINK_DIRECTORY
+    Image("./image/Choose_level/stone.png"),                    // STONE_DIRECTORY
+    Image("./image/Choose_level/thumb_bg_day.png"),             // THUMB_BG_DAY_DIRECTORY
+    Image("./image/Choose_level/thumb_bg_night.png"),           //  THUMB_BG_NIGHT_DIRECTORY
+    Image("./image/Choose_level/normal.png"),                   //  NORMAL_DIRECTORY
+    Image("./image/Choose_level/flag.png"),                     // FLAG_DIRECTORY
+    Image("./image/Choose_level/cone.png"),                     //  CONE_DIRECTORY
+    Image("./image/Choose_level/bucket.png"),                   // BUCKET_DIRECTORY
+    Image("./image/Choose_level/door.png"),                     // DOOR_DIRECTORY
+
+    Image("./image/Background/Frontyard_LV0.jpg"),   // BACKGROUND_LV0_DIRECTORY
+    Image("./image/Background/Frontyard_LV1.png"),   // BACKGROUND_LV1_DIRECTORY
+    Image("./image/Background/Frontyard_LV2.png"),   // BACKGROUND_LV2_DIRECTORY
+    Image("./image/Background/Frontyard.png"),       // BACKGROUND_DIRECTORY
+    Image("./image/Background/Frontyard_night.png"), // BACKGROUND_NIGHT_DIRECTORY
+    Image("./image/Background/ZombiesWon.png"),      // LOSING_MESSAGE_DIRECTORY
+    Image("./image/Background/Winning_Pic.png"),     // WINNING_MESSAGE_DIRECTORY
 
     Image("./image/Icons/sun.png"),                    // SUN_DIRECTORY
     Image("./image/Icons/sun_bar.png"),                // SUN_BAR_DIRECTORY
@@ -736,6 +776,8 @@ const Image all_img[] = {
 
 /*Corresponding blink of image*/
 static map<int, int> blink_of = {
+    {SELECTOR_DIRECTORY, SELECTOR_BLINK_DIRECTORY},
+
     {PEASHOOTER_SHEET_DIRECTORY, PEASHOOTER_SHEET_BLINK_DIRECTORY},
     {PEASHOOTER_ATTACK_DIRECTORY, PEASHOOTER_ATTACK_BLINK_DIRECTORY},
 

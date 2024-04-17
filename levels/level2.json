@@ -2,7 +2,9 @@
     "#comment": "Day 2",
     "objects": {
         "map_type": 2,
-        "has_sun_from_sky": true
+        "has_sun_from_sky": true,
+        "display_zombie": "normal",
+        "init_sun": 100
     },
     "waves": [
         {

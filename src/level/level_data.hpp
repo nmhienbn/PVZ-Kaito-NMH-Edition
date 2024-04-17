@@ -1,8 +1,9 @@
 #pragma once
 #include "elements/elements.hpp"
-#include "elements/mower/mower.hpp"
 #define LEVELS_DIRECTORY "./levels/"
+#define LEVEL_COUNT 12
 
+json get_lv_json(int lv_id);
 void read_level();
 void reset_level();
 void load_level();
