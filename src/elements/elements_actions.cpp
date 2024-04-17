@@ -3,7 +3,7 @@
 extern int clk;
 extern Level level;
 extern Elements game_characters;
-extern Icons icons;
+
 extern Player player;
 extern Map cells;
 Wave current_wave;
@@ -178,10 +178,12 @@ void handle_movements()
 void update_plant_seeds_remaining_time()
 {
     // Update icons remainning time
-    for (int i = 0; i < PLANT_COUNT; i++)
+    for (auto &seed_packet : player.seed_packets)
     {
-        if (icons.plant_remaining_time[i])
-            icons.plant_remaining_time[i]--;
+        if (seed_packet.remaining_time)
+        {
+            seed_packet.remaining_time--;
+        }
     }
     // Sun count blink
     if (player.sun_count_change_color_times)

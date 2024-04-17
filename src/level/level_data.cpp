@@ -2,7 +2,7 @@
 
 extern Level level;
 extern Elements game_characters;
-extern Icons icons;
+
 extern Player player;
 extern Map cells;
 
@@ -24,10 +24,19 @@ void reset_level()
         for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
         {
             cells[y][x].is_planted = false;
-            cells[y][x].is_potate_mine = false;
         }
     }
-    icons = Icons();
+
+    // Count number of unlocked plant.
+    auto &x = level_unlock_new_plant;
+    int num_plants = upper_bound(x, x + PLANT_COUNT, level.level_num) - x;
+
+    // Plant seed packets
+    player.seed_packets.clear();
+    for (int i = 0; i < num_plants; i++)
+    {
+        player.seed_packets.push_back(SeedPacket(i));
+    }
 }
 
 /*
@@ -125,7 +134,6 @@ void load_level()
     else
         init_mower(game_characters.mowers, 0, 4);
     player.sun_count = INIT_SUN_COUNT;
-    player.is_choosing_a_plant = false;
     player.is_shoveling = false;
     level.zombie_has_coming = false;
 }

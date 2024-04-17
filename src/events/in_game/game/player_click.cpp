@@ -3,7 +3,7 @@
 
 extern Level level;
 extern Elements game_characters;
-extern Icons icons;
+
 extern Player player;
 extern Map cells;
 extern Window win;
@@ -47,10 +47,10 @@ void handle_user_click(const int &mouse_x, const int &mouse_y)
     //     specify plant type and create a new plant there.
     if (is_a_plant_seed_clicked_on(mouse_x, mouse_y))
     {
-        which_plant_is_chosen(mouse_y, player.is_choosing_a_plant);
+        which_plant_is_chosen(mouse_y);
         return;
     }
-    if (player.is_choosing_a_plant == true)
+    if (player.is_choosing_a_plant())
     {
         if (click_is_in_frontyard(mouse_x, mouse_y))
         {
@@ -92,11 +92,10 @@ Change is_a_plant_chosen status and chosen plant
     Otherwise, determine which plant is chosen, play sound.
         Note that double choose on a plant seed will cancel the selection.
 */
-void change_chosen_status(const int &i, bool &is_a_plant_chosen)
+void change_chosen_status(const int &i)
 {
     if (level.level_num < level_unlock_new_plant[i])
         return;
-    is_a_plant_chosen = false;
     if (player.sun_count < PLANT_SUN_COST[i])
     {
         // not enough sun
@@ -105,7 +104,7 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
         play_sound_effect(BUZZER_MUSIC_DIRECTORY);
         win.show_announcer_text("YOU DO NOT HAVE ENOUGH SUNS!");
     }
-    else if (icons.plant_remaining_time[i])
+    else if (player.seed_packets[i].remaining_time)
     {
         // plant has not refresh
         remove_chosen_plant();
@@ -113,17 +112,16 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
     }
     else
     {
-        if (icons.chosen_plant == i)
+        if (SeedPacket::chosen_plant == i)
         {
             // double choose: remove chosen plant
-            icons.chosen_plant = PLANT_COUNT;
+            SeedPacket::chosen_plant = PLANT_COUNT;
         }
         else
         {
             // specify chosen plant
-            icons.chosen_plant = i;
+            SeedPacket::chosen_plant = (PlantType)i;
             play_sound_effect(SEED_LIFT_MUSIC_DIRECTORY);
-            is_a_plant_chosen = true;
             player.is_shoveling = false;
         }
     }
@@ -132,14 +130,14 @@ void change_chosen_status(const int &i, bool &is_a_plant_chosen)
 /*Find which plant is chosen.
 For all plant seeds' coordinate.
  */
-void which_plant_is_chosen(int mouse_y, bool &is_a_plant_chosen)
+void which_plant_is_chosen(int mouse_y)
 {
     for (int i = 0; i < PLANT_COUNT; i++)
         if (level.level_num >= level_unlock_new_plant[i])
         {
             if (plant_seed[i].y1 < mouse_y && mouse_y < plant_seed[i].y2)
             {
-                change_chosen_status(i, is_a_plant_chosen);
+                change_chosen_status(i);
                 break;
             }
         }
@@ -194,8 +192,7 @@ Restore the status that player is not choosing a plant
 */
 void remove_chosen_plant()
 {
-    player.is_choosing_a_plant = false;
-    icons.chosen_plant = PLANT_COUNT;
+    SeedPacket::chosen_plant = PLANT_COUNT;
 }
 
 /*Plant the plant in the given row and col.
@@ -210,12 +207,10 @@ void plant_new_plant(int type, const int &row, const int &col)
     remove_chosen_plant();
     if (type < 0 || type >= PLANT_COUNT)
         return;
-    icons.plant_remaining_time[type] = PLANT_LOADING_TIME[type];
+    player.seed_packets[type].reset_remaining_time();
     game_characters.plants.push_back(init_plant(type, row, col));
     player.sun_count -= PLANT_SUN_COST[type];
     cells[row][col].is_planted = true;
-    if (type == POTATOMINE_TYPE)
-        cells[row][col].is_potate_mine = true;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }
 
@@ -234,7 +229,7 @@ void create_new_plant(const int &mouse_x, const int &mouse_y)
         remove_chosen_plant();
         return;
     }
-    plant_new_plant(icons.chosen_plant, row, col);
+    plant_new_plant(SeedPacket::chosen_plant, row, col);
 }
 
 /*

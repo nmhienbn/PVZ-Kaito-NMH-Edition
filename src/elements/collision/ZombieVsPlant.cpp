@@ -18,7 +18,12 @@ bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p
 {
     if (has_zombie_reached_block(zombie, plants[p_ind]->get_row(), plants[p_ind]->get_col()))
     {
-        play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
+        PotatoMine *potatoMinePtr = dynamic_cast<PotatoMine *>(plants[p_ind]);
+        if (potatoMinePtr != nullptr && !potatoMinePtr->is_armed())
+        {
+            play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
+        }
+
         zombie.bite_time = BITE_CLK_COUNT;
         if (zombie.cold_time)
             zombie.bite_time += BITE_CLK_COUNT;

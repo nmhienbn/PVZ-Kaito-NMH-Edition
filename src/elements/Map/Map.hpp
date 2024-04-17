@@ -15,7 +15,6 @@ struct Block
     int x1, x2;
     int y1, y2;
     bool is_planted = false;
-    bool is_potate_mine = false;
 };
 // Block[][]: which are limited by x1-x2 and y1-y2
 typedef vector<vector<Block>> Map;

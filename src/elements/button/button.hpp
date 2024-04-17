@@ -44,7 +44,6 @@ const Button LEVEL_BUTTON[] = {
 
 };
 
-const int level_unlock_new_plant[] = {1, 2, 4, 6, 8, 10};
 const vector<Button> plant_seed = []()
 {
     vector<Button> buttons;

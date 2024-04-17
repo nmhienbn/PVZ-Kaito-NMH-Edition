@@ -15,7 +15,7 @@ Trong đó, tìm game asset trên mạng tốn 60% :v
 
 Ở dưới đây --> có nghĩa là giải nén thành
 
-# PVZ 1 sprite sheets
+# PVZ 1 PC sprite sheets
 ## Giải thích ý nghĩa file
 Bản chất, khi tải 1 game pvz trên PC bản full (có thể dùng bản portable) sẽ có 1 file **.pak**<br/>
 - **.pak** --> **.png**, **.jpg**, **.compiled**.
@@ -45,6 +45,8 @@ Chi tiết lấy trong file *Zombie.fla*:
 * 	die1: 179-217
 * 	die2: 218-250
 * 	die3: 293-429
+
+# PVZ 1 Android
 
 # Với PVZ 2 sprite sheet
 ## Giải thích ý nghĩa file
@@ -83,6 +85,11 @@ Các [tool](https://8auniverse.com/) của [8A Gaming - Youtube](https://www.you
 Tương tự SPCUtils, nhưng dễ dùng hơn.
 Link: [Github](https://github.com/twinkles-twinstar/TwinStar.ToolKit), [Download](https://mega.nz/folder/vFNi2aKD#vpzZz9g0BAu7AcdO-CVEGg), [Youtube](https://www.youtube.com/watch?v=opBGagu4LOo&t=0s).
 Chỉ cần kéo thả file cần giải nén (hoặc nén) vào file **SPCUtils.exe** (tên file có thể kèm tên tác giả nên có thể khác) và chọn option phù hợp
+
+### Pop Studio
+Thực chất .apk, .obb chỉ cần đổi đuôi sang .zip là giải nén đc.
+Còn [PopStudio](https://github.com/YingFengTingYu/PopStudio_Old/releases/tag/v4.0) hỗ trợ giải nén hầu như
+tất cả các định dạng file của PopCap Games. Chưa kể nó ở dạng UI thay vì cmd nên khá dễ sử dụng.
 
 # Tạo GIF
 **.fla** hoặc **.xfl + LIBRARY** có thể export được thành **.gif** với **Adobe Animate**(Chú ý Ctrl + J để chỉnh kích thước, và Export GIF nền và viền bao quanh trong suốt)

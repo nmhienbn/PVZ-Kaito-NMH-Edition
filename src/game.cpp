@@ -5,7 +5,6 @@ bool quit = false;
 int clk = 0;
 Level level;
 Elements game_characters;
-Icons icons;
 Player player;
 Map cells;
 Window win(WINDOW_WIDTH, WINDOW_HEIGHT);

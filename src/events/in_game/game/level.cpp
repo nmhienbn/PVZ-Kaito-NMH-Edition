@@ -118,7 +118,7 @@ void start_level()
             if (check_status(game_state, IS_PAUSED) == false) {
                 if (e.type == SDL_KEYDOWN && is_in(SDLK_1, e.key.keysym.sym, SDLK_1 + PLANT_COUNT - 1))
                 {
-                    change_chosen_status(e.key.keysym.sym - SDLK_1, player.is_choosing_a_plant);
+                    change_chosen_status(e.key.keysym.sym - SDLK_1);
                 }
                 KEY_PRESS(s, {
                     play_sound_effect(SHOVEL_MUSIC_DIRECTORY);

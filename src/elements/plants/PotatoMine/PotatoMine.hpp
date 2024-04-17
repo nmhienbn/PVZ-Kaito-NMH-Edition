@@ -24,4 +24,5 @@ public:
     bool is_blow();
     void disappear();
     void next_frame(const PlantAssets &assets);
+    bool is_armed();
 };

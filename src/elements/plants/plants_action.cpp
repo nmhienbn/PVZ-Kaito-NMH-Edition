@@ -74,7 +74,6 @@ Delete idx-th plant in vector<plants*>
 void delete_plant(vector<Plants *> &plants, int &idx)
 {
     cells[plants[idx]->get_row()][plants[idx]->get_col()].is_planted = false;
-    cells[plants[idx]->get_row()][plants[idx]->get_col()].is_potate_mine = false;
     delete plants[idx];
     plants.erase(plants.begin() + idx);
     idx--;

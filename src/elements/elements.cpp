@@ -1,15 +1,5 @@
 #include "elements.hpp"
 
-/*Icons init*/
-Icons::Icons()
-{
-    chosen_plant = PLANT_COUNT;
-    for (int i = 0; i < PLANT_COUNT; i++)
-    {
-        plant_remaining_time[i] = 0;
-    }
-}
-
 /*Reset level: Clear all zombie waves' information*/
 void Level::reset()
 {

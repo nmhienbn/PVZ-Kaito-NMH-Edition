@@ -1,7 +1,8 @@
 /*
-This file include game elements: Plants, Zombies, Player, Level, Icons (Plant seeds)
+This file include game elements: Plants, Zombies, Player, Level (Plant seeds)
 */
 #pragma once
+#include "elements/SeedPacket/SeedPacket.hpp"
 #include "elements/announcer/announcer.hpp"
 #include "elements/mower/mower.hpp"
 #include "elements/plants/plant_type.hpp"
@@ -33,19 +34,17 @@ struct Player
     string name;
     int sun_count;
     int level;
-    bool is_choosing_a_plant, is_shoveling;
+    bool is_shoveling;
     int unlocked_level = 0;
+    vector<SeedPacket> seed_packets;
 
     int sun_count_change_color_time = 0;
     int sun_count_change_color_times = 0;
-};
 
-struct Icons
-{
-    int chosen_plant; // = PLANT_COUNT if no plant is chosen
-    int plant_remaining_time[PLANT_COUNT];
-
-    Icons();
+    bool is_choosing_a_plant()
+    {
+        return SeedPacket::chosen_plant != PLANT_COUNT;
+    }
 };
 
 enum ZOMBIE_DELAY_STATE

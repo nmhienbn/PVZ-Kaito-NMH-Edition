@@ -135,3 +135,8 @@ void PotatoMine::next_frame(const PlantAssets &assets)
         }
     }
 }
+
+bool PotatoMine::is_armed()
+{
+    return state == ARMED;
+}

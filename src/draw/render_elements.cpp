@@ -4,7 +4,7 @@
 
 extern Level level;
 extern Elements game_characters;
-extern Icons icons;
+
 extern Player player;
 extern Map cells;
 extern Window win;
@@ -85,9 +85,9 @@ void display_game_layout()
     // Sun bar and player's sun count
     win.draw_png_height_scaled(SUN_BAR_DIRECTORY, 5, 5, SUN_BAR_WIDTH);
     win.set_style(PVZUI_TTF, 26, TTF_STYLE_BOLD);
-    win.show_text(to_string(player.sun_count), 90, 33,
+    win.show_text(to_string(player.sun_count), 100, 17,
                   (player.sun_count_change_color_times & 1 ? RED : BLACK),
-                  PVZUI_TTF, 26);
+                  PVZUI_TTF, 30);
 
     // Shovel
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);
@@ -96,7 +96,7 @@ void display_game_layout()
 
     // Plant seed
     display_icons_in_icon_bar();
-    if (player.is_choosing_a_plant || player.is_shoveling)
+    if (player.is_choosing_a_plant() || player.is_shoveling)
     {
         blink_row_and_col();
     }
@@ -120,67 +120,15 @@ void display_game_layout()
 */
 void display_icons_in_icon_bar()
 {
-    int plant_seed_dir[] = {
-        PEASHOOTER_DIRECTORY,
-        SUNFLOWER_DIRECTORY,
-        WALLNUT_DIRECTORY,
-        SNOWPEA_DIRECTORY,
-        POTATOMINE_DIRECTORY,
-        CHERRYBOMB_DIRECTORY};
     // Count number of unlocked plant.
-    int num_plants = 0;
-    for (int i = 0; i < PLANT_COUNT; i++)
-    {
-        if (level.level_num >= level_unlock_new_plant[i])
-        {
-            num_plants = i;
-        }
-        else
-        {
-            break;
-        }
-    }
-    // Plant seed bar
-    // win.draw_png(ICON_BAR_DIRECTORY, 15, 85, ICON_BAR_WIDTH, plant_seed[num_plants].y2 - 80);
-    // Plant seed
-    for (int i = 0; i <= num_plants; i++)
-    {
-        win.draw_png_height_scaled(SEED_PACKET_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH);
-        win.set_texture_alpha(plant_seed_dir[i], 255);
-        win.draw_png_width_scaled(plant_seed_dir[i], plant_seed[i].x1 + 8, plant_seed[i].y1 + 2, ICON_HEIGHT - 3);
-        win.set_texture_alpha(plant_seed_dir[i], 200);
-        win.draw_png_height_scaled(SUN_TAG_DIRECTORY, plant_seed[i].x1 + 58, plant_seed[i].y1 + 25, 41);
-        win.draw_png_height_scaled(SEED_PACKET_BOT_BORDER_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1 + 60, ICON_WIDTH);
-        // Not enough sun or is chosen
-        if (player.sun_count < PLANT_SUN_COST[i] || icons.chosen_plant == i || icons.plant_remaining_time[i])
-        {
-            win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH, ICON_HEIGHT);
-        }
+    int num_plants = player.seed_packets.size();
 
-        if (icons.plant_remaining_time[i] == 0)
-        {
-            if (icons.chosen_plant != i)
-                plant_seed[i].blink();
-            else
-                win.draw_png_height_scaled(SEED_CHOSEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH);
-        }
-        else
-        {
-            // Remaining time
-            win.draw_png(BLACK_SCREEN_DIRECTORY, plant_seed[i].x1, plant_seed[i].y1, ICON_WIDTH,
-                         icons.plant_remaining_time[i] * ICON_HEIGHT / PLANT_LOADING_TIME[i]);
-        }
+    // Plant seed packets
+    for (int i = 0; i < num_plants; i++)
+    {
+        player.seed_packets[i].display(plant_seed[i].x1, plant_seed[i].y1, player.sun_count);
         win.show_text_shadowed(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
-
-        int w, h;
-        int fsize = 30;
-        TTF_SizeText(win.get_font(PVZUI_TTF, fsize), to_string(PLANT_SUN_COST[i]).c_str(), &w, &h);
-        w = plant_seed[i].x1 + ICON_WIDTH - 4 - w;
-        h = plant_seed[i].y1 + ICON_HEIGHT - h;
-        win.show_text(to_string(PLANT_SUN_COST[i]),
-                      w + 2, h + 3, BLACK, PVZUI_TTF, fsize);
-        win.show_text_shadowed(to_string(PLANT_SUN_COST[i]),
-                               w, h, WHITE, PVZUI_TTF, fsize);
+        plant_seed[i].blink();
     }
 }
 
@@ -249,11 +197,11 @@ void display_chosen_plant()
         win.draw_png_width_scaled(SHOVEL_DIRECTORY, _x, _y - ICON_HEIGHT, ICON_HEIGHT);
         return;
     }
-    if (PEASHOOTER_TYPE <= icons.chosen_plant && icons.chosen_plant < PLANT_COUNT)
+    if (PEASHOOTER_TYPE <= SeedPacket::chosen_plant && SeedPacket::chosen_plant < PLANT_COUNT)
     {
         _x -= ICON_WIDTH >> 2;
         _y -= ICON_HEIGHT >> 1;
-        win.draw_png_width_scaled(PEASHOOTER_DIRECTORY + icons.chosen_plant, _x, _y, ICON_HEIGHT);
+        win.draw_png_width_scaled(PEASHOOTER_DIRECTORY + SeedPacket::chosen_plant, _x, _y, ICON_HEIGHT);
     }
 }
 
