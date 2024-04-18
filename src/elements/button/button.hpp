@@ -19,6 +19,8 @@ struct Button
     ~Button();
     bool is_mouse_in(int mouse_x, int mouse_y) const;
     void blink() const;
+    void show_text(const string &text, const int &x_bias, const int &y_bias,
+                   const int &font_size, const RGB &color, const RGB &shadow_color) const;
 };
 void display_button(const Button &button, const int &button_directory, int angle = 0, SDL_RendererFlip flip = SDL_FLIP_NONE);
 void display_level_is_locked(const Button &button);
@@ -68,9 +70,9 @@ const Button RESTART(MENU_X1 + 105, MENU_X1 + 300, MENU_Y1 + 274, MENU_Y1 + 312)
 #define CONTINUE_HEIGHT 37
 const Button CONTINUE((WINDOW_WIDTH - CONTINUE_WIDTH) / 2, (WINDOW_WIDTH + CONTINUE_WIDTH) / 2, 540, 540 + CONTINUE_HEIGHT);
 
-const Button RENAME_BUTTON(0, 91, 0, 37);
-const Button RESET_LEVEL_BUTTON(WINDOW_WIDTH - 162, WINDOW_WIDTH, 0, 37);
-const Button QUIT_BUTTON((WINDOW_WIDTH - 140) / 2, (WINDOW_WIDTH + 140) / 2, 0, 37);
+const Button RENAME_BUTTON(10, 237, 265, 405);
+const Button RESET_LEVEL_BUTTON(155, 155 + 252, 520, 520 + 72);
+const Button QUIT_BUTTON(750, 750 + 252, 535, 535 + 72);
 
 const Button PREV_PAGE_BUTTON(15, 65, 125, 175);
 const Button NEXT_PAGE_BUTTON(985, 1035, 125, 175);

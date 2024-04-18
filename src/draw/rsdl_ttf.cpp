@@ -72,7 +72,7 @@ void Window::show_announcer_text()
         // set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
         int w = 0, h = 0;
         TTF_SizeText(get_font(HOUSEOFTERROR_TTF, 40), announce.c_str(), &w, &h);
-        show_text_shadowed(announce, (WINDOW_WIDTH - w) / 2, 540 + (60 - h) / 2, WHITE, HOUSEOFTERROR_TTF, 40);
+        show_text_outlined(announce, (WINDOW_WIDTH - w) / 2, 540 + (60 - h) / 2, WHITE, HOUSEOFTERROR_TTF, 40);
     }
 }
 
@@ -98,13 +98,22 @@ void Window::set_outline(const string &font_addr, const int &size, const int &ou
 Show text shadowed by render it's outline (set font outline).
 Then render it.
 */
-void Window::show_text_shadowed(const string &input, const int &x, const int &y,
+void Window::show_text_outlined(const string &input, const int &x, const int &y,
                                 const RGB &color, string font_addr,
                                 const int &size, const int &outline_weight, const RGB &outline_color)
 {
     set_outline(font_addr, size, outline_weight);
     show_text(input, x - outline_weight, y - outline_weight, outline_color, font_addr, size);
     set_outline(font_addr, size, 0);
+    show_text(input, x, y, color, font_addr, size);
+}
+
+void Window::show_text_shadowed(const string &input, const int &x, const int &y,
+                                const RGB &color, string font_addr,
+                                const int &size, const int &x_shadow, const int &y_shadow,
+                                const RGB &shadow_color)
+{
+    show_text(input, x + x_shadow, y + y_shadow, shadow_color, font_addr, size);
     show_text(input, x, y, color, font_addr, size);
 }
 
@@ -125,7 +134,7 @@ void Window::show_text_center(const string &input, int x, int y,
         y = (WINDOW_HEIGHT - h) / 2;
 
     set_style(font_addr, size, style);
-    show_text_shadowed(input, x, y, color, font_addr, size, outline_weight, outline_color);
+    show_text_outlined(input, x, y, color, font_addr, size, outline_weight, outline_color);
 }
 
 /* Show the utf 8 text at (x; y)

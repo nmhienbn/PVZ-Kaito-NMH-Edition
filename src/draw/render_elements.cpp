@@ -34,25 +34,31 @@ void display_choose_level(const bool &is_mouse_needed)
     else
         win.draw_png(NIGHT_LIT_DIRECTORY, 345, 443, 124, 58);
     // Buttons
-    display_button(RENAME_BUTTON, RENAME_DIRECTORY);
-    display_button(RESET_LEVEL_BUTTON, RESET_LEVEL_DIRECTORY);
-    display_button(QUIT_BUTTON, QUIT_DIRECTORY);
+    display_button(RENAME_BUTTON, NAME_DIRECTORY);
+    display_button(RESET_LEVEL_BUTTON, STONE_DIRECTORY, 358);
+    display_button(QUIT_BUTTON, STONE_DIRECTORY, 358);
+    QUIT_BUTTON.show_text("QUIT", 0, -8, 30, BLACK, RGB(162, 203, 134));
+    RESET_LEVEL_BUTTON.show_text("RESET LEVEL", 0, -8, 30, BLACK, RGB(162, 203, 134));
     if (shown_level[0] != 1)
         display_button(PREV_PAGE_BUTTON, BACK_BUTTON_DIRECTORY);
     if (shown_level.back() != LEVEL_COUNT)
         display_button(NEXT_PAGE_BUTTON, BACK_BUTTON_DIRECTORY, 0, SDL_FLIP_HORIZONTAL);
+
+    // int name_w, name_h;
+    // TTF_SizeText(win.get_font(PVZUI_TTF, 30), player.name.c_str(), &name_w, &name_h);
+    win.show_text(player.name, 40, 350, WHITE, PVZUI_TTF, 30);
     if (is_mouse_needed)
     {
-        RENAME_BUTTON.blink();
-        RESET_LEVEL_BUTTON.blink();
-        QUIT_BUTTON.blink();
-
         int _x = 0, _y = 0;
         SDL_GetMouseState(&_x, &_y);
         if (PREV_PAGE_BUTTON.is_mouse_in(_x, _y) && shown_level[0] != 1)
             display_button(PREV_PAGE_BUTTON, BACK_PRESS_BUTTON_DIRECTORY);
         if (NEXT_PAGE_BUTTON.is_mouse_in(_x, _y) && shown_level.back() != LEVEL_COUNT)
             display_button(NEXT_PAGE_BUTTON, BACK_PRESS_BUTTON_DIRECTORY, 0, SDL_FLIP_HORIZONTAL);
+        if (QUIT_BUTTON.is_mouse_in(_x, _y))
+            QUIT_BUTTON.show_text("QUIT", 0, -8, 30, RGB(255, 222, 247), RGB(244, 67, 191));
+        if (RESET_LEVEL_BUTTON.is_mouse_in(_x, _y))
+            RESET_LEVEL_BUTTON.show_text("RESET LEVEL", 0, -8, 30, RGB(255, 222, 247), RGB(244, 67, 191));
     }
     // Level appearance
     for (int i, _ = shown_level.size(); i < _; ++i)
@@ -86,10 +92,12 @@ void display_choose_level(const bool &is_mouse_needed)
             }
             else
                 level_now.display(x, y, WHITE);
+            if (player.unlocked_level > shown_level[i])
+                level_now.display_complete(x, y);
         }
         else
         {
-            level_now.display(x, y, BLACK);
+            level_now.display(x, y, WHITE);
             level_now.display_locked(x, y);
         }
     }
@@ -119,7 +127,7 @@ void display_game_layout()
     // Shovel
     display_button(Shovel_bar, SHOVEL_BAR_DIRECTORY);
     Shovel_bar.blink();
-    win.show_text_shadowed("S", Shovel_bar.x2 - 13, Shovel_bar.y1, WHITE, BRIANNE_TTF);
+    win.show_text_outlined("S", Shovel_bar.x2 - 13, Shovel_bar.y1, WHITE, BRIANNE_TTF);
 
     // Plant seed
     display_icons_in_icon_bar();
@@ -154,7 +162,7 @@ void display_icons_in_icon_bar()
     for (int i = 0; i < num_plants; i++)
     {
         player.seed_packets[i].display(plant_seed[i].x1, plant_seed[i].y1, player.sun_count);
-        win.show_text_shadowed(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
+        win.show_text_outlined(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
         plant_seed[i].blink();
     }
 }

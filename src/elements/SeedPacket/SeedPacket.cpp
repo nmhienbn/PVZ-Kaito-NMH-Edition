@@ -65,6 +65,6 @@ void SeedPacket::display(int x, int y, int player_sun_count)
     h = y + ICON_HEIGHT - h;
     win.show_text(to_string(sun_cost),
                   w + 2, h + 3, BLACK, PVZUI_TTF, fsize);
-    win.show_text_shadowed(to_string(sun_cost),
+    win.show_text_outlined(to_string(sun_cost),
                            w, h, WHITE, PVZUI_TTF, fsize);
 }

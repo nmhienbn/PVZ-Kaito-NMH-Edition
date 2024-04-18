@@ -142,9 +142,6 @@ enum ImageType
     TURBO_ICON_A_DIRECTORY,
     MENU_DIRECTORY,
     CONTINUE_DIRECTORY,
-    RENAME_DIRECTORY,
-    RESET_LEVEL_DIRECTORY,
-    QUIT_DIRECTORY,
     OK_DIRECTORY,
     CANCEL_DIRECTORY,
     RENAME_MENU_DIRECTORY,
@@ -532,9 +529,6 @@ const Image all_img[] = {
     Image("./image/Icons/Turbo_Button_Activited.png"), // TURBO_ICON_A_DIRECTORY
     Image("./image/Icons/menu.png"),                   // MENU_DIRECTORY
     Image("./image/Icons/continue.png"),               // CONTINUE_DIRECTORY
-    Image("./image/Icons/rename.png"),                 // RENAME_DIRECTORY
-    Image("./image/Icons/reset_level.png"),            // RESET_LEVEL_DIRECTORY
-    Image("./image/Icons/quit.png"),                   // QUIT_DIRECTORY
     Image("./image/Icons/ok.png"),                     // OK_DIRECTORY
     Image("./image/Icons/cancel.png"),                 // CANCEL_DIRECTORY
     Image("./image/Icons/rename_menu.png"),            // RENAME_MENU_DIRECTORY

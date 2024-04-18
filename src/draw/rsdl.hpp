@@ -92,10 +92,14 @@ public:
 	void show_text(const string &input, const int &x = 0, const int &y = 0,
 				   const RGB &color = WHITE, string font_addr = FREESANS_TTF,
 				   const int &size = 24, const int &aplha = 255);
-	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
+	void show_text_outlined(const string &input, const int &x = 0, const int &y = 0,
 							const RGB &color = WHITE, string font_addr = FREESANS_TTF,
 							const int &size = 24, const int &outline_weight = 2,
 							const RGB &outline_color = BLACK);
+	void show_text_shadowed(const string &input, const int &x = 0, const int &y = 0,
+							const RGB &color = WHITE, string font_addr = FREESANS_TTF,
+							const int &size = 24, const int &x_shadow = 0, const int &y_shadow = 2,
+							const RGB &shadow_color = BLACK);
 	void show_text_center(const string &input, int x = -1, int y = -1,
 						  const RGB &color = WHITE, string font_addr = FREESANS_TTF,
 						  const int &size = 24, const int &style = TTF_STYLE_NORMAL,

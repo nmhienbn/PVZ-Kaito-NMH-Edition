@@ -62,11 +62,11 @@ void display_starting_screen()
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
         if (TAP_TO_START.is_mouse_in(_x, _y))
         {
-            win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, TAPPED, BRIANNE_TTF, 40, 1);
+            win.show_text_outlined(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, TAPPED, BRIANNE_TTF, 40, 1);
         }
         else
         {
-            win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
+            win.show_text_outlined(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
         }
         HANDLE_SDL_EVENT(
             QUIT();
@@ -144,7 +144,7 @@ void display_loading_screen()
         // Loading text
         int w = 0, h = 0;
         TTF_SizeText(win.get_font(BRIANNE_TTF, 40), loading.c_str(), &w, &h);
-        win.show_text_shadowed(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
+        win.show_text_outlined(loading, 204 + (642 - w) / 2, 490 + (106 - h) / 2, UNTAP, BRIANNE_TTF, 40, 1);
         // Loading grass
         int dx = 628 * clk / LOADING_TIME;
         win.draw_png(LOAD_BAR_GRASS_DIRECTORY, 0, 0, dx / 2, 33, 200, 455, dx, 66);

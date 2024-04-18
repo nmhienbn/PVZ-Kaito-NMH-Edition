@@ -81,6 +81,6 @@ void display_progress_bar()
     int w, h;
     TTF_SizeText(win.get_font(PVZUI_TTF, 24), LEVEL_NUMBER.c_str(), &w, &h);
     win.set_style(PVZUI_TTF, 24, TTF_STYLE_BOLD);
-    win.show_text_shadowed(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, PVZUI_TTF, 24);
+    win.show_text_outlined(LEVEL_NUMBER, dx - w - 15, dy, YELLOW_A, PVZUI_TTF, 24);
     win.set_style(PVZUI_TTF, 24, TTF_STYLE_NORMAL);
 }

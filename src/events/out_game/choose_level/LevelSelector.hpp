@@ -27,6 +27,7 @@ public:
     void display(int x, int y, RGB color);
     void display_locked(int x, int y);
     void display_blink(int x, int y);
+    void display_complete(int x, int y);
     bool is_mouse_in(int mouse_x, int mouse_y, int x, int y);
 };
 
