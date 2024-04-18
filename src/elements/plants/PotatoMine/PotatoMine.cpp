@@ -2,8 +2,8 @@
 #define POTATO_MINE_ARMED_TIME 900
 
 extern const json plant_json;
-static ifstream potatomine("./image/json/potatomine.json");
-static ifstream potatomine_explosion("./image/json/potatomine_explosion.json");
+static ifstream potatomine("./resources/images/json/potatomine.json");
+static ifstream potatomine_explosion("./resources/images/json/potatomine_explosion.json");
 
 json potatomine_data = json::parse(potatomine);
 json potatomine_explosion_data = json::parse(potatomine_explosion);

@@ -30,6 +30,7 @@ int main(int argv, char **args)
     //     cout << setw(2) << all_img[i].n_sheet << ' ' << all_img[i].c_sheet << ' ';
     //     cout << all_img[i].img_dir << '\n';
     // }
+    // cout << 0 << endl;
 
     // Init game & music.
     init_music();

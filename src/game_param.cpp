@@ -2,13 +2,13 @@
 #include <nlohmann/json.hpp>
 using namespace nlohmann;
 
-ifstream param_f("./dat/parameters.json");
+ifstream param_f("./resources/dat/parameters.json");
 json param_json = json::parse(param_f);
 
-ifstream plants_json(".\\dat\\plants.json");
+ifstream plants_json("./resources/dat/plants.json");
 auto plant_json = ordered_json::parse(plants_json);
 
-ifstream zombies_json(".\\dat\\zombies.json");
+ifstream zombies_json("./resources/dat/zombies.json");
 auto zombie_json = ordered_json::parse(zombies_json);
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*

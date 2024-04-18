@@ -66,7 +66,7 @@ Wait a few seconds and then click on the "CLICK TO START!" button to start playi
 
 <div style="text-align: center; ">
 
-![ezgif com-video-to-gif](preview/loading.gif)
+![ezgif com-video-to-gif](resources/preview/loading.gif)
 
 </div>
 
@@ -75,7 +75,7 @@ Enter to continue.
 
 <div style="text-align: center; ">
 
-![image](preview/name.png)
+![image](resources/preview/name.png)
 
 </div>
 
@@ -83,7 +83,7 @@ Players will immediately receive their first plant - the Peashooter.
 
 <div style="text-align: center; ">
 
-![image](preview/first_plant.png)
+![image](resources/preview/first_plant.png)
 
 </div>
 
@@ -94,7 +94,7 @@ that level will light up. Simply click the mouse to play that level.
 
 <div style="text-align: center; ">
 
-![image](preview/choose_level.png)
+![image](resources/preview/choose_level.png)
 
 </div>
 
@@ -102,7 +102,7 @@ However, when starting out, you can only unlock 1 level. Win each level in order
 
 <div style="text-align: center; ">
 
-![image](preview/choose_level1.png)
+![image](resources/preview/choose_level1.png)
 
 </div>
 
@@ -111,7 +111,7 @@ progress to experience the game again from the beginning:
 
 <div style="text-align: center; ">
 
-![image](preview/choose_level2.png)
+![image](resources/preview/choose_level2.png)
 
 </div>
 
@@ -120,7 +120,7 @@ side).
 
 <div style="text-align: center; ">
 
-![image](preview/levels.png)
+![image](resources/preview/levels.png)
 
 </div>
 
@@ -131,7 +131,7 @@ Before starting the game, you will know what types of zombies will appear.
 
 <div style="text-align: center; ">
 
-![image](preview/credit.png)
+![image](resources/preview/credit.png)
 
 </div>
 
@@ -139,14 +139,14 @@ Before starting the game, you will know what types of zombies will appear.
 
 - Sun
 
-![image](preview/sun.png)
+![image](resources/preview/sun.png)
 
 : a unit to buy plants in the game. Click to collect. And note that if a sun exists for too long, it will gradually fade
 and disappear. You won't be able to collect them after they disappear.
 
 - Sun bar
 
-![image](preview/sun_bar.png)
+![image](resources/preview/sun_bar.png)
 
 : a scoreboard of the number of suns that the player currently has.
 
@@ -157,7 +157,7 @@ and disappear. You won't be able to collect them after they disappear.
 
 <div style="text-align: center; ">
 
-![image](preview/plant_seed.png)
+![image](resources/preview/plant_seed.png)
 
 </div>
 
@@ -165,7 +165,7 @@ and disappear. You won't be able to collect them after they disappear.
 
 <div style="text-align: center; ">
 
-![image](preview/shovel.png)
+![image](resources/preview/shovel.png)
 
 </div>
 
@@ -174,7 +174,7 @@ and disappear. You won't be able to collect them after they disappear.
 
 <div style="text-align: center; ">
 
-![image](preview/progress_bar.png)
+![image](resources/preview/progress_bar.png)
 
 </div>
 
@@ -183,16 +183,16 @@ and disappear. You won't be able to collect them after they disappear.
 - And if you find the game too scary at this speed, just press it again to return to normal speed.
   ● Game at the original speed:
 
-![image](preview/faster.png)
+![image](resources/preview/faster.png)
 
 ● Game currently at twice the original speed:
 
-![image](preview/faster_triggered.png)
+![image](resources/preview/faster_triggered.png)
 
 - Pause Button: Do you need to pause the game to play later? Or do you want to adjust the volume of the background music
   and sound effects? Too simple, the game can be paused by clicking
 
-![image](preview/pause.png)
+![image](resources/preview/pause.png)
 
 or clicking outside the game.
 
@@ -201,7 +201,7 @@ or clicking outside the game.
 
 <div style="text-align: center; ">
 
-![image](preview/mower.png)
+![image](resources/preview/mower.png)
 
 </div>
 
@@ -209,7 +209,7 @@ or clicking outside the game.
 
 <div style="text-align: center; ">
 
-![image](preview/game.png)
+![image](resources/preview/game.png)
 
 </div>
 
@@ -226,12 +226,12 @@ There are 5 types of plants, in order of availability in the game:
 
 |                                                                             | Plant Name  | Function                                                                                              |
 |-----------------------------------------------------------------------------|-------------|-------------------------------------------------------------------------------------------------------|
-| <img src="image/Plant_sheet/peashooter/Peashooter.png" width=50>  | Peashooter  | Shoots peas at zombies.                                                                               |
-| <img src="image/Plant_sheet/sunflower/Sunflower.png" width=44>    | Sunflower   | Produces suns that can be used to plant more plants.                                                  |
-| <img src="image/Plant_sheet/walnut/Walnut.png" width=42>          | Wall-nut    | Takes a lot of hits before breaking, protecting other plants.                                         |
-| <img src="image/Plant_sheet/snowpea/SnowPea.png" width=52>        | Snow Pea    | Shoots frozen peas that slow down zombies and reduce their attack speed, but don't deal extra damage. |
-| <img src="image/Plant_sheet/potatomine/Potato_Mine.png" width=56> | Potato Mine | Explode on contact, but they take time to arm                                                         |
-| <img src="image/Plant_sheet/cherrybomb/Cherrybomb.png" width=48>  | Cherry Bomb | Explodes and kills all zombies in a 3x3 area.                                                         |
+| <img src="resources/images/Plant_sheet/peashooter/Peashooter.png" width=50>  | Peashooter  | Shoots peas at zombies.                                                                               |
+| <img src="resources/images/Plant_sheet/sunflower/Sunflower.png" width=44>    | Sunflower   | Produces suns that can be used to plant more plants.                                                  |
+| <img src="resources/images/Plant_sheet/walnut/Walnut.png" width=42>          | Wall-nut    | Takes a lot of hits before breaking, protecting other plants.                                         |
+| <img src="resources/images/Plant_sheet/snowpea/SnowPea.png" width=52>        | Snow Pea    | Shoots frozen peas that slow down zombies and reduce their attack speed, but don't deal extra damage. |
+| <img src="resources/images/Plant_sheet/potatomine/Potato_Mine.png" width=56> | Potato Mine | Explode on contact, but they take time to arm                                                         |
+| <img src="resources/images/Plant_sheet/cherrybomb/Cherrybomb.png" width=48>  | Cherry Bomb | Explodes and kills all zombies in a 3x3 area.                                                         |
 
 ## b. Types of zombies
 
@@ -239,15 +239,15 @@ There are 5 types of plants, in order of availability in the game:
 
 |                                         | Zombie Name       | Function                                                                                                             |
 |-----------------------------------------|-------------------|----------------------------------------------------------------------------------------------------------------------|
-| ![image](image/Choose_level/normal.png) | Browncoat Zombie  | Eats your plants and brains.                                                                                         |
+| ![image](resources/images/Choose_level/normal.png) | Browncoat Zombie  | Eats your plants and brains.                                                                                         |
 |
- ![image](image/Choose_level/flag.png)   | Flag Zombie       | Signals a large wave of zombies incoming.                                                                            |
+ ![image](resources/images/Choose_level/flag.png)   | Flag Zombie       | Signals a large wave of zombies incoming.                                                                            |
 |
- ![image](image/Choose_level/cone.png)   | Conehead Zombie   | Has three times the health of a regular zombie.                                                                      |
+ ![image](resources/images/Choose_level/cone.png)   | Conehead Zombie   | Has three times the health of a regular zombie.                                                                      |
 |
- ![image](image/Choose_level/bucket.png) | Buckethead Zombie | Has 6.5 times the health of a regular zombie.                                                                        |
+ ![image](resources/images/Choose_level/bucket.png) | Buckethead Zombie | Has 6.5 times the health of a regular zombie.                                                                        |
 |
- ![image](image/Choose_level/door.png)   | Door Zombie       | Has 6.5 times the health of a regular zombie and is not affected by frozen peas as long as its door is still intact. |
+ ![image](resources/images/Choose_level/door.png)   | Door Zombie       | Has 6.5 times the health of a regular zombie and is not affected by frozen peas as long as its door is still intact. |
 
 # 5. Winning and losing
 
@@ -255,14 +255,14 @@ There are 5 types of plants, in order of availability in the game:
 
 <div style="text-align: center;">
 
-![image](preview/win.png)
+![image](resources/preview/win.png)
 </div>
 
 - You will lose if a zombie goes all the way to your house.
 
 <div style="text-align: center;">
 
-![image](preview/lose.png)
+![image](resources/preview/lose.png)
 </div>
 
 ---

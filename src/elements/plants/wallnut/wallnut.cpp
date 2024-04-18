@@ -1,6 +1,6 @@
 #include "wallnut.hpp"
 
-static ifstream wallnut("./image/json/wallnut.json");
+static ifstream wallnut("./resources/images/json/wallnut.json");
 json wallnut_data = json::parse(wallnut);
 
 auto WALLNUT_ASSET = PlantAssets(wallnut_data["frame"], wallnut_data["img_width"], wallnut_data["img_height"],

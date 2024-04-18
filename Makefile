@@ -16,7 +16,7 @@ CFLAGS = -std=c++17 -Wall -pedantic -MMD -MP
 OUTDIR = .
 DATADIR = ./data
 SUBDIR = semihost stream arg_parser
-ICONDIR = ./icon/main.res
+ICONDIR = ./resources/icon/main.res
 DIR_OBJ = ./obj
 DIR_SRC = ./obj
 

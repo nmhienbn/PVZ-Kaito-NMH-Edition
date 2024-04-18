@@ -8,7 +8,7 @@
 #include <iostream>
 #include <map>
 #include <string>
-#define FONTS_DIRECTORY "./fonts/"
+#define FONTS_DIRECTORY "./resources/fonts/"
 #define FREESANS_TTF "FreeSans.ttf"
 #define CONTM_TTF "contm.ttf"
 #define BRIANNE_TTF "Brianne_s_hand.ttf"

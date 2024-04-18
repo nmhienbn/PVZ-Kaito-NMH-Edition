@@ -1,7 +1,7 @@
 #include "cherrybomb.hpp"
 
-static ifstream cherrybomb("./image/json/cherrybomb.json");
-static ifstream cherrybomb_explosion("./image/json/cherrybomb_explosion.json");
+static ifstream cherrybomb("./resources/images/json/cherrybomb.json");
+static ifstream cherrybomb_explosion("./resources/images/json/cherrybomb_explosion.json");
 
 json cherrybomb_data = json::parse(cherrybomb);
 json cherrybomb_explosion_data = json::parse(cherrybomb_explosion);

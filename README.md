@@ -38,7 +38,7 @@ Giải nén game vào một thư mục và bật pvz.exe lên và chơi.<br/>
 **Bước 1:** Clone repo này về (Khoảng 800 MB - do có cả lịch sử các phiên bản). <br/>
 Hoặc Chọn Code -> Download Zip (Khoảng 90MB)
 
-![image](preview/download.png)
+![image](resources/preview/download.png)
 
 - Tất cả code đều nằm trong thư mục src.<br/>
 - Có thể nhảy đến bước 5 để chơi luôn.
@@ -63,7 +63,7 @@ Một số chú ý: <br/>
 Chờ một chút rồi click vào nút “CLICK TO START!” để bắt đầu chơi game.
 <div style="text-align: center;">
 
-![ezgif com-video-to-gif](preview/loading.gif)
+![ezgif com-video-to-gif](resources/preview/loading.gif)
 
 </div>
 
@@ -73,7 +73,7 @@ tục.
 
 <div style="text-align: center;">
 
-![image](preview/name.png)
+![image](resources/preview/name.png)
 
 </div>
 
@@ -82,7 +82,7 @@ tục.
 Và người chơi sẽ ngay lập tức nhận được 1 cây đầu tiên - Peashooter
 <div style="text-align: center;">
 
-![image](preview/first_plant.png)
+![image](resources/preview/first_plant.png)
 
 </div>
 
@@ -92,14 +92,14 @@ Có tổng cộng 12 level với mức độ khó dễ khác nhau để bạn ch
 click chuột để chơi level đó.
 <div style="text-align: center;">
 
-![image](preview/choose_level.png)
+![image](resources/preview/choose_level.png)
 </div>
 
 
 Tuy nhiên khi mới bắt đầu, bạn chỉ mở được 1 level. Chiến thắng lần lượt từng level để mở khóa và chơi level tiếp theo:
 <div style="text-align: center;">
 
-![image](preview/choose_level1.png)
+![image](resources/preview/choose_level1.png)
 </div>
 
 
@@ -108,7 +108,7 @@ trải nghiệm game lại từ đầu.
 
 <div style="text-align: center;">
 
-![image](preview/choose_level2.png)
+![image](resources/preview/choose_level2.png)
 </div>
 
 
@@ -116,7 +116,7 @@ trải nghiệm game lại từ đầu.
 Khi vào game, có 2 loại level mà mọi người sẽ gặp: buổi sáng (bên trái) và buổi tối (bên phải)
 <div style="text-align: center;">
 
-![image](preview/levels.png)
+![image](resources/preview/levels.png)
 </div>
 
 - Buổi sáng thì thi thoảng sẽ có sun (mặt trời) từ trên trời rơi xuống.
@@ -125,16 +125,16 @@ Khi vào game, có 2 loại level mà mọi người sẽ gặp: buổi sáng (b
 Trước khi bắt đầu game, bạn sẽ được biết trước có những loại zombie gì sẽ xuất hiện.
 <div style="text-align: center;">
 
-![image](preview/credit.png)
+![image](resources/preview/credit.png)
 </div>
 
 # 3. Các thành phần trong game:
 
--    Sun (Mặt trời) ![image](preview/sun.png)
+-    Sun (Mặt trời) ![image](resources/preview/sun.png)
      : là đơn vị để mua plant (cây) trong game. Nhấp vào để thu. Và nên chú ý là nếu một sun tồn tại quá lâu, nó sẽ mờ
      dần rồi biến mất. Bạn sẽ không thể thu chúng sau khi chúng đã biến mất.
 
--    Sun bar (Thanh mặt trời) ![image](preview/sun_bar.png)
+-    Sun bar (Thanh mặt trời) ![image](resources/preview/sun_bar.png)
      : là bảng đếm số mặt trời mà người chơi đang có
 
 - Plant seeds: tất cả các giống cây là người chơi đang sở hữu. Để chọn một giống cây mang đi trồng, người chơi phải
@@ -143,14 +143,14 @@ Trước khi bắt đầu game, bạn sẽ được biết trước có những 
 
 <div style="text-align: center;">
 
-![image](preview/plant_seed.png)
+![image](resources/preview/plant_seed.png)
 </div>
 
 - Shovel (Xẻng): Là vật dụng vô cùng hữu hiệu để bạn có thể đào đi những cây không cần thiết và thay vào đó cây mới.
 
 <div style="text-align: center;">
 
-![image](preview/shovel.png)
+![image](resources/preview/shovel.png)
 </div>
 
 - Thanh tiến trình game (progress bar): Là thanh bạn có thể theo dõi để xem còn bao nhiêu zombie tiếp theo sẽ ra hay bạn
@@ -158,32 +158,32 @@ Trước khi bắt đầu game, bạn sẽ được biết trước có những 
 
 <div style="text-align: center;">
 
-![image](preview/progress_bar.png)
+![image](resources/preview/progress_bar.png)
 </div>
 
 - Nút tua nhanh game (Turbo button): Nếu thấy game quá chậm hay quá dễ mà bạn cần tiết kiệm thời gian, hãy nhấn nút để
   trải nghiệm game với tốc độ x2 tốc độ gốc.
 - Và nếu thấy game quá đáng sợ ở tốc độ này, hãy nhấn lại để game trở về tốc độ bình thường.
-  ● Game ở tốc độ ban đầu:  ![image](preview/faster.png)
+  ● Game ở tốc độ ban đầu:  ![image](resources/preview/faster.png)
 
-● Game đang ở tốc độ nhanh gấp 2 ban đầu:  ![image](preview/faster_triggered.png)
+● Game đang ở tốc độ nhanh gấp 2 ban đầu:  ![image](resources/preview/faster_triggered.png)
 
 - Nút dừng game (Pause Button): Bạn có việc cần dừng game để lúc sau chơi tiếp ư? Hay bạn muốn điều chỉnh âm lượng của
-  nhạc nền và hiệu ứng âm thanh? Quá đơn giản, game có thể dừng lại bằng cách click ![image](preview/pause.png)  hoặc
+  nhạc nền và hiệu ứng âm thanh? Quá đơn giản, game có thể dừng lại bằng cách click ![image](resources/preview/pause.png)  hoặc
   click đâu đó bên ngoài game.
 - Máy cắt cỏ (Mower): Nếu bạn để zombie lại quá gần nhà, máy cắt cỏ sẽ tự động kích hoạt và tiêu diệt tất cả zombie hiện
   tại đang ở hàng đó. Chú ý là mỗi hàng chỉ có một máy cắt cỏ thôi.
 
 <div style="text-align: center;">
 
-![image](preview/mower.png)
+![image](resources/preview/mower.png)
 </div>
 
 - Bố cục game cơ bản:
 
 <div style="text-align: center;">
 
-![image](preview/game.png)
+![image](resources/preview/game.png)
 </div>
 
  
@@ -201,12 +201,12 @@ Có 6 loại cây, lần lượt theo thứ tự có thể nhận được trong
 
 |                                                                             | Tên cây	     | Chức năng                                                                                                                    |
 |-----------------------------------------------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------|
-| <img src="image/Plant_sheet/peashooter/Peashooter.png" width=50>  | Peashooter	  | Mỗi lần bắn một đậu vào zombie.                                                                                              |
-| <img src="image/Plant_sheet/sunflower/Sunflower.png" width=44>    | Sunflower	   | Tạo thêm mặt trời để trồng cây                                                                                               |
-| <img src="image/Plant_sheet/walnut/Walnut.png" width=42>          | Wall-nut	    | Chịu được nhiều phát ăn của zombie để bảo vệ các cây khác.                                                                   |
-| <img src="image/Plant_sheet/snowpea/SnowPea.png" width=52>        | Snow Pea	    | Mỗi lần bắn một đậu băng vào zombie. Đậu băng không tăng sát thương nhưng làm chậm tốc độ di chuyển và tốc độ ăn của zombie. |
-| <img src="image/Plant_sheet/potatomine/Potato_Mine.png" width=56> | Potato Mine  | Tiêu diệt zombie khi chạm nó nhưng cần thời gian để kích hoạt.                                                               |
-| <img src="image/Plant_sheet/cherrybomb/Cherrybomb.png" width=48>  | Cherry Bomb	 | Ngay lập tức tiêu diệt tất cả zombie trong khu vực 3x3.                                                                      |
+| <img src="resources/images/Plant_sheet/peashooter/Peashooter.png" width=50>  | Peashooter	  | Mỗi lần bắn một đậu vào zombie.                                                                                              |
+| <img src="resources/images/Plant_sheet/sunflower/Sunflower.png" width=44>    | Sunflower	   | Tạo thêm mặt trời để trồng cây                                                                                               |
+| <img src="resources/images/Plant_sheet/walnut/Walnut.png" width=42>          | Wall-nut	    | Chịu được nhiều phát ăn của zombie để bảo vệ các cây khác.                                                                   |
+| <img src="resources/images/Plant_sheet/snowpea/SnowPea.png" width=52>        | Snow Pea	    | Mỗi lần bắn một đậu băng vào zombie. Đậu băng không tăng sát thương nhưng làm chậm tốc độ di chuyển và tốc độ ăn của zombie. |
+| <img src="resources/images/Plant_sheet/potatomine/Potato_Mine.png" width=56> | Potato Mine  | Tiêu diệt zombie khi chạm nó nhưng cần thời gian để kích hoạt.                                                               |
+| <img src="resources/images/Plant_sheet/cherrybomb/Cherrybomb.png" width=48>  | Cherry Bomb	 | Ngay lập tức tiêu diệt tất cả zombie trong khu vực 3x3.                                                                      |
 
 ## b. Các loại zombie
 
@@ -214,11 +214,11 @@ Có 6 loại cây, lần lượt theo thứ tự có thể nhận được trong
 
 |                                         | Tên zombie 	       | Chức năng                                                                                        |
 |-----------------------------------------|--------------------|--------------------------------------------------------------------------------------------------|
-| ![image](image/Choose_level/normal.png) | Browncoat Zombie	  | Ăn cây và não của bạn.                                                                           |
-| ![image](image/Choose_level/flag.png)   | Flag Zombie	       | Báo hiệu một lượng lớn zombie đang chuẩn bị ra.                                                  |
-| ![image](image/Choose_level/cone.png)   | Conehead Zombie	   | Trâu gấp 3 lần zombie thường                                                                     |
-| ![image](image/Choose_level/bucket.png) | Buckethead Zombie	 | Trâu gấp 6.5 lần zombie thường                                                                   |
-| ![image](image/Choose_level/door.png)   | Door Zombie	       | Trâu gấp 6.5 lần zombie thường. Không bị ảnh hưởng bởi sự làm chậm của đạn băng nếu vẫn còn cửa. |
+| ![image](resources/images/Choose_level/normal.png) | Browncoat Zombie	  | Ăn cây và não của bạn.                                                                           |
+| ![image](resources/images/Choose_level/flag.png)   | Flag Zombie	       | Báo hiệu một lượng lớn zombie đang chuẩn bị ra.                                                  |
+| ![image](resources/images/Choose_level/cone.png)   | Conehead Zombie	   | Trâu gấp 3 lần zombie thường                                                                     |
+| ![image](resources/images/Choose_level/bucket.png) | Buckethead Zombie	 | Trâu gấp 6.5 lần zombie thường                                                                   |
+| ![image](resources/images/Choose_level/door.png)   | Door Zombie	       | Trâu gấp 6.5 lần zombie thường. Không bị ảnh hưởng bởi sự làm chậm của đạn băng nếu vẫn còn cửa. |
 
 # 5. Chiến thắng và thất bại
 
@@ -226,14 +226,14 @@ Có 6 loại cây, lần lượt theo thứ tự có thể nhận được trong
 
 <div style="text-align: center;">
 
-![image](preview/win.png)
+![image](resources/preview/win.png)
 </div>
 
 - Bạn sẽ thất bại nếu có một zombie nào đó đi hết sân để vào nhà bạn.
 
 <div style="text-align: center;">
 
-![image](preview/lose.png)
+![image](resources/preview/lose.png)
 </div>
 
 ---

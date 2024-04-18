@@ -1,6 +1,6 @@
 #pragma once
 #include "elements/elements.hpp"
-#define LEVELS_DIRECTORY "./levels/"
+#define LEVELS_DIRECTORY "./resources/levels/"
 #define LEVEL_COUNT 12
 
 json get_lv_json(int lv_id);

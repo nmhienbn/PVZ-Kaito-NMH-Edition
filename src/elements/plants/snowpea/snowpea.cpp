@@ -1,6 +1,6 @@
 #include "snowpea.hpp"
 
-static ifstream snowpea("./image/json/snowpea.json");
+static ifstream snowpea("./resources/images/json/snowpea.json");
 json snowpea_data = json::parse(snowpea);
 
 auto SNOWPEA_ASSET = PlantAssets(snowpea_data["frame"], snowpea_data["img_width"], snowpea_data["img_height"],

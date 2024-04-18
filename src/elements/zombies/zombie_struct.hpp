@@ -75,7 +75,7 @@ public:
 #include <nlohmann/json.hpp>
 using namespace nlohmann;
 
-static ifstream f("./image/json/zombie.json");
+static ifstream f("./resources/images/json/zombie.json");
 static json zombie = json::parse(f);
 
 const int ZOMBIE_FRAME = zombie["zombie_frame"];
