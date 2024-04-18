@@ -18,7 +18,7 @@ Sunflower::Sunflower(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = SUNFLOWER_TYPE;
     health = PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE];
-    sec_for_prepare = SUN_GEN_SUNFLOWER_CLK_COUNT / 4;
+    sec_for_prepare = SUN_GEN_SUNFLOWER_CLK_COUNT / 2;
     directory_num = SUNFLOWER_SHEET_DIRECTORY;
 }
 
