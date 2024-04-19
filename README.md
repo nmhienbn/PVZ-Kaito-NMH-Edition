@@ -28,9 +28,9 @@ tiêu diệt các loại zombie đang bao vây ngôi nhà.
 
 ## a. Cách 1: Không bao gồm code.
 
-Tải game (được nén thành .rar) tại link
-sau: https://drive.google.com/drive/u/0/folders/1awM0sfex1InCzlSA1ZIenKUGbhhC_hc0<br/>
-Cách này tiết kiệm bộ nhớ và thời gian tải đi rất nhiều (khoảng 90MB).<br/>
+Tải game (được nén thành .zip) tại link
+sau: https://github.com/nmhienbn/PVZ-Kaito-NMH-Edition/releases/tag/published<br/>
+Cách này tiết kiệm bộ nhớ và thời gian tải đi rất nhiều (khoảng 103MB).<br/>
 Giải nén game vào một thư mục và bật pvz.exe lên và chơi.<br/>
 
 ## b. Cách 2: Bao gồm code và có thể biên dịch.

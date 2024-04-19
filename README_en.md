@@ -28,9 +28,9 @@ players can destroy the various types of zombies that are attacking their house.
 
 ## a. Option 1: Without source code.
 
-Download the game (compressed into a .rar file) at the following
-link: https://drive.google.com/drive/u/0/folders/1awM0sfex1InCzlSA1ZIenKUGbhhC_hc0<br/>
-This method saves a lot of memory and download time (around 90MB).<br/>
+Download the game (compressed into a .zip file) at the following
+link: https://github.com/nmhienbn/PVZ-Kaito-NMH-Edition/releases/tag/published<br/>
+This method saves a lot of memory and download time (around 103MB).<br/>
 Extract the game into a folder and run pvz.exe to play.<br/>
 
 ## b. Option 2: With source code and can be compiled.
