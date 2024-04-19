@@ -31,7 +31,7 @@ bool has_zombie_reached_plant(Zombie &zombie)
     int col = get_block_col(zombie.x_location - ZOMBIE_DX + 95);
     if (col >= 0)
     {
-        if (cells[zombie.row][col].is_planted && has_zombie_reached_block(zombie, zombie.row, col))
+        if (cells[zombie.row][col].is_block_zombie && has_zombie_reached_block(zombie, zombie.row, col))
         {
             zombie.is_moving = false;
             zombie.change_zombie_eating_status();

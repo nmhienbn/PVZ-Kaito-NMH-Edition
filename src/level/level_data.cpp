@@ -34,6 +34,7 @@ void reset_level()
         for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
         {
             cells[y][x].is_planted = false;
+            cells[y][x].is_block_zombie = false;
         }
     }
 

@@ -58,6 +58,7 @@ void PotatoMine::action()
     if (state == ARMED && check_in_attack_range(*this, game_characters.zombies))
     {
         state = ATTACK;
+        directory_num = POTATOMINE_ATTACK_DIRECTORY;
         frame = 0;
     }
     if (is_blow())
@@ -74,6 +75,7 @@ Delete idx-th plant in vector<plants*>
 void delete_plant(vector<Plants *> &plants, int &idx)
 {
     cells[plants[idx]->get_row()][plants[idx]->get_col()].is_planted = false;
+    cells[plants[idx]->get_row()][plants[idx]->get_col()].is_block_zombie = false;
     delete plants[idx];
     plants.erase(plants.begin() + idx);
     idx--;

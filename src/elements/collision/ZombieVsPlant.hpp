@@ -1,6 +1,6 @@
 #pragma once
 #include "draw/rsdl.hpp"
-#include "elements/plants/plant_type.hpp"
+#include "elements/plants/plants.hpp"
 #include "elements/zombies/zombie.hpp"
 #include "game_param.hpp"
 #include "music/music.hpp"

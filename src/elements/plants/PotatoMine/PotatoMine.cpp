@@ -1,4 +1,5 @@
 #include "PotatoMine.hpp"
+#include "elements/Map/Map.hpp"
 #define POTATO_MINE_ARMED_TIME 900
 
 extern const json plant_json;
@@ -19,6 +20,7 @@ auto POTATOMINE_EXPLOSION_ASSET = PlantAssets(potatomine_explosion_data["frame"]
 
 extern int game_state;
 extern Window win;
+extern Map cells;
 
 /*
 Cherry Bomb constructor
@@ -108,6 +110,7 @@ void PotatoMine::next_frame(const PlantAssets &assets)
                 state = ARMED;
                 frame = 0;
                 directory_num = POTATOMINE_IDLE_DIRECTORY;
+                cells[row][col].is_block_zombie = false;
             }
             break;
         }

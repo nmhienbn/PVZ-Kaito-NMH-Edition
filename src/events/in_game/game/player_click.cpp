@@ -211,6 +211,7 @@ void plant_new_plant(int type, const int &row, const int &col)
     game_characters.plants.push_back(init_plant(type, row, col));
     player.sun_count -= PLANT_SUN_COST[type];
     cells[row][col].is_planted = true;
+    cells[row][col].is_block_zombie = true;
     play_sound_effect(PLANT_PLANT_MUSIC_DIRECTORY);
 }
 

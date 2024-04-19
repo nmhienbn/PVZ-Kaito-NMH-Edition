@@ -61,7 +61,7 @@ void display_credit()
     // random credit zombies from final waves
     vector<Zombie *> tmp;
 
-    for (int i = NORMAL_TYPE; i <= COUNT_ZOMBIE_TYPE; i++)
+    for (int i = NORMAL_TYPE; i < COUNT_ZOMBIE_TYPE; i++)
     {
         int cnt = min(level.count_zombie_type[i] / 2, 7);
         for (int j = 0; j < cnt; j++)

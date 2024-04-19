@@ -18,24 +18,23 @@ bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p
 {
     if (has_zombie_reached_block(zombie, plants[p_ind]->get_row(), plants[p_ind]->get_col()))
     {
-        PotatoMine *potatoMinePtr = dynamic_cast<PotatoMine *>(plants[p_ind]);
-        if (potatoMinePtr == nullptr || !potatoMinePtr->is_armed())
+        if (cells[plants[p_ind]->get_row()][plants[p_ind]->get_col()].is_block_zombie)
         {
             play_sound_effect(ZOMBIE_EATING_MUSIC_DIRECTORY);
-        }
 
-        zombie.bite_time = BITE_CLK_COUNT;
-        if (zombie.cold_time)
-            zombie.bite_time += BITE_CLK_COUNT;
-        plants[p_ind]->set_attacked_time(MAX_TIME_BLINK);
-        plants[p_ind]->decrease_health();
-        if (plants[p_ind]->is_died())
-        {
-            zombie.is_moving = true;
             zombie.bite_time = BITE_CLK_COUNT;
-            delete_plant(plants, p_ind);
+            if (zombie.cold_time)
+                zombie.bite_time += BITE_CLK_COUNT;
+            plants[p_ind]->set_attacked_time(MAX_TIME_BLINK);
+            plants[p_ind]->decrease_health();
+            if (plants[p_ind]->is_died())
+            {
+                zombie.is_moving = true;
+                zombie.bite_time = BITE_CLK_COUNT;
+                delete_plant(plants, p_ind);
+            }
+            return true;
         }
-        return true;
     }
     return false;
 }

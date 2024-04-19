@@ -25,7 +25,7 @@ bool check_in_attack_range(const Plants &plant, const Zombie &zombie)
     }
     case ONE_X_ONE:
     {
-        int right_limit = cells[plant.get_row()][plant.get_col()].x2;
+        int right_limit = cells[plant.get_row()][plant.get_col()].x2 - 25;
         int left_limit = cells[plant.get_row()][plant.get_col()].x1 - 50;
         if (plant.get_row() == zombie.get_row() &&
             is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION + 15, right_limit))
