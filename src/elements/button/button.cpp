@@ -53,7 +53,7 @@ void Button::show_text(const string &text, const int &x_bias, const int &y_bias,
     TTF_SizeText(win.get_font(DWARVESC_TTF, font_size), text.c_str(), &w, &h);
     int x = (x2 + x1 - w) / 2 + x_bias;
     int y = (y2 + y1 - h) / 2 + y_bias;
-    win.show_text_shadowed(text, x, y, color, DWARVESC_TTF, font_size, 0, 2, shadow_color);
+    win.show_text_shadowed(text, x, y, color, DWARVESC_TTF, font_size, 0, 1, shadow_color);
 }
 /*
 Display Game Buttons

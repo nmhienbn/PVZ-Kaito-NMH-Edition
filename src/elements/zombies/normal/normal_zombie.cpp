@@ -16,5 +16,5 @@ void NormalZombie::make_credit()
 {
     x_location = rand(WINDOW_WIDTH, 1300) - 50;
     y_location = rand(0, WINDOW_HEIGHT - dir_height);
-    directory_num = rand(ZOMBIE_CREDIT1_DIRECTORY, ZOMBIE_CREDIT2_DIRECTORY);
+    directory_num = ZOMBIE_CREDIT_DIRECTORY;
 }

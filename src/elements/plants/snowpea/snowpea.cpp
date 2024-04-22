@@ -65,6 +65,7 @@ void SnowPea::determine_appearance(bool check_zombie_in_attack_range)
     {
         if (directory_num == SNOWPEA_ATTACK_DIRECTORY)
         {
+            if (frame == 0)
             {
                 directory_num = SNOWPEA_SHEET_DIRECTORY;
             }

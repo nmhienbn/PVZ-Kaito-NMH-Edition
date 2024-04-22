@@ -4,6 +4,42 @@ extern int game_state;
 extern Map cells;
 extern Window win;
 
+/*Corresponding walking of zombie eat image*/
+static map<int, int> degrade_of = {
+    {ZOMBIE_WALK1_DIRECTORY, ARMLESS_ZOMBIE_WALK1_DIRECTORY},
+    {ZOMBIE_WALK2_DIRECTORY, ARMLESS_ZOMBIE_WALK2_DIRECTORY},
+    {ZOMBIE_EATING_DIRECTORY, ARMLESS_ZOMBIE_EATING_DIRECTORY},
+
+    {CONE1_DIRECTORY, CONE2_DIRECTORY},
+    {CONE2_DIRECTORY, CONE3_DIRECTORY},
+    {CONE3_DIRECTORY, NULL_DIRECTORY},
+
+    {BUCKET1_DIRECTORY, BUCKET2_DIRECTORY},
+    {BUCKET2_DIRECTORY, BUCKET3_DIRECTORY},
+    {BUCKET3_DIRECTORY, NULL_DIRECTORY},
+
+    {FLAG_ZOMBIE_WALK1_1_DIRECTORY, FLAG_ZOMBIE_WALK1_2_DIRECTORY},
+    {FLAG_ZOMBIE_WALK2_1_DIRECTORY, FLAG_ZOMBIE_WALK2_2_DIRECTORY},
+    {FLAG_ZOMBIE_EATING_1_DIRECTORY, FLAG_ZOMBIE_EATING_2_DIRECTORY},
+    {FLAG_ZOMBIE_WALK1_2_DIRECTORY, FLAG_ZOMBIE_WALK1_3_DIRECTORY},
+    {FLAG_ZOMBIE_WALK2_2_DIRECTORY, FLAG_ZOMBIE_WALK2_3_DIRECTORY},
+    {FLAG_ZOMBIE_EATING_2_DIRECTORY, FLAG_ZOMBIE_EATING_3_DIRECTORY},
+    {FLAG_ZOMBIE_WALK1_3_DIRECTORY, ARMLESS_ZOMBIE_WALK1_DIRECTORY},
+    {FLAG_ZOMBIE_WALK2_3_DIRECTORY, ARMLESS_ZOMBIE_WALK2_DIRECTORY},
+    {FLAG_ZOMBIE_EATING_3_DIRECTORY, ARMLESS_ZOMBIE_EATING_DIRECTORY},
+
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, DOOR_ZOMBIE_WALK1_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_1_DIRECTORY, DOOR_ZOMBIE_WALK2_2_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_1_DIRECTORY, DOOR_ZOMBIE_EATING_2_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_2_DIRECTORY, DOOR_ZOMBIE_WALK1_3_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_2_DIRECTORY, DOOR_ZOMBIE_WALK2_3_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_2_DIRECTORY, DOOR_ZOMBIE_EATING_3_DIRECTORY},
+    {DOOR_ZOMBIE_WALK1_3_DIRECTORY, ZOMBIE_WALK1_DIRECTORY},
+    {DOOR_ZOMBIE_WALK2_3_DIRECTORY, ZOMBIE_WALK2_DIRECTORY},
+    {DOOR_ZOMBIE_EATING_3_DIRECTORY, ZOMBIE_EATING_DIRECTORY}
+
+};
+
 /*Zombie constructor.
  */
 Zombie::Zombie()
@@ -86,11 +122,18 @@ void Zombie::determine_appearance(vector<ZombiePart> &zombie_parts)
     // Degrade the zombie
     if (ZOMBIE_HEALTH_LIMIT[type].find(health) != ZOMBIE_HEALTH_LIMIT[type].end())
     {
-        directory_num = degrade_of[directory_num];
-        if (health <= 5)
+        if (type == CONE_TYPE || type == BUCKET_TYPE)
         {
-            zombie_parts.push_back(ZombiePart(ZOMBIE_ARM_DIRECTORY, 1, row, x_location,
-                                              ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
+            armor_dir = degrade_of[armor_dir];
+        }
+        else
+        {
+            directory_num = degrade_of[directory_num];
+            if (health <= 5)
+            {
+                zombie_parts.push_back(ZombiePart(ZOMBIE_ARM_DIRECTORY, 1, row, x_location,
+                                                  ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
+            }
         }
     }
     // Armor drop if necessary
@@ -126,6 +169,43 @@ void Zombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
                                       HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, cold_time > 0));
 }
 
+void Zombie::render_zombie()
+{
+    // zombie
+    // current frame
+    int sframe = frame / ZOMBIE_FRAME;
+    // current column in source image
+    int scol = sframe % all_img[directory_num].c_sheet;
+    // current row in source image
+    int srow = sframe / all_img[directory_num].c_sheet;
+    win.draw_png(directory_num, dir_width * scol, dir_height * srow,
+                 dir_width, dir_height,
+                 x_location, y_location,
+                 dir_width, dir_height);
+
+    // zombie cold
+    if (cold_time)
+    {
+        win.set_texture_color(blink_of[directory_num], 0, 75, 255);
+        win.set_texture_alpha(blink_of[directory_num], 120);
+        win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
+                     dir_width, dir_height,
+                     x_location, y_location,
+                     dir_width, dir_height);
+        win.set_texture_color(blink_of[directory_num], 255, 255, 255);
+        win.set_texture_alpha(blink_of[directory_num], 70);
+    }
+
+    // zombie attacked
+    if (attacked_time)
+    {
+        win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
+                     dir_width, dir_height,
+                     x_location, y_location,
+                     dir_width, dir_height);
+    }
+}
+
 /*
 display zombie
 */
@@ -133,57 +213,22 @@ void Zombie::display(const int &_row)
 {
     if (row == _row)
     {
-        // zombie
-        // current frame
-        int sframe = frame / ZOMBIE_FRAME;
-        // current column in source image
-        int scol = sframe % all_img[directory_num].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[directory_num].c_sheet;
-        win.draw_png(directory_num, dir_width * scol, dir_height * srow,
-                     dir_width, dir_height,
-                     x_location, y_location,
-                     dir_width, dir_height);
-
-        // zombie cold
-        if (cold_time)
+        render_zombie();
+        // zombie next frame
+        if (check_status(game_state, IS_PAUSED) == false)
         {
-            win.set_texture_color(blink_of[directory_num], 0, 75, 255);
-            win.set_texture_alpha(blink_of[directory_num], 120);
-            win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
-                         dir_width, dir_height,
-                         x_location, y_location,
-                         dir_width, dir_height);
-            win.set_texture_color(blink_of[directory_num], 255, 255, 255);
-            win.set_texture_alpha(blink_of[directory_num], 70);
-            if (check_status(game_state, IS_PAUSED) == false)
+            if (cold_time)
                 if (--cold_time == 0)
                 {
                     bite_time /= 2;
                     next_step_time /= 2;
                 }
-        }
-
-        // zombie attacked
-        if (attacked_time)
-        {
-            win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
-                         dir_width, dir_height,
-                         x_location, y_location,
-                         dir_width, dir_height);
-            if (check_status(game_state, IS_PAUSED) == false)
+            if (attacked_time)
                 attacked_time--;
-        }
-
-        // zombie next frame
-        if (check_status(game_state, IS_PAUSED) == false)
-        {
             if (cold_time % 2 == 0)
                 frame++;
             if (frame >= ZOMBIE_FRAME * all_img[directory_num].n_sheet)
-            {
                 frame = 0;
-            }
         }
     }
 }

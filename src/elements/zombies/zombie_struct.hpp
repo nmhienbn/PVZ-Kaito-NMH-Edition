@@ -40,6 +40,8 @@ protected:
     int frame;
     int dir_width, dir_height;
     int nZom;
+    int armor_dir = -1;
+    virtual void render_zombie();
 
 public:
     int type;
@@ -66,7 +68,7 @@ public:
     bool decrease_health(vector<ZombiePart> &zombie_parts);
     void add_zombie_die(vector<ZombiePart> &zombie_parts);
     void display(const int &_row);
-    void display_credited(const int &_minus_x);
+    virtual void display_credited(const int &_minus_x);
 
     friend Zombie *init_zombie(int _type, int level_num);
     friend Zombie *init_zombie(int _type, int level_num, const int &x_bias);
