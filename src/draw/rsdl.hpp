@@ -71,6 +71,7 @@ public:
 	// Note that we don't draw 0-width and 0-height images
 	// To optimize, we use texture_cache[] to store images
 
+	SDL_Texture *load_texture_with_blink(int file_num);
 	SDL_Texture *load_texture(int file_num);
 	void draw_bmp(int file_num, int x, int y, int width, int height);
 	void draw_png(int file_num, int x, int y, int width, int height);

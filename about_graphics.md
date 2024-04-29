@@ -47,6 +47,12 @@ Chi tiết lấy trong file *Zombie.fla*:
 * 	die3: 293-429
 
 # PVZ 1 Android
+Thực chất .apk và .obb là file .zip (thậm chí đổi tên là xong, không cần công cụ chuyển).
+Khi đó , có các file:
+- .cdat --> .png
+- .plist, .ccreator --> là file tương tự json để tách texture từ .png
+
+
 
 # Với PVZ 2 sprite sheet
 ## Giải thích ý nghĩa file

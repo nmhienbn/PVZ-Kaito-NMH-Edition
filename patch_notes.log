@@ -270,9 +270,9 @@ Dim = Exposue - 3.20
 
 29/04/2024:
 	Reduce dependencies between .hpp and .cpp --> link files faster.
-	change all buttons.
+	Change all buttons.
+	Don't need blink png anymore.
 
 TODO: vector<level> 
-- update about_graphic pvz 1 android (obb and creator, plist, cdat)
 - reverse progress bar
 - animated new plant pages.

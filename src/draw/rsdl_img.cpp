@@ -26,6 +26,54 @@ void print_error(SDL_Texture *res, const string &img)
 }
 
 /*
+Print error when loading image
+*/
+void print_error(SDL_Surface *res, const string &img)
+{
+    if (res == NULL)
+    {
+        printf("Cannot load image %s! Error: %s\n", img.c_str(), SDL_GetError());
+        exit(-123);
+    }
+}
+
+SDL_Texture *Window::load_texture_with_blink(int file_num)
+{
+    string img_dir = all_img[file_num].img_dir;
+    SDL_Surface *loadedSurface = IMG_Load(img_dir.c_str());
+    // cout << SDL_GetPixelFormatName(loadedSurface->format->format) << endl;
+    print_error(loadedSurface, img_dir);
+    SDL_Texture *res = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    print_error(res, img_dir);
+    Uint32 format = loadedSurface->format->format;
+    int width = loadedSurface->w;
+    int height = loadedSurface->h;
+
+    Uint32 *pixels = (Uint32 *)loadedSurface->pixels;
+    int pitch = loadedSurface->pitch;
+    int pixel_count = pitch / sizeof(Uint32) * height;
+
+    Uint32 white_color = SDL_MapRGBA(loadedSurface->format, 0xff, 0xff, 0xff, 0xff);
+    Uint32 transparent = SDL_MapRGBA(loadedSurface->format, 0x00, 0x00, 0x00, 0x00);
+
+    for (int i = 0; i < pixel_count; ++i)
+
+    {
+        Uint32 pixel = pixels[i];
+        Uint8 r, g, b, a;
+        SDL_GetRGBA(pixel, loadedSurface->format, &r, &g, &b, &a);
+        pixels[i] = (a > 127 ? white_color : transparent);
+    }
+
+    // Mở khóa texture
+    SDL_Texture *blink = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    SDL_FreeSurface(loadedSurface);
+    set_default_alpha(blink_of(file_num), blink);
+    texture_cache[blink_of(file_num)] = blink;
+    return res;
+}
+
+/*
 Get loaded texture.
 If has not loaded, create new texture.
 */
@@ -35,10 +83,19 @@ SDL_Texture *Window::load_texture(int file_num)
     SDL_Texture *res = texture_cache[file_num];
     if (res == NULL)
     {
-        res = IMG_LoadTexture(renderer, all_img[file_num].img_dir.c_str());
-        print_error(res, all_img[file_num].img_dir);
-        set_default_alpha(file_num, res);
-        texture_cache[file_num] = res;
+        if (blink_of(file_num) != NULL_DIRECTORY)
+        {
+            res = load_texture_with_blink(file_num);
+            set_default_alpha(file_num, res);
+            texture_cache[file_num] = res;
+        }
+        else
+        {
+            res = IMG_LoadTexture(renderer, all_img[file_num].img_dir.c_str());
+            print_error(res, all_img[file_num].img_dir);
+            set_default_alpha(file_num, res);
+            texture_cache[file_num] = res;
+        }
 
         // query size of texture
         // int texture_width, texture_height, texture_access;
