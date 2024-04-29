@@ -1,4 +1,7 @@
 #include "zombie_struct.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+#include "music/music.hpp"
 
 extern int game_state;
 extern Map cells;
@@ -97,11 +100,11 @@ void Zombie::change_zombie_eating_status()
 {
     if (is_moving == false)
     {
-        auto it = eat_of.find(directory_num);
-        if (it != eat_of.end())
+        auto dir = eat_of(directory_num);
+        if (dir >= 0)
         {
             frame = 0;
-            directory_num = it->second;
+            directory_num = dir;
         }
     }
     else
@@ -174,35 +177,25 @@ void Zombie::render_zombie()
     // zombie
     // current frame
     int sframe = frame / ZOMBIE_FRAME;
-    // current column in source image
-    int scol = sframe % all_img[directory_num].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[directory_num].c_sheet;
-    win.draw_png(directory_num, dir_width * scol, dir_height * srow,
-                 dir_width, dir_height,
-                 x_location, y_location,
-                 dir_width, dir_height);
+    win.draw_nth_frame(directory_num, sframe, dir_width, dir_height,
+                       x_location, y_location, dir_width, dir_height);
 
     // zombie cold
     if (cold_time)
     {
-        win.set_texture_color(blink_of[directory_num], 0, 75, 255);
-        win.set_texture_alpha(blink_of[directory_num], 120);
-        win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
-                     dir_width, dir_height,
-                     x_location, y_location,
-                     dir_width, dir_height);
-        win.set_texture_color(blink_of[directory_num], 255, 255, 255);
-        win.set_texture_alpha(blink_of[directory_num], 70);
+        win.set_texture_color(blink_of(directory_num), 0, 75, 255);
+        win.set_texture_alpha(blink_of(directory_num), 120);
+        win.draw_nth_frame(blink_of(directory_num), sframe, dir_width, dir_height,
+                           x_location, y_location, dir_width, dir_height);
+        win.set_texture_color(blink_of(directory_num), 255, 255, 255);
+        win.set_texture_alpha(blink_of(directory_num), 70);
     }
 
     // zombie attacked
     if (attacked_time)
     {
-        win.draw_png(blink_of[directory_num], dir_width * scol, dir_height * srow,
-                     dir_width, dir_height,
-                     x_location, y_location,
-                     dir_width, dir_height);
+        win.draw_nth_frame(blink_of(directory_num), sframe, dir_width, dir_height,
+                           x_location, y_location, dir_width, dir_height);
     }
 }
 
@@ -238,19 +231,14 @@ display credited zombie
 */
 void Zombie::display_credited(const int &_minus_x)
 {
+    const int REAL_FRAME = ZOMBIE_FRAME * 2;
     // current frame
-    int sframe = frame / ZOMBIE_FRAME / 2;
-    // current column in source image
-    int scol = sframe % all_img[directory_num].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[directory_num].c_sheet;
-    win.draw_png(directory_num, dir_width * scol, dir_height * srow,
-                 dir_width, dir_height,
-                 x_location - _minus_x, y_location,
-                 dir_width, dir_height);
+    int sframe = frame / REAL_FRAME;
+    win.draw_nth_frame(directory_num, sframe, dir_width, dir_height,
+                       x_location - _minus_x, y_location, dir_width, dir_height);
 
     // zombie next frame
-    if (++frame >= 2 * ZOMBIE_FRAME * all_img[directory_num].n_sheet)
+    if (++frame >= REAL_FRAME * all_img[directory_num].n_sheet)
     {
         frame = 0;
     }
@@ -280,26 +268,17 @@ bool ZombiePart::display(const int &_row)
         int y_location = cells[row][0].y1 - 50;
         // current frame
         int sframe = frame / frame_clk;
-        // current column in source image
-        int scol = sframe % all_img[img_num].c_sheet;
-        // current row in source image
-        int srow = sframe / all_img[img_num].c_sheet;
-        // zombie part
-        win.draw_png(img_num, width * scol, height * srow,
-                     width, height,
-                     x_location, y_location,
-                     width, height);
+        win.draw_nth_frame(img_num, sframe, width, height,
+                           x_location, y_location, width, height);
         // cold
         if (is_cold)
         {
-            win.set_texture_color(blink_of[img_num], 0, 75, 255);
-            win.set_texture_alpha(blink_of[img_num], 120);
-            win.draw_png(blink_of[img_num], width * scol, height * srow,
-                         width, height,
-                         x_location, y_location,
-                         width, height);
-            win.set_texture_color(blink_of[img_num], 255, 255, 255);
-            win.set_texture_alpha(blink_of[img_num], 70);
+            win.set_texture_color(blink_of(img_num), 0, 75, 255);
+            win.set_texture_alpha(blink_of(img_num), 120);
+            win.draw_nth_frame(blink_of(img_num), sframe, width, height,
+                               x_location, y_location, width, height);
+            win.set_texture_color(blink_of(img_num), 255, 255, 255);
+            win.set_texture_alpha(blink_of(img_num), 70);
         }
         // next frame
         if (check_status(game_state, IS_PAUSED) == false)

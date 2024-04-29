@@ -1,4 +1,8 @@
 #include "BulletVsZombie.hpp"
+#include "game_param.hpp"
+#include "music/music.hpp"
+#include <algorithm>
+using namespace std;
 
 /*
 @return 'true' if pea reach the zombie

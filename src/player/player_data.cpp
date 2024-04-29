@@ -1,4 +1,6 @@
 #include "player/player_data.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Player/Player.hpp"
 
 extern Level level;
 extern Player player;

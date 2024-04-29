@@ -1,4 +1,7 @@
 #include "turbo.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
 #define MAX_DIM_SCREEN_TIME 10
 
 extern int game_state;
@@ -47,11 +50,11 @@ void display_turbo_icon()
 {
     if (check_status(game_state, IS_FAST) == true)
     {
-        display_button(TURBO_ICON, TURBO_ICON_A_DIRECTORY);
+        TURBO_ICON.display(TURBO_ICON_PRESS_DIRECTORY);
     }
     else
     {
-        display_button(TURBO_ICON, TURBO_ICON_DIRECTORY);
+        TURBO_ICON.display(TURBO_ICON_DIRECTORY);
     }
     if (dim_screen_time)
     {

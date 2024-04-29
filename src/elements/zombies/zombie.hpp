@@ -1,7 +1,4 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "game_param.hpp"
-#include "music/music.hpp"
 #include "zombie_type.hpp"
 
 bool has_zombie_reached_block(const Zombie &zombie, const int &row, const int &col);

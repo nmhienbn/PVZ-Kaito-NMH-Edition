@@ -1,5 +1,8 @@
 #include "progress_bar.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Level/Level.hpp"
 #include "level/level_data.hpp"
+
 #define PROGRESS_BAR_WIDTH 158
 #define PROGRESS_BAR_WIDTH_1 7
 #define PROGRESS_BAR_WIDTH_2 144

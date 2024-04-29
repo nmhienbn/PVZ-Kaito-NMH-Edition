@@ -1,4 +1,5 @@
 #include "LevelSelector.hpp"
+#include "level/level_data.hpp"
 #include <fstream>
 #include <nlohmann/json.hpp>
 using namespace nlohmann;
@@ -63,7 +64,7 @@ void LevelSelector::display(int x, int y, RGB color)
         int w, h;
         TTF_SizeText(win.get_font(PVZUI_TTF, 40), level_name.c_str(), &w, &h);
         int kc = (selector_width - w) / 2;
-        win.show_text_outlined(level_name, x + kc, y + 130, color, PVZUI_TTF, 40);
+        win.show_text_shadowed(level_name, x + kc, y + 130, color, PVZUI_TTF, 40);
     }
 }
 

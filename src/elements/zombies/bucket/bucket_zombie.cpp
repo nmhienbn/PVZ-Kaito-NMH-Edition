@@ -1,4 +1,5 @@
 #include "bucket_zombie.hpp"
+#include "draw/rsdl.hpp"
 
 extern Window win;
 
@@ -56,39 +57,27 @@ void BucketZombie::render_zombie()
 
     // current frame
     int sframe = frame / ZOMBIE_FRAME + bucket_of.at(directory_num);
-    // current column in source image
-    int scol = sframe % all_img[armor_dir].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[armor_dir].c_sheet;
-
     int x_loc = x_location + BUCKET_X_BIAS;
     int y_loc = y_location + BUCKET_Y_BIAS;
-
-    win.draw_png(armor_dir, BUCKET_WIDTH * scol, BUCKET_HEIGHT * srow,
-                 BUCKET_WIDTH, BUCKET_HEIGHT,
-                 x_loc, y_loc,
-                 BUCKET_WIDTH, BUCKET_HEIGHT);
+    win.draw_nth_frame(armor_dir, sframe, BUCKET_WIDTH, BUCKET_HEIGHT,
+                       x_loc, y_loc, BUCKET_WIDTH, BUCKET_HEIGHT);
 
     // zombie cold
     if (cold_time)
     {
-        win.set_texture_color(blink_of[armor_dir], 0, 75, 255);
-        win.set_texture_alpha(blink_of[armor_dir], 120);
-        win.draw_png(blink_of[armor_dir], BUCKET_WIDTH * scol, BUCKET_HEIGHT * srow,
-                     BUCKET_WIDTH, BUCKET_HEIGHT,
-                     x_loc, y_loc,
-                     BUCKET_WIDTH, BUCKET_HEIGHT);
-        win.set_texture_color(blink_of[armor_dir], 255, 255, 255);
-        win.set_texture_alpha(blink_of[armor_dir], 70);
+        win.set_texture_color(blink_of(armor_dir), 0, 75, 255);
+        win.set_texture_alpha(blink_of(armor_dir), 120);
+        win.draw_nth_frame(blink_of(armor_dir), sframe, BUCKET_WIDTH, BUCKET_HEIGHT,
+                           x_loc, y_loc, BUCKET_WIDTH, BUCKET_HEIGHT);
+        win.set_texture_color(blink_of(armor_dir), 255, 255, 255);
+        win.set_texture_alpha(blink_of(armor_dir), 70);
     }
 
     // zombie attacked
     if (attacked_time)
     {
-        win.draw_png(blink_of[armor_dir], BUCKET_WIDTH * scol, BUCKET_HEIGHT * srow,
-                     BUCKET_WIDTH, BUCKET_HEIGHT,
-                     x_loc, y_loc,
-                     BUCKET_WIDTH, BUCKET_HEIGHT);
+        win.draw_nth_frame(blink_of(armor_dir), sframe, BUCKET_WIDTH, BUCKET_HEIGHT,
+                           x_loc, y_loc, BUCKET_WIDTH, BUCKET_HEIGHT);
     }
 }
 
@@ -96,25 +85,14 @@ void BucketZombie::display_credited(const int &_minus_x)
 {
     // current frame
     int sframe = frame / ZOMBIE_FRAME / 2;
-    // current column in source image
-    int scol = sframe % all_img[directory_num].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[directory_num].c_sheet;
-    win.draw_png(directory_num, dir_width * scol, dir_height * srow,
-                 dir_width, dir_height,
-                 x_location - _minus_x, y_location,
-                 dir_width, dir_height);
+    win.draw_nth_frame(directory_num, sframe, dir_width, dir_height,
+                       x_location - _minus_x, y_location, dir_width, dir_height);
 
-    sframe = frame / ZOMBIE_FRAME / 2 + bucket_of.at(directory_num);
-    scol = sframe % all_img[armor_dir].c_sheet;
-    srow = sframe / all_img[armor_dir].c_sheet;
+    sframe += bucket_of.at(directory_num);
     int x_loc = x_location + BUCKET_X_BIAS - _minus_x;
     int y_loc = y_location + BUCKET_Y_BIAS;
-
-    win.draw_png(armor_dir, BUCKET_WIDTH * scol, BUCKET_HEIGHT * srow,
-                 BUCKET_WIDTH, BUCKET_HEIGHT,
-                 x_loc, y_loc,
-                 BUCKET_WIDTH, BUCKET_HEIGHT);
+    win.draw_nth_frame(armor_dir, sframe, BUCKET_WIDTH, BUCKET_HEIGHT,
+                       x_loc, y_loc, BUCKET_WIDTH, BUCKET_HEIGHT);
 
     // zombie next frame
     if (++frame >= 2 * ZOMBIE_FRAME * all_img[directory_num].n_sheet)

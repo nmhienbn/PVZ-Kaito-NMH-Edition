@@ -1,4 +1,7 @@
 #include "snowpea.hpp"
+#include "elements/Map/Map.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
 
 static ifstream snowpea("./resources/images/json/snowpea.json");
 json snowpea_data = json::parse(snowpea);

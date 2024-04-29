@@ -1,6 +1,12 @@
 #include "zombie_type.hpp"
+#include "draw/ImageType.hpp"
+#include "elements/Map/Map.hpp"
+#include "game_param.hpp"
+#include "support.hpp"
 
 static int last_zombie_row = -1;
+
+extern Map cells;
 
 /*
 Init a new zombie with its type.

@@ -1,4 +1,7 @@
 #include "sunflower.hpp"
+#include "elements/Map/Map.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
 
 static ifstream sunflower("./resources/images/json/sunflower.json");
 json sunflower_data = json::parse(sunflower);

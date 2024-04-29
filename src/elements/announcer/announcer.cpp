@@ -1,7 +1,14 @@
 #include "announcer.hpp"
+#include "draw/rsdl.hpp"
+#include "music/music.hpp"
 
 extern Window win;
 const int CAP_ANNOUNCER_CLK_COUNT = 30;
+
+Announcer::Announcer()
+{
+    Announcer(NULL_DIRECTORY, NULL_MUSIC_DIRECTORY);
+}
 
 Announcer::Announcer(const int &img_directory, const int &sound_directory)
 {

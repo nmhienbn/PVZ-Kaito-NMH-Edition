@@ -1,4 +1,7 @@
 #include "player_name.hpp"
+#include "elements/Player/Player.hpp"
+#include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "music/music.hpp"
 
 const int GET_NAME_MENU_WIDTH = 677;
 const int GET_NAME_MENU_HEIGHT = 400;
@@ -164,12 +167,12 @@ void display_get_name_player(const int &get_name_dir)
         win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
         if (is_new_user)
         {
-            OK2.blink();
+            OK2.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
         }
         else
         {
-            OK.blink();
-            CANCEL.blink();
+            OK.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+            CANCEL.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
         }
 
         // Text is not empty

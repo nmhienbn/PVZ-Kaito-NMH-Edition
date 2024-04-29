@@ -1,4 +1,5 @@
 #include "door_zombie.hpp"
+#include "draw/rsdl.hpp"
 
 DoorZombie::~DoorZombie()
 {

@@ -1,4 +1,6 @@
 #include "MowerVsZombie.hpp"
+#include "draw/ImageType.hpp"
+#include "game_param.hpp"
 
 extern int game_state;
 

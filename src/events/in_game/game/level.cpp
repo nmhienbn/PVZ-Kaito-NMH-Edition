@@ -1,4 +1,22 @@
 #include "level.hpp"
+#include "draw/render_elements.hpp"
+#include "draw/render_message.hpp"
+#include "elements/elements_actions.hpp"
+#include "player_click.hpp"
+
+#include "../credit/credit.hpp"
+#include "../lose/lose.hpp"
+#include "../main_menu/leave_menu.hpp"
+#include "../pause_menu/game_pause.hpp"
+#include "../restart_menu/restart_menu.hpp"
+#include "../turbo/turbo.hpp"
+#include "../win/win.hpp"
+
+#include "elements/Level/Level.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/elements.hpp"
+#include "music/music.hpp"
+#include "player/player_data.hpp"
 
 extern int game_state;
 extern bool quit;

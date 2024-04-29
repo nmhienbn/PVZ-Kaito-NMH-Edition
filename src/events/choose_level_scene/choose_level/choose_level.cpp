@@ -1,5 +1,13 @@
 #include "choose_level.hpp"
-#include "LevelSelector.hpp"
+#include "draw/render_elements.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Player/Player.hpp"
+#include "events/choose_level_scene/quit_menu/quit_menu.hpp"
+#include "events/choose_level_scene/render_scene/LevelSelector.hpp"
+#include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "events/choose_level_scene/reset_level/reset_menu.hpp"
+#include "level/level_data.hpp"
+#include "player/player_data.hpp"
 #include <deque>
 using namespace std;
 

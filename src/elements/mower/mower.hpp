@@ -1,7 +1,6 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/Map/Map.hpp"
-#include "music/music.hpp"
+#include <vector>
+using namespace std;
 #define MOWER_WIDTH 70
 #define MOWER_HEIGHT 57
 #define MOWER_FRAME 5

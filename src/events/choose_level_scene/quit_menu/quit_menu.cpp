@@ -1,16 +1,17 @@
 #include "quit_menu.hpp"
+#include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "music/music.hpp"
 
 extern int game_state;
 extern bool quit;
-extern Level level;
 
 #define QUIT_X1 325
 #define QUIT_X2 725
 #define QUIT_Y1 153
 #define QUIT_Y2 446
 const Button QUIT_MENU(QUIT_X1, QUIT_X2, QUIT_Y1, QUIT_Y2);
-const Button OK_QUIT(QUIT_X1 + 33, QUIT_X1 + 190, QUIT_Y1 + 229, QUIT_Y1 + 269);
-const Button CANCEL_QUIT(QUIT_X1 + 210, QUIT_X1 + 365, QUIT_Y1 + 229, QUIT_Y1 + 269);
+const Button OK_QUIT(QUIT_X1 + 33, QUIT_X1 + 194, QUIT_Y1 + 229, QUIT_Y1 + 273);
+const Button CANCEL_QUIT(QUIT_X1 + 206, QUIT_X1 + 367, QUIT_Y1 + 229, QUIT_Y1 + 273);
 
 /*
 Display this when player tends to quit game at choosing level screen.
@@ -19,9 +20,9 @@ Display this when player tends to quit game at choosing level screen.
 void display_game_quit()
 {
     display_choose_level(false);
-    display_button(QUIT_MENU, QUIT_PROMPT_DIRECTORY);
-    OK_QUIT.blink();
-    CANCEL_QUIT.blink();
+    QUIT_MENU.display(QUIT_PROMPT_DIRECTORY);
+    OK_QUIT.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    CANCEL_QUIT.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
 }
 
 /*

@@ -4,7 +4,6 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:/Game_programming/SDL2/include/SDL2",
                 "./src",
                 "${workspaceFolder}/include"
             ],

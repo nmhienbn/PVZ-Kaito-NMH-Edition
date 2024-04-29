@@ -1,4 +1,7 @@
 #include "volume.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/button/button.hpp"
+#include "music/music.hpp"
 
 extern Window win;
 extern int music_volume;
@@ -7,18 +10,22 @@ extern Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
 extern Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 extern int now_music;
 
-// Music volume limit
-Button MUSIC_VOLUME(MENU_X1 + 194, MENU_X1 + 334, MENU_Y1 + 139, MENU_Y1 + 168);
-// SFX volume limit
-Button SFX_VOLUME(MENU_X1 + 194, MENU_X1 + 334, MENU_Y1 + 168, MENU_Y1 + 197);
-
 // Music volume slider
-int music_x = (MUSIC_VOLUME.x1 + MUSIC_VOLUME.x2) / 2 - 11;
-int music_y = MUSIC_VOLUME.y1;
+int music_x, music_y;
 
 // SFX volume slider
-int sfx_x = (SFX_VOLUME.x1 + SFX_VOLUME.x2) / 2 - 11;
-int sfx_y = SFX_VOLUME.y1;
+int sfx_x, sfx_y;
+
+void init_volume()
+{
+    // Music volume slider
+    music_x = (MUSIC_VOLUME.x1 + MUSIC_VOLUME.x2) / 2 - 11;
+    music_y = MUSIC_VOLUME.y1;
+
+    // SFX volume slider
+    sfx_x = (SFX_VOLUME.x1 + SFX_VOLUME.x2) / 2 - 11;
+    sfx_y = SFX_VOLUME.y1;
+}
 
 /*
 Handle player mouse down on slide to change the volume.

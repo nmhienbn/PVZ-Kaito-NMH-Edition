@@ -1,5 +1,7 @@
 #include "PotatoMine.hpp"
 #include "elements/Map/Map.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
 #define POTATO_MINE_ARMED_TIME 900
 
 extern const json plant_json;

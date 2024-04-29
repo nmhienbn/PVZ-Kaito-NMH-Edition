@@ -1,4 +1,7 @@
 #include "zombie.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+#include "music/music.hpp"
 #include <algorithm>
 
 extern int game_state;

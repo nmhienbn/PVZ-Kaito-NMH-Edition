@@ -1,4 +1,6 @@
 #include "wallnut.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
 
 static ifstream wallnut("./resources/images/json/wallnut.json");
 json wallnut_data = json::parse(wallnut);

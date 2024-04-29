@@ -1,4 +1,5 @@
 #pragma once
+#include "support.hpp"
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <stdio.h>

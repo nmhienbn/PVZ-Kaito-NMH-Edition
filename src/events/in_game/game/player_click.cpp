@@ -1,5 +1,11 @@
 #include "player_click.hpp"
-#include "elements/plants/plant_type.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
+#include "music/music.hpp"
 
 extern Level level;
 extern Elements game_characters;

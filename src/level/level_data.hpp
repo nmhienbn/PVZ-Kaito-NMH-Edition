@@ -1,5 +1,10 @@
 #pragma once
-#include "elements/elements.hpp"
+#include "elements/zombies/wave.hpp"
+#include "nlohmann/json.hpp"
+#include <vector>
+using namespace nlohmann;
+using namespace std;
+
 #define LEVELS_DIRECTORY "./resources/levels/"
 #define LEVEL_COUNT 12
 

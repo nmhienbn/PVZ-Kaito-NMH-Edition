@@ -1,4 +1,9 @@
 #include "ZombieVsPlant.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+#include "music/music.hpp"
+
+extern Map cells;
 
 /*
 Update time for all zombies' next bite.

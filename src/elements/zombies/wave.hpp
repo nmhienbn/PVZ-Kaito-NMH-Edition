@@ -1,5 +1,5 @@
 #pragma once
-#include "elements/zombies/zombie.hpp"
+#include "elements/zombies/zombie_struct.hpp"
 
 class Wave
 {

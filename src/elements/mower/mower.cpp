@@ -1,4 +1,7 @@
 #include "mower.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+#include "music/music.hpp"
 
 extern int game_state;
 extern Window win;
@@ -26,13 +29,8 @@ void Mower::display()
 {
     // current frame
     int sframe = frame / MOWER_FRAME;
-    // current column in source image
-    int scol = sframe % all_img[MOWER_DIRECTORY].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[MOWER_DIRECTORY].c_sheet;
-    // display
-    win.draw_png(MOWER_DIRECTORY, MOWER_WIDTH * scol, MOWER_HEIGHT * srow, MOWER_WIDTH, MOWER_HEIGHT,
-                 x, cells[row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
+    win.draw_nth_frame(MOWER_DIRECTORY, sframe, MOWER_WIDTH, MOWER_HEIGHT,
+                       x, cells[row][0].y1 + 40, MOWER_WIDTH, MOWER_HEIGHT);
     // move to next frame
     if (status == MOWER_ACTIVE && check_status(game_state, IS_PAUSED) == false)
     {

@@ -1,6 +1,6 @@
 #pragma once
+#include "ImageType.hpp"
 #include "game_param.hpp"
-#include "image_directory.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -46,6 +46,10 @@ const RGB YELLOW_A(226, 189, 98);
 void print_error(SDL_Texture *res, const string &img);
 void set_default_alpha(int file_num, SDL_Texture *res);
 
+int walk_of(const int &img_dir);
+int blink_of(const int &img_dir);
+int eat_of(const int &img_dir);
+
 class Window
 {
 public:
@@ -73,8 +77,13 @@ public:
 	void draw_png_height_scaled(int file_num, int x, int y, int width, int angle = 0);
 	void draw_png_width_scaled(int file_num, int x, int y, int height, int angle = 0);
 	void draw_png_center(int file_num, double ratio = 1.0, int x1 = -1, int y1 = -1);
-	void draw_png(int file_num, int x, int y, int width, int height, int angle, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	void draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw_png(int file_num, int x, int y, int width, int height, int angle,
+				  SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw_png(int file_num, int sx, int sy, int sw, int sh,
+				  int dx, int dy, int dw, int dh,
+				  SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw_nth_frame(int file_num, int sframe, int ori_w, int ori_h,
+						int game_x, int game_y, int game_w, int game_h, int angle = 0);
 	void draw_bg(int file_num, int x = 0, int y = 0);
 	void delete_texture(const int &file_num);
 	void delete_all_texture();

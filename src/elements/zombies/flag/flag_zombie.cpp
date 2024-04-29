@@ -1,4 +1,5 @@
 #include "flag_zombie.hpp"
+#include "draw/rsdl.hpp"
 
 FlagZombie::~FlagZombie()
 {

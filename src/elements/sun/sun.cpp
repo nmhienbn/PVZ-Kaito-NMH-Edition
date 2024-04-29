@@ -1,4 +1,7 @@
 #include "sun.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+
 #define INIT_SUN_Y 5
 
 extern Map cells;

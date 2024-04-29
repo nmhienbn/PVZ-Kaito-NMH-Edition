@@ -1,4 +1,7 @@
 #include "win.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
 
 extern int game_state;
 extern bool quit;
@@ -38,8 +41,7 @@ bool display_win()
             // Display continue After 23th winning frame
             if (i >= 23)
             {
-                win.draw_png_height_scaled(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH);
-                CONTINUE.blink();
+                CONTINUE.display_with_text(BUTTON_DIRECTORY, "Continue", 20, RGB(0, 196, 0), RGB(43, 44, 58));
             }
             win.update_screen();
             HANDLE_SDL_EVENT(

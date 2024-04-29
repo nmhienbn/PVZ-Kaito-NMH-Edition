@@ -1,8 +1,5 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/Map/Map.hpp"
-#include "game_param.hpp"
-#include "music/music.hpp"
+#include <vector>
 
 #define BULLET_EXPLODE_TIME 15
 

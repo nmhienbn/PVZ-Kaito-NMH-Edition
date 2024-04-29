@@ -1,6 +1,5 @@
 #pragma once
 #include "../bullet.hpp"
-#include "elements/zombies/zombie_struct.hpp"
 
 class Pea : public Bullet
 {

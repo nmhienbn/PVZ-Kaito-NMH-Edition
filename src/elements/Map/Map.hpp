@@ -1,13 +1,6 @@
 #pragma once
-#include <chrono>
-#include <ctime>
-#include <random>
+#include <vector>
 using namespace std;
-
-static mt19937 rd(chrono::high_resolution_clock::now().time_since_epoch().count());
-
-int rand(int L, int R);
-bool is_in(const int &L, const int &x, const int &R);
 
 // Limited by x1-x2 and y1-y2
 struct Block
@@ -21,3 +14,5 @@ struct Block
 typedef vector<vector<Block>> Map;
 int get_block_col(const int &x);
 int get_block_row(const int &y);
+
+Map create_a_collection_of_blocks();

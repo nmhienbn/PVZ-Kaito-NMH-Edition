@@ -1,4 +1,9 @@
 #include "peashooter.hpp"
+#include "elements/Map/Map.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
+using namespace nlohmann;
+
 static ifstream peashooter("./resources/images/json/peashooter.json");
 json peashooter_data = json::parse(peashooter);
 

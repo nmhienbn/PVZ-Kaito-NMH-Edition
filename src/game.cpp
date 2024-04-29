@@ -1,5 +1,10 @@
 #include "game.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/elements.hpp"
 #include <deque>
+#include <iomanip>
 using namespace std;
 
 int game_state = 0;
@@ -20,7 +25,6 @@ If a level is not chosen:
     Handle choosing level screen.
 Else: start level.
 */
-#include <iomanip>
 int main(int argv, char **args)
 {
     // Load all image to check image error
@@ -31,7 +35,6 @@ int main(int argv, char **args)
     //     cout << all_img[i].img_dir << '\n';
     // }
     // cout << 0 << endl;
-
     // Init game & music.
     init_music();
     Mouse Mouse_cursor;

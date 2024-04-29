@@ -1,4 +1,6 @@
 #include "cherrybomb.hpp"
+#include "nlohmann/json.hpp"
+using namespace nlohmann;
 
 static ifstream cherrybomb("./resources/images/json/cherrybomb.json");
 static ifstream cherrybomb_explosion("./resources/images/json/cherrybomb_explosion.json");

@@ -1,15 +1,17 @@
 #include "reset_menu.hpp"
+#include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "music/music.hpp"
+#include "player/player_data.hpp"
 
 extern int game_state;
-extern Level level;
 
 #define RESET_X1 325
 #define RESET_X2 725
 #define RESET_Y1 155
 #define RESET_Y2 446
 const Button RESET_MENU(RESET_X1, RESET_X2, RESET_Y1, RESET_Y2);
-const Button OK_RESET(RESET_X1 + 33, RESET_X1 + 190, RESET_Y1 + 226, RESET_Y1 + 266);
-const Button CANCEL_RESET(RESET_X1 + 210, RESET_X1 + 365, RESET_Y1 + 226, RESET_Y1 + 266);
+const Button OK_RESET(RESET_X1 + 33, RESET_X1 + 194, RESET_Y1 + 226, RESET_Y1 + 270);
+const Button CANCEL_RESET(RESET_X1 + 206, RESET_X1 + 367, RESET_Y1 + 226, RESET_Y1 + 270);
 
 /*
 Display this when player tends to reset game level.
@@ -20,9 +22,9 @@ Display this when player tends to reset game level.
 void display_game_reset()
 {
     display_choose_level(false);
-    display_button(RESET_MENU, RESET_PROMPT_DIRECTORY);
-    OK_RESET.blink();
-    CANCEL_RESET.blink();
+    RESET_MENU.display(RESET_PROMPT_DIRECTORY);
+    OK_RESET.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    CANCEL_RESET.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
 }
 
 /*

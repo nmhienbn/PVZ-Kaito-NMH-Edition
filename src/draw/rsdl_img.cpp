@@ -180,6 +180,25 @@ void Window::draw_png(int file_num, int sx, int sy, int sw, int sh, int dx, int 
     SDL_RenderCopyEx(renderer, res, &src, &dst, 0, NULL, flip);
 }
 
+void Window::draw_nth_frame(int file_num, int sframe, int ori_w, int ori_h,
+                            int game_x, int game_y, int game_w, int game_h, int angle)
+{
+    if (file_num == NULL_DIRECTORY || game_w <= 0 || game_h <= 0 || ori_w <= 0 || ori_h <= 0)
+        return;
+    if (all_img[file_num].c_sheet == 0)
+    {
+        cout << "NOT A SHEET IMAGE\n";
+        exit(-1234567);
+    }
+    // current col in source image
+    int scol = sframe % all_img[file_num].c_sheet;
+    // current row in source image
+    int srow = sframe / all_img[file_num].c_sheet;
+
+    draw_png(file_num, ori_w * scol, ori_h * srow, ori_w, ori_h,
+             game_x, game_y, game_w, game_h);
+}
+
 /*
 Load & draw image to all window:
     Load: Texture

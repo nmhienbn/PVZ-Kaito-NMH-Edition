@@ -1,5 +1,6 @@
 #include "plants.hpp"
 #include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
 #include "elements/zombies/zombie_struct.hpp"
 #include "music/music.hpp"
 
@@ -116,22 +117,15 @@ void Plants::display(const PlantAssets &assets)
 {
     // current frame
     int sframe = frame / assets.frame;
-    // current column in source image
-    int scol = sframe % all_img[directory_num].c_sheet;
-    // current row in source image
-    int srow = sframe / all_img[directory_num].c_sheet;
-    // Plant
-    win.draw_png(directory_num, assets.img_width * scol, assets.img_height * srow,
-                 assets.img_width, assets.img_height,
-                 cells[row][col].x1 + assets.x_alias, cells[row][col].y1 + assets.y_alias,
-                 assets.game_width, assets.game_height);
+    int x_loc = cells[row][col].x1 + assets.x_alias;
+    int y_loc = cells[row][col].y1 + assets.y_alias;
+    win.draw_nth_frame(directory_num, sframe, assets.img_width, assets.img_height,
+                       x_loc, y_loc, assets.game_width, assets.game_height);
     // Blink
     if (attacked_time)
     {
-        win.draw_png(blink_of[directory_num], assets.img_width * scol, assets.img_height * srow,
-                     assets.img_width, assets.img_height,
-                     cells[row][col].x1 + assets.x_alias, cells[row][col].y1 + assets.y_alias,
-                     assets.game_width, assets.game_height);
+        win.draw_nth_frame(blink_of(directory_num), sframe, assets.img_width, assets.img_height,
+                           x_loc, y_loc, assets.game_width, assets.game_height);
         if (check_status(game_state, IS_PAUSED) == false)
             attacked_time--;
     }

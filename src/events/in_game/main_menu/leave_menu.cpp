@@ -1,12 +1,15 @@
 #include "leave_menu.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/button/button.hpp"
+#include "music/music.hpp"
 
 #define LEAVE_X1 325
 #define LEAVE_X2 725
 #define LEAVE_Y1 125
 #define LEAVE_Y2 475
 const Button LEAVE_MENU(LEAVE_X1, LEAVE_X2, LEAVE_Y1, LEAVE_Y2);
-const Button OK_LEAVE(LEAVE_X1 + 33, LEAVE_X1 + 190, LEAVE_Y1 + 280, LEAVE_Y1 + 320);
-const Button CANCEL_LEAVE(LEAVE_X1 + 210, LEAVE_X1 + 365, LEAVE_Y1 + 280, LEAVE_Y1 + 320);
+const Button OK_LEAVE(LEAVE_X1 + 33, LEAVE_X1 + 194, LEAVE_Y1 + 280, LEAVE_Y1 + 326);
+const Button CANCEL_LEAVE(LEAVE_X1 + 206, LEAVE_X1 + 367, LEAVE_Y1 + 280, LEAVE_Y1 + 326);
 
 extern int game_state;
 extern bool quit;
@@ -20,10 +23,12 @@ void display_game_leave()
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements();
-    display_button(MENU, MENU_DIRECTORY);
-    display_button(LEAVE_MENU, LEAVE_PROMPT_DIRECTORY);
-    OK_LEAVE.blink();
-    CANCEL_LEAVE.blink();
+    MENU.display(MENU_DIRECTORY);
+    BACK_TO_GAME.display(BACK_TO_GAME_BUTTON_DIRECTORY);
+    BACK_TO_GAME.show_text("Back To Game", -3, -3, 37, RGB(0, 196, 0), RGB(43, 44, 58));
+    LEAVE_MENU.display(LEAVE_PROMPT_DIRECTORY);
+    OK_LEAVE.display_with_text(BUTTON_DIRECTORY, "LEAVE", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    CANCEL_LEAVE.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
 }
 
 /*

@@ -1,8 +1,6 @@
 #pragma once
 #include "../zombie_struct.hpp"
 
-extern Map cells;
-
 class NormalZombie : public Zombie
 {
 public:

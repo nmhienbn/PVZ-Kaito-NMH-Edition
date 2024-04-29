@@ -1,4 +1,5 @@
 #include "AttackPlantVsZombie.hpp"
+#include "elements/Map/Map.hpp"
 
 extern Map cells;
 

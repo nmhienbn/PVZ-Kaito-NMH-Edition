@@ -1,4 +1,6 @@
 #include "game_pause.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/button/button.hpp"
 
 extern int game_state;
 extern bool quit;
@@ -12,10 +14,11 @@ void display_game_pause()
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements();
-    display_button(MENU, MENU_DIRECTORY);
-    BACK_TO_GAME.blink();
-    MAIN_MENU.blink();
-    RESTART.blink();
+    MENU.display(MENU_DIRECTORY);
+    BACK_TO_GAME.display_with_text(BACK_TO_GAME_BUTTON_DIRECTORY, "Back To Game",
+                                   37, RGB(0, 196, 0), RGB(43, 44, 58));
+    MAIN_MENU.display_with_text(BUTTON_DIRECTORY, "MAIN MENU", 20, RGB(0, 196, 0), RGB(43, 44, 58));
+    RESTART.display_with_text(BUTTON_DIRECTORY, "RESTART", 20, RGB(0, 196, 0), RGB(43, 44, 58));
     display_slider();
 }
 

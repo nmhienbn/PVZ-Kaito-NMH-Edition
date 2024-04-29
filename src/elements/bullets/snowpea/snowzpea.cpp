@@ -1,4 +1,8 @@
 #include "snowzpea.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Map/Map.hpp"
+#include "music/music.hpp"
+#include <algorithm>
 
 extern Map cells;
 extern Window win;

@@ -1,4 +1,11 @@
 #include "lose.hpp"
+#include "draw/render_elements.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
+#include "elements/mower/mower.hpp"
+#include "music/music.hpp"
+#include "player/player_data.hpp"
 
 extern int game_state;
 extern bool quit;
@@ -22,7 +29,7 @@ void display_losing_message()
         HANDLE_SDL_EVENT(QUIT(););
     }
     win.draw_png_center(LOSING_MESSAGE_DIRECTORY);
-    win.draw_png_height_scaled(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH);
+    CONTINUE.display_with_text(BUTTON_DIRECTORY, "Continue", 20, RGB(0, 196, 0), RGB(43, 44, 58));
     has_display_lost = true;
 }
 
@@ -51,7 +58,6 @@ void display_lose()
     play_music(LOSE_MUSIC_DIRECTORY, 0);
     if (!has_display_lost)
         display_losing_message();
-    CONTINUE.blink();
     win.update_screen();
     while (has_display_lost)
     {

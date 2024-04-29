@@ -1,4 +1,5 @@
 #include "music.hpp"
+#include "events/in_game/volume/volume.hpp"
 int music_volume = MIX_MAX_VOLUME / 2;
 int sfx_volume = MIX_MAX_VOLUME / 2;
 
@@ -30,6 +31,7 @@ bool init_music()
         // Change number of channels - number of sfx can be used at a time
         Mix_AllocateChannels(200);
     }
+    init_volume();
     return success;
 }
 

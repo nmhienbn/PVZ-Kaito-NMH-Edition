@@ -1,3 +1,4 @@
+#include "elements/Map/Map.hpp"
 #include "elements/collision/AttackPlantVsZombie.hpp"
 #include "elements/collision/InstancePlantVsZombie.hpp"
 #include "elements/elements.hpp"

@@ -1,6 +1,4 @@
 #pragma once
-#include "draw/render_elements.hpp"
-#include "player/player_data.hpp"
 
 void display_game_reset();
 

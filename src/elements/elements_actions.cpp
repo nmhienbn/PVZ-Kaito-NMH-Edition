@@ -1,4 +1,12 @@
 #include "elements_actions.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/collision/BulletVsZombie.hpp"
+#include "elements/collision/MowerVsZombie.hpp"
+#include "elements/collision/ZombieVsPlant.hpp"
+#include "elements/elements.hpp"
 
 extern int clk;
 extern Level level;

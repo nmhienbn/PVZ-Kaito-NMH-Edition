@@ -1,4 +1,7 @@
 #include "unlock_plant.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/button/button.hpp"
+#include "elements/elements.hpp"
 
 extern int game_state;
 extern bool quit;
@@ -103,7 +106,7 @@ void display_unlock_plant(const int &_plant_type)
         lower += delta;
     }
 
-    win.draw_png_height_scaled(CONTINUE_DIRECTORY, CONTINUE.x1, CONTINUE.y1, CONTINUE_WIDTH);
+    CONTINUE.show_text("Continue", 0, 0, 20, RGB(0, 196, 0), RGB(43, 44, 58));
 }
 
 /*
@@ -113,7 +116,7 @@ void unlock_plant(const int &_plant_type)
 {
     display_unlock_plant(_plant_type);
     play_music(NEW_PLANT_MUSIC_DIRECTORY, 0);
-    CONTINUE.blink();
+    CONTINUE.display_with_text(BUTTON_DIRECTORY, "Continue", 20, RGB(0, 196, 0), RGB(43, 44, 58));
     win.update_screen();
     HANDLE_SDL_EVENT(
         QUIT();

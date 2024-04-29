@@ -1,6 +1,4 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "music/music.hpp"
 
 enum AnnouncerState
 {
@@ -15,6 +13,7 @@ public:
     int sound_directory;
     int remain_time;
     int state;
+    Announcer();
     Announcer(const int &img_directory, const int &sound_directory);
     void display();
     bool is_finished();

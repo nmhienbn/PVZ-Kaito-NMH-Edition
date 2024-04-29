@@ -1,4 +1,5 @@
 #include "normal_zombie.hpp"
+#include "draw/rsdl.hpp"
 
 NormalZombie::~NormalZombie()
 {

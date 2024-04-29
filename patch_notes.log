@@ -268,12 +268,11 @@ Dim = Exposue - 3.20
 	Change some animations.
 	Change seed packets and new plant pages.
 
+29/04/2024:
+	Reduce dependencies between .hpp and .cpp --> link files faster.
+	change all buttons.
+
 TODO: vector<level> 
 - update about_graphic pvz 1 android (obb and creator, plist, cdat)
-
-- choose level pages (change page, less levels/page): use vector to add next page levels, 
-then minus coordinate and pop until have 6 levels.
 - reverse progress bar
 - animated new plant pages.
-conehead and buckethead not contains zombie, base on normal zombie. if have time, maybe door zombie too.
-

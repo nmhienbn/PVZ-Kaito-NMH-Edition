@@ -1,4 +1,9 @@
 #include "level/level_data.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/elements.hpp"
+#include "elements/zombies/zombie_type.hpp"
 
 extern Level level;
 extern Elements game_characters;

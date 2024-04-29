@@ -1,4 +1,11 @@
 #include "credit.hpp"
+#include "draw/render_elements.hpp"
+#include "draw/render_message.hpp"
+#include "draw/rsdl.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
+#include "elements/zombies/zombie_type.hpp"
 #include <algorithm>
 
 extern int game_state;
@@ -6,6 +13,7 @@ extern bool quit;
 extern Level level;
 extern Player player;
 extern Window win;
+extern Map cells;
 
 /*
 Display zombies outside playground

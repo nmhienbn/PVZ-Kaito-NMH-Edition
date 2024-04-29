@@ -1,23 +1,6 @@
 #include "Map.hpp"
 #include "game_param.hpp"
-
-/*
-random int in [L;R]
-*/
-int rand(int L, int R)
-{
-    if (L > R)
-        exit(-10);
-    return rd() % (R - L + 1) + L;
-}
-
-/*
-Check if x in [L; R]
-*/
-bool is_in(const int &L, const int &x, const int &R)
-{
-    return L <= x && x <= R;
-}
+#include "support.hpp"
 
 /*
 @param x query x-coordinate
@@ -41,4 +24,33 @@ int get_block_row(const int &y)
     if (!is_in(0, res, VERT_BLOCK_COUNT - 1))
         res = -1;
     return res;
+}
+
+/*Create 5 x 9 tiles
+0 1 2 3 4 5 6 7 8
+1
+2
+3
+4
+*/
+Map create_a_collection_of_blocks()
+{
+    Map result;
+    vector<Block> temps;
+    Block temp;
+    for (int y = 0; y < VERT_BLOCK_COUNT; y++)
+    {
+        temps.clear();
+        for (int x = 0; x < HORIZ_BLOCK_COUNT; x++)
+        {
+            temp.x1 = X_UPPER_LEFT + (x * BLOCK_WIDTH);
+            temp.x2 = temp.x1 + BLOCK_WIDTH;
+            temp.y1 = Y_UPPER_LEFT + (y * BLOCK_HEIGHT);
+            temp.y2 = temp.y1 + BLOCK_HEIGHT;
+
+            temps.push_back(temp);
+        }
+        result.push_back(temps);
+    }
+    return result;
 }

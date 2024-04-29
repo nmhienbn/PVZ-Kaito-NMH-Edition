@@ -1,11 +1,6 @@
 #pragma once
 #include "draw/rsdl.hpp"
 #include "music/music.hpp"
-#include "plants.hpp"
-#include <nlohmann/json.hpp>
-#include <vector>
-using namespace std;
-using namespace nlohmann;
 
 enum AttackRange
 {

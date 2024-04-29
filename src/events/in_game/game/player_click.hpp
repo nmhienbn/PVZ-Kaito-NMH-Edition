@@ -1,8 +1,7 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/button/button.hpp"
-#include "elements/elements.hpp"
-#include "music/music.hpp"
+#include "elements/plants/plant_type.hpp"
+#include <vector>
+using namespace std;
 
 void handle_user_click(const int &mouse_x, const int &mouse_y);
 void remove_plant_if_clicked_on(vector<Plants *> &plants, const int &mouse_x, const int &mouse_y);
@@ -20,5 +19,3 @@ bool is_click_made_in_element_block(const int &row, const int &col, const int &m
 void determine_row_and_col_chosen_by_second_click(const int &mouse_x, const int &mouse_y, int &row, int &col);
 void remove_chosen_plant();
 void create_new_plant(const int &mouse_x, const int &mouse_y);
-
-extern Map cells;

@@ -1,7 +1,6 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/Map/Map.hpp"
-#include "game_param.hpp"
+#include <vector>
+using namespace std;
 
 struct Sun
 {

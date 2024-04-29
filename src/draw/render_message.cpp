@@ -1,4 +1,8 @@
 #include "draw/render_message.hpp"
+#include "draw/render_elements.hpp"
+#include "elements/Level/Level.hpp"
+#include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
 
 extern Level level;
 extern Player player;

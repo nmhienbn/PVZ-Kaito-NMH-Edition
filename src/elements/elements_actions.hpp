@@ -1,9 +1,4 @@
 #pragma once
-#include "draw/rsdl.hpp"
-#include "elements/collision/BulletVsZombie.hpp"
-#include "elements/collision/MowerVsZombie.hpp"
-#include "elements/collision/ZombieVsPlant.hpp"
-#include "elements/elements.hpp"
 
 void handle_changes();
 void handle_movements();
