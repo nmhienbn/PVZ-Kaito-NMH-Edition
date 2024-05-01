@@ -42,7 +42,7 @@ const Image all_img[] = {
 
     Image("./resources/images/Plant_sheet/cherrybomb/cherrybomb_sheet.png", 21, 8),           // CHERRYBOMB_SHEET_DIRECTORY
     Image("./resources/images/Plant_sheet/cherrybomb/cherrybomb_sheet_blink.png", 21, 8, 70), // CHERRYBOMB_SHEET_BLINK_DIRECTORY
-    Image("./resources/images/Plant_sheet/cherrybomb/cherrybomb_explosion.png", 84, 8),       // CHERRYBOMB_EXPLOSION_DIRECTORY
+    Image("./resources/images/Plant_sheet/cherrybomb/cherrybomb_explosion.png", 80, 10),      // CHERRYBOMB_EXPLOSION_DIRECTORY
 
     Image("./resources/images/Plant_sheet/potatomine/Potato_Mine_unarmed.png", 27, 8),           // POTATOMINE_UNARMED_DIRECTORY
     Image("./resources/images/Plant_sheet/potatomine/Potato_Mine_unarmed_blink.png", 27, 8, 70), // POTATOMINE_UNARMED_BLINK_DIRECTORY
