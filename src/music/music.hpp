@@ -10,6 +10,7 @@ bool init_music();
 void play_music(int num_path, int repeat_times = -1);
 void play_sound_effect(int num_path);
 void close_music();
+void delete_all_sound_effect();
 
 #define GROAN_MUSIC_DIRECTORY rand(GROAN1_MUSIC_DIRECTORY, GROAN5_MUSIC_DIRECTORY)
 #define ZOMBIE_EATING_MUSIC_DIRECTORY rand(ZOMBIE_EATING1_MUSIC_DIRECTORY, ZOMBIE_EATING2_MUSIC_DIRECTORY)

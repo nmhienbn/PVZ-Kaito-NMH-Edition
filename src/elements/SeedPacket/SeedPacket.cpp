@@ -2,6 +2,7 @@
 #include "elements/button/button.hpp"
 
 extern Window win;
+const int level_unlock_new_plant[] = {1, 2, 4, 6, 8, 10};
 
 PlantType SeedPacket::chosen_plant = PLANT_COUNT;
 
@@ -67,4 +68,14 @@ void SeedPacket::display(int x, int y, int player_sun_count)
                   w + 2, h + 3, BLACK, PVZUI_TTF, fsize);
     win.show_text_outlined(to_string(sun_cost),
                            w, h, WHITE, PVZUI_TTF, fsize);
+}
+
+void SeedPacket::blink(int x, int y) const
+{
+    int _x, _y;
+    SDL_GetMouseState(&_x, &_y);
+    if (is_in(x, _x, x + ICON_WIDTH) && is_in(y, _y, y + ICON_HEIGHT))
+    {
+        win.draw_png(WHITE_SCREEN_DIRECTORY, x, y, ICON_WIDTH, ICON_HEIGHT);
+    }
 }

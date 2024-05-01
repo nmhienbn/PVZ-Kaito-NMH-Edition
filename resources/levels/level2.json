@@ -3,7 +3,7 @@
     "objects": {
         "map_type": 2,
         "has_sun_from_sky": true,
-        "display_zombie": "normal",
+        "display_zombie": "flag",
         "init_sun": 100
     },
     "waves": [

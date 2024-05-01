@@ -6,6 +6,7 @@
 
 extern Elements game_characters;
 extern Map cells;
+extern Window win;
 
 /*
 Peashooter's action: fire pea
@@ -61,6 +62,7 @@ void PotatoMine::action()
         state = ATTACK;
         directory_num = POTATOMINE_ATTACK_DIRECTORY;
         frame = 0;
+        win.load_texture(POTATOMINE_EXPLOSION_DIRECTORY);
     }
     if (is_blow())
     {

@@ -104,3 +104,12 @@ void close_music()
     // Quit SDL subsystems
     Mix_Quit();
 }
+
+void delete_all_sound_effect()
+{
+    for (int i = 0; i < COUNT_MUSIC_DIRECTORY; i++)
+    {
+        Mix_FreeChunk(gChunk[i]);
+        gChunk[i] = NULL;
+    }
+}

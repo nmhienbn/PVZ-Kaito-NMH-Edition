@@ -29,6 +29,7 @@ extern Window win;
 const int TIME_FOR_WIN = 180;
 int delay_for_win = INF;
 
+int last_time_delete = 600;
 /*
 If game has not started:
     display credit.
@@ -196,6 +197,13 @@ void start_level()
     if (check_status(game_state, IS_PAUSED) == true || check_status(game_state, IS_FAST) == false || (clk & 1))
     {
         win.update_screen();
+    }
+
+    win.delete_all_texture_no_use();
+    if (--last_time_delete <= 0)
+    {
+        last_time_delete = 600;
+        delete_all_sound_effect();
     }
 }
 

@@ -54,6 +54,7 @@ bool PotatoMine::is_blow()
         directory_num = POTATOMINE_EXPLOSION_DIRECTORY;
         state = EXPLOSION;
         frame = 0;
+        win.delete_texture(POTATOMINE_ATTACK_DIRECTORY);
         return true;
     }
     return false;
@@ -67,6 +68,7 @@ void PotatoMine::disappear()
     if (state == EXPLOSION && frame >= POTATOMINE_EXPLOSION_ASSET.frame * all_img[POTATOMINE_EXPLOSION_DIRECTORY].n_sheet)
     {
         health = 0;
+        win.delete_texture(POTATOMINE_EXPLOSION_DIRECTORY);
     }
 }
 

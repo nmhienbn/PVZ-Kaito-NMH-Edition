@@ -48,6 +48,7 @@ void set_default_alpha(int file_num, SDL_Texture *res);
 
 int walk_of(const int &img_dir);
 int blink_of(const int &img_dir);
+int blink_ori(const int &img_dir);
 int eat_of(const int &img_dir);
 
 class Window
@@ -88,6 +89,7 @@ public:
 	void draw_bg(int file_num, int x = 0, int y = 0);
 	void delete_texture(const int &file_num);
 	void delete_all_texture();
+	void delete_all_texture_no_use();
 
 	void set_texture_alpha(int file_num, int a);
 	void set_texture_color(int file_num, int r, int g, int b);
@@ -96,7 +98,6 @@ public:
 	// draw text
 	// Note that we don't draw null strings
 	// To optimize, we use fonts_cache[] to store fonts
-	//					and string_cache[] to store used strings
 
 	TTF_Font *get_font(string font_addr, const int &size);
 	void show_text(const string &input, const int &x = 0, const int &y = 0,
@@ -127,7 +128,6 @@ private:
 	SDL_Renderer *renderer;
 	SDL_Texture *texture_cache[COUNT_USED_DIRECTORY];
 	std::map<string, TTF_Font *> fonts_cache;
-	std::map<string, SDL_Texture *> string_cache;
 	void set_color(RGB color);
 	void dump_err() { std::cerr << SDL_GetError() << '\n'; }
 	void init();

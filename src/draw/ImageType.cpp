@@ -134,6 +134,16 @@ int blink_of(const int &img_dir)
     return NULL_DIRECTORY;
 }
 
+int blink_ori(const int &img_dir)
+{
+    for (const auto &i : blink_img)
+    {
+        if (i.second == img_dir)
+            return i.first;
+    }
+    return NULL_DIRECTORY;
+}
+
 int eat_of(const int &img_dir)
 {
     if (eat_img.find(img_dir) != eat_img.end())

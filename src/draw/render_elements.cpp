@@ -80,7 +80,7 @@ void display_seed_packets_bar()
     {
         player.seed_packets[i].display(plant_seed[i].x1, plant_seed[i].y1, player.sun_count);
         win.show_text_outlined(to_string(i + 1), plant_seed[i].x1 + ICON_WIDTH - 13, plant_seed[i].y1, WHITE, BRIANNE_TTF);
-        plant_seed[i].blink();
+        player.seed_packets[i].blink(plant_seed[i].x1, plant_seed[i].y1);
     }
 }
 

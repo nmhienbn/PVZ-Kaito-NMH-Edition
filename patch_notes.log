@@ -273,6 +273,10 @@ Dim = Exposue - 3.20
 	Change all buttons.
 	Don't need blink png anymore.
 
-TODO: vector<level> 
+01/05/2024:
+	Optimize RAM (<= 300MB)
+
+TODO: 
+- choose plants screen
+- change the announcements
 - reverse progress bar
-- animated new plant pages.

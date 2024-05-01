@@ -2,6 +2,8 @@
 #include <iostream>
 using namespace std;
 
+int last_render[COUNT_USED_DIRECTORY];
+
 /*
 Set default alpha blender for image in first loaded
 */
@@ -41,12 +43,7 @@ SDL_Texture *Window::load_texture_with_blink(int file_num)
 {
     string img_dir = all_img[file_num].img_dir;
     SDL_Surface *loadedSurface = IMG_Load(img_dir.c_str());
-    // cout << SDL_GetPixelFormatName(loadedSurface->format->format) << endl;
     print_error(loadedSurface, img_dir);
-    SDL_Texture *res = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-    print_error(res, img_dir);
-    Uint32 format = loadedSurface->format->format;
-    int width = loadedSurface->w;
     int height = loadedSurface->h;
 
     Uint32 *pixels = (Uint32 *)loadedSurface->pixels;
@@ -65,12 +62,10 @@ SDL_Texture *Window::load_texture_with_blink(int file_num)
         pixels[i] = (a > 127 ? white_color : transparent);
     }
 
-    // Mở khóa texture
     SDL_Texture *blink = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);
-    set_default_alpha(blink_of(file_num), blink);
     texture_cache[blink_of(file_num)] = blink;
-    return res;
+    return blink;
 }
 
 /*
@@ -81,11 +76,13 @@ double total_mem = 0;
 SDL_Texture *Window::load_texture(int file_num)
 {
     SDL_Texture *res = texture_cache[file_num];
+    last_render[file_num] = 0;
     if (res == NULL)
     {
-        if (blink_of(file_num) != NULL_DIRECTORY)
+        int blink = blink_ori(file_num);
+        if (blink != NULL_DIRECTORY)
         {
-            res = load_texture_with_blink(file_num);
+            res = load_texture_with_blink(blink);
             set_default_alpha(file_num, res);
             texture_cache[file_num] = res;
         }
@@ -330,6 +327,18 @@ void Window::delete_all_texture()
 {
     for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
         if (i != MOUSE_CURSOR_DIRECTORY)
+        {
+            delete_texture(i);
+        }
+}
+
+void Window::delete_all_texture_no_use()
+{
+    for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
+        if (i != MOUSE_CURSOR_DIRECTORY &&
+            i != CHERRYBOMB_EXPLOSION_DIRECTORY &&
+            i != POTATOMINE_EXPLOSION_DIRECTORY &&
+            ++last_render[i] > 300)
         {
             delete_texture(i);
         }

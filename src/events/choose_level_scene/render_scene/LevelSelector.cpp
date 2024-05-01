@@ -72,8 +72,13 @@ void LevelSelector::display_locked(int x, int y)
 {
     win.set_texture_color(SELECTOR_BLINK_DIRECTORY, 99, 99, 132);
     win.set_texture_alpha(SELECTOR_BLINK_DIRECTORY, 180);
+    win.set_texture_color(WHITE_SCREEN_DIRECTORY, 99, 99, 132);
+    win.set_texture_alpha(WHITE_SCREEN_DIRECTORY, 180);
+
+    win.draw_png_height_scaled(WHITE_SCREEN_DIRECTORY, x + 5, y + 10, 128);
     win.draw_png_height_scaled(SELECTOR_BLINK_DIRECTORY, x, y, selector_width);
     win.draw_png(LOCK_DIRECTORY, x + selector_width - 25, y - 10, 35, 44);
+    win.set_texture_alpha(WHITE_SCREEN_DIRECTORY, 70);
 }
 
 void LevelSelector::display_blink(int x, int y)

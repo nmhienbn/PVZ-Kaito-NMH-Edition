@@ -30,6 +30,7 @@ CherryBomb::CherryBomb(const int &_row, const int &_col) : Plants(_row, _col)
     directory_num = CHERRYBOMB_SHEET_DIRECTORY;
     attack_range = THREE_X_THREE;
     has_exploded = false;
+    win.load_texture(CHERRYBOMB_EXPLOSION_DIRECTORY);
 }
 
 /*
@@ -49,6 +50,7 @@ bool CherryBomb::is_blow()
         directory_num = CHERRYBOMB_EXPLOSION_DIRECTORY;
         has_exploded = true;
         frame = 0;
+        win.delete_texture(CHERRYBOMB_SHEET_DIRECTORY);
         return true;
     }
     return false;
@@ -62,6 +64,7 @@ void CherryBomb::disappear()
     if (has_exploded && frame >= CHERRYBOMB_EXPLOSION_ASSET.frame * all_img[CHERRYBOMB_EXPLOSION_DIRECTORY].n_sheet)
     {
         health = 0;
+        win.delete_texture(CHERRYBOMB_EXPLOSION_DIRECTORY);
     }
 }
 
