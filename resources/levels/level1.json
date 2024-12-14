@@ -4,7 +4,7 @@
         "map_type": 1,
         "has_sun_from_sky": true,
         "display_zombie": "normal",
-        "init_sun": 100,
+        "init_sun": 150,
         "unlocked_plant": "sunflower"
         
     },
