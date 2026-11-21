@@ -21,8 +21,48 @@ TTF_Font *Window::get_font(string font_addr, const int &size)
     return font;
 }
 
+/*
+Render `input` with `font` and draw it at (x, y) through the sprite batch.
+The rendered texture is cached in text_cache (keyed by font, size, style,
+outline, text and color) and evicted when unused for
+TEXT_CACHE_EVICT_FRAMES frames (see update_screen()).
+`utf8` selects TTF_RenderUTF8_Blended over TTF_RenderText_Blended.
+Note: like the old SDL code, the surface alpha mod of `alpha` does not reach
+the texture (SDL_CreateTextureFromSurface ignores it), so it only feeds the
+cache key.
+*/
+void Window::show_text_cached(TTF_Font *font, const string &input, const int &x,
+                              const int &y, const RGB &color, const int &alpha, bool utf8)
+{
+    if (font == NULL)
+        return;
+    stringstream key;
+    key << (utf8 ? "u8" : "t8") << '|' << (size_t)font << '|'
+        << TTF_GetFontStyle(font) << '|' << TTF_GetFontOutline(font) << '|'
+        << color.red << ',' << color.green << ',' << color.blue << ','
+        << alpha << '|' << input;
+
+    TextCacheEntry &entry = text_cache[key.str()];
+    entry.last_used_frame = frame_counter;
+    if (entry.tex.id == 0)
+    {
+        SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
+        SDL_Surface *textSurface =
+            utf8 ? TTF_RenderUTF8_Blended(font, input.c_str(), textColor)
+                 : TTF_RenderText_Blended(font, input.c_str(), textColor);
+        if (textSurface == NULL)
+            return;
+        entry.tex = batch.upload(textSurface);
+        SDL_FreeSurface(textSurface);
+        if (entry.tex.id == 0)
+            return;
+    }
+    batch.drawQuad(entry.tex, 0, 0, (float)entry.tex.w, (float)entry.tex.h,
+                   (float)x, (float)y, (float)entry.tex.w, (float)entry.tex.h);
+}
+
 /* Show the text at (x; y)
-    Load: Font, Surface -> Texture
+    Load: Font, Surface -> Texture (cached)
 Fixed: cannot show many texts.
 Runtime: Solid < Shaded < Blended
 */
@@ -31,23 +71,7 @@ void Window::show_text(const string &input, const int &x, const int &y,
 {
     if (input == "")
         return;
-    font_addr = FONTS_DIRECTORY + font_addr;
-    SDL_Color textColor = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
-    stringstream ss;
-    ss << size;
-    TTF_Font *font = fonts_cache[font_addr + ":" + ss.str()];
-    if (font == NULL)
-    {
-        font = TTF_OpenFont(font_addr.c_str(), size);
-        fonts_cache[font_addr + ":" + ss.str()] = font;
-    }
-    SDL_Surface *textSurface = TTF_RenderText_Blended(font, input.c_str(), textColor);
-    SDL_SetSurfaceAlphaMod(textSurface, alpha);
-    SDL_Texture *text = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_Rect renderQuad = {x, y, textSurface->w, textSurface->h};
-    SDL_RenderCopy(renderer, text, NULL, &renderQuad);
-    SDL_FreeSurface(textSurface);
-    SDL_DestroyTexture(text);
+    show_text_cached(get_font(font_addr, size), input, x, y, color, alpha, false);
 }
 
 /*
@@ -66,7 +90,12 @@ void Window::show_announcer_text()
 {
     if (time_announce > 0)
     {
-        time_announce--;
+        // Auto-FPS: the countdown tracks LOGIC ticks (the gameplay frame
+        // driver in level.cpp), not the uncapped render rate -- at 144 fps
+        // the old per-call decrement erased the text 2.4x too fast. The
+        // time_announce > 0 half of the guard keeps the dip at 0.
+        for (int _lt = logic_ticked; _lt > 0 && time_announce > 0; _lt--)
+            time_announce--;
         // set_texture_alpha(BLACK_SCREEN_DIRECTORY, 100);
         draw_png(BLACK_SCREEN_DIRECTORY, 0, 540, WINDOW_WIDTH, 100);
         // set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
@@ -138,7 +167,7 @@ void Window::show_text_center(const string &input, int x, int y,
 }
 
 /* Show the utf 8 text at (x; y)
-    Load: Font, Surface -> Texture
+    Load: Font, Surface -> Texture (cached)
 Fixed: cannot show many texts.
 */
 void Window::show_text_utf8(const string &input, const int &x, const int &y,
@@ -146,20 +175,5 @@ void Window::show_text_utf8(const string &input, const int &x, const int &y,
 {
     if (input == "")
         return;
-    font_addr = FONTS_DIRECTORY + font_addr;
-    SDL_Color textColor_fg = {(Uint8)color.red, (Uint8)color.green, (Uint8)color.blue, 0};
-    stringstream ss;
-    ss << size;
-    TTF_Font *font = fonts_cache[font_addr + ":" + ss.str()];
-    if (font == NULL)
-    {
-        font = TTF_OpenFont(font_addr.c_str(), size);
-        fonts_cache[font_addr + ":" + ss.str()] = font;
-    }
-    SDL_Surface *textSurface = TTF_RenderUTF8_Blended(font, input.c_str(), textColor_fg);
-    SDL_Texture *text = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_Rect renderQuad = {x, y, textSurface->w, textSurface->h};
-    SDL_RenderCopy(renderer, text, NULL, &renderQuad);
-    SDL_FreeSurface(textSurface);
-    SDL_DestroyTexture(text);
+    show_text_cached(get_font(font_addr, size), input, x, y, color, 255, true);
 }

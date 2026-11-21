@@ -10,6 +10,5 @@ public:
     void display(const int &_row) override;
     void action() override;
     void determine_appearance();
-    bool is_gen_sun();
     void gen_sun_from_a_sunflower(vector<Sun> &suns);
 };

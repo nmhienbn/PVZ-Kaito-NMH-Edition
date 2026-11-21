@@ -1,0 +1,50 @@
+{
+    "name": "Level 2-7",
+    "#comment": "Level 2-7",
+    "rows": 5,
+    "background": "frontyard_night",
+    "graves": 11,
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "all_unlocked"
+    },
+    "zombies": {
+        "total_waves": 20,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "football",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "door",
+                "cost": 4,
+                "weight": 3500,
+                "first_wave": 5
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "iceshroom"
+    },
+    "display": {
+        "zombie": "football"
+    }
+}

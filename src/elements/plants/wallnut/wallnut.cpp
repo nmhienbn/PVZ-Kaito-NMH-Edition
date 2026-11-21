@@ -1,5 +1,7 @@
 #include "wallnut.hpp"
 #include "nlohmann/json.hpp"
+#include "elements/Map/Map.hpp"
+
 using namespace nlohmann;
 
 static ifstream wallnut("./resources/images/json/wallnut.json");
@@ -10,6 +12,7 @@ auto WALLNUT_ASSET = PlantAssets(wallnut_data["frame"], wallnut_data["img_width"
                                  wallnut_data["x_alias"], wallnut_data["y_alias"]);
 
 extern int game_state;
+extern Map cells;
 extern Window win;
 
 /*

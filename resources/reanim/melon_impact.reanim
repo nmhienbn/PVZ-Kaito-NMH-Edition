@@ -1,0 +1,14 @@
+<fps>27</fps>
+<track>
+<name>burst</name>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_0</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_1</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_2</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_3</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_4</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_5</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_6</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_7</i></t>
+<t><x>-46.5</x><y>-35.5</y><a>1</a><i>IMAGE_REANIM_MELON_IMPACT_8</i></t>
+<t><f>-1</f></t>
+</track>

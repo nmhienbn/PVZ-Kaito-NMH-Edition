@@ -1,5 +1,8 @@
 #include "cherrybomb.hpp"
+#include "draw/explosion_fx.hpp"
+#include "elements/Map/Map.hpp"
 #include "nlohmann/json.hpp"
+#include "elements/Level/Level.hpp" // roof_tile_dy
 using namespace nlohmann;
 
 static ifstream cherrybomb("./resources/images/json/cherrybomb.json");
@@ -19,6 +22,7 @@ auto CHERRYBOMB_EXPLOSION_ASSET = PlantAssets(cherrybomb_explosion_data["frame"]
 
 extern int game_state;
 extern Window win;
+extern Map cells;
 
 /*
 Cherry Bomb constructor
@@ -73,14 +77,23 @@ void CherryBomb::display(const int &_row)
     if (row == _row)
     {
         if (!has_exploded)
+        {
             Plants::display(CHERRYBOMB_ASSET);
-        else
-            Plants::display(CHERRYBOMB_EXPLOSION_ASSET);
+            return;
+        }
+        Plants::display(CHERRYBOMB_EXPLOSION_ASSET);
+        // Comic blast caption ("POWIE!") on top of the blast; anchored at the
+        // center of the explosion art's box (~head height of the plant) and
+        // timed by the sheet frame counter (see draw/explosion_fx.hpp).
+        int cx = cells[row][col].x1 + CHERRYBOMB_EXPLOSION_ASSET.x_alias + CHERRYBOMB_EXPLOSION_ASSET.game_width / 2;
+        int cy = (cells[row][col].y1 + roof_tile_dy(col)) + CHERRYBOMB_EXPLOSION_ASSET.y_alias + CHERRYBOMB_EXPLOSION_ASSET.game_height * 2 / 5;
+        draw_boom_caption(cx, cy, frame);
     }
 }
 
 void CherryBomb::next_frame(const PlantAssets &assets)
 {
-    if (check_status(game_state, IS_PAUSED) == false)
+    // anim advances per logic tick, not per render (auto-FPS)
+    for (int _lt = logic_ticked; _lt > 0 && check_status(game_state, IS_PAUSED) == false; _lt--)
         ++frame;
 }

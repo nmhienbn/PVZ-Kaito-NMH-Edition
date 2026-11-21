@@ -1,0 +1,52 @@
+{
+    "name": "Level 4-4",
+    "#comment": "Level 4-4",
+    "rows": 6,
+    "background": "pool_night_fog",
+    "water_rows": [
+        2,
+        3
+    ],
+    "fog_column": 5,
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "all_unlocked"
+    },
+    "zombies": {
+        "total_waves": 20,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "balloon",
+                "cost": 2,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "dolphinrider",
+                "cost": 3,
+                "weight": 1500,
+                "first_wave": 10
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": null,
+    "display": {
+        "zombie": "balloon"
+    }
+}

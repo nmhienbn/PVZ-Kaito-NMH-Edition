@@ -61,6 +61,13 @@ void display_turbo_icon()
         win.set_texture_alpha(BLACK_SCREEN_DIRECTORY, 70);
         win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         win.set_texture_alpha(BLACK_SCREEN_DIRECTORY, 150);
-        dim_screen_time--;
+        // Dim fade counts logic ticks, not renders (auto-FPS: display runs
+        // at the uncapped render rate; one frame can cover several ticks in
+        // turbo). The > 0 half keeps the fade from running negative.
+        for (int _lt = logic_ticked;
+             _lt > 0 && check_status(game_state, IS_PAUSED) == false &&
+             dim_screen_time > 0;
+             _lt--)
+            dim_screen_time--;
     }
 }

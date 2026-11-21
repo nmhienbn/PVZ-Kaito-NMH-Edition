@@ -1,5 +1,6 @@
 #include "quit_menu.hpp"
 #include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "events/in_game/pause_menu/pvz1_ui.hpp"
 #include "music/music.hpp"
 
 extern int game_state;
@@ -15,14 +16,15 @@ const Button CANCEL_QUIT(QUIT_X1 + 206, QUIT_X1 + 367, QUIT_Y1 + 229, QUIT_Y1 + 
 
 /*
 Display this when player tends to quit game at choosing level screen.
-2 choice: OK/CANCEL
+2 choice: OK/CANCEL (classic Lawn dialog button + real GreenInset atlas
+label, hover swaps to BrightGreenInset -- a la the retail confirm rows).
 */
 void display_game_quit()
 {
     display_choose_level(false);
     QUIT_MENU.display(QUIT_PROMPT_DIRECTORY);
-    OK_QUIT.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-    CANCEL_QUIT.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    draw_classic_dialog_button(OK_QUIT, "OK", pvz1_hot(OK_QUIT));
+    draw_classic_dialog_button(CANCEL_QUIT, "CANCEL", pvz1_hot(CANCEL_QUIT));
 }
 
 /*

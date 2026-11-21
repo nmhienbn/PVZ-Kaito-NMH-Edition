@@ -1,0 +1,50 @@
+{
+    "name": "Level 2-5",
+    "#comment": "Level 2-5",
+    "rows": 5,
+    "background": "frontyard_night",
+    "graves": 9,
+    "special": "whack",
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "fixed",
+        "fixed": [
+            "potato_mine",
+            "gravebuster",
+            "cherrybomb"
+        ]
+    },
+    "zombies": {
+        "total_waves": 8,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 2000,
+                "first_wave": 4
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "hypnoshroom"
+    },
+    "display": {
+        "zombie": "normal"
+    }
+}

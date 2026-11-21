@@ -46,6 +46,15 @@ void SnowPea::fire_pea(vector<Bullet *> &bullets)
 }
 
 /*
+Attack loop = one pea per 90 ticks (original mLaunchRate 150 cs for shooters);
+wrap the attack reel there instead of riding the full sheet.
+*/
+void SnowPea::next_frame(const PlantAssets &assets)
+{
+    next_frame_capped(assets, SNOWPEA_ATTACK_DIRECTORY, 90);
+}
+
+/*
 Change snow pea's appearance if a snow pea need to attack or not.
 (Snow Pea is attack only if there are some zombies in the row.)
 Updated: Zombie position > snow pea position

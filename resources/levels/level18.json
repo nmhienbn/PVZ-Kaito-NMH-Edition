@@ -1,0 +1,20 @@
+{
+    "name": "Level 2-8",
+    "#comment": "Level 2-8",
+    "rows": 5,
+    "background": "frontyard_night",
+    "graves": 11,
+    "sun": { "initial": 50, "sky": false },
+    "seeds": { "mode": "all_unlocked" },
+    "zombies": {
+        "total_waves": 10,
+        "roster": [
+            { "type": "normal", "cost": 1, "weight": 4000, "first_wave": 1 },
+            { "type": "conehead", "cost": 2, "weight": 4000, "first_wave": 1 },
+            { "type": "dancer", "cost": 5, "weight": 1000, "first_wave": 5 }
+        ],
+        "intro_force": { "type": "dancer" }
+    },
+    "reward": { "plant": "doomshroom" },
+    "display": { "zombie": "dancer" }
+}

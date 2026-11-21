@@ -1,34 +1,36 @@
 #include "leave_menu.hpp"
 #include "elements/Level/Level.hpp"
 #include "elements/button/button.hpp"
+#include "events/in_game/pause_menu/pvz1_ui.hpp"
 #include "music/music.hpp"
-
-#define LEAVE_X1 325
-#define LEAVE_X2 725
-#define LEAVE_Y1 125
-#define LEAVE_Y2 475
-const Button LEAVE_MENU(LEAVE_X1, LEAVE_X2, LEAVE_Y1, LEAVE_Y2);
-const Button OK_LEAVE(LEAVE_X1 + 33, LEAVE_X1 + 194, LEAVE_Y1 + 280, LEAVE_Y1 + 326);
-const Button CANCEL_LEAVE(LEAVE_X1 + 206, LEAVE_X1 + 367, LEAVE_Y1 + 280, LEAVE_Y1 + 326);
 
 extern int game_state;
 extern bool quit;
 extern Level level;
 extern Window win;
 
+/*Retail strings (patoke/re-plants-vs-zombies LawnApp.cpp:676
+DoConfirmBackToMain): header "Leave Game?" / body
+[LEAVE_GAME_HEADER], YES relabeled [LEAVE_BUTTON].*/
+static const char *LEAVE_HDR = "Leave Game?";
+static const char *LEAVE_BODY = "Do you want to return\nto the main menu?\n\nYour game will be saved.";
+static const char *LEAVE_YES = "LEAVE";
+static const char *LEAVE_NO = "CANCEL";
+
 /*
-Display this when player tends to leave to main menu
+Display this when player tends to leave to main menu: pause options panel
+behind, the LawnDialog-style confirm on top (like the original).
 */
 void display_game_leave()
 {
     win.draw_bg(level.background_directory);
     display_game_paused_elements();
-    MENU.display(MENU_DIRECTORY);
-    BACK_TO_GAME.display(BACK_TO_GAME_BUTTON_DIRECTORY);
-    BACK_TO_GAME.show_text("Back To Game", -3, -3, 37, RGB(0, 196, 0), RGB(43, 44, 58));
-    LEAVE_MENU.display(LEAVE_PROMPT_DIRECTORY);
-    OK_LEAVE.display_with_text(BUTTON_DIRECTORY, "LEAVE", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-    CANCEL_LEAVE.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    draw_pause_base();
+    Pvz1ConfirmLayout box = lay_pvz1_confirm(LEAVE_HDR, LEAVE_BODY);
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+    int hover = box.yes.is_mouse_in(mx, my) ? 1 : box.no.is_mouse_in(mx, my) ? 2 : 0;
+    draw_pvz1_confirm(box, LEAVE_HDR, LEAVE_YES, LEAVE_NO, hover);
 }
 
 /*
@@ -50,15 +52,16 @@ Handle when player tends to leave to main menu:
 */
 void handle_leave_menu_click(const int &mouse_x, const int &mouse_y)
 {
+    Pvz1ConfirmLayout box = lay_pvz1_confirm(LEAVE_HDR, LEAVE_BODY);
     // OK to leave to main menu
-    if (OK_LEAVE.is_mouse_in(mouse_x, mouse_y))
+    if (box.yes.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_LEAVE, false);
         leave_game();
         return;
     }
     // CANCEL to return back to the pause-menu
-    if (CANCEL_LEAVE.is_mouse_in(mouse_x, mouse_y))
+    if (box.no.is_mouse_in(mouse_x, mouse_y))
     {
         set_status(game_state, IS_LEAVE, false);
         play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);

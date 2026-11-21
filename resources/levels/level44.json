@@ -1,0 +1,130 @@
+{
+    "name": "Level 5-4",
+    "#comment": "Level 5-4",
+    "rows": 5,
+    "background": "roof",
+    "sun": {
+        "initial": 50,
+        "sky": true
+    },
+    "seeds": {
+        "mode": "all_unlocked"
+    },
+    "zombies": {
+        "total_waves": 30,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "ladder",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "football",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "pogo",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": null,
+    "display": {
+        "zombie": "ladder"
+    },
+    "pre_planted": [
+        {
+            "row": 0,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 2,
+            "plant": "flowerpot"
+        }
+    ]
+}

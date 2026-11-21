@@ -1,0 +1,17 @@
+<fps>36</fps>
+<track>
+<name>ring</name>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_0</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_1</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_2</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_3</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_4</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_5</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_6</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_7</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_8</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_9</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_10</i></t>
+<t><x>-37</x><y>-30</y><a>1</a><i>IMAGE_REANIM_PLANT_DIRT_11</i></t>
+<t><f>-1</f></t>
+</track>

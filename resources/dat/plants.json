@@ -3,27 +3,27 @@
         "id": 1,
         "cost": 100,
         "health": 6,
-        "loading_time": 400
+        "loading_time": 450
     },
     "sunflower": {
         "id": 2,
         "cost": 50,
         "health": 6,
-        "loading_time": 400
+        "loading_time": 450
     },
-    "walnut": {
+    "wallnut": {
         "id": 3,
         "cost": 50,
-        "health": 72,
-        "loading_time": 1500
+        "health": 80,
+        "loading_time": 1800
     },
     "snowpea": {
         "id": 4,
         "cost": 175,
         "health": 6,
-        "loading_time": 400
+        "loading_time": 450
     },
-    "potatomine": {
+    "potato_mine": {
         "id": 6,
         "cost": 25,
         "health": 6,
@@ -35,5 +35,212 @@
         "cost": 150,
         "health": 9999,
         "loading_time": 3000
+    },
+    "repeater": {
+        "id": 7,
+        "cost": 200,
+        "health": 6,
+        "loading_time": 450
+    },
+    "chomper": {
+        "id": 8,
+        "cost": 150,
+        "health": 6,
+        "loading_time": 450
+    },
+    "puffshroom": {
+        "id": 9,
+        "cost": 0,
+        "health": 6,
+        "loading_time": 450
+    },
+    "sunshroom": {
+        "id": 10,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 450
+    },
+    "fumeshroom": {
+        "id": 11,
+        "cost": 75,
+        "health": 6,
+        "loading_time": 450
+    },
+    "gravebuster": {
+        "id": 12,
+        "cost": 75,
+        "health": 6,
+        "loading_time": 450
+    },
+    "hypnoshroom": {
+        "id": 13,
+        "cost": 75,
+        "health": 6,
+        "loading_time": 1800
+    },
+    "scaredyshroom": {
+        "id": 14,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 450
+    },
+    "iceshroom": {
+        "id": 15,
+        "cost": 75,
+        "health": 6,
+        "loading_time": 3000
+    },
+    "doomshroom": {
+        "id": 16,
+        "cost": 125,
+        "health": 6,
+        "loading_time": 3000
+    },
+    "lilypad": {
+        "id": 17,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 450,
+        "aquatic": true
+    },
+    "squash": {
+        "id": 18,
+        "cost": 50,
+        "health": 6,
+        "loading_time": 1800
+    },
+    "threepeater": {
+        "id": 19,
+        "cost": 325,
+        "health": 6,
+        "loading_time": 450
+    },
+    "tanglekelp": {
+        "id": 20,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 1800,
+        "aquatic": true
+    },
+    "jalapeno": {
+        "id": 21,
+        "cost": 125,
+        "health": 9999,
+        "loading_time": 3000
+    },
+    "spikeweed": {
+        "id": 22,
+        "cost": 100,
+        "health": 9999,
+        "loading_time": 450
+    },
+    "torchwood": {
+        "id": 23,
+        "cost": 175,
+        "health": 6,
+        "loading_time": 450
+    },
+    "tallnut": {
+        "id": 24,
+        "cost": 125,
+        "health": 160,
+        "loading_time": 1800
+    },
+    "seashroom": {
+        "id": 25,
+        "cost": 0,
+        "health": 6,
+        "loading_time": 1800,
+        "aquatic": true
+    },
+    "plantern": {
+        "id": 26,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 1800
+    },
+    "cactus": {
+        "id": 27,
+        "cost": 125,
+        "health": 6,
+        "loading_time": 450
+    },
+    "blover": {
+        "id": 28,
+        "cost": 100,
+        "health": 9999,
+        "loading_time": 450
+    },
+    "splitpea": {
+        "id": 29,
+        "cost": 125,
+        "health": 6,
+        "loading_time": 450
+    },
+    "starfruit": {
+        "id": 30,
+        "cost": 125,
+        "health": 6,
+        "loading_time": 450
+    },
+    "pumpkin": {
+        "id": 31,
+        "cost": 125,
+        "health": 80,
+        "loading_time": 1800
+    },
+    "magnetshroom": {
+        "id": 32,
+        "cost": 100,
+        "health": 6,
+        "loading_time": 450
+    },
+    "cabbagepult": {
+        "id": 33,
+        "cost": 100,
+        "health": 6,
+        "loading_time": 450
+    },
+    "flowerpot": {
+        "id": 34,
+        "cost": 25,
+        "health": 6,
+        "loading_time": 450
+    },
+    "kernelpult": {
+        "id": 35,
+        "cost": 100,
+        "health": 6,
+        "loading_time": 450
+    },
+    "coffeebean": {
+        "id": 36,
+        "cost": 75,
+        "health": 6,
+        "loading_time": 450
+    },
+    "garlic": {
+        "id": 37,
+        "cost": 50,
+        "health": 8,
+        "loading_time": 450
+    },
+    "umbrellaleaf": {
+        "id": 38,
+        "cost": 100,
+        "health": 6,
+        "loading_time": 450
+    },
+    "marigold": {
+        "id": 39,
+        "cost": 50,
+        "health": 6,
+        "loading_time": 1800
+    },
+    "melonpult": {
+        "id": 40,
+        "cost": 300,
+        "health": 6,
+        "loading_time": 450
     }
 }

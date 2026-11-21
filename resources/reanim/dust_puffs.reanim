@@ -1,0 +1,10 @@
+<fps>15</fps>
+<track>
+<name>puff</name>
+<t><x>-16</x><y>-27</y><sx>0.8</sx><sy>0.8</sy><a>0.85</a><i>IMAGE_REANIM_DUST_PUFFS_0</i></t>
+<t><x>-16</x><y>-27</y><sx>1</sx><sy>1</sy><a>0.9</a><i>IMAGE_REANIM_DUST_PUFFS_1</i></t>
+<t><x>-16</x><y>-27</y><sx>1.05</sx><sy>1.05</sy><a>0.8</a><i>IMAGE_REANIM_DUST_PUFFS_2</i></t>
+<t><x>-16</x><y>-27</y><sx>1.15</sx><sy>1.15</sy><a>0.5</a><i>IMAGE_REANIM_DUST_PUFFS_2</i></t>
+<t><x>-16</x><y>-27</y><sx>1.25</sx><sy>1.25</sy><a>0.2</a><i>IMAGE_REANIM_DUST_PUFFS_2</i></t>
+<t><f>-1</f></t>
+</track>

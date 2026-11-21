@@ -1,9 +1,11 @@
 #include "choose_level.hpp"
 #include "draw/render_elements.hpp"
+#include "events/anim_viewer/anim_viewer.hpp"
 #include "elements/Level/Level.hpp"
 #include "elements/Player/Player.hpp"
 #include "events/choose_level_scene/quit_menu/quit_menu.hpp"
 #include "events/choose_level_scene/render_scene/LevelSelector.hpp"
+#include "events/choose_level_scene/render_scene/area_tabs.hpp"
 #include "events/choose_level_scene/render_scene/display_choose_level.hpp"
 #include "events/choose_level_scene/reset_level/reset_menu.hpp"
 #include "level/level_data.hpp"
@@ -18,38 +20,36 @@ extern Player player;
 extern Window win;
 extern deque<int> shown_level;
 
+const int LEVELS_PER_PAGE = 5;
+
+deque<int> get_page_starting_at(int first)
+{
+    deque<int> page;
+    for (int lv = first; lv < first + LEVELS_PER_PAGE && lv <= LEVEL_COUNT; lv++)
+        page.push_back(lv);
+    return page;
+}
+
 deque<int> get_prev_page(deque<int> shown_level)
 {
-    for (int i = 1; i <= 6; i++)
-    {
-        if (shown_level[0] > 1)
-            shown_level.push_front(shown_level[0] - 1);
-        else
-            break;
-    }
-    while (shown_level.size() > 6)
-        shown_level.pop_back();
-    return shown_level;
+    int first = shown_level[0] - LEVELS_PER_PAGE;
+    if (first < 1)
+        first = 1;
+    return get_page_starting_at(first);
 }
 
 deque<int> get_next_page(deque<int> shown_level)
 {
-    for (int i = 1; i <= 6; i++)
-    {
-        if (shown_level.back() < LEVEL_COUNT)
-            shown_level.push_back(shown_level.back() + 1);
-        else
-            break;
-    }
-    while (shown_level.size() > 6)
-        shown_level.pop_front();
-    return shown_level;
+    if (shown_level.back() >= LEVEL_COUNT)
+        return shown_level;
+    return get_page_starting_at(shown_level[0] + LEVELS_PER_PAGE);
 }
 
 /*
 Handle choosing level screen:
-    Display choosing level screen (4 type: normal, quit, reset level; last type is rename in player_name.hpp)
-    Handle quit menu, reset menu, quit/reset level/rename button, levels, respectively.
+    Display choosing level screen (3 type: normal, quit, reset level).
+    Handle quit menu, reset menu, quit/reset level button, levels, respectively.
+    (Rename lives on the selector/mode screen's wood sign, a la retail.)
 */
 void handle_choosing_level_screen()
 {
@@ -84,18 +84,18 @@ void handle_choosing_level_screen()
                 handle_reset_menu_click(mouse_x, mouse_y);
                 break;
             }
+            // Back to the selector/mode screen (tombstone picker)
+            if (BACK_TO_SELECTOR_BUTTON.is_mouse_in(mouse_x, mouse_y))
+            {
+                play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
+                set_status(game_state, IS_SELECTOR_SCREEN, true);
+                break;
+            }
             // Reset levels
             if (RESET_LEVEL_BUTTON.is_mouse_in(mouse_x, mouse_y))
             {
                 play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
                 set_status(game_state, IS_RESET, true);
-                break;
-            }
-            // Rename
-            if (RENAME_BUTTON.is_mouse_in(mouse_x, mouse_y))
-            {
-                play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
-                display_get_name_player(RENAME_MENU_DIRECTORY);
                 break;
             }
             // Quit
@@ -118,6 +118,16 @@ void handle_choosing_level_screen()
                 shown_level = get_next_page(shown_level);
                 break;
             }
+            // World buttons: jump the page to the world's first level. A
+            // locked or decorative button swallows the click silently so
+            // nothing behind it fires.
+            AreaTabClick tab_click = handle_area_tab_click(mouse_x, mouse_y);
+            if (tab_click != AREA_TAB_NONE)
+            {
+                if (tab_click == AREA_TAB_JUMPED)
+                    play_sound_effect(BUTTON_CLICK_MUSIC_DIRECTORY);
+                break;
+            }
             // Level choosing
             for (int i = 0, _ = shown_level.size(); i < _; i++)
                 if (player.unlocked_level >= shown_level[i] &&
@@ -130,6 +140,8 @@ void handle_choosing_level_screen()
                     break;
                 }
         });
+        // Debug animation viewer (renders with the real game pipeline)
+        KEY_PRESS(F1, display_anim_viewer(););
 
     );
 }

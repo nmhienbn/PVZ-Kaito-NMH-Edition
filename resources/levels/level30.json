@@ -1,0 +1,108 @@
+{
+    "name": "Level 3-10",
+    "#comment": "Level 3-10",
+    "rows": 6,
+    "background": "pool",
+    "water_rows": [
+        2,
+        3
+    ],
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "lilypad",
+                    "weight": 25
+                },
+                {
+                    "plant": "threepeater",
+                    "weight": 25
+                },
+                {
+                    "plant": "jalapeno",
+                    "weight": 10
+                },
+                {
+                    "plant": "spikeweed",
+                    "weight": 10
+                },
+                {
+                    "plant": "torchwood",
+                    "weight": 10
+                },
+                {
+                    "plant": "tallnut",
+                    "weight": 10
+                },
+                {
+                    "plant": "squash",
+                    "weight": 5
+                },
+                {
+                    "plant": "tanglekelp",
+                    "weight": 5
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 30,
+        "point_multiplier": 3,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 3000,
+                "first_wave": 1
+            },
+            {
+                "type": "snorkel",
+                "cost": 3,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "zomboni",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "bobsled",
+                "cost": 3,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "dolphinrider",
+                "cost": 3,
+                "weight": 1500,
+                "first_wave": 10
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "seashroom"
+    },
+    "display": {
+        "zombie": "zomboni"
+    }
+}

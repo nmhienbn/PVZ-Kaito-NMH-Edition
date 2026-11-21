@@ -6,7 +6,7 @@
 extern Window win;
 extern int music_volume;
 extern int sfx_volume;
-extern Mix_Music *gMusic[COUNT_MUSIC_DIRECTORY];
+extern Mix_Music *gMusic;
 extern Mix_Chunk *gChunk[COUNT_MUSIC_DIRECTORY];
 extern int now_music;
 

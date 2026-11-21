@@ -1,0 +1,55 @@
+{
+    "name": "Level 3-6",
+    "#comment": "Level 3-6",
+    "rows": 6,
+    "background": "pool",
+    "water_rows": [
+        2,
+        3
+    ],
+    "sun": {
+        "initial": 50,
+        "sky": true
+    },
+    "seeds": {
+        "mode": "all_unlocked"
+    },
+    "zombies": {
+        "total_waves": 20,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "zomboni",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "bobsled",
+                "cost": 3,
+                "weight": 2000,
+                "first_wave": 5
+            }
+        ],
+        "intro_force": {
+            "type": "zomboni"
+        }
+    },
+    "reward": {
+        "plant": "spikeweed"
+    },
+    "display": {
+        "zombie": "zomboni"
+    }
+}

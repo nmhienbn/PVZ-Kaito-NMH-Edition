@@ -1,12 +1,21 @@
 #include "player_name.hpp"
+#include "draw/atlas_font.hpp"
 #include "elements/Player/Player.hpp"
 #include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "events/in_game/pause_menu/pvz1_ui.hpp"
 #include "music/music.hpp"
 
 const int GET_NAME_MENU_WIDTH = 677;
 const int GET_NAME_MENU_HEIGHT = 400;
-const int GET_NAME_INPUT_X = 75;
-const int GET_NAME_INPUT_Y = 208;
+const int GET_NAME_INPUT_X = 75;   // edit box art-local left edge + pad
+const int GET_NAME_INPUT_CY = 228; // edit box vertical center (art-local)
+/*PvZ1 NewUserDialog palette (repvz): the typed name sits in the edit box in
+the LawnEditWidget ink (gLawnEditWidgetColors COLOR_TEXT), with the original
+caret blink (mBlinkDelay 14); the OK/CANCEL GameButton labels are readable
+Dwarvesc TTF (user request: buttons back to English -- green ink + dark
+shadow, brightened on hover) via the shared draw_classic_dialog_button.*/
+const int GET_NAME_INPUT_SIZE = 28;
+const RGB NAME_INK(240, 240, 255);
 
 #define GET_NAME_MENU_X (WINDOW_WIDTH - GET_NAME_MENU_WIDTH) / 2
 #define GET_NAME_MENU_Y (WINDOW_HEIGHT - GET_NAME_MENU_HEIGHT) / 2
@@ -52,6 +61,56 @@ void update_player_name(const string &new_name)
 }
 
 /*
+OK/CANCEL as the PvZ1 GameButton: Lawn button art + the real inset dwarven
+label atlas (18 GreenInset, BrightGreenInset on hover), centered on the
+button. Shared with the quit/reset dialogs through pvz1_ui.
+*/
+static void show_get_name_button(const Button &b, const string &text)
+{
+    draw_classic_dialog_button(b, text, pvz1_hot(b));
+}
+
+/*
+One get-name dialog frame (split out of display_get_name_player so the
+headless dialog dump can render it): the scene the dialog was opened from
+behind (choose-level by default; the caller's `backdrop` when it passed one,
+e.g. the selector/mode screen for the wood-sign rename), then dim,
+the NEW USER/RENAME dialog art (its header + prompt line are baked into the
+art), the typed name in Brianne icy-white inside the edit box with the
+original's blinking caret, and the GameButtons.
+*/
+void draw_get_name_dialog(const int &get_name_dir, const string &inputText, int frame_clk,
+                          SceneBackdrop backdrop)
+{
+    bool is_new_user = (get_name_dir == NEW_USER_DIRECTORY);
+    // frame of the scene behind, no mouse-over handling
+    (backdrop != nullptr ? backdrop : (SceneBackdrop)display_choose_level)(false);
+    // dim
+    win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
+    if (is_new_user)
+    {
+        show_get_name_button(OK2, "OK");
+    }
+    else
+    {
+        show_get_name_button(OK, "OK");
+        show_get_name_button(CANCEL, "CANCEL");
+    }
+
+    // Edit box text (LawnEditWidget: BRIANNETOD16, icy-white ink), vertically
+    // centered in the box; blinking caret after the last character.
+    int tw = 0, th = 0, tx = GET_NAME_MENU_X + GET_NAME_INPUT_X;
+    TTF_SizeText(win.get_font(BRIANNE_TTF, GET_NAME_INPUT_SIZE), inputText.c_str(), &tw, &th);
+    int ty = GET_NAME_MENU_Y + GET_NAME_INPUT_CY - th / 2;
+    // Text is not empty
+    if (inputText != "")
+        win.show_text(inputText, tx, ty, NAME_INK, BRIANNE_TTF, GET_NAME_INPUT_SIZE);
+    if ((frame_clk / 14) % 2 == 0)
+        win.show_text("|", tx + tw + 1, ty, NAME_INK, BRIANNE_TTF, GET_NAME_INPUT_SIZE);
+}
+
+/*
 Display player get_name menu:
     Handle quit event.
     Handle key down event:
@@ -66,7 +125,7 @@ Display player get_name menu:
     OR
         OK to set name for new player
 */
-void display_get_name_player(const int &get_name_dir)
+void display_get_name_player(const int &get_name_dir, SceneBackdrop backdrop)
 {
     bool is_new_user = (get_name_dir == NEW_USER_DIRECTORY);
     if (is_new_user && player.name != "")
@@ -77,6 +136,8 @@ void display_get_name_player(const int &get_name_dir)
     SDL_Event e;
     // The current input text.
     string inputText = player.name;
+    // frame counter for the caret blink
+    int frame_clk = 0;
     // Enable text input
     SDL_StartTextInput();
     // While application is running
@@ -160,29 +221,11 @@ void display_get_name_player(const int &get_name_dir)
                 }
             });
         }
-        // display choosing level screen that not handle mouse over
-        display_choose_level(false);
-        // dim
-        win.draw_png(BLACK_SCREEN_DIRECTORY, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-        win.draw_png(get_name_dir, GET_NAME_MENU_X, GET_NAME_MENU_Y, GET_NAME_MENU_WIDTH, GET_NAME_MENU_HEIGHT);
-        if (is_new_user)
-        {
-            OK2.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-        }
-        else
-        {
-            OK.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-            CANCEL.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-        }
-
-        // Text is not empty
-        if (inputText != "")
-        {
-            while (inputText.size() > 20)
-                inputText.erase(inputText.begin());
-            // Render new text
-            win.show_text(inputText.c_str(), GET_NAME_MENU_X + GET_NAME_INPUT_X, GET_NAME_MENU_Y + GET_NAME_INPUT_Y, WHITE, HOUSEOFTERROR_TTF, 30);
-        }
+        // Text input length capped at 20 visible characters
+        while (inputText.size() > 20)
+            inputText.erase(inputText.begin());
+        draw_get_name_dialog(get_name_dir, inputText, frame_clk, backdrop);
+        frame_clk++;
         win.update_screen();
     }
 

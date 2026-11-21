@@ -1,0 +1,50 @@
+{
+    "name": "Level 4-6",
+    "#comment": "Level 4-6",
+    "rows": 6,
+    "background": "pool_night_fog",
+    "water_rows": [
+        2,
+        3
+    ],
+    "fog_column": 5,
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "all_unlocked"
+    },
+    "zombies": {
+        "total_waves": 10,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "digger",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 5
+            }
+        ],
+        "intro_force": {
+            "type": "digger"
+        }
+    },
+    "reward": {
+        "plant": "starfruit"
+    },
+    "display": {
+        "zombie": "digger"
+    }
+}

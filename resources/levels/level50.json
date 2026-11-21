@@ -1,0 +1,219 @@
+{
+    "name": "Level 5-10",
+    "#comment": "Level 5-10",
+    "rows": 5,
+    "background": "roof_night",
+    "special": "boss",
+    "pre_planted": [
+        {
+            "row": 0,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 2,
+            "plant": "flowerpot"
+        }
+    ],
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "flowerpot",
+                    "weight": 55
+                },
+                {
+                    "plant": "jalapeno",
+                    "weight": 12
+                },
+                {
+                    "plant": "melonpult",
+                    "weight": 10
+                },
+                {
+                    "plant": "cabbagepult",
+                    "weight": 10
+                },
+                {
+                    "plant": "iceshroom",
+                    "weight": 8
+                },
+                {
+                    "plant": "kernelpult",
+                    "weight": 5
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 30,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 3000,
+                "first_wave": 1
+            },
+            {
+                "type": "football",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "polevault",
+                "cost": 2,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "jackbox",
+                "cost": 3,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "ladder",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "zomboni",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "catapult",
+                "cost": 5,
+                "weight": 1500,
+                "first_wave": 10
+            },
+            {
+                "type": "pogo",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "newspaper",
+                "cost": 2,
+                "weight": 1000,
+                "first_wave": 1
+            },
+            {
+                "type": "door",
+                "cost": 4,
+                "weight": 3500,
+                "first_wave": 5
+            },
+            {
+                "type": "gargantuar",
+                "cost": 10,
+                "weight": 1500,
+                "first_wave": 15
+            },
+            {
+                "type": "bungee",
+                "cost": 3,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "zomboss",
+                "cost": 10,
+                "weight": 0,
+                "first_wave": 1
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": null,
+    "display": {
+        "zombie": "zomboss"
+    }
+}

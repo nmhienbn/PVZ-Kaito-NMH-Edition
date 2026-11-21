@@ -7,5 +7,6 @@ public:
     ~FlagZombie();
     void init() override;
     void make_credit() override;
+    float speed_px_per_tick() const override;
     using Zombie::Zombie;
 };

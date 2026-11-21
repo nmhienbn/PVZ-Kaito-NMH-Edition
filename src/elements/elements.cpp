@@ -1,4 +1,6 @@
 #include "elements.hpp"
+#include "plants/jalapeno/jalapeno_fire.hpp"
+#include "reanim/one_shot_fx.hpp"
 
 /*Clear all elements*/
 void Elements::reset()
@@ -14,4 +16,7 @@ void Elements::reset()
 
     zombies.clear();
     zombie_parts.clear();
+
+    reanimfx::clear();
+    jalapeno_fx::clear();
 }

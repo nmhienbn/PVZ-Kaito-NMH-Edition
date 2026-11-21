@@ -1,5 +1,6 @@
 #include "reset_menu.hpp"
 #include "events/choose_level_scene/render_scene/display_choose_level.hpp"
+#include "events/in_game/pause_menu/pvz1_ui.hpp"
 #include "music/music.hpp"
 #include "player/player_data.hpp"
 
@@ -18,13 +19,14 @@ Display this when player tends to reset game level.
 2 choices:
     OK
     CANCEL
+(classic Lawn dialog button + real GreenInset atlas label, hover bright.)
 */
 void display_game_reset()
 {
     display_choose_level(false);
     RESET_MENU.display(RESET_PROMPT_DIRECTORY);
-    OK_RESET.display_with_text(BUTTON_DIRECTORY, "OK", 25, RGB(0, 196, 0), RGB(43, 44, 58));
-    CANCEL_RESET.display_with_text(BUTTON_DIRECTORY, "CANCEL", 25, RGB(0, 196, 0), RGB(43, 44, 58));
+    draw_classic_dialog_button(OK_RESET, "OK", pvz1_hot(OK_RESET));
+    draw_classic_dialog_button(CANCEL_RESET, "CANCEL", pvz1_hot(CANCEL_RESET));
 }
 
 /*

@@ -1,0 +1,87 @@
+{
+    "name": "Level 2-10",
+    "#comment": "Level 2-10",
+    "rows": 5,
+    "background": "frontyard_night",
+    "graves": 13,
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "gravebuster",
+                    "weight": 20
+                },
+                {
+                    "plant": "iceshroom",
+                    "weight": 15
+                },
+                {
+                    "plant": "doomshroom",
+                    "weight": 15
+                },
+                {
+                    "plant": "hypnoshroom",
+                    "weight": 10
+                },
+                {
+                    "plant": "scaredyshroom",
+                    "weight": 15
+                },
+                {
+                    "plant": "fumeshroom",
+                    "weight": 15
+                },
+                {
+                    "plant": "puffshroom",
+                    "weight": 10
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 20,
+        "point_multiplier": 3,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "football",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            },
+            {
+                "type": "door",
+                "cost": 4,
+                "weight": 3500,
+                "first_wave": 5
+            },
+            {
+                "type": "dancer",
+                "cost": 5,
+                "weight": 1000,
+                "first_wave": 5
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": null,
+    "display": {
+        "zombie": "football"
+    }
+}

@@ -1,126 +1,19 @@
 {
-    "#comment": "Day 3",
-    "objects": {
-        "map_type": 3,
-        "has_sun_from_sky": true,
-        "display_zombie": "flag",
-        "init_sun": 100,
-        "unlocked_plant": "wallnut"
+    "name": "Level 1-3",
+    "comment": "Day 3",
+    "#comment": "Level 1-3",
+    "rows": 3,
+    "background": "frontyard_3lane",
+    "sun": { "initial": 50, "sky": true },
+    "seeds": { "mode": "fixed", "fixed": ["peashooter", "sunflower", "cherrybomb"] },
+    "zombies": {
+        "total_waves": 8,
+        "roster": [
+            { "type": "normal", "cost": 1, "weight": 4000, "first_wave": 1 },
+            { "type": "conehead", "cost": 2, "weight": 4000, "first_wave": 1 }
+        ],
+        "intro_force": { "type": "conehead" }
     },
-    "waves": [
-        {
-            "num": 1,
-            "delay_time": 1000,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 1
-                    }
-
-                ]
-        },
-        {
-            "num": 2,
-            "delay_time": 2000,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 1
-                    }
-
-                ]
-        },
-        {
-            "num": 3,
-            "delay_time": 2000,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 2
-                    }
-
-                ]
-        },
-        {
-            "num": 4,
-            "delay_time": 2000,
-            "has_flag": true,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 2
-                    }
-
-                ]
-        },
-        
-        {
-            "num": 5,
-            "delay_time": 800,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 1
-                    }
-
-                ]
-        },
-        {
-            "num": 6,
-            "delay_time": 800,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 3
-                    }
-
-                ]
-        },
-        {
-            "num": 7,
-            "delay_time": 800,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 2
-                    }
-
-                ]
-        },
-        {
-            "num": 8,
-            "delay_time": 2000,
-            "has_flag": true,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 5
-                    }
-
-                ]
-        },
-        {
-            "num": 9,
-            "delay_time": 800,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 3
-                    }
-
-                ]
-        },
-        {
-            "num": 10,
-            "delay_time": 700,
-            "zombies": [
-                    {
-                        "type": "normal",
-                        "count": 4
-                    }
-
-                ]
-        }
-
-    ]
+    "reward": { "plant": "wallnut" },
+    "display": { "zombie": "conehead" }
 }

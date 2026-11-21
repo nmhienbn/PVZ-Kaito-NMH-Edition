@@ -5,6 +5,7 @@
 #include "music/music.hpp"
 
 #include "events/choose_level_scene/choose_level/choose_level.hpp"
+#include "events/dave_scene/dave_scene.hpp"
 #include "events/start_game/start_game.hpp"
 #include "events/unlock_plant/unlock_plant.hpp"
 

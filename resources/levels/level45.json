@@ -1,0 +1,148 @@
+{
+    "name": "Level 5-5",
+    "#comment": "Level 5-5",
+    "rows": 5,
+    "background": "roof",
+    "special": "bungee",
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "flowerpot",
+                    "weight": 50
+                },
+                {
+                    "plant": "chomper",
+                    "weight": 25
+                },
+                {
+                    "plant": "pumpkin",
+                    "weight": 15
+                },
+                {
+                    "plant": "cherrybomb",
+                    "weight": 10
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 20,
+        "point_multiplier": 2,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 3000,
+                "first_wave": 1
+            },
+            {
+                "type": "ladder",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "garlic"
+    },
+    "display": {
+        "zombie": "bungee"
+    },
+    "pre_planted": [
+        {
+            "row": 0,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 0,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 1,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 0,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 1,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 2,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 3,
+            "col": 2,
+            "plant": "flowerpot"
+        },
+        {
+            "row": 4,
+            "col": 2,
+            "plant": "flowerpot"
+        }
+    ]
+}

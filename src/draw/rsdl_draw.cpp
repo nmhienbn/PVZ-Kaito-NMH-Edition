@@ -1,47 +1,77 @@
 #include "rsdl.hpp"
 
-/*
-SDL set color
-*/
-void Window::set_color(RGB color)
+#include <map>
+
+namespace
 {
-    SDL_SetRenderDrawColor(renderer, color.red, color.green, color.blue, 255);
+std::map<const void *, float> g_debug_scales;
+}
+
+void rsdl_set_debug_scale(const void *key, float scale)
+{
+    if (key != NULL && scale != 1.0f)
+        g_debug_scales[key] = scale;
+    else
+        g_debug_scales.erase(key);
+}
+
+void rsdl_clear_debug_scale(const void *key)
+{
+    g_debug_scales.erase(key);
+}
+
+void rsdl_clear_debug_scales()
+{
+    g_debug_scales.clear();
+}
+
+float rsdl_debug_scale(const void *key)
+{
+    auto it = g_debug_scales.find(key);
+    return it == g_debug_scales.end() ? 1.0f : it->second;
 }
 
 /*
-SDL draw filled rectangle
+Set the current draw color (also the color clear_renderer() uses, like the
+SDL renderer draw color did)
+*/
+void Window::set_color(RGB color)
+{
+    clear_r = color.red;
+    clear_g = color.green;
+    clear_b = color.blue;
+}
+
+/*
+Draw filled rectangle (1x1 white texture, tinted)
 */
 void Window::fill_rect(int x, int y, int width, int height, RGB color)
 {
     set_color(color);
-    SDL_Rect r;
-    r.x = x;
-    r.y = y;
-    r.w = width;
-    r.h = height;
-    SDL_RenderFillRect(renderer, &r);
+    batch.fillRect((float)x, (float)y, (float)width, (float)height,
+                   (Uint8)color.red, (Uint8)color.green, (Uint8)color.blue);
 }
 
 /*
-SDL draw line
+Draw line (1px thick quad)
 */
 void Window::draw_line(int x1, int y1, int x2, int y2, RGB color)
 {
     set_color(color);
-    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+    batch.drawLine(x1, y1, x2, y2, (Uint8)color.red, (Uint8)color.green, (Uint8)color.blue);
 }
 
 /*
-SDL draw point
+Draw point (1x1 rect)
 */
 void Window::draw_point(int x, int y, RGB color)
 {
     set_color(color);
-    SDL_RenderDrawPoint(renderer, x, y);
+    batch.drawPoint(x, y, (Uint8)color.red, (Uint8)color.green, (Uint8)color.blue);
 }
 
 /*
-SDL draw unfilled rectangle
+Draw unfilled rectangle
 */
 void Window::draw_rect(int x, int y, int width, int height, RGB color)
 {

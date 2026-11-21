@@ -1,0 +1,14 @@
+<fps>27</fps>
+<track>
+<name>splat</name>
+<t><x>-19</x><y>-28.5</y><sx>0.6</sx><sy>0.6</sy><a>1</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>0.75</sx><sy>0.75</sy><a>1</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>0.88</sx><sy>0.88</sy><a>1</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>0.97</sx><sy>0.97</sy><a>0.95</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>1.05</sx><sy>1.05</sy><a>0.8</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>1.11</sx><sy>1.11</sy><a>0.6</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>1.16</sx><sy>1.16</sy><a>0.4</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>1.19</sx><sy>1.19</sy><a>0.2</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><x>-19</x><y>-28.5</y><sx>1.2</sx><sy>1.2</sy><a>0</a><i>IMAGE_REANIM_BUTTER_SPLAT</i></t>
+<t><f>-1</f></t>
+</track>

@@ -1,0 +1,77 @@
+{
+    "name": "Level 3-5",
+    "#comment": "Level 3-5",
+    "rows": 6,
+    "background": "pool",
+    "special": "big_trouble",
+    "#zombie_time_mul": "Big Trouble Little Zombie: reanim playback speed of the mini zombies (walk/eat/die/pops all scale). 2x matches the original exactly (anim rate ~ 1/mScaleZombie, Zombie.cpp UpdateAnimSpeed).",
+    "zombie_time_mul": 2.0,
+    "water_rows": [
+        2,
+        3
+    ],
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "lilypad",
+                    "weight": 25
+                },
+                {
+                    "plant": "peashooter",
+                    "weight": 25
+                },
+                {
+                    "plant": "cherrybomb",
+                    "weight": 35
+                },
+                {
+                    "plant": "wallnut",
+                    "weight": 15
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 20,
+        "point_multiplier": 4,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "snorkel",
+                "cost": 3,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "football",
+                "cost": 7,
+                "weight": 2000,
+                "first_wave": 5
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "jalapeno"
+    },
+    "display": {
+        "zombie": "normal"
+    }
+}

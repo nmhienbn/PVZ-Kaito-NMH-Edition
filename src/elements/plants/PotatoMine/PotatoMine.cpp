@@ -46,7 +46,10 @@ PotatoMine::~PotatoMine()
 
 /*
 @return true if current frame cherry bomb can explode
-*/
+
+The ATTACK wind-up is bypassed now (see PotatoMine::action): the blast is
+instant, so this never fires anymore. Kept dead for reference / possible
+re-enable of a telegraphed attack:
 bool PotatoMine::is_blow()
 {
     if (state == ATTACK && frame >= POTATOMINE_ASSET.frame * all_img[POTATOMINE_ATTACK_DIRECTORY].n_sheet)
@@ -58,6 +61,7 @@ bool PotatoMine::is_blow()
     }
     return false;
 }
+*/
 
 /*
 @return if cherry bomb can now disappear
@@ -86,7 +90,9 @@ void PotatoMine::display(const int &_row)
 
 void PotatoMine::next_frame(const PlantAssets &assets)
 {
-    if (check_status(game_state, IS_PAUSED) == false)
+    // anim advances per logic tick, not per render (auto-FPS); gates the
+    // frame advances (and arm countdown) in every state below
+    for (int _lt = logic_ticked; _lt > 0 && check_status(game_state, IS_PAUSED) == false; _lt--)
     {
         switch (state)
         {
@@ -124,11 +130,7 @@ void PotatoMine::next_frame(const PlantAssets &assets)
             }
             break;
         }
-        case ATTACK:
-        {
-            ++frame;
-            break;
-        }
+        // case ATTACK removed: explosion is instant (see PotatoMine::action).
         case EXPLOSION:
         {
             ++frame;

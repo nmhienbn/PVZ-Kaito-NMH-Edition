@@ -1,0 +1,97 @@
+{
+    "name": "Level 4-10",
+    "#comment": "Level 4-10",
+    "rows": 6,
+    "background": "pool_night_fog",
+    "special": "storm",
+    "water_rows": [
+        2,
+        3
+    ],
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "conveyor",
+        "conveyor": {
+            "seeds": [
+                {
+                    "plant": "lilypad",
+                    "weight": 30
+                },
+                {
+                    "plant": "cherrybomb",
+                    "weight": 25
+                },
+                {
+                    "plant": "peashooter",
+                    "weight": 20
+                },
+                {
+                    "plant": "puffshroom",
+                    "weight": 15
+                },
+                {
+                    "plant": "cactus",
+                    "weight": 10
+                }
+            ]
+        }
+    },
+    "zombies": {
+        "total_waves": 20,
+        "point_multiplier": 3,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 3000,
+                "first_wave": 1
+            },
+            {
+                "type": "digger",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "jackbox",
+                "cost": 3,
+                "weight": 1000,
+                "first_wave": 10
+            },
+            {
+                "type": "balloon",
+                "cost": 2,
+                "weight": 2000,
+                "first_wave": 10
+            },
+            {
+                "type": "pogo",
+                "cost": 4,
+                "weight": 1000,
+                "first_wave": 10
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "cabbagepult"
+    },
+    "display": {
+        "zombie": "pogo"
+    }
+}

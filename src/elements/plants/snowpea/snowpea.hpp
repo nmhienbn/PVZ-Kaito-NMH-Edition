@@ -11,4 +11,5 @@ public:
     void display(const int &_row) override;
     void action() override;
     void fire_pea(vector<Bullet *> &bullets);
+    void next_frame(const PlantAssets &assets) override;
 };

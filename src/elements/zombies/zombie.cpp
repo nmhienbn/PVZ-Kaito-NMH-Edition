@@ -1,14 +1,72 @@
 #include "zombie.hpp"
 #include "draw/rsdl.hpp"
 #include "elements/Map/Map.hpp"
+#include "elements/elements.hpp"
 #include "music/music.hpp"
 #include <algorithm>
 
 extern int game_state;
 extern Map cells;
 extern Window win;
+extern Elements game_characters;
+
+/*Continuous locomotion (retail pacing): every tick the speed (retail
+CS_VEL x HEAD_SPEED_SCALE, plain mean 0.30 px/cs = 30 px/s) accrues
+into walk_carry and the integer x_location steps only the whole-pixel
+part, so a plain walker glides 0/1 px per tick around its mean (fast
+classes may occasionally take a 2-px tick) -- never a big lurch at
+foot plants. The reanim walk loop is pace-pinned (reanim_zombie.cpp
+head_pace_fps, HEAD_WALK_FPS = 8.33 fps = the retail legacy 12-cs pose)
+and the sheet walk stride-locks on ground covered (ZOMBIE_WALK_STRIDE_PX),
+both coupled to the ground speed like retail's UpdateAnimSpeed.*/
+
+/*
+repvz Plant::GetPlantRect horizontal span of tile (row,col)
+(Plant.cpp:5221-5240; base plant box mWidth=80/mHeight=80 at Plant.cpp:129-130):
+    default:          Rect(mX+10, mY, mWidth-20, ...) -> [x1+10, x2-10]
+    TALLNUT (:282):   Rect(mX+10, mY, mWidth, ...)    -> [x1+10, x1+90]
+    PUMPKIN (:380-384, mWidth=120): Rect(mX, mY, 100) -> [x1, x1+100]
+    (the clone ships no Cob Cannon, so its 140-px rect (:595) has no case here)
+FindPlantTarget (Zombie.cpp:6459-6476) accepts the first plant whose rect the
+attack box overlaps by >=20, so the effective target band of a stacked tile
+uses the union edges.
+*/
+void plant_rect_span(const int &row, const int &col, int &r_left, int &r_right)
+{
+    const Block &c = cells[row][col];
+    int lacc = c.x1 + 10, racc = c.x2 - 10; // default rect; also the empty-tile fallback
+    bool found = false;
+    for (auto *p : game_characters.plants)
+    {
+        if (p->get_row() != row || p->get_col() != col)
+            continue;
+        int l, r;
+        switch (p->get_type())
+        {
+        case TALLNUT_TYPE:   l = c.x1 + 10; r = c.x1 + 90;  break;
+        case PUMPKIN_TYPE:   l = c.x1;      r = c.x1 + 100; break;
+        default:             l = c.x1 + 10; r = c.x2 - 10;  break;
+        }
+        if (!found)
+        {
+            lacc = l, racc = r, found = true;
+        }
+        else
+        {
+            lacc = std::min(lacc, l);
+            racc = std::max(racc, r);
+        }
+    }
+    r_left = lacc;
+    r_right = racc;
+}
+
 /*
 Check if Zombie is in query tile or not to change its status.
+repvz Zombie::FindPlantTarget (Zombie.cpp:6459-6476): the zombie's per-type
+attack box (mZombieAttackRect, attack_x_span) must overlap the plant rect
+(above) by at least 20 px before the bite locks on (the per-type mouth box
+replaces the old flat x-1+95 probe point).
 @param zombie: query zombie
 @param row: query row
 @param col: query column
@@ -16,13 +74,17 @@ Check if Zombie is in query tile or not to change its status.
 */
 bool has_zombie_reached_block(const Zombie &zombie, const int &row, const int &col)
 {
-    int right_limit = cells[row][col].x2 - 1;
-    int left_limit = cells[row][col].x1;
-    int zombie_new_location = zombie.x_location - ZOMBIE_DX + 95;
-    if (zombie.row == row &&
-        is_in(left_limit, zombie_new_location, right_limit))
-        return true;
-    return false;
+    if (zombie.row != row)
+        return false;
+    int a_left, a_width;
+    zombie.attack_x_span(a_left, a_width);
+    if (a_width <= 0)
+        return false; // bungee/boss-type: no tile to chew (repvz Rect(0,0,0,0))
+    int p_left, p_right;
+    plant_rect_span(row, col, p_left, p_right);
+    const int left = zombie.x_location + a_left;
+    const int right = left + a_width;
+    return std::min(right, p_right) - std::max(left, p_left) >= 20;
 }
 
 /*
@@ -31,11 +93,19 @@ If true, Update zombie status.
 */
 bool has_zombie_reached_plant(Zombie &zombie)
 {
-    int col = get_block_col(zombie.x_location - ZOMBIE_DX + 95);
-    if (col >= 0)
+    // Scan columns right-to-left: the zombie walks left, so the rightmost
+    // blocked tile its attack box overlaps is the one it bumps into first
+    // (wide vehicle boxes can bridge two tiles at once, repvz (:406 133 px).
+    for (int col = HORIZ_BLOCK_COUNT - 1; col >= 0; col--)
     {
-        if (cells[zombie.row][col].is_block_zombie && has_zombie_reached_block(zombie, zombie.row, col))
+        // A ladder placed by a ladder zombie neutralizes the plant's block:
+        // every zombie (the ladder zombie included) climbs over the tile.
+        if (cells[zombie.row][col].is_block_zombie && !cells[zombie.row][col].has_ladder &&
+            has_zombie_reached_block(zombie, zombie.row, col))
         {
+            // subclass override (pole vaulter jumps the first plant instead)
+            if (zombie.on_reach_plant(col))
+                return true;
             zombie.is_moving = false;
             zombie.change_zombie_eating_status();
             return true;
@@ -81,6 +151,8 @@ void update_moving_status_for_zombies(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
     {
+        if (zombie->is_charmed)
+            continue; // charmed ignore plants; the brawl loop sets is_moving
         has_zombie_reached_any_plant(*zombie);
     }
 }
@@ -94,18 +166,56 @@ void move_zombies(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
     {
-        if (zombie->next_step_time)
+        // Ice-shroom hold: the zombie stands dead still for freeze_time ticks,
+        // then keeps the ice-shroom chill afterwards (repvz HitIceTrap:
+        // ApplyChill(true) = 2000cs, longer than the snow-pea 1000cs chill).
+        if (zombie->freeze_time)
         {
-            zombie->next_step_time--;
+            zombie->freeze_time--;
+            if (zombie->freeze_time == 0)
+                zombie->cold_time = ICE_SHROOM_COLD_TIME;
             continue;
         }
-        zombie->next_step_time = ZOMBIE_CLK_COUNT;
-        if (zombie->cold_time)
-            zombie->next_step_time += ZOMBIE_CLK_COUNT;
-        if (can_zombie_move(*zombie))
+        // Kernel-pult butter: glued in place, no lingering chill afterwards.
+        if (zombie->butter_time)
         {
-            zombie->x_location -= ZOMBIE_DX;
+            zombie->butter_time--;
+            continue;
         }
+        // subclass movement override (pole vault flight, newspaper gasp):
+        // true means the tick's movement is fully handled.
+        if (zombie->on_move_tick())
+            continue;
+        /*Walking speed this tick: the per-zombie roll in px/tick, chilled to
+        x0.4 (CHILLED_SPEED_FACTOR; HEAD: the walk pin halves the anim rate
+        with it). Subclass paces come via speed_px_per_tick(); the whack
+        sprint ramp scales there (big_trouble minis keep the plain roll --
+        only their walk ANIMATION doubles, reanim layer).
+        Retail pacing: every speed constant is the original CS_VEL figure
+        x HEAD_SPEED_SCALE (=1.0), so the plain-roll mean is CS_VEL(0.30)
+        = 30 px/s like the original. Every tick the float carry takes the
+        full velocity and x_location steps ONLY the whole-pixel part -- so
+        a plain walker moves 0 or 1 px per tick with no frozen pauses at
+        the float level, and no tick ever lurches more than a pixel past
+        its pace (1 px max at the 23-37 px/s band, 2 px at the 66-91 px/s
+        fast classes). The carry drains even while blocked, so a zombie
+        released from a bite resumes without any backlog lurch.*/
+        float v = zombie->speed_px_per_tick();
+        if (zombie->cold_time)
+            v *= CHILLED_SPEED_FACTOR;
+        zombie->walk_carry += v;
+        int step = (int)zombie->walk_carry;
+        zombie->walk_carry -= step;
+        // Hypnotized zombies march right and ignore plants/grave rules; the
+        // zombie-vs-zombie fight in update loop marks them stopped.
+        if (zombie->is_charmed)
+        {
+            if (zombie->is_moving)
+                zombie->x_location += step;
+            continue;
+        }
+        if (step > 0 && can_zombie_move(*zombie))
+            zombie->x_location -= step;
     }
 }
 

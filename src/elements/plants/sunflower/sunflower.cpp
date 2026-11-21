@@ -1,6 +1,8 @@
 #include "sunflower.hpp"
 #include "elements/Map/Map.hpp"
 #include "nlohmann/json.hpp"
+#include "support.hpp"
+#include "elements/Level/Level.hpp" // roof_tile_dy
 using namespace nlohmann;
 
 static ifstream sunflower("./resources/images/json/sunflower.json");
@@ -21,7 +23,8 @@ Sunflower::Sunflower(const int &_row, const int &_col) : Plants(_row, _col)
 {
     type = SUNFLOWER_TYPE;
     health = PLANT_HEALTH_LIMIT[SUNFLOWER_TYPE];
-    sec_for_prepare = SUN_GEN_SUNFLOWER_CLK_COUNT / 2;
+    // First sun 3-12.5 s after planting (original PvZ timing).
+    sec_for_prepare = 180 + rand(0, 569);
     directory_num = SUNFLOWER_SHEET_DIRECTORY;
 }
 
@@ -33,40 +36,19 @@ Sunflower::~Sunflower()
 }
 
 /*
-@return true if sunflower gen a new sun.
+Change sunflower appearance: the glow-with-sun sheet leads the drop by
+~2 s (one sheet cycle, switched under frame==0 wraps) so the flash plays as
+the sun pops. The drop itself is timer-authoritative like the original's
+mLaunchCounter (repvz Plant.cpp:1027) -- not gated on a sheet frame, which
+used to stretch the interval to ~26 s instead of 23.5-25 s.
 */
-bool Sunflower::is_gen_sun()
-{
-    return directory_num == SUNFLOWER_HAPPY_DIRECTORY && frame == 30 * SUNFLOWER_ASSET.frame;
-}
+const int SUNFLOWER_GLOW_LEAD = 120;
 
-/*
-Change sunflower appearance when gen a new sun or normal
-*/
 void Sunflower::determine_appearance()
 {
-    // Gen new sun
-    if (sec_for_prepare <= 0)
-    {
-        if (directory_num == SUNFLOWER_SHEET_DIRECTORY)
-        {
-            if (frame == 0)
-            {
-                directory_num = SUNFLOWER_HAPPY_DIRECTORY;
-            }
-        }
-    }
-    // Normal
-    else
-    {
-        if (directory_num == SUNFLOWER_HAPPY_DIRECTORY)
-        {
-            if (frame == 0)
-            {
-                directory_num = SUNFLOWER_SHEET_DIRECTORY;
-            }
-        }
-    }
+    if (frame == 0)
+        directory_num = sec_for_prepare <= SUNFLOWER_GLOW_LEAD ? SUNFLOWER_HAPPY_DIRECTORY
+                                                               : SUNFLOWER_SHEET_DIRECTORY;
     if (frame >= SUNFLOWER_ASSET.frame * all_img[SUNFLOWER_SHEET_DIRECTORY].n_sheet)
     {
         frame = 0;
@@ -77,6 +59,8 @@ void Sunflower::determine_appearance()
 Update time to have next sun.
 Init a new sun.
 Then add it into vector<Sun>.
+Re-arm the moment the counter runs out (repvz Plant.cpp:1027:
+mLaunchCounter = RandRangeInt(2350, 2500) cs = 1410-1500 ticks at 60 tps).
 */
 void Sunflower::gen_sun_from_a_sunflower(vector<Sun> &suns)
 {
@@ -85,19 +69,10 @@ void Sunflower::gen_sun_from_a_sunflower(vector<Sun> &suns)
     determine_appearance();
     if (sec_for_prepare <= 0)
     {
-        if (is_gen_sun())
-        {
-            // Reset time to have next sun.
-            sec_for_prepare = SUN_GEN_SUNFLOWER_CLK_COUNT;
-            // Init a new sun.
-            Sun temp;
-            temp.final_col = col;
-            temp.final_row = row;
-            temp.y_location = cells[row][col].y1 - 20;
-            temp.wait_seconds = 0;
-            // Then add it into vector<Sun>.
-            suns.push_back(temp);
-        }
+        // Reset time to have next sun: 23.5-25 s.
+        sec_for_prepare = 1410 + rand(0, 89);
+        // Pop a sun out of the body (repvz COIN_MOTION_FROM_PLANT).
+        spawn_sun_from_plant(suns, row, col, NORMAL_SUN_VALUE);
     }
 }
 

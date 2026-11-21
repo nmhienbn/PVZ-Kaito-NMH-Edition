@@ -1,0 +1,64 @@
+{
+    "name": "Level 4-5",
+    "#comment": "Level 4-5",
+    "rows": 6,
+    "background": "pool_night_fog",
+    "special": "vasebreaker",
+    "water_rows": [
+        2,
+        3
+    ],
+    "fog_column": 5,
+    "sun": {
+        "initial": 50,
+        "sky": false
+    },
+    "seeds": {
+        "mode": "fixed",
+        "fixed": [
+            "cherrybomb"
+        ]
+    },
+    "zombies": {
+        "total_waves": 0,
+        "flag_waves": false,
+        "roster": [
+            {
+                "type": "normal",
+                "cost": 1,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "conehead",
+                "cost": 2,
+                "weight": 4000,
+                "first_wave": 1
+            },
+            {
+                "type": "buckethead",
+                "cost": 4,
+                "weight": 3000,
+                "first_wave": 1
+            }
+        ],
+        "intro_force": null
+    },
+    "reward": {
+        "plant": "splitpea"
+    },
+    "display": {
+        "zombie": "normal"
+    },
+    "vases": {
+        "grid": [
+            3,
+            5
+        ],
+        "preset": "scary_potter",
+        "zombies": [
+            "normal",
+            "buckethead"
+        ]
+    }
+}

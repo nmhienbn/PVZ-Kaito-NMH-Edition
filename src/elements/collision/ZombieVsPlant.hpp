@@ -7,4 +7,4 @@ bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p
 void handle_zombie_plant_encounter(vector<Zombie *> &zombies, vector<Plants *> &plants);
 
 //------------------------------Zombie all status--------------------------------------
-void update_zombies_status(vector<Zombie *> &zombies, vector<Plants *> &plants);
+void update_zombies_status(vector<Zombie *> &zombies, vector<Plants *> &plants, vector<ZombiePart> &zombie_parts);

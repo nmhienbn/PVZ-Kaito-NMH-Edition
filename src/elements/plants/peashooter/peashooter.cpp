@@ -47,6 +47,16 @@ void Peashooter::fire_pea(vector<Bullet *> &bullets)
 }
 
 /*
+Attack loop = one pea per 90 ticks: the original mLaunchRate for shooters is
+150 cs (Plant.cpp gPlantDefs) = 90 ticks at 60 fps; wrap the attack reel there
+instead of riding the full sheet.
+*/
+void Peashooter::next_frame(const PlantAssets &assets)
+{
+    next_frame_capped(assets, PEASHOOTER_ATTACK_DIRECTORY, 90);
+}
+
+/*
 Change peashooter's appearance if a peashooter need to attack or not.
 (Peashooter is attack only if there are some zombies in the row.)
 Updated: Zombie position > peashooter position
