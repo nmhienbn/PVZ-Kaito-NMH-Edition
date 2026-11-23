@@ -310,11 +310,14 @@ public:
     /*Per logic tick: hit-flash/chill clocks (run even frozen/buttered).
     Render frames no longer age zombie state (D2).*/
     void update_logic_timers();
-    /*Per logic tick: advance the sheet pose + reanim clock. `walk_v` is this
-    tick's chilled forward pace (0 when not walking). When the state has a
+    /*Per logic tick: advance the sheet pose + reanim clock. `walk_v_raw` is
+    this tick's unchilled forward pace (0 when not walking); `cold` applies
+    the retail chill (fallback movement x0.4, ground-driven anim rate x0.5
+    per RefreshAnimRate, Zombie.cpp:6637-6644). When the state has a usable
     _ground track, returns the board-px ground delta caused by the advance
-    and sets ground_driven; otherwise caller moves by raw walk_v.*/
-    float update_logic_animation(float walk_v, bool &ground_driven);
+    and sets ground_driven (the caller moves BY it, yielding retail's
+    0.47*velX); otherwise the caller moves by the chilled raw pace.*/
+    float update_logic_animation(float walk_v_raw, bool cold, bool &ground_driven);
     /*Narrow write access to the pooled health for spawn-time team assembly:
     bobsled mates spawn with the bare body+sled tier instead of the leader's
     full helm stack (level_data.cpp materialize_wave_plans; original only the

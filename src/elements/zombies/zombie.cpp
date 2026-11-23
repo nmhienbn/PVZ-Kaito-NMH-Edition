@@ -194,12 +194,14 @@ void move_zombies(vector<Zombie *> &zombies)
             zombie->butter_time--;
             continue;
         }
-        /*Walking speed this tick: the per-zombie roll in px/tick, chilled to
-        x0.4 (CHILLED_SPEED_FACTOR). Subclass paces come via
+        /*Walking speed this tick: the per-zombie roll in px/tick (raw mVelX,
+        unchilled). Ground-driven walkers cover 0.47*raw per tick (retail
+        UpdateAnimSpeed); phases without a _ground track move by raw veering
+        x0.4 when chilled (CHILLED_SPEED_FACTOR). Subclass paces come via
         speed_px_per_tick(); the whack sprint ramp scales there.*/
-        float v = zombie->speed_px_per_tick();
-        if (zombie->cold_time)
-            v *= CHILLED_SPEED_FACTOR;
+        const bool cold = zombie->cold_time > 0;
+        const float v_raw = zombie->speed_px_per_tick();
+        const float v = cold ? v_raw * CHILLED_SPEED_FACTOR : v_raw;
         // subclass movement override (pole vault flight, newspaper gasp):
         // true means the tick's movement is fully handled; the animation
         // still advances below.
@@ -208,15 +210,15 @@ void move_zombies(vector<Zombie *> &zombies)
         _ground track reports the ground actually covered (retail
         UpdateZombieWalking, Zombie.cpp:4126-4133: dx = ground.x(new anim
         time) - ground.x(old anim time), x mScaleZombie). The reanim rate is
-        derived from the rolled pace, so the average equals velX. States with
+        the retail formula, so the average pace is 0.47 * velX. States with
         no distance-driven walk segment (eating, one-shots, vault, swim,
         zamboni, bobsled, dolphin jump, digger tunnel) fall back to raw velX
         and a fixed anim rate. Nothing is computed in the draw pass, so the
         movement is identical with or without rendered frames.*/
-        const bool walking = zombie->is_moving && v > 0.0f;
+        const bool walking = zombie->is_moving && v_raw > 0.0f;
         bool ground_driven = false;
         const float ground_dx =
-            zombie->update_logic_animation(walking ? v : 0.0f, ground_driven);
+            zombie->update_logic_animation(walking ? v_raw : 0.0f, cold, ground_driven);
         if (handled)
             continue;
         if (!walking)
@@ -224,8 +226,8 @@ void move_zombies(vector<Zombie *> &zombies)
         /*Carry the fractional distance; whole pixels step x_location below.
         On ground-driven states the delta IS the distance covered (the seam
         tick holds at 0 and the stride is repaid across the loop, so the
-        average is exactly v). The carry drains even while blocked, so a
-        zombie released from a bite resumes without any backlog lurch.*/
+        average is exactly 0.47 * velX). The carry drains even while blocked,
+        so a zombie released from a bite resumes without any backlog lurch.*/
         zombie->walk_carry += ground_driven ? ground_dx : v;
         int step = (int)zombie->walk_carry;
         zombie->walk_carry -= step;

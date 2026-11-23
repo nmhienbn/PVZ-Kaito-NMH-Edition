@@ -41,6 +41,7 @@ void JackboxZombie::init()
         fuse_distance /= 3;
     if (level.is_special(LevelSpecial::Vasebreaker))
         fuse_distance = 80;
+    fuse_ticks = -1; // converted from distance/mVelX on the first tick
     last_x = x_location; // fuse observer baseline (init_zombie placed us already)
 }
 
@@ -79,25 +80,28 @@ bool JackboxZombie::on_move_tick()
     }
     if (state == STOLEN)
         return false; // box gone: plain walker, fuse and music died with it
-    // Fuse observer: the base stepper moves the zombie; the box only arms
-    // while it actually walks (eating pauses the fuse), and the pop only
-    // fires on the board.
-    if (last_x >= 0)
+    /*Fuse (retail PHASE_JACK_IN_THE_BOX_RUNNING): the original arms
+    mPhaseCounter = int(aDistance / mVelX) * ZOMBIE_LIMP_SPEED_FACTOR (2)
+    at 100 cs/s (Zombie.cpp:506) and ticks it down every update unless
+    immobilized (Zombie.cpp:4344-4346), so the popper covers 0.47 * 2 =
+    0.94 * aDistance of ground. Port that as a 60 Hz tick count off the
+    same mVelX -- NOT as an odometer of the real (0.47 x) walking pace.
+    Eating does not pause it; frozen/buttered ticks never reach here.*/
+    if (fuse_ticks < 0)
     {
-        int walked = last_x - x_location;
-        if (walked > 0 && is_moving)
-        {
-            fuse_distance -= walked;
-            if (fuse_distance <= 0 && x_location < WINDOW_WIDTH - 10)
-            {
-                state = POPPING;
-                pop_ticks = JACK_POP_TICKS;
-                frame = 0;
-                reanim_time = 0.0f;
-                float len = reanimz::skinSegmentLength(reanimz::SKIN_JACKBOX, "anim_pop");
-                reanim_rate = len > 0 ? len / JACK_POP_TICKS : 0.2f;
-            }
-        }
+        const float velx_cs = CS_VEL(0.67f) * HEAD_SPEED_SCALE * 0.6f;
+        fuse_ticks = (int)((float)fuse_distance / velx_cs) * 2 * 3 / 5;
+        if (fuse_ticks < 1)
+            fuse_ticks = 1;
+    }
+    if (--fuse_ticks <= 0 && x_location < WINDOW_WIDTH - 10)
+    {
+        state = POPPING;
+        pop_ticks = JACK_POP_TICKS;
+        frame = 0;
+        reanim_time = 0.0f;
+        float len = reanimz::skinSegmentLength(reanimz::SKIN_JACKBOX, "anim_pop");
+        reanim_rate = len > 0 ? len / JACK_POP_TICKS : 0.2f;
     }
     last_x = x_location;
     jack_music_tick(*this, music_clk, false);

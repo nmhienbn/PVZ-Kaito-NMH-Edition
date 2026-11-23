@@ -143,21 +143,40 @@ struct ZombieMeta
     int spawn_x = 0;
     int spawn_tick = 0;
     float spawn_hp = 0.0f;
-    double nominal_speed = 0.0; // px/s at spawn (step_speed * 60)
+    double nominal_speed = 0.0; // raw mVelX px/s at spawn (step_speed * 60)
+    /*Expected steady-state pace: ground-driven walkers cover 0.47 * mVelX
+    (retail UpdateAnimSpeed); phases without a _ground track keep mVelX.*/
+    double expected_walk = 0.0;
+    bool ground_walker = false;
     long long move_ticks = 0;
     double move_dist = 0.0;
     int death_tick = -1;
     string death_cause = "alive";
     float death_hp = 0.0f;
+    float last_hp = 0.0f;
+    int first_hit_tick = -1;
+    int first_hit_x = 0;
+    int hit_to_death_px = -1;
     int fully_on_tick = -1;
     bool enter_logged = false;
     bool full_logged = false;
     bool lose_logged = false;
 };
 
-struct BulletMeta
+/*Fill the spawn-time pace fields: nominal = raw mVelX px/s, expected =
+the steady-state walk pace the retail movement formula produces (0.47 x
+mVelX on ground-driven walkers, raw mVelX elsewhere).*/
+void fill_speed_meta(ZombieMeta &m, Zombie *z)
 {
-    int id = 0;
+    m.nominal_speed = (double)z->speed_px_per_tick() * TICKS_PER_SEC;
+    m.ground_walker =
+        reanimz::walkFeedPerPx(z->cur_dir(), -1, false) >= 0.0f;
+    m.expected_walk =
+        m.nominal_speed * (m.ground_walker ? GROUND_WALK_PACE : 1.0);
+}
+
+struct BulletMeta
+{    int id = 0;
     int type = 0;
     int row = 0;
     int spawn_tick = 0;
@@ -363,7 +382,8 @@ Zombie *add_zombie(int type, int row)
     m.spawn_x = z->x_location;
     m.spawn_tick = 0;
     m.spawn_hp = z->get_health();
-    m.nominal_speed = (double)z->speed_px_per_tick() * TICKS_PER_SEC;
+    fill_speed_meta(m, z);
+    m.last_hp = m.spawn_hp;
     zombie_meta[z] = m;
     return z;
 }
@@ -846,6 +866,8 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                 continue;
             m.death_tick = tick;
             m.death_hp = s.hp;
+            if (m.first_hit_tick >= 0)
+                m.hit_to_death_px = m.first_hit_x - s.x;
             if ((mower_this_tick.count(s.row) &&
                  mower_this_tick[s.row] == (int)MOWER_ACTIVE) ||
                 (mower_after.count(s.row) &&
@@ -888,8 +910,8 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                 m.spawn_x = z->x_location;
                 m.spawn_tick = tick;
                 m.spawn_hp = z->get_health();
-                m.nominal_speed =
-                    (double)z->speed_px_per_tick() * TICKS_PER_SEC;
+                fill_speed_meta(m, z);
+                m.last_hp = m.spawn_hp;
                 zombie_meta[z] = m;
                 event_row(tick, "zombie_spawn", "zombie", m.id, z->type, z->row,
                           -1, z->x_location, z->y_location,
@@ -897,6 +919,14 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                 it = zombie_meta.find(z);
             }
             ZombieMeta &m = it->second;
+            /*First damage tick + position: the pea1 report measures the
+            distance walked between the first hit and the death.*/
+            if (m.first_hit_tick < 0 && z->get_health() < m.last_hp)
+            {
+                m.first_hit_tick = tick;
+                m.first_hit_x = z->x_location;
+            }
+            m.last_hp = z->get_health();
             if (!m.enter_logged && zombie_on_screen(*z))
             {
                 m.enter_logged = true;
@@ -1128,8 +1158,9 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
     sum << "\n";
 
     sum << "[zombies]\n";
-    sum << "id,type,row,spawn_x,spawn_hp,spawn_speed_px_s,mean_walk_px_s,"
-           "moved_px,moved_s,fully_on_screen_s,death_s,death_cause\n";
+    sum << "id,type,row,spawn_x,spawn_hp,spawn_velX_px_s,expected_walk_px_s,"
+           "mean_walk_px_s,moved_px,moved_s,fully_on_screen_s,death_s,"
+           "death_cause,first_hit_s,hit_to_death_px\n";
     for (const ZombieMeta *mp : sorted_metas(zombie_meta))
     {
         const ZombieMeta &m = *mp;
@@ -1138,11 +1169,46 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                              : 0.0;
         sum << m.id << ',' << zombie_name(m.type) << ',' << m.row << ','
             << m.spawn_x << ',' << fmt(m.spawn_hp) << ',' << fmt(m.nominal_speed)
+            << ',' << fmt(m.expected_walk)
             << ',' << fmt(walk_speed) << ',' << fmt(m.move_dist, 0) << ','
             << fmt(m.move_ticks / (double)TICKS_PER_SEC)
             << ',' << fmt(m.fully_on_tick < 0 ? -1 : tsec(m.fully_on_tick))
             << ',' << fmt(m.death_tick < 0 ? -1 : tsec(m.death_tick)) << ','
-            << m.death_cause << '\n';
+            << m.death_cause << ','
+            << fmt(m.first_hit_tick < 0 ? -1 : tsec(m.first_hit_tick)) << ','
+            << m.hit_to_death_px << '\n';
+    }
+    sum << "\n";
+
+    /*Explicit retail-formula check: nominal mVelX vs the 0.47 x mVelX
+    expected pace vs measured, per type.*/
+    sum << "[zombie_walk_expected_vs_measured]\n";
+    sum << "type,count,ground_walker,nominal_velX_px_s,expected_walk_px_s,"
+           "measured_px_s,ratio_to_nominal\n";
+    {
+        map<int, vector<const ZombieMeta *>> by_type;
+        for (auto &kv : zombie_meta)
+            if (kv.second.move_ticks > 0)
+                by_type[kv.second.type].push_back(&kv.second);
+        for (auto &kv : by_type)
+        {
+            double nom = 0.0, exp = 0.0, meas = 0.0;
+            bool ground = true;
+            for (const ZombieMeta *m : kv.second)
+            {
+                nom += m->nominal_speed;
+                exp += m->expected_walk;
+                meas += m->move_dist /
+                        (m->move_ticks / (double)TICKS_PER_SEC);
+                ground = ground && m->ground_walker;
+            }
+            const double n = (double)kv.second.size();
+            nom /= n, exp /= n, meas /= n;
+            sum << zombie_name(kv.first) << ',' << kv.second.size() << ','
+                << (ground ? "yes" : "no") << ',' << fmt(nom) << ','
+                << fmt(exp) << ',' << fmt(meas) << ','
+                << (nom > 0 ? fmt(meas / nom, 3) : "n/a") << '\n';
+        }
     }
     sum << "\n";
 
@@ -1198,6 +1264,28 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
         << (pea_shots > 0 ? fmt(100.0 * pea_hits / pea_shots, 1) + "%" : "n/a")
         << "\n";
     sum << "\n";
+
+    /*pea1: how far the target walked between the first pea hit and its
+    death -- the direct read of the retail 0.47*mVelX pace under fire.*/
+    if (scenario == "pea1")
+    {
+        sum << "[pea1_hit_to_death]\n";
+        sum << "id,type,first_hit_s,death_s,moved_px,mean_px_s\n";
+        for (const ZombieMeta *mp : sorted_metas(zombie_meta))
+        {
+            const ZombieMeta &m = *mp;
+            if (m.first_hit_tick < 0 || m.death_tick < 0)
+                continue;
+            const double dt =
+                (m.death_tick - m.first_hit_tick) / (double)TICKS_PER_SEC;
+            sum << m.id << ',' << zombie_name(m.type) << ','
+                << fmt(tsec(m.first_hit_tick)) << ','
+                << fmt(tsec(m.death_tick)) << ',' << m.hit_to_death_px << ','
+                << (dt > 0 ? fmt(m.hit_to_death_px / dt) : string("n/a"))
+                << '\n';
+        }
+        sum << "\n";
+    }
 
     sum << "[mowers]\n";
     sum << "row,activated,final_status\n";

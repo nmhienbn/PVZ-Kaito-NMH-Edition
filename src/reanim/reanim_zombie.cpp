@@ -1696,14 +1696,11 @@ static bool flagHandDelta(float absFrame, int segFirst, int segLast,
     return true;
 }
 
-bool drawZombie(int directory_num, int armor_dir, float reanim_time,
+static bool drawZombieSpec(const Spec &s, float reanim_time,
                 int x_location, int y_location, bool cold, bool attacked,
                 const std::unordered_set<std::string> *extraHide,
                 const std::unordered_set<std::string> *extraShow,
                 int *partsDrawn, reanim::DrawStats *stats, float attack_fade) {
-    if (!gReady) return false;
-    Spec s = specFromState(directory_num, armor_dir);
-    if (!s.ok) return false;
     attack_fade = std::clamp(attack_fade, 0.0f, 1.0f);
     if (s.skin != SKIN_PLAIN)
         return drawSkinZombie(s, reanim_time, x_location, y_location, cold,
@@ -1801,6 +1798,34 @@ bool drawZombie(int directory_num, int armor_dir, float reanim_time,
         }
     }
     return true;
+}
+
+bool drawZombie(int directory_num, int armor_dir, float reanim_time,
+                int x_location, int y_location, bool cold, bool attacked,
+                const std::unordered_set<std::string> *extraHide,
+                const std::unordered_set<std::string> *extraShow,
+                int *partsDrawn, reanim::DrawStats *stats, float attack_fade) {
+    if (!gReady) return false;
+    Spec s = specFromState(directory_num, armor_dir);
+    if (!s.ok) return false;
+    return drawZombieSpec(s, reanim_time, x_location, y_location, cold, attacked,
+                          extraHide, extraShow, partsDrawn, stats, attack_fade);
+}
+
+bool drawZombieSegment(int directory_num, int armor_dir, const char *segment,
+                       float reanim_time, int x_location, int y_location) {
+    if (!gReady || segment == nullptr) return false;
+    Spec s = specFromState(directory_num, armor_dir);
+    if (!s.ok) return false;
+    const reanim::ReanimDoc *doc = skinDoc(s.skin);
+    int first = 0, last = 0;
+    if (doc != nullptr && docSegmentRange(*doc, segment, first, last)) {
+        s.first = first;
+        s.last = loopPlayLast(*doc, first, last);
+        s.segName = nullptr; // forced segment: no state playback-rate pin
+    }
+    return drawZombieSpec(s, reanim_time, x_location, y_location, false, false,
+                          nullptr, nullptr, nullptr, nullptr, 1.0f);
 }
 
 std::vector<std::string> trackNames() {
@@ -2322,6 +2347,32 @@ bool skinPoseGeom(int skin, const char* segment, PoseGeom& out,
     }
     cache[key] = out;
     return out.ok;
+}
+
+bool skinPoseGeomFrame(int skin, const char* segment, float frame, PoseGeom& out,
+                       const std::unordered_set<std::string>* extraHide) {
+    out = PoseGeom();
+    if (!gReady || segment == nullptr) return false;
+    const reanim::ReanimDoc* doc = skinDoc(skin);
+    if (doc == nullptr) return false;
+    int first, last;
+    if (!docSegmentRange(*doc, segment, first, last)) return false;
+    if (frame < (float)first) frame = (float)first;
+    if (frame > (float)last) frame = (float)last;
+    const SkinGeom geo = geomFor(skin);
+    std::unordered_set<std::string> hideL;
+    if (skin == SKIN_PLAIN)
+        for (const char* h : kBaseHidden) hideL.insert(h);
+    if (extraHide != nullptr)
+        for (const auto& t : *extraHide) hideL.insert(lowerOf(t));
+    auto hideTrack = [&](const std::string& n) { return hideL.count(lowerOf(n)) > 0; };
+    reanim::DrawOptions opt;
+    opt.measureOnly = true;
+    reanim::DrawStats st =
+        gRenderer->Draw(*doc, frame, 0.0f, 0.0f, geo.scale, hideTrack, opt);
+    if (!st.hasBounds) return false;
+    foldPivot(st, geo, out);
+    return true;
 }
 
 void skinDrawPivot(int skin, float& pivotX, float& pivotY) {

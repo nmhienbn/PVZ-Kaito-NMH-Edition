@@ -6,6 +6,7 @@
 #include "draw/world_scale.hpp"
 #include "elements/Level/Level.hpp"
 #include "elements/Map/Map.hpp"
+#include "elements/Player/Player.hpp"
 #include "elements/bullets/pea/pea.hpp"
 #include "elements/elements.hpp"
 #include "elements/mower/mower.hpp"
@@ -13,6 +14,7 @@
 #include "elements/sun/sun.hpp"
 #include "elements/zombies/zombie.hpp"
 #include "elements/zombies/zombie_type.hpp"
+#include "events/almanac/almanac.hpp"
 #include "game_param.hpp"
 #include "level/level_data.hpp"
 #include "reanim/reanim_plant.hpp"
@@ -33,6 +35,7 @@ extern Level level;
 extern Elements game_characters;
 extern Map cells;
 extern Window win;
+extern Player player;
 extern int game_state;
 
 namespace scene_dump
@@ -447,6 +450,30 @@ bool run_if_requested()
     ticks = max(0, min(ticks, 100000));
 
     SDL_Log("scene_dump: scene=%s ticks=%d out=%s", scene.c_str(), ticks, out_path.c_str());
+
+    // Almanac page renders bypass the level/entity setup: they only need the
+    // reanim assets and a fully unlocked player (so the plants grid is shown
+    // in full, like the live scene after the book is found).
+    if (scene == "almanac_index" || scene == "almanac_plants" ||
+        scene == "almanac_zombies")
+    {
+        int entry = 0;
+        if (const char *e = getenv("PVZ_ALMANAC_ENTRY"))
+            entry = atoi(e);
+        if (!reanimz::ready())
+            reanimz::init(win.sprite_renderer());
+        if (!reanimplant::ready())
+            reanimplant::init(win.sprite_renderer());
+        player.unlocked_level = 99;
+        const int page = scene == "almanac_plants" ? 1
+                         : scene == "almanac_zombies" ? 2
+                                                      : 0;
+        almanac_render_page(page, entry, 0.0f);
+        const bool ok = save_png(out_path.c_str());
+        SDL_Log("scene_dump: almanac page=%d entry=%d %s", page, entry,
+                ok ? "saved" : "SAVE FAILED");
+        return true;
+    }
 
     // Level setup through the normal loader (grid geometry + background +
     // mowers). No menus, no save data, no seed chooser.

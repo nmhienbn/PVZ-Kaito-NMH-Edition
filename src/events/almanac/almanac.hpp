@@ -19,54 +19,32 @@ void run_almanac();
 // static icon PNG).
 bool draw_plant_preview(int type, float clock, int center_x, int foot_y);
 
-// --- Zombie icon layout (shared with the headless layout check) -------------
-// Every zombie art in the almanac (grid windows AND the detail-card vignette)
-// draws at ONE common scale, ALMANAC_ZOMBIE_DRAW_SCALE -- no per-zombie fit:
-// the vignette reads the zombies at their natural relative sizes. The value
-// reproduces the pre-rework look for a NORMAL zombie: the old 76x80 windows
-// fit the 109x137-unit basic at ~0.57 (~78px tall); 0.55 renders it ~75px in
-// the 100px glass. Arts too big for the glass at this scale (zomboss head,
-// gargantuar torso, zomboni, the balloon) are NOT scaled down for it -- they
-// are scissored to the cell/patch instead (crop rect, then container clip).
-//
-// Placement is bottom-center: the zombie's EFFECTIVE bbox (the pose-space
-// crop rect for the types that crop, the OPAQUE-pixel union bbox of the pose
-// otherwise -- probed at runtime through reanimz::zombiePoseGeom /
-// skinPoseGeom, see almanac_pose_geom in the .cpp) x the common scale,
-// centered on the target x with the bbox bottom on the foot line.
-// AlmanacZombieLayout is the resolved placement; almanac_zombie_draw_args
-// maps it onto the reanimz draw arguments via the retail pivot: one
-// x_location/y_location pair feeds drawZombie AND drawSkinSegment (the
-// pivot anchors the art, so a single convention serves every pose). Same
-// math feeds the real scene and demo/almanac_layout_check.cpp.
-inline constexpr float ALMANAC_ZOMBIE_DRAW_SCALE = 0.55f;
+// --- Zombie icon layout -----------------------------------------------------
+// Grid thumbnails and the detail vignette follow the ORIGINAL 800x600 almanac
+// geometry (see AlmanacDialog.cpp / ReanimationLawn.cpp in the reference):
+// thumbnails are the in-game zombie drawn at scale 0.5 with its retail doc
+// origin placed inside a 76x80 window cell; the detail zombie is the in-game
+// zombie at scale 1.0 with mPosX/mPosY = (559,175) (pass x_location =
+// 559+OX, y_location = 175-20 to the normal in-game draw path; the clone's
+// y_location and original mPosY differ by 20).
+inline constexpr float ALMANAC_ZOMBIE_THUMB_SCALE = 0.5f;
 
-struct AlmanacZombieLayout
-{
-    float scale;    // == ALMANAC_ZOMBIE_DRAW_SCALE for almanac placements
-    float anchor_x; // bbox-center-x / foot-line anchor in window coords
-    float anchor_y;
-    float bbox_l, bbox_t, bbox_r, bbox_b; // expected on-screen art bounds
-};
+// --- Zombies grid -----------------------------------------------------------
+// Original GetZombiePosition (AlmanacDialog.cpp:609-618): 5 columns of 85x80
+// cells at (OX + 22 + col*85, 86 + row*80); the boss has its own slot at
+// (OX + 192, 486). 26 types = 6 rows, which fit the panel without scrolling
+// (the wheel/scrollbar code stays inert when everything is visible).
+inline const int ALMANAC_ZOMBIE_COLS = 5;
+inline const int ALMANAC_ZOMBIE_CELL_W = 76; // Almanac_ZombieWindow
+inline const int ALMANAC_ZOMBIE_CELL_H = 80;
+inline const int ALMANAC_ZOMBIE_CELL_DX = 85;
+inline const int ALMANAC_ZOMBIE_CELL_DY = 80;
+inline const int ALMANAC_ZOMBIE_GRID_X = (WINDOW_WIDTH - 800) / 2 + 22;
+inline const int ALMANAC_ZOMBIE_GRID_Y = 86;
+inline const int ALMANAC_ZOMBIE_VIS_ROWS = 6;
 
-// --- Zombies grid (shared with the headless layout check) --------------------
-// Big zombie windows in the ZombieBack panel (dark face spans x~141..549 in
-// window coords, top y~60): 4 touching columns of 100x100 cells at
-// (GRID_X + col*101, GRID_Y + row*104) -- the windows are the original 76x80
-// Almanac_ZombieWindow art scaled up x1.32. 26 zombies = 7 rows; 4 rows are
-// visible (y 92..504, buttons start at 567), the rest scroll in by whole rows
-// via the mouse wheel or the slim scrollbar right of the grid.
-inline const int ALMANAC_ZOMBIE_COLS = 4;
-inline const int ALMANAC_ZOMBIE_CELL_W = 100;
-inline const int ALMANAC_ZOMBIE_CELL_H = 100;
-inline const int ALMANAC_ZOMBIE_CELL_DX = 101;
-inline const int ALMANAC_ZOMBIE_CELL_DY = 104;
-inline const int ALMANAC_ZOMBIE_GRID_X = (WINDOW_WIDTH - 800) / 2 + 19;
-inline const int ALMANAC_ZOMBIE_GRID_Y = 92;
-inline const int ALMANAC_ZOMBIE_VIS_ROWS = 4;
-
-// Grid cell of a zombie entry at a scroll position (top-left of its 100x100
-// window, window coords).
+// Grid cell of a zombie entry at a scroll position (top-left of its 76x80
+// window, window coords). The boss is pinned to the original (192,486) slot.
 void almanac_zombie_cell(int type, int scroll_row, int &x, int &y);
 
 // Number of hidden grid rows (0 -> no scrollbar, wheel/drag inert).
@@ -79,71 +57,37 @@ bool almanac_zombies_scrollbar(int scroll_row, SDL_Rect &track, SDL_Rect &thumb)
 // Inverse of the thumb placement, for drags: scroll row from the thumb's top.
 int almanac_zombies_scroll_row_at(int thumb_top);
 
-// Resolved layout of the grid icon inside the window at (cell_x, cell_y).
-AlmanacZombieLayout almanac_zombie_grid_layout(int type, int cell_x, int cell_y);
-// Resolved layout of the detail-card preview icon.
-AlmanacZombieLayout almanac_zombie_preview_layout(int type);
-// reanimz call arguments for a resolved layout (the probe's pivot placement:
-// x/y such that the effective bbox centers on anchor_x and bottoms on
-// anchor_y; (0,0) when the pose probe fails).
-void almanac_zombie_draw_args(int type, const AlmanacZombieLayout &layout,
-                              int &x_location, int &y_location);
-// Pose-space crop rect, PIVOT space: doc point (30,120) as origin with the
-// skin's retail mScaleZombie folded in -- the same frame the probes report
-// and the retail pivot anchors the draw about (a pivot-space point P renders
-// at the draw pivot + P*scale). True when the type renders its FULL pose and
-// shows only this rect (catapult driver, gargantuar torso, zomboni vehicle +
-// driver, zomboss head). The rect is also the effective bbox the layout
-// fits/centers.
-bool almanac_zombie_crop(int type, float &l, float &t, float &r, float &b);
-// The crop rect mapped into window coords for a resolved layout (the
-// pose-origin mapping inside almanac_draw_zombie_icon). false = no crop.
-bool almanac_zombie_clip_rect(int type, const AlmanacZombieLayout &layout,
-                              SDL_Rect &clip);
+// Resolved layout of the detail-card preview icon (unused by the grid: the
+// grid places the retail doc origin directly, see the .cpp).
+struct AlmanacZombieLayout
+{
+    float scale;
+    float anchor_x;
+    float anchor_y;
+    float bbox_l, bbox_t, bbox_r, bbox_b;
+};
 
-// Draw a zombie's almanac pose at a resolved layout (the scene's own icon
-// path; lazily inits reanimz on the game renderer). The pose is the walk
-// reanim for most types; the recipe swaps in a fixed segment pose (pole
-// vaulter standing with his pole, balloon idle -- the only frames with the
-// balloon, catapult driver vignette, gargantuar torso vignette) or the 2Pak
-// disco doc for the dancer; Zomboss renders the head-only pose + dome driver
-// overlay. `contain`, when given, scissored the draw to that rect (grid cell
-// / preview patch); cropped types are additionally scissored to their mapped
-// crop rect.
-void almanac_draw_zombie_icon(int type, float clock,
-                              const AlmanacZombieLayout &layout,
-                              const SDL_Rect *contain = nullptr);
-// Loop length of the zombie's almanac pose in 12fps clock units (walk loop by
-// default, the pose segment's otherwise); 0 when unavailable.
+// Draw a zombie's detail-page pose (the in-game walk/idle draw for the type,
+// special segment poses for the types whose almanac vignette uses one,
+// Zomboss head + dome driver). x_location/y_location are the in-game zombie
+// pair; scale_mul multiplies the retail skin scale. Lazily inits reanimz.
+void almanac_draw_zombie_detail(int type, float clock, int x_location,
+                                int y_location, float scale_mul);
+// Loop length of the zombie's detail pose in 12fps clock units.
 float almanac_zombie_pose_loop_length(int type);
 
-// --- Plants grid (shared with the headless layout check) ---------------------
-// Chooser-sized seed packets (105x65, the seed bank / pre-game chooser size
-// ICON_WIDTH x ICON_HEIGHT) in 4 columns inside the PlantBack panel (wood
-// frame at x 21..443, top edge y~91, bottom edge y~557): cells touch like
-// the seed bank does, 7 rows fit (y 92..553), the remaining rows scroll in
-// by whole rows via the mouse wheel or the slim scrollbar just right of the
-// grid. 40 plants / 4 cols = 10 rows, so the scroll range is 0..3.
-inline const int ALMANAC_PLANT_COLS = 4;
-inline const int ALMANAC_PLANT_CELL_W = 105; // chooser packet size
+// --- Plants grid ------------------------------------------------------------
+// Original GetSeedPosition (AlmanacDialog.cpp:522-531): seed index s sits at
+// (OX + 26 + (s%8)*52, 92 + (s/8)*78); packets are the in-game seed-bank
+// packet (ICON_WIDTH x ICON_HEIGHT). 40 plants = 5 rows, all visible.
+inline const int ALMANAC_PLANT_COLS = 8;
+inline const int ALMANAC_PLANT_CELL_W = 105; // chooser/bank packet size
 inline const int ALMANAC_PLANT_CELL_H = 65;
-inline const int ALMANAC_PLANT_CELL_DX = 105;
-inline const int ALMANAC_PLANT_CELL_DY = 66;
-inline const int ALMANAC_PLANT_GRID_X = (WINDOW_WIDTH - 800) / 2 + 22;
+inline const int ALMANAC_PLANT_CELL_DX = 52;
+inline const int ALMANAC_PLANT_CELL_DY = 78;
+inline const int ALMANAC_PLANT_GRID_X = (WINDOW_WIDTH - 800) / 2 + 26;
 inline const int ALMANAC_PLANT_GRID_Y = 92;
-inline const int ALMANAC_PLANT_VIS_ROWS = 7;
-// One natural-pixel scale for every almanac packet: each plant's icon art
-// draws at this exact factor (no per-plant sizing) so the grid reads at a
-// uniform zoom, bottom-anchored inside the icon box. 1.0 is the seed bank /
-// pre-game chooser proportion (SEED_ICON_SCALE reference, world_scale.hpp):
-// large arts clamp into the box (same containment as the old world-height
-// fit), small arts draw 1:1 instead of being shrunk to a grid-wide fit.
-inline constexpr float ALMANAC_SEED_SCALE = 1.0f;
-// Portrait clamp box inside a cell: 4px side inset, 3px top inset, 6px
-// bottom margin -- the lily pad is the exception, bottom flush (margin 0).
-inline const int ALMANAC_ICON_SIDE_INSET = 4;
-inline const int ALMANAC_ICON_TOP_INSET = 3;
-inline const int ALMANAC_ICON_BOTTOM_MARGIN = 6;
+inline const int ALMANAC_PLANT_VIS_ROWS = 5;
 // Slim scrollbar: 10px track hugging the grid's right edge (spanning the
 // visible rows exactly), 12px square knob thumb.
 inline const int ALMANAC_SCROLL_TRACK_W = 10;
@@ -155,12 +99,6 @@ int almanac_plant_max_scroll_row();
 bool almanac_plant_row_visible(int type, int scroll_row);
 // Top-left of a plant's packet cell at a scroll position (window coords).
 void almanac_plant_cell(int type, int scroll_row, int &x, int &y);
-// The portrait's clamp box inside the cell at (cell_x, cell_y): centered in
-// the cell, its bottom edge the icon's anchor line (cell bottom minus the
-// margin). The portrait draws at the one shared ALMANAC_SEED_SCALE, so no
-// part can leave the cell.
-void almanac_plant_icon_box(int type, int cell_x, int cell_y, int &bx, int &by,
-                            int &bw, int &bh);
 // Plants-page scrollbar geometry, window coords. Returns false when the grid
 // fits in the view (bar not drawn, wheel/drag inert).
 bool almanac_plants_scrollbar(int scroll_row, SDL_Rect &track, SDL_Rect &thumb);
@@ -186,7 +124,14 @@ struct AlmanacBackdrop
 AlmanacBackdrop almanac_plant_backdrop(int plant_type);
 AlmanacBackdrop almanac_zombie_backdrop(int zombie_type);
 
-// --- Plant grid icon ---------------------------------------------------------
-// Packet portrait at the shared almanac seed scale: center-bottom anchored in
-// the cell's clamp box (see almanac_plant_icon_box).
-void almanac_draw_plant_icon(int type, int cell_x, int cell_y);
+// --- Plant grid packet -------------------------------------------------------
+// The in-game seed-bank packet (105x65: packet art + portrait + sun tag +
+// border + cost) at the packet's normal size, top-left (x, y).
+void almanac_draw_plant_packet(int type, int x, int y);
+
+// --- Headless page render (scene dump) ---------------------------------------
+// Draws one almanac page into the current renderer without running the scene
+// loop: page 0 = index, 1 = plants, 2 = zombies; `entry` selects the detail
+// subject (plant/zombie type); `clock` is the reanim clock. The caller does
+// the frame capture/readback.
+void almanac_render_page(int page, int entry, float clock);

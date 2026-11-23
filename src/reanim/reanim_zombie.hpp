@@ -208,6 +208,14 @@ bool drawZombie(int directory_num, int armor_dir, float reanim_time,
                 int *partsDrawn = nullptr, reanim::DrawStats *stats = nullptr,
                 float attack_fade = 1.0f);
 
+// Draw the zombie state's doc at a FORCED segment (e.g. "anim_idle") while
+// keeping the state-derived accessory visibility (cone/bucket/door/flag...)
+// and the retail placement of drawZombie. When the state's doc has no such
+// segment, the normal state draw is used. Used by the almanac grid
+// thumbnails (first anim_idle frame, else walk frame 0).
+bool drawZombieSegment(int directory_num, int armor_dir, const char *segment,
+                       float reanim_time, int x_location, int y_location);
+
 // Track names of the main zombie reanim doc (lowercased), for debug tooling.
 std::vector<std::string> trackNames();
 
@@ -334,6 +342,12 @@ bool zombiePoseGeom(int directory_num, int armor_dir, PoseGeom &out);
 // pose of the flagpole doc.
 bool skinPoseGeom(int skin, const char *segment, PoseGeom &out,
                   const std::unordered_set<std::string> *extraHide = nullptr);
+// Like skinPoseGeom, but measures ONE drawn frame (clamped into the segment)
+// instead of the loop-union bbox. Used for static poses such as the almanac
+// Zomboss thumbnail (anim_head_idle frame 0), whose first frame is smaller
+// than the animation's union box.
+bool skinPoseGeomFrame(int skin, const char *segment, float frame, PoseGeom &out,
+                       const std::unordered_set<std::string> *extraHide = nullptr);
 // Draw pivot of a skin: (45+offX, 132+offY) from the retail formula (the
 // doc point (30, 120) anchor at mul 1, no deltas).
 void skinDrawPivot(int skin, float &pivotX, float &pivotY);

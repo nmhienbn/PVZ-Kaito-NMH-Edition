@@ -737,19 +737,23 @@ void Zombie::update_logic_timers()
 }
 
 /*
-Per logic tick: advance the sheet pose + reanim clock. `walk_v` is this tick's
-chilled forward pace in px (0 when not walking). When the current state has a
-usable _ground walk track the reanim clock is advanced by the distance-locked
-feed and the resulting ground delta (board px, forward-positive) is returned
-with ground_driven=true; otherwise the caller moves by walk_v and the reanim
-plays at its fixed rate (eat, one-shots, special phases).
+Per logic tick: advance the sheet pose + reanim clock. `walk_v_raw` is this
+tick's unchilled forward pace in px (0 when not walking); `cold` is the chill
+state. When the current state has a usable _ground walk track the reanim clock
+advances at the retail UpdateAnimSpeed rate (reanim_zombie.cpp stepWalkReanim)
+and the resulting ground delta (board px, forward-positive) is returned with
+ground_driven=true -- the original moves the same way (mPosX -= ground
+velocity * mScaleZombie, Zombie.cpp:4126-4144), so the average pace is
+0.47*velX. Otherwise the caller moves by the chilled raw pace x0.4 and the
+reanim plays at its fixed rate (eat, one-shots, special phases).
 
 This is the D2 move of the old display-side aging: standing still (or eating)
 no longer depends on a frame being rendered.
 */
-float Zombie::update_logic_animation(float walk_v, bool &ground_driven)
+float Zombie::update_logic_animation(float walk_v_raw, bool cold, bool &ground_driven)
 {
     ground_driven = false;
+    const float walk_v = cold ? walk_v_raw * CHILLED_SPEED_FACTOR : walk_v_raw;
     // Chill countdown used to live in the render loop; when it ends the
     // pending bite/step budgets halve back (the chill doubled them).
     if (cold_time)
@@ -780,12 +784,17 @@ float Zombie::update_logic_animation(float walk_v, bool &ground_driven)
     mVelX * (frames / distance) * 47 / scale fps (Zombie.cpp:6694) and the step
     is groundDelta * SECONDS_PER_UPDATE * rate * scale (Zombie.cpp:4133,
     Reanimator.cpp:1247), so the average pace is 0.47 * mVelX. Feeding the
-    distance-locked stepper 0.47 * v reproduces both that anim rate and that
-    pace. Phases without _ground keep raw v (the fallback below).*/
-    if (is_moving && walk_v > 0.0f)
+    distance-locked stepper 0.47 * mVelX reproduces both that anim rate and
+    that pace (the feed is ground-locked, so 1 px fed = 1 px drawn travel).
+    Chill on this path is the original's ApplyAnimRate(mAnimRate * 0.5)
+    (Zombie.cpp:6637-6644): the anim rate halves, and since the movement IS
+    the track velocity, so does the pace. Phases without _ground keep raw v
+    (the fallback below, which uses the x0.4 CHILLED_SPEED_FACTOR).*/
+    if (is_moving && walk_v_raw > 0.0f)
         stepped = reanimz::stepWalkReanim(directory_num, armor_dir, reanim_time,
-                                          walk_v * GROUND_WALK_PACE, cold_time > 0,
-                                          ground_dx);
+                                          walk_v_raw * GROUND_WALK_PACE *
+                                              (cold ? 0.5f : 1.0f),
+                                          cold, ground_dx);
     ground_driven = stepped;
     if (!stepped)
     {

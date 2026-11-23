@@ -57,7 +57,8 @@ private:
         STOLEN   // box magneted off: ordinary zombie, box art hidden
     };
     JackState state = RUNNING;
-    int fuse_distance = 500; // px to walk before the pop
+    int fuse_distance = 500; // original aDistance (450 + Rand(300))
+    int fuse_ticks = -1;     // 60 Hz fuse countdown, armed on the first tick
     int last_x = -1;         // previous tick's x (fuse observer)
     int pop_ticks = 0;       // POPPING countdown
     int music_clk = 0;       // jackinthebox.ogg loop bookkeeping
