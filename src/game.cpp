@@ -8,6 +8,7 @@
 #include "events/choose_level_scene/render_scene/display_choose_level.hpp"
 #include "events/choose_level_scene/reset_level/reset_menu.hpp"
 #include "events/in_game/credit/credit.hpp"
+#include "events/autoplay/autoplay.hpp"
 #include "events/layout_editor/layout_editor.hpp"
 #include "events/scene_dump/scene_dump.hpp"
 #include "events/seed_chooser/seed_chooser.hpp"
@@ -65,6 +66,11 @@ int main(int argv, char **args)
     // PVZ_SCENE_DUMP=<out.png>: build the fixed debug scene, save a PNG +
     // report and exit 0 before any normal game init/menu/save-data path.
     if (scene_dump::run_if_requested())
+        return 0;
+
+    // PVZ_AUTOPLAY=<scenario> PVZ_AUTOPLAY_OUT=<dir>: headless gameplay
+    // simulation; same pre-init placement as the scene dump.
+    if (autoplay::run_if_requested())
         return 0;
 
     // Load all image to check image error
