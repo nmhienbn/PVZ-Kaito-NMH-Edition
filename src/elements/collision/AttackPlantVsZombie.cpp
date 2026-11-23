@@ -74,31 +74,37 @@ bool check_in_attack_range(const Plants &plant, const Zombie &zombie)
         // against the zombie body rect, row distance filtered to +-3 -- on
         // 100-px rows the circle reaches about +-2 rows in practice, so a
         // mid-lawn doom covers 5 rows, not the old clone 3.
+        // Doom-shroom: radius 250, rowRange 3, circle at the plant origin
+        // (repvz Plant::DoSpecial aPosX/aPosY = mX+40, mY+40 -> Plant.cpp:4326;
+        // Board::KillAllZombiesInRadius Board.cpp:9301-9317).
         const Block &cell = cells[plant.get_row()][plant.get_col()];
         if (abs(plant.get_row() - zombie.row) > 3)
             return false;
-        int cx = (cell.x1 + cell.x2) / 2;
-        int cy = (cell.y1 + cell.y2) / 2;
-        return circle_rect_overlap(cx, cy, 250, zombie.zrect_left(), zombie.zrect_top(),
+        return circle_rect_overlap(cell.x1 + 40, cell.y1 + 40, 250,
+                                   zombie.zrect_left(), zombie.zrect_top(),
                                    zombie.zrect_right(), zombie.zrect_bottom());
     }
     case THREE_X_THREE:
     {
-        int right_limit = cells[plant.get_row()][plant.get_col()].x2 + BLOCK_WIDTH;
-        int left_limit = cells[plant.get_row()][plant.get_col()].x1 - BLOCK_WIDTH - 50;
-        if (is_in(plant.get_row() - 1, zombie.row, plant.get_row() + 1) &&
-            is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION + 15, right_limit))
-            return true;
-        return false;
+        // Cherry bomb: radius 115, rowRange 1, circle centred on the plant
+        // origin (repvz Plant.cpp:4313 -> KillAllZombiesInRadius).
+        const Block &cell = cells[plant.get_row()][plant.get_col()];
+        if (!is_in(plant.get_row() - 1, zombie.row, plant.get_row() + 1))
+            return false;
+        return circle_rect_overlap(cell.x1 + 40, cell.y1 + 40, 115,
+                                   zombie.zrect_left(), zombie.zrect_top(),
+                                   zombie.zrect_right(), zombie.zrect_bottom());
     }
     case ONE_X_ONE:
     {
-        int right_limit = cells[plant.get_row()][plant.get_col()].x2 - 25;
-        int left_limit = cells[plant.get_row()][plant.get_col()].x1 - 50;
-        if (plant.get_row() == zombie.get_row() &&
-            is_in(left_limit, zombie.x_location + ZOMBIE_EXACT_LOCATION + 15, right_limit))
-            return true;
-        return false;
+        // Potato mine: radius 60, rowRange 0, centre (mX+20, mY+40)
+        // (repvz Plant.cpp:4373-4377).
+        const Block &cell = cells[plant.get_row()][plant.get_col()];
+        if (plant.get_row() != zombie.get_row())
+            return false;
+        return circle_rect_overlap(cell.x1 + 20, cell.y1 + 40, 60,
+                                   zombie.zrect_left(), zombie.zrect_top(),
+                                   zombie.zrect_right(), zombie.zrect_bottom());
     }
     default:
         return false;

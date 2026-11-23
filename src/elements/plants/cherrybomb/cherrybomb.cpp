@@ -1,6 +1,7 @@
 #include "cherrybomb.hpp"
 #include "draw/explosion_fx.hpp"
 #include "elements/Map/Map.hpp"
+#include "game_param.hpp"           // CS_TICKS
 #include "nlohmann/json.hpp"
 #include "elements/Level/Level.hpp" // roof_tile_dy
 using namespace nlohmann;
@@ -48,7 +49,10 @@ CherryBomb::~CherryBomb()
 */
 bool CherryBomb::is_blow()
 {
-    if (!has_exploded && frame >= CHERRYBOMB_ASSET.frame * all_img[CHERRYBOMB_SHEET_DIRECTORY].n_sheet)
+    // Retail fuse = 100 cs (Plant.cpp:320-327). The blast animation starts on
+    // the same tick the circle damage is applied (the sheet's growth reel is
+    // 63 ticks; the damage timing is the authoritative 60 ticks).
+    if (!has_exploded && frame >= CS_TICKS(100))
     {
         directory_num = CHERRYBOMB_EXPLOSION_DIRECTORY;
         has_exploded = true;

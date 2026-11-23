@@ -39,8 +39,7 @@
 
     "ZOMBIE_INIT_X": 1050,
     "ZOMBIE_DX": 1,
-    "ZOMBIE_COLD_DX": 2,
-    "PEA_DX": 10,
+    "PEA_DX": 3.33,
     "SUN_DY": 1,
     "CLICKED_SUN_D": 50
 }

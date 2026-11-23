@@ -28,7 +28,7 @@
         "cost": 25,
         "health": 6,
         "loading_time": 1800,
-        "armed_time": 900
+        "armed_time": 1500
     },
     "cherrybomb": {
         "id": 5,

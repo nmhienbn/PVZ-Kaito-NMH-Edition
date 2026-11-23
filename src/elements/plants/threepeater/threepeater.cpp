@@ -56,7 +56,8 @@ lanes simply lose the off-board head's pea, like the original).
 void ThreePeater::fire_peas(vector<Bullet *> &bullets)
 {
     play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-    int x = cells[row][col].x2 - 10;
+    // repvz Plant.cpp:4626: threepeater origin mX + 45 (= cell x1 + 45).
+    int x = cells[row][col].x1 + 45;
     if (row > 0)
         bullets.push_back(new Pea(row - 1, x));
     bullets.push_back(new Pea(row, x));

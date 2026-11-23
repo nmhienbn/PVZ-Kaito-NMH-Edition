@@ -24,7 +24,7 @@ namespace {
 // flame origin rides the row's ground line 10 px up (GetPosYBasedOnRow
 // (aPosX + 10, row) - 10), following the roof slope per column.
 const int FIRE_STATIONS = 12;
-const int BOARD_OFFSET_X = 220;
+// BOARD_OFFSET_X comes from game_param.hpp (220).
 // repvz mFwooshCountDown = 100 cs (1 s here): stations hold "anim_flame" for
 // the first 50 cs; UpdateFwoosh's linear 12 -> 0 ramp then kills one station
 // every ~4.2 cs, each finishing with the 10-frame "anim_done" take at 15 fps.

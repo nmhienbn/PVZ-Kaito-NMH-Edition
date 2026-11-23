@@ -607,17 +607,19 @@ bool pick_sun_if_clicked_on(const int &mouse_x, const int &mouse_y, bool *is_mon
 {
     for (auto &sun : game_characters.suns)
     {
-        int row = sun.final_row;
-        int col = sun.final_col;
-        int right_bound = cells[row][col].x2;
-        int left_bound = cells[row][col].x1;
+        // Sky suns spawn at an arbitrary board x and plant-popped suns drift
+        // off-tile: the hitbox rides the real x_location (same as
+        // cursor_on_sun in sun.cpp).
+        int left_bound = sun.x_location;
+        int right_bound = sun.x_location + SUN_WIDTH;
         int upper_bound = sun.y_location;
         int lower_bound = sun.y_location + ELEMENT_HEIGHT;
         if (mouse_x > left_bound && mouse_x < right_bound &&
             mouse_y > upper_bound && mouse_y < lower_bound)
         {
             sun.is_clicked = true;
-            sun.x_location = left_bound;
+            sun.fx = (float)sun.x_location;
+            sun.fy = (float)sun.y_location;
             if (sun.money_kind == MONEY_SEED_PACKET)
             {
                 // Vasebreaker plant vase (retail COIN_USABLE_SEED_PACKET):

@@ -1,8 +1,8 @@
 #include "PotatoMine.hpp"
 #include "elements/Map/Map.hpp"
+#include "game_param.hpp" // PLANT_ARMED_TIME, CS_TICKS
 #include "nlohmann/json.hpp"
 using namespace nlohmann;
-#define POTATO_MINE_ARMED_TIME 900
 
 extern const json plant_json;
 static ifstream potatomine("./resources/images/json/potatomine.json");
@@ -34,7 +34,9 @@ PotatoMine::PotatoMine(const int &_row, const int &_col) : Plants(_row, _col)
     directory_num = POTATOMINE_UNARMED_DIRECTORY;
     attack_range = ONE_X_ONE;
     state = PLANTED;
-    arm_count_down = POTATO_MINE_ARMED_TIME;
+    // plants.json is the single source, in original centiseconds (1500 cs =
+    // 15 s -> 900 ticks here).
+    arm_count_down = CS_TICKS(PLANT_ARMED_TIME[POTATOMINE_TYPE]);
 }
 
 /*

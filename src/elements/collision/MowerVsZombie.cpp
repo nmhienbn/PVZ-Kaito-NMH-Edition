@@ -3,6 +3,7 @@
 #include "elements/Level/Level.hpp"
 #include "game_param.hpp"
 #include "reanim/reanim_zombie.hpp"
+#include <algorithm>
 
 extern int game_state;
 extern Level level;
@@ -25,24 +26,30 @@ static bool mower_can_touch(const Zombie &z)
     return true;
 }
 
-/*The parked mower only rolls when the zombie that crosses its line can
+/*Horizontal overlap of the mower attack rect with the zombie body rect.
+GetRectOverlap in the original is x-only (Board.cpp:8939-8943); the row filter
+already separates lanes. The balloon floats high, so it must sink a full 20 px
+into the blade before the mower reacts (LawnMower.cpp:224-226).*/
+static int mower_overlap_x(const float &mower_x, const Zombie &z)
+{
+    int mx = (int)mower_x;
+    return std::min(mx + 50, z.zrect_right()) - std::max(mx, z.zrect_left());
+}
+
+/*The parked mower only rolls when the zombie that crosses its attack rect can
 actually trip it (repvz LawnMower::Update, LawnMower.cpp:194-216): a bungee
 dangles above the blade and never sets it off, and a zombie whose health pool
 is already spent (the clone has no bleed-out headless walkers, so health <= 0
 covers the original's !mHasHead dead-but-standing case) is a corpse in
-transit, not a trigger. The trigger line doubles as the mower attack edge:
-overlap measured in px against it -- balloon floats high, so it must sink a
-full 20 px into the blade before the mower reacts (original's
-overlap > (balloon ? 20 : 0)).*/
+transit, not a trigger.*/
 static bool can_zombie_trip_mower(const Zombie &z)
 {
     if (z.type == BUNGEE_TYPE) // hangs over the mower, never trips it
         return false;
     if (z.get_health() <= 0)   // spent pool: dying walker, no trigger
         return false;
-    if (z.type == BALLOON_TYPE)
-        return (X_UPPER_LEFT - 30) - (z.x_location + ZOMBIE_EXACT_LOCATION) > 20;
-    return z.x_location + ZOMBIE_EXACT_LOCATION < X_UPPER_LEFT - 30;
+    int overlap = mower_overlap_x((float)(BOARD_OFFSET_X - 21), z);
+    return overlap > (z.type == BALLOON_TYPE ? 20 : 0);
 }
 
 /*
@@ -68,23 +75,25 @@ void handle_mower_zombie_encounter(vector<Mower *> &mowers,
     for (int i = 0; i < (int)mowers.size(); i++)
         if (mowers[i] != nullptr && mowers[i]->status == MOWER_ACTIVE)
         {
-            // mower move (repvz: 3.33 px/cs lawn, 2.5 px/cs pool, x5/3 here)
-            mowers[i]->x += level.row_has_water(mowers[i]->row) ? MOWER_POOL_DX : MOWER_LAWN_DX;
-
-            // mower gone (repvz mPosX > WIDE_BOARD_WIDTH = 800; clone +220)
-            if (mowers[i]->x >= 1020)
-            {
-                mowers[i] = nullptr;
-                continue;
-            }
-
-            // mower hit zombie
+            // repvz Update tests the attack rect against the zombie bodies
+            // BEFORE advancing the mower, so the triggering zombie is mown on
+            // the activation tick.
             for (int j = 0; j < (int)zombies.size();)
             {
                 if (!apply_mower_hitting_zombie(zombies, j, *mowers[i], zombie_parts))
                 {
                     j++;
                 }
+            }
+
+            // mower move (repvz: 3.33 px/cs lawn, 2.5 px/cs pool, x5/3 here)
+            mowers[i]->x += level.row_has_water(mowers[i]->row) ? MOWER_POOL_DX : MOWER_LAWN_DX;
+
+            // mower gone (repvz mPosX > WIDE_BOARD_WIDTH = 800; clone +220)
+            if (mowers[i]->x > BOARD_OFFSET_X + 800)
+            {
+                mowers[i] = nullptr;
+                continue;
             }
         }
 }
@@ -142,8 +151,10 @@ bool is_mower_hit_zombie(Mower &mower, Zombie &zombie)
 {
     if (!mower_can_touch(zombie))
         return false;
-    if (zombie.row == mower.row &&
-        zombie.x_location <= mower.x)
-        return true;
-    return false;
+    if (zombie.row != mower.row)
+        return false;
+    // repvz LawnMower::Update (LawnMower.cpp:224-226): x-overlap of the
+    // 50-px-wide attack rect with GetZombieRect(), >20 for a balloon.
+    int overlap = mower_overlap_x(mower.x, zombie);
+    return overlap > (zombie.type == BALLOON_TYPE ? 20 : 0);
 }

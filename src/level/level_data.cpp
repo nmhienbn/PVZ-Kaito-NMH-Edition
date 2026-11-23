@@ -432,7 +432,7 @@ static void materialize_wave_plans(const vector<WavePlan> &plans, mt19937 &rng)
         if (wave.has_flag && !blitz_flag)
         {
             wave.add_zombie(init_zombie(FLAG_TYPE, level.level_num));
-            x_bias_zombie = 100;
+            x_bias_zombie = 40; // flag-wave followers: +40 (Zombie.cpp:235)
         }
         if (blitz_flag)
         {

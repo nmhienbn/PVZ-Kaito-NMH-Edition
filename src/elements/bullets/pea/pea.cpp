@@ -17,8 +17,9 @@ extern Window win;
 extern Elements game_characters;
 extern Level level;
 
-// Straight-shot speed comes from PEA_DX (HEAD pacing, a61577b: 10 px/tick;
-// DPS unchanged -- fire rate and damage untouched, only flight pacing).
+// Straight-shot speed comes from PEA_DX (repvz Projectile.cpp:688: 3.33
+// px/cs, converted by CS_VEL; DPS unchanged -- fire rate and damage untouched,
+// only flight pacing).
 
 // Fire pea art (repvz Projectile::Draw: the fireball has NO sprite image --
 // Projectile.cpp:987-990 -- every pixel comes from the REANIM_FIRE_PEA

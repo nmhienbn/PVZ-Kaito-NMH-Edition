@@ -61,7 +61,8 @@ void SplitPea::fire_peas(vector<Bullet *> &bullets)
         if (check_in_attack_range(*this, game_characters.zombies))
         {
             play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-            bullets.push_back(new Pea(row, cells[row][col].x2 - 10));
+            // Same forward muzzle as the peashooter: mX + headX + 24.
+            bullets.push_back(new Pea(row, cells[row][col].x1 + 40));
         }
     }
     if (frame == SPLITPEA_BACK_FIRE_FRAME_1 * SPLITPEA_ASSET_FRAMES ||

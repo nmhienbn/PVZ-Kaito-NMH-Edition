@@ -42,7 +42,9 @@ void Peashooter::fire_pea(vector<Bullet *> &bullets)
     if (directory_num == PEASHOOTER_ATTACK_DIRECTORY && frame == 32 * PEASHOOTER_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-        bullets.push_back(new Pea(row, cells[row][col].x2 - 10));
+        // repvz Plant::Fire: (mX + headX + 24, ...) -- headX ~= 16 puts the
+        // muzzle at the cell's x1 + 40.
+        bullets.push_back(new Pea(row, cells[row][col].x1 + 40));
     }
 }
 

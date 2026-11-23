@@ -11,6 +11,20 @@ using namespace std;
 #define WINDOW_WIDTH 1050
 #define WINDOW_HEIGHT 600
 
+// Original PvZ runs at 100 ticks/s ("cs" = centisecond); this clone runs at
+// 60. Port an original tick count with CS_TICKS(cs), and an original px/cs
+// velocity with CS_VEL(v) (see zombie_struct.hpp), keeping the original
+// number written literally so it stays auditable against the reference.
+constexpr int CS_TICKS(const int cs)
+{
+    return (cs * 60 + 50) / 100;
+}
+
+// X shift from the original 800-px board to this 1050-px window: the original
+// lawn left edge (LAWN_XMIN 40) lands at 260 here. Absolute x constants are
+// expressed as BOARD_OFFSET_X + <original value>.
+constexpr int BOARD_OFFSET_X = 220;
+
 // 0: plants keep the PvZ1 sprite sheets; 1: plants use the PvZ2 PAM skins.
 #define USE_PAM_PLANT_SKIN 0
 
@@ -268,7 +282,6 @@ Moving speed of some elements
 */
 extern const int ZOMBIE_INIT_X;
 extern const int ZOMBIE_DX;
-extern const int ZOMBIE_COLD_DX;
 extern const float PEA_DX;
 extern const int SUN_DY;
 extern const int CLICKED_SUN_D;
@@ -278,6 +291,10 @@ extern const vector<int> PLANT_SUN_COST;
 extern const vector<int> PLANT_LOADING_TIME;
 
 extern const vector<int> PLANT_HEALTH_LIMIT;
+
+// plants.json "armed_time" in original centiseconds (potato mine); convert
+// with CS_TICKS at the consumer.
+extern const vector<int> PLANT_ARMED_TIME;
 
 // plants.json "aquatic" flag (lilypad/tanglekelp/seashroom can sit in water)
 extern const vector<bool> PLANT_IS_AQUATIC;

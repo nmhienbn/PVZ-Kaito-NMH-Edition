@@ -4,11 +4,12 @@
 #include "elements/Level/Level.hpp"
 #include "elements/Map/Map.hpp"
 #include "elements/Player/Player.hpp"
+#include "elements/zombies/zombie_struct.hpp" // CS_VEL
+#include "game_param.hpp"                     // BOARD_OFFSET_X, CS_TICKS
 #include "music/music.hpp"
 #include "support.hpp"
+#include <algorithm>
 #include <cmath>
-
-#define INIT_SUN_Y 5
 
 extern Map cells;
 extern Window win;
@@ -22,9 +23,18 @@ Then add it into vector<Sun>
 void gen_random_sun_from_sky(vector<Sun> &suns)
 {
     Sun temp;
+    // repvz Board::AddCoin(RandRangeInt(100,649), 60, COIN_MOTION_FROM_SKY):
+    // the original x is board-relative, so shift it by BOARD_OFFSET_X. It
+    // falls straight down at 0.67 px/cs and lands at y = 300 + Rand(250)
+    // (Coin.cpp:315-318).
+    int x = BOARD_OFFSET_X + rand(100, 649);
     temp.final_row = level.playable_rows[rand(0, (int)level.playable_rows.size() - 1)];
-    temp.final_col = rand(0, 8);
-    temp.y_location = INIT_SUN_Y;
+    temp.final_col = max(0, min(8, (x - X_UPPER_LEFT) / BLOCK_WIDTH));
+    temp.fx = (float)x;
+    temp.fy = 60.0f;
+    temp.ground_y = 300 + rand(0, 250);
+    temp.x_location = x;
+    temp.y_location = 60;
     temp.wait_seconds = 0;
     // Tutorial 1-1: the first sky sun waits for the player's click forever.
     temp.persists = (level.level_num == 1 && level.sky_sun_fallen == 0);
@@ -64,9 +74,11 @@ static void push_popped_sun(vector<Sun> &suns, const int &row, const int &col,
     temp.from_plant = true;
     temp.fx = fx;
     temp.fy = fy;
-    temp.vx = (rand(-40, 40) / 100.0f) * (100.0f / 60.0f);
-    temp.vy = (-1.7f - rand(0, 170) / 100.0f) * (100.0f / 60.0f);
-    temp.ground_y = (int)temp.fy + 15 + rand(0, 19);
+    // repvz COIN_MOTION_FROM_PLANT: velY = -1.7 - RandRangeFloat(0,1.7),
+    // velX = -0.4 + RandRangeFloat(0,0.8) px/cs (Coin.cpp:327-331).
+    temp.vx = CS_VEL(-0.4f + rand(0, 80) / 100.0f);
+    temp.vy = CS_VEL(-1.7f - rand(0, 170) / 100.0f);
+    temp.ground_y = (int)temp.fy + 15 + rand(0, 19); // +15 + Rand(20)
     temp.x_location = (int)temp.fx;
     temp.y_location = (int)temp.fy;
     temp.wait_seconds = 0;
@@ -121,8 +133,8 @@ void spawn_seed_packet_pickup(vector<Sun> &suns, const int &row, const int &col,
     temp.from_plant = true;
     temp.fx = cells[row][col].x1 + 20.0f;
     temp.fy = cells[row][col].y1 + 10.0f + roof_tile_dy(col);
-    temp.vx = (rand(-40, 40) / 100.0f) * (100.0f / 60.0f);
-    temp.vy = (-1.7f - rand(0, 170) / 100.0f) * (100.0f / 60.0f);
+    temp.vx = CS_VEL(-0.4f + rand(0, 80) / 100.0f);
+    temp.vy = CS_VEL(-1.7f - rand(0, 170) / 100.0f);
     temp.ground_y = (int)temp.fy + 15 + rand(0, 19);
     temp.x_location = (int)temp.fx;
     temp.y_location = (int)temp.fy;
@@ -149,11 +161,10 @@ Hitbox test shared by click (pick_sun_if_clicked_on) and hover collection.
 */
 static bool cursor_on_sun(const Sun &sun, const int &mx, const int &my)
 {
-    int row = sun.final_row;
-    int col = sun.final_col;
-    // A plant-popped sun drifts off-tile on its arc: hitbox rides its real x.
-    int x1 = sun.from_plant ? sun.x_location : cells[row][col].x1;
-    int x2 = sun.from_plant ? sun.x_location + SUN_WIDTH : cells[row][col].x2;
+    // Sky suns spawn at an arbitrary board x and plant-popped suns drift off
+    // their tile on the hop: both hitboxes ride the real x_location.
+    int x1 = sun.x_location;
+    int x2 = sun.x_location + SUN_WIDTH;
     return (mx > x1 && mx < x2 &&
             my > sun.y_location && my < sun.y_location + ELEMENT_HEIGHT);
 }
@@ -172,7 +183,8 @@ bool try_collect_sun(Sun &sun, const int &mx, const int &my)
     if (sun.is_clicked || !cursor_on_sun(sun, mx, my))
         return false;
     sun.is_clicked = true;
-    sun.x_location = cells[sun.final_row][sun.final_col].x1;
+    sun.fx = (float)sun.x_location;
+    sun.fy = (float)sun.y_location;
     player.sun_count += sun.value;
     // Money pickups chime with the coin sound; a plain sun keeps its own.
     play_sound_effect(sun.money_kind == MONEY_NONE ? SUN_CLICK_MUSIC_DIRECTORY : COIN_MUSIC_DIRECTORY);
@@ -210,11 +222,17 @@ void move_suns(vector<Sun> &suns)
     {
         if (suns[i].is_clicked)
         {
-            // move sun to top left corner.
-            suns[i].y_location -= CLICKED_SUN_D * suns[i].y_location / suns[i].x_location;
-            suns[i].x_location -= CLICKED_SUN_D;
-            // remove sun.
-            if (suns[i].x_location <= 0)
+            // repvz Coin::UpdateCollected (Coin.cpp:667-684): every original
+            // centisecond tick closes 1/21 of the remaining distance toward the
+            // sun bank (15, 0). At 60 tps the per-tick fraction is
+            // 1 - (1 - 1/21)^(100/60), so the wall-clock flight is unchanged.
+            const float k = 1.0f - powf(1.0f - 1.0f / 21.0f, 100.0f / 60.0f);
+            suns[i].fx += (15.0f - suns[i].fx) * k;
+            suns[i].fy += (0.0f - suns[i].fy) * k;
+            suns[i].x_location = (int)lroundf(suns[i].fx);
+            suns[i].y_location = (int)lroundf(suns[i].fy);
+            // Retail scores/removes the coin within ~8 px of the bank.
+            if (hypotf(suns[i].fx - 15.0f, suns[i].fy) < 8.0f)
             {
                 suns.erase(suns.begin() + i);
                 i--;
@@ -254,15 +272,20 @@ void move_suns(vector<Sun> &suns)
             }
             continue;
         }
-        int row = suns[i].final_row;
-        int col = suns[i].final_col;
-        // Ground = the tile surface: on the roof the sloped columns sit higher
-        // (roof_tile_dy), so the sky sun must stop on the shingles, not sink.
-        int lower_limit = cells[row][col].y1 + 30 + roof_tile_dy(col);
-        if (suns[i].y_location + SUN_DY < lower_limit)
-            suns[i].y_location += SUN_DY;
+        // repvz COIN_MOTION_FROM_SKY (Coin.cpp:315-318): constant 0.67 px/cs
+        // fall (not gravity), landing on the board-fixed ground line
+        // 300 + Rand(250) set at spawn.
+        Sun &s = suns[i];
+        if (s.fy + CS_VEL(0.67f) < (float)s.ground_y)
+        {
+            s.fy += CS_VEL(0.67f);
+            s.y_location = (int)lroundf(s.fy);
+        }
         else
-            suns[i].wait_seconds++;
+        {
+            s.y_location = s.ground_y;
+            s.wait_seconds++;
+        }
     }
 }
 
@@ -301,13 +324,7 @@ void display_suns(vector<Sun> &suns)
             dir = SEED_PACKET_DIRECTORY;
         if (!sun.is_clicked)
         {
-            // Sky suns sit on their column's left border; plant-popped suns
-            // keep the arc's x (set by move_suns).
-            if (!sun.from_plant)
-            {
-                int col = sun.final_col;
-                sun.x_location = cells[0][col].x1;
-            }
+            // x_location rides the sun's own motion (sky fall / plant hop).
             win.set_texture_alpha(dir, sun_alpha_for(sun));
         }
         else

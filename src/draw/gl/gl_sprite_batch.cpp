@@ -1,5 +1,7 @@
 #include "gl_sprite_batch.hpp"
 
+#include "events/scene_dump/scene_dump.hpp"
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -258,6 +260,15 @@ void GlSpriteBatch::pushVert(float x, float y, float u, float v,
 
 void GlSpriteBatch::pushQuad(GLuint_t texId, const Vert verts[4])
 {
+    // PVZ_SCENE_DUMP: while one entity's display is being measured, union this
+    // quad's screen-space corners into its drawn bbox. Inert (one branch) in
+    // normal play.
+    if (scene_dump::g_capture_active)
+    {
+        float xs[4] = {verts[0].x, verts[1].x, verts[2].x, verts[3].x};
+        float ys[4] = {verts[0].y, verts[1].y, verts[2].y, verts[3].y};
+        scene_dump::capture_quad(xs, ys);
+    }
     if (texId != mCurTex || (int)mVerts.size() + 6 > MAX_QUADS * 6)
     {
         flush();

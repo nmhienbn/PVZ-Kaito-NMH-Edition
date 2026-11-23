@@ -41,7 +41,8 @@ void SnowPea::fire_pea(vector<Bullet *> &bullets)
     if (directory_num == SNOWPEA_ATTACK_DIRECTORY && frame == 17 * SNOWPEA_ASSET.frame)
     {
         play_sound_effect(FIRE_PEA_MUSIC_DIRECTORY);
-        bullets.push_back(new SnowzPea(row, cells[row][col].x2 - 10));
+        // Same peashooter muzzle as above: mX + headX + 24 ~= x1 + 40.
+        bullets.push_back(new SnowzPea(row, cells[row][col].x1 + 40));
     }
 }
 

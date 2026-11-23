@@ -148,11 +148,34 @@ Zombie *init_zombie(int _type, int level_num, const int &x_bias, int wave_idx)
         res->row = new_row;
         last_zombie_row = new_row;
     }
-    // Random delay time to appear
-    if (_type == FLAG_TYPE)
-        res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + 10;
-    else
-        res->x_location = WINDOW_WIDTH - ZOMBIE_EXACT_LOCATION + rand(10, 200) + x_bias;
+    // Retail spawn x (Zombie.cpp:161): 780 + Rand(40) board-relative. Flag
+    // waves add +40 to every follower (Zombie.cpp:235); level_data passes
+    // that as x_bias. Type-specific spawns override this below with their own
+    // absolute x (the original switch runs after the flag-wave bump too).
+    res->x_location = BOARD_OFFSET_X + 780 + rand(0, 39) + x_bias;
+    switch (_type)
+    {
+    case POLEVAULT_TYPE:
+        res->x_location = BOARD_OFFSET_X + 870 + rand(0, 9); // 800+70+Rand(10)
+        break;
+    case GARGANTUAR_TYPE:
+        res->x_location = BOARD_OFFSET_X + 845 + rand(0, 9); // 800+45+Rand(10)
+        break;
+    case ZOMBONI_TYPE:
+        res->x_location = BOARD_OFFSET_X + 800 + rand(0, 9); // 800+Rand(10)
+        break;
+    case CATAPULT_TYPE:
+        res->x_location = BOARD_OFFSET_X + 825 + rand(0, 9); // 800+25+Rand(10)
+        break;
+    case BOBSLED_TYPE:
+        res->x_location = BOARD_OFFSET_X + 880; // 800+80
+        break;
+    case FLAG_TYPE:
+        res->x_location = BOARD_OFFSET_X + 800;
+        break;
+    default:
+        break;
+    }
     res->y_location = cells[res->row][0].y1 - 50;
     // Set init status
     res->is_moving = true;

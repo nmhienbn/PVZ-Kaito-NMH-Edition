@@ -1,4 +1,5 @@
 #include "game_param.hpp"
+#include "elements/zombies/zombie_struct.hpp" // CS_VEL
 #include "level/plants_registry.hpp"
 #include "level/zombies_registry.hpp"
 #include <nlohmann/json.hpp>
@@ -106,7 +107,8 @@ const int MAX_COLD_TIME = param_json["MAX_COLD_TIME"];
 // Chill left by the ice-shroom blast once the freeze lets go (repvz
 // ApplyChill(true) = 2000cs = 20s -> 1200 ticks at 60 tps)
 const int ICE_SHROOM_COLD_TIME = param_json["ICE_SHROOM_COLD_TIME"];
-// Max time that a sun can appear
+// Max time that a sun can appear (450 ticks = CS_TICKS(750), repvz
+// Coin::GetDisappearTime Coin.cpp:1495-1515)
 const int SUN_APPEAR_LIMIT = param_json["SUN_APPEAR_LIMIT"];
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -119,11 +121,10 @@ const int INF = param_json["INF"];
 // Moving speed of some elements
 const int ZOMBIE_INIT_X = WINDOW_WIDTH;
 const int ZOMBIE_DX = param_json["ZOMBIE_DX"];
-const int ZOMBIE_COLD_DX = param_json["ZOMBIE_COLD_DX"];
 // PEA_DX is px/tick for every straight shot (pea/snow pea/puff/spike/star
-// axes); HEAD pacing (a61577b) flies them at 10 px/tick (DPS unchanged -- fire
-// rate and damage untouched, only flight pacing).
-const float PEA_DX = param_json["PEA_DX"];
+// axes). parameters.json holds the original 3.33 px/cs; CS_VEL converts it to
+// the clone's 60 tps.
+const float PEA_DX = CS_VEL(param_json["PEA_DX"]);
 const int SUN_DY = param_json["SUN_DY"];
 const int CLICKED_SUN_D = param_json["CLICKED_SUN_D"];
 
@@ -182,6 +183,15 @@ const vector<int> PLANT_HEALTH_LIMIT = [](const vector<const ordered_json *> &by
     vector<int> v(PLANT_COUNT);
     for (int i = 0; i < PLANT_COUNT; i++)
         v[i] = (*by[i])["health"];
+    return v;
+}(PLANTS_DAT);
+
+// Arming delay in original centiseconds (only the potato mine has one).
+const vector<int> PLANT_ARMED_TIME = [](const vector<const ordered_json *> &by)
+{
+    vector<int> v(PLANT_COUNT);
+    for (int i = 0; i < PLANT_COUNT; i++)
+        v[i] = by[i]->value("armed_time", 0);
     return v;
 }(PLANTS_DAT);
 

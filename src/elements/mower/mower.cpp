@@ -3,6 +3,7 @@
 #include "draw/world_scale.hpp"
 #include "elements/Level/Level.hpp"
 #include "elements/Map/Map.hpp"
+#include "game_param.hpp" // BOARD_OFFSET_X
 #include "music/music.hpp"
 #include "reanim/one_shot_fx.hpp"
 #include "reanim/reanim.hpp"
@@ -149,29 +150,15 @@ int mower_skin_for(int row)
     return -1;
 }
 
-/*Parked-lane anchor x, calibrated by the designer with the F2 layout editor
-(layout_dump.txt). Per stage zone:
-  + day/night lawn (5 lanes x 100 px): 163/163/156/159/158 per row;
-  + pool/fog (6 lanes x 85 px): 177 on the lawn rows, 200 on the two water
-    rows -- the pool cleaner parks on the water's edge, right of the lawn
-    mowers;
-  + roof/roof_night (5 lanes x 85 px): hand-tuned via the F2 layout dump,
-    parked flush against column 0's west edge: 189/190/190/194/188.
+/*Parked-lane anchor x: the original parks every cleaner at mPosX = -21
+(LawnMower.cpp:193 rolls -160 -> -21; pool/roof use the same anchor), so the
+clone's board shift puts it at BOARD_OFFSET_X - 21 = 199.
 Vertical placement is NOT here: the art bottom-anchors on mower_ground_y,
-which IS the tuned per-row parked ground at the parked x -- the rect the
-editor calibrated these anchors against -- and rides the slope delta once
-the cleaner rolls.*/
+which rides the roof slope delta once the cleaner rolls.*/
 int mower_parked_x(int row)
 {
-    if (level.is_roof())
-    {
-        static const int ROOF_PARKED_X[] = {189, 190, 190, 194, 188};
-        return ROOF_PARKED_X[row < 0 ? 0 : (row > 4 ? 4 : row)];
-    }
-    if (level.has_water_rows())
-        return level.row_has_water(row) ? 200 : 177;
-    static const int LAWN_PARKED_X[] = {163, 163, 156, 159, 158};
-    return LAWN_PARKED_X[row < 0 ? 0 : (row > 4 ? 4 : row)];
+    (void)row;
+    return BOARD_OFFSET_X - 21;
 }
 
 } // namespace

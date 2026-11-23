@@ -9,6 +9,7 @@
 #include "events/choose_level_scene/reset_level/reset_menu.hpp"
 #include "events/in_game/credit/credit.hpp"
 #include "events/layout_editor/layout_editor.hpp"
+#include "events/scene_dump/scene_dump.hpp"
 #include "events/seed_chooser/seed_chooser.hpp"
 #include "events/selector_scene/selector_scene.hpp"
 #include <deque>
@@ -61,6 +62,11 @@ Else: start level.
 */
 int main(int argv, char **args)
 {
+    // PVZ_SCENE_DUMP=<out.png>: build the fixed debug scene, save a PNG +
+    // report and exit 0 before any normal game init/menu/save-data path.
+    if (scene_dump::run_if_requested())
+        return 0;
+
     // Load all image to check image error
     // for (int i = 0; i < COUNT_USED_DIRECTORY; i++)
     // {
