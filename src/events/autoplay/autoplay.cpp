@@ -506,25 +506,6 @@ void capture_screenshot(const string &path)
     game_state = saved_state;
 }
 
-/*Advance the zombie animation by `ticks` game ticks without touching gameplay
-(their display paths are render-only). Plants are advanced one tick at a time
-below because the peashooter's fire frame lives in the same state machine.*/
-void advance_zombie_animation(int ticks)
-{
-    if (ticks <= 0)
-        return;
-    const int saved_logic = logic_ticked;
-    const int saved_state = game_state;
-    game_state = 0;
-    logic_ticked = ticks;
-    for (auto *z : game_characters.zombies)
-        z->display(z->row);
-    logic_ticked = 0;
-    game_state = saved_state;
-    logic_ticked = saved_logic;
-    win.sprite_batch().flush();
-}
-
 /*---- helpers -------------------------------------------------------------*/
 
 bool zombie_on_screen(const Zombie &z)
@@ -737,7 +718,10 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
     const int hard_limit = 60 * TICKS_PER_SEC;
     int tick = 0;
     int last_zombie_death = -1;
-    int prev_anim_tick = 0;
+    /*D2 walk-sync diagnostics: running sum of the _ground delta fed by the
+    walk animation and of the whole-pixel steps actually applied.*/
+    double ground_dx_sum = 0.0;
+    double applied_step_sum = 0.0;
 
     while (tick < hard_limit)
     {
@@ -951,6 +935,10 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                     ++it->second.move_ticks;
                     if (dx > 0)
                         it->second.move_dist += dx;
+                    // By construction the ground delta equals the applied
+                    // whole-pixel step over the run (fractional carry aside).
+                    ground_dx_sum += s.p->last_ground_dx;
+                    applied_step_sum += s.p->last_step_px;
                 }
             }
 
@@ -1005,12 +993,10 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
         }
 
         /*--- 0.5 s sampling ----------------------------------------------*/
+        // Zombie animation now advances inside the logic tick (move_zombies),
+        // so there is nothing to fast-forward before a render anymore.
         if (tick % 30 == 0)
-        {
-            advance_zombie_animation(tick - prev_anim_tick);
-            prev_anim_tick = tick;
             sample_track(tick);
-        }
 
         /*--- screenshots -------------------------------------------------*/
         if (shot_ticks.count(tick))
@@ -1186,6 +1172,18 @@ RunResult run_scenario(const string &scenario, const string &out_dir)
                 << fmt(hi) << '\n';
         }
     }
+    sum << "\n";
+
+    /*D2: the walk animation's _ground feed must equal the applied movement.*/
+    sum << "[walk_sync]\n";
+    sum << "ground_dx_total: " << fmt(ground_dx_sum) << "\n";
+    sum << "applied_step_total: " << fmt(applied_step_sum) << "\n";
+    sum << "delta_vs_applied_pct: "
+        << (applied_step_sum > 0
+                ? fmt(100.0 * std::fabs(ground_dx_sum - applied_step_sum) /
+                          applied_step_sum)
+                : string("n/a"))
+        << "\n";
     sum << "\n";
 
     sum << "[peas]\n";

@@ -18,6 +18,7 @@
 #include "elements/vasebreaker/vasebreaker.hpp"
 #include "elements/zombies/zombie.hpp"
 #include "reanim/one_shot_fx.hpp"
+#include "reanim/reanim_zombie.hpp" // DrawShadow port: skinScaleForType + image offsets
 #include <deque>
 #include <cmath>
 using namespace std;
@@ -184,21 +185,51 @@ void display_shadow()
     }
     for (const auto &zombie : game_characters.zombies)
     {
-        // Zombie shadows ride the same slope ramp the zombie render uses
-        // (GetPosYBasedOnRow) so the blob stays under its feet. Big Trouble
-        // Little Zombie (3-5) minis draw at half reanim scale -- the blob
-        // shrinks with them, center anchored like the original's
-        // TodDrawImageCenterScaledF(g, IMAGE_PLANTSHADOW, ..., mScaleZombie)
-        // (repvz Zombie::DrawShadow, Zombie.cpp:9123-9310, mScaleZombie=0.5
-        // for Little Trouble at Zombie.cpp:792).
-        float k = zombie->shadow_scale();
-        int sw = max(1, (int)lround(96 * k * WORLD_SCALE));
-        int sh = max(1, (int)lround(40 * k * WORLD_SCALE));
-        win.draw_png(SHADOW_DIRECTORY,
-                     zombie->x_location + 23 + (96 - sw) / 2,
-                     cells[zombie->row][0].y2 - 40 + (40 - sh) / 2 +
-                         roof_slope_offset(zombie->x_location),
-                     sw, sh);
+        // Retail Zombie::DrawShadow (Zombie.cpp:9369-9560), ported verbatim
+        // (the per-type branch table below; backward-walk variants and the
+        // bungee altitude curve are not ported -- no such states here). The
+        // blob is IMAGE_PLANTSHADOW (86x36) center-scaled:
+        //   cx = x + offX + 20*s - 20 + tx
+        //   cy = y + 112 + offY + ty   (+ roof slope; pool rows -25)
+        // with s = the type's retail mScaleZombie (skin part x the
+        // big-trouble editor part), offX/offY the netted per-type image
+        // offsets (reanimz::zombieImageOffsetForType -- same table the body
+        // draw anchors with) and (tx, ty) the retail per-type deltas. The
+        // clone's y_location is retail mPosY - 20, so retail's +92 line lands
+        // at y + 112; the roof slope rides the blob like the body draw.
+        // Retail's pool whitewater band (+67 instead of +92) has no art in
+        // this build (documented): the regular blob drops 25px instead.
+        // Night stages keep the day blob (PLANTSHADOW2 absent).
+        const float s = reanimz::skinScaleForType(zombie->type) * zombie->shadow_scale();
+        float offX, offY;
+        reanimz::zombieImageOffsetForType(zombie->type, offX, offY);
+        float tx = 23.0f, ty = 0.0f, mul = 1.0f; // generic reanim zombie: +23x
+        switch (zombie->type)
+        {
+        case FOOTBALL_TYPE:     tx = 20.0f + 21.0f * s; ty = 16.0f; break;
+        case NEWSPAPER_TYPE:    tx = 29.0f; ty = 4.0f; break;
+        case POLEVAULT_TYPE:    tx = 36.0f; ty = 11.0f; break;
+        case BOBSLED_TYPE:      tx = 20.0f; ty = 13.0f; break;
+        case IMP_TYPE:          tx = 25.0f; ty = 7.0f; mul = 0.6f; break;
+        case DIGGER_TYPE:       tx = 17.0f; ty = 5.0f; break;
+        case SNORKEL_TYPE:      tx = 35.0f; ty = 5.0f; break;
+        case DOLPHINRIDER_TYPE: tx = 19.0f; ty = 11.0f; break;
+        case YETI_TYPE:         tx = 3.0f; ty = 20.0f; break;
+        case GARGANTUAR_TYPE:   tx = 27.0f; ty = 7.0f; mul = 1.5f; break;
+        case BALLOON_TYPE:      tx = 23.0f; ty = 13.0f; break; // generic +23, +13y
+        case BUNGEE_TYPE:       tx = 11.0f; ty = 0.0f; break;  // generic +23, -12x
+        default: break; // boss/boulder and every plain-doc type keep the +23
+        }
+        const float scale = s * mul * WORLD_SCALE;
+        const int sw = max(1, (int)lround(86.0f * scale));
+        const int sh = max(1, (int)lround(36.0f * scale));
+        float cx = zombie->x_location + offX + 20.0f * s - 20.0f + tx;
+        float cy = (float)zombie->y_location + 112.0f + offY + ty +
+                   roof_slope_offset(zombie->x_location);
+        if (level.row_has_water(zombie->row))
+            cy -= 25.0f;
+        win.draw_png(SHADOW_DIRECTORY, (int)lround(cx) - sw / 2,
+                     (int)lround(cy) - sh / 2, sw, sh);
     }
     for (auto &bullet : game_characters.bullets)
     {

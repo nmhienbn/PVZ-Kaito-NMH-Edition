@@ -66,16 +66,17 @@ void almanac_draw_plant_icon(int type, int cell_x, int cell_y)
 }
 
 // Per-zombie reanim icon geometry. walk_dir/armor_dir pick the anim like the
-// in-game draw; bbox_w/h + cx_off/foot_off describe the EFFECTIVE bbox of the
-// almanac pose (union over one loop at scale 1, measured off-screen through
-// the production almanac_draw_zombie_icon, demo/almanac_calib_dump.cpp):
-// cx_off = bboxCenterX - anchorX, foot_off = bboxBottom - anchorY, where the
-// anchor is drawZombie's (mass-center-x, feet-line) for the default pose and
-// the segment draw's (x_location, y_location) for the per-type poses. Four
-// zombies crop the FULL pose render to a pose-space rect instead of fitting
-// the whole anim: for those, bbox_*/cx_off/foot_off describe the CROP rect
-// itself (see crop_rect below) -- the art beyond the rect is scissored off,
-// so the vignette is steady (a pixel crop; the pose itself is unchanged).
+// in-game draw; the EFFECTIVE bbox is measured at runtime by the placement
+// probes (reanimz::zombiePoseGeom / skinPoseGeom): the renderer's opaque
+// union over the pose's whole play window, in the retail pivot frame (doc
+// point (30,120), skin scale folded -- see reanim_zombie.hpp). Four zombies
+// crop the FULL pose render to a PIVOT-SPACE rect instead of fitting the
+// whole anim: for those, the crop rect is the effective bbox -- the art
+// beyond the rect is scissored off, so the vignette is steady (a pixel crop;
+// the pose itself is unchanged). The dancer's disco doc is almanac-local
+// (see the namespace below) and keeps hand-measured numbers instead of a
+// probe (documented deviation: its draw stays at DISCO_DRAW_SCALE, not the
+// retail 0.8 dancer skin scale).
 //
 // Per-type preview poses (the "recipe"): the plain default previews the walk
 // loop; several zombies read wrong that way, so the recipe picks a different
@@ -94,28 +95,27 @@ void almanac_draw_plant_icon(int type, int cell_x, int cell_y)
 //                  (the 2Pak walk segment hid the balloon parts entirely,
 //                  showing the popped, ground-walking zombie)
 //   catapult      "anim_idle" FULL render, crop rect on the driver's
-//                  head+face zone (38,-30)..(160,48) pose units -- the
+//                  head+face zone (-24.8,-125.1)..(89.2,-52.2) pivot units -- the
 //                  vehicle frame/wheels sit outside the rect and are
-//                  scissored off (measured: vehicle-only pixels inside the
-//                  rect = 243, a noise fringe behind the seat)
+//                  scissored off
 //   gargantuar    "anim_walk" FULL render, crop rect on head+torso+pack imp
-//                  (-8,-56)..(227,111) -- the legs animate below the rect
-//                  (the telephone pole behind the shoulder stays inside, as
-//                  in the full art)
+//                  (-159.7,-207.0)..(126.9,-3.3) -- the legs animate below
+//                  the rect (the telephone pole behind the shoulder stays
+//                  inside, as in the full art)
 //   zomboni       "anim_drive" FULL render (the doc already includes the
 //                  driver in the cabin -- no tracks hidden), crop rect =
-//                  the vehicle silhouette (-110,-176)..(103,-6); the brush
-//                  dips ~15 units below the wheel line on bounce frames and
-//                  gets clipped by the cell
+//                  the vehicle silhouette (-116.7,-141.0)..(105.2,36.0); the
+//                  brush dips below the wheel line on bounce frames and gets
+//                  clipped by the cell
 //   zomboss       "anim_head_idle" head-only track subset (kBossBodyCrop,
 //                  kept because the head sits in FRONT of the body in this
 //                  pose, so a pure pixel crop would keep body junk behind/
 //                  through the neck) + the dome driver overlay riding the
-//                  boss_head track; the crop rect (-95,-150)..(105,20) frames
-//                  the head TOP -- the cockpit dome with the doctor (pose
-//                  x +10..+75) plus the exposed brain (-15..+60, -30..+15) --
-//                  the jaw clips below and the wide skull side/antenna struts
-//                  clip at the glass edges at the common 0.55 almanac scale
+//                  boss_head track; the crop rect (547.8,55.5)..(747.8,225.5)
+//                  frames the head TOP -- the cockpit dome with the doctor
+//                  plus the exposed brain; the jaw clips below and the wide
+//                  skull side/antenna struts clip at the glass edges at the
+//                  common 0.55 almanac scale
 enum AlmanacZombiePose
 {
     AZ_POSE_WALK,    // drawZombie(walk_dir, armor_dir) -- the default
@@ -128,15 +128,19 @@ struct AlmanacZombie
 {
     int walk_dir;
     int armor_dir; // CONE1/BUCKET1 directory, a reanimz phase (dolphin), -1 otherwise
-    float bbox_w, bbox_h, cx_off, foot_off; // effective bbox (crop rect if crop_on)
     AlmanacZombiePose pose = AZ_POSE_WALK;
     int skin = -1;                                  // AZ_POSE_SEGMENT: reanimz skin
     const char *seg = nullptr;                      // AZ_POSE_SEGMENT: segment name
     const std::unordered_set<std::string> *hide = nullptr; // Zomboss: body-out tracks
-    // Pose-space crop rect (units at scale 1, same origin as cx_off/foot_off):
-    // crop_on=true renders the FULL pose and scissor-clips to this rect;
-    // bbox_*/cx_off/foot_off then already DESCRIBE the rect. false -> the
-    // whole pose union bbox is the effective bbox.
+    // AZ_POSE_DISCO only: hand-fitted placement of the almanac-local disco
+    // doc (raw draw at (x, y), DISCO_DRAW_SCALE folded in) -- bbox_w/h the
+    // effective bbox, cx_off/foot_off its center/bottom in that draw's own
+    // scale-1 pose space.
+    float bbox_w = 0, bbox_h = 0, cx_off = 0, foot_off = 0;
+    // Pose-space crop rect (PIVOT space: doc point (30,120) origin, skin
+    // scale folded -- the same frame the probes report): crop_on=true
+    // renders the FULL pose and scissor-clips to this rect; the rect is
+    // then also the effective bbox the layout fits/centers.
     bool crop_on = false;
     float crop_l = 0, crop_t = 0, crop_r = 0, crop_b = 0;
 };
@@ -163,47 +167,119 @@ static const std::unordered_set<std::string> kBossBodyCrop = {
     "boss_outerarm_bits", "boss_outerarm_lower", "boss_outerarm_upper",
 };
 
-// bbox_w/h + cx_off/foot_off: union bbox of the pose for the plain entries;
-// for the four crop_on entries the COLUMNS ARE THE CROP RECT (w = r-l,
-// h = b-t, cx_off = (l+r)/2, foot_off = b), so the layout math below needs
-// no special case. All measured via demo/almanac_calib_dump.cpp.
+// The recipe: pose selection only (the geometry itself is probed at runtime
+// -- see almanac_pose_geom below). The disco entry keeps its hand-fitted
+// bbox/placement numbers; the four crop entries carry their PIVOT-space
+// crop rects (same frame as the probe's geometry).
 const AlmanacZombie ZOMBIE_RECIPE[COUNT_ZOMBIE_TYPE] = {
-    {ZOMBIE_WALK1_DIRECTORY, -1, 109, 137, -1.0f, -7.0f},            // normal
-    {FLAG_ZOMBIE_WALK1_1_DIRECTORY, -1, 161, 179, -27.0f, -7.0f},    // flag
-    {ZOMBIE_WALK1_DIRECTORY, CONE1_DIRECTORY, 110, 170, -1.5f, -7.0f},   // conehead
-    {ZOMBIE_WALK1_DIRECTORY, BUCKET1_DIRECTORY, 122, 162, -7.5f, -7.0f}, // buckethead
-    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, -1, 128, 147, -10.5f, 3.0f},     // screen door
-    {POLEVAULT_WALK_DIRECTORY, -1, 190, 133, 76.5f, 130.0f, AZ_POSE_SEGMENT,
-     reanimz::SKIN_POLEVAULT, "anim_idle"}, // pole vaulter: standing, pole in hand
-    {NEWSPAPER_WALK_DIRECTORY, -1, 132, 140, -8.5f, -8.0f},          // newspaper
-    {FOOTBALL_RUN_DIRECTORY, -1, 162, 157, -2.5f, -13.0f},           // football
-    {DANCER_WALK_DIRECTORY, -1, 72, 114, 27.5f, 92.0f, AZ_POSE_DISCO}, // dancer
-    {BACKUP_WALK_DIRECTORY, -1, 79, 137, -2.0f, -7.0f},              // backup dancer
-    {DUCKYTUBE_WALK_DIRECTORY, -1, 109, 137, -1.0f, -7.0f},          // ducky tube
-    {SNORKEL_WALK_DIRECTORY, -1, 100, 119, -39.5f, 35.0f},           // snorkel
-    {ZOMBONI_DRIVE_DIRECTORY, -1, 213, 170, -3.5f, -6.0f, AZ_POSE_WALK,
-     -1, nullptr, nullptr, true, -110.0f, -176.0f, 103.0f, -6.0f}, // full vehicle + driver
-    {BOBSLED_WALK_DIRECTORY, -1, 126, 144, -1.5f, -6.0f},            // bobsled team
-    {DOLPHINRIDER_WALK_DIRECTORY, reanimz::DOLPHIN_CARRY_STATE, 131, 125,
-     13.0f, -8.0f}, // dolphin rider: anim_walkdolphin, dolphin on head
-    {JACKBOX_WALK_DIRECTORY, -1, 106, 143, -2.5f, -7.0f},            // jack-in-the-box
-    {BALLOON_WALK_DIRECTORY, -1, 110, 193, 126.5f, 132.0f, AZ_POSE_SEGMENT,
-     reanimz::SKIN_BALLOON, "anim_idle"}, // balloon: only idle shows the balloon
-    {DIGGER_WALK_DIRECTORY, -1, 108, 142, -0.5f, -9.0f},             // digger
-    {POGO_WALK_DIRECTORY, -1, 69, 130, 1.0f, 9.0f},                  // pogo
-    {BUNGEE_WALK_DIRECTORY, -1, 109, 106, -1.0f, -6.0f},             // bungee
-    {LADDER_WALK_DIRECTORY, -1, 141, 135, 2.0f, -6.0f},              // ladder
-    {CATAPULT_WALK_DIRECTORY, -1, 122, 78, 99.0f, 48.0f, AZ_POSE_SEGMENT,
-     reanimz::SKIN_CATAPULT, "anim_idle", nullptr, true,
-     38.0f, -30.0f, 160.0f, 48.0f}, // full render, driver head+torso crop
-    {GARGANTUAR_WALK_DIRECTORY, -1, 235, 167, 109.5f, 111.0f,
-     AZ_POSE_SEGMENT, reanimz::SKIN_GARGANTUAR, "anim_walk", nullptr, true,
-     -8.0f, -56.0f, 227.0f, 111.0f}, // full render, head+torso crop
-    {IMP_WALK_DIRECTORY, -1, 79, 93, -3.0f, -3.0f},                  // imp
-    {0, -1, 200, 170, 5.0f, 20.0f, AZ_POSE_ZOMBOSS, -1, nullptr,
-     &kBossBodyCrop, true, -95.0f, -150.0f, 105.0f, 20.0f}, // head top: dome driver + brain, jaw clipped
-    {YETI_WALK_DIRECTORY, -1, 160, 176, -3.5f, -9.0f},               // zombie yeti
+    {ZOMBIE_WALK1_DIRECTORY, -1},                                    // normal
+    {FLAG_ZOMBIE_WALK1_1_DIRECTORY, -1},                             // flag
+    {ZOMBIE_WALK1_DIRECTORY, CONE1_DIRECTORY},                       // conehead
+    {ZOMBIE_WALK1_DIRECTORY, BUCKET1_DIRECTORY},                     // buckethead
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, -1},                             // screen door
+    {POLEVAULT_WALK_DIRECTORY, -1, AZ_POSE_SEGMENT,
+     reanimz::SKIN_POLEVAULT, "anim_idle"},                          // pole vaulter: standing, pole in hand
+    {NEWSPAPER_WALK_DIRECTORY, -1},                                 // newspaper
+    {FOOTBALL_RUN_DIRECTORY, -1},                                   // football
+    {DANCER_WALK_DIRECTORY, -1, AZ_POSE_DISCO, -1, nullptr, nullptr,
+     72, 114, 27.5f, 92.0f},                                        // dancer (hand-fitted)
+    {BACKUP_WALK_DIRECTORY, -1},                                     // backup dancer
+    {DUCKYTUBE_WALK_DIRECTORY, -1},                                 // ducky tube
+    {SNORKEL_WALK_DIRECTORY, -1},                                   // snorkel
+    {ZOMBONI_DRIVE_DIRECTORY, -1, AZ_POSE_WALK, -1, nullptr, nullptr,
+     0, 0, 0, 0, true, -116.7f, -141.0f, 105.2f, 36.0f},            // full vehicle + driver crop
+    {BOBSLED_WALK_DIRECTORY, -1},                                   // bobsled team
+    {DOLPHINRIDER_WALK_DIRECTORY, reanimz::DOLPHIN_CARRY_STATE},    // dolphin rider: anim_walkdolphin, dolphin on head
+    {JACKBOX_WALK_DIRECTORY, -1},                                   // jack-in-the-box
+    {BALLOON_WALK_DIRECTORY, -1, AZ_POSE_SEGMENT,
+     reanimz::SKIN_BALLOON, "anim_idle"},                            // balloon: only idle shows the balloon
+    {DIGGER_WALK_DIRECTORY, -1},                                     // digger
+    {POGO_WALK_DIRECTORY, -1},                                       // pogo
+    {BUNGEE_WALK_DIRECTORY, -1},                                     // bungee
+    {LADDER_WALK_DIRECTORY, -1},                                     // ladder
+    {CATAPULT_WALK_DIRECTORY, -1, AZ_POSE_SEGMENT,
+     reanimz::SKIN_CATAPULT, "anim_idle", nullptr, 0, 0, 0, 0, true,
+     -24.8f, -125.1f, 89.2f, -52.2f},                               // full render, driver head+torso crop
+    {GARGANTUAR_WALK_DIRECTORY, -1, AZ_POSE_SEGMENT,
+     reanimz::SKIN_GARGANTUAR, "anim_walk", nullptr, 0, 0, 0, 0, true,
+     -159.7f, -207.0f, 126.9f, -3.3f},                              // full render, head+torso crop
+    {IMP_WALK_DIRECTORY, -1},                                        // imp
+    {0, -1, AZ_POSE_ZOMBOSS, -1, nullptr, &kBossBodyCrop, 0, 0, 0, 0,
+     true, 547.8f, 55.5f, 747.8f, 225.5f},                          // head top: dome driver + brain, jaw clipped
+    {YETI_WALK_DIRECTORY, -1},                                      // zombie yeti
 };
+
+// Effective pose geometry of an almanac entry, in the draw's own frame:
+//   pivotX/pivotY: where the pose's doc-pivot point lands for a draw at
+//     (x_location, y_location), mul 1, no deltas -- (45+offX, 132+offY) for
+//     the skins (the art grows about it), + the boss doc compensation for
+//     Zomboss (its drawSkinSegment call passes that pair as ddx/ddy).
+//   C/B/W/H: effective bbox center-x / bottom / size, pivot space at mul 1
+//     (the probe's opaque-union box, overridden by the crop rect when the
+//     entry crops -- the rect IS the effective bbox then).
+// A caller wanting the bbox centered on (ax, ay) at scale m draws at
+//   x_location = ax - pivotX - m*C,  y_location = ay - pivotY - m*B.
+// Lazily inits reanimz (almanac_zombie_place runs before the icon draw's
+// own init dance); ok=false when the assets are unavailable or the pose is
+// the hand-fitted disco (caller uses the recipe's numbers).
+struct AlmanacPoseGeom
+{
+    float pivotX = 0, pivotY = 0;
+    float C = 0, B = 0, W = 0, H = 0;
+    bool ok = false;
+};
+
+static bool almanac_pose_geom(int type, float scale, AlmanacPoseGeom &out)
+{
+    out.ok = false;
+    if (type < 0 || type >= COUNT_ZOMBIE_TYPE)
+        return false;
+    const AlmanacZombie &r = ZOMBIE_RECIPE[type];
+    if (r.pose == AZ_POSE_DISCO)
+        return false; // hand-fitted placement (the recipe numbers)
+    if (!reanimz::ready() && !reanimz::init(win.sprite_renderer()))
+        return false;
+    reanimz::PoseGeom g;
+    bool have;
+    if (r.pose == AZ_POSE_ZOMBOSS)
+        have = reanimz::skinPoseGeom(reanimz::SKIN_ZOMBOSS, "anim_head_idle", g,
+                                     &kBossBodyCrop);
+    else if (r.pose == AZ_POSE_SEGMENT)
+        have = reanimz::skinPoseGeom(r.skin, r.seg, g, r.hide);
+    else
+        have = reanimz::zombiePoseGeom(r.walk_dir, r.armor_dir, g);
+    if (!have)
+        return false;
+    out.pivotX = g.pivotX;
+    out.pivotY = g.pivotY;
+    if (r.crop_on)
+    {
+        // the crop rect is the effective bbox (pivot space, like C/B)
+        out.C = (r.crop_l + r.crop_r) * 0.5f;
+        out.B = r.crop_b;
+        out.W = r.crop_r - r.crop_l;
+        out.H = r.crop_b - r.crop_t;
+    }
+    else
+    {
+        out.C = g.C;
+        out.B = g.B;
+        out.W = g.W;
+        out.H = g.H;
+    }
+    if (r.pose == AZ_POSE_ZOMBOSS)
+    {
+        // the draw passes the boss doc compensation as ddx/ddy: fold it into
+        // the pivot so placement and clip rect track the real draw (the pair
+        // is scale-dependent, hence the `scale` parameter).
+        int ddx, ddy;
+        reanimz::bossDocCompensation(scale, ddx, ddy);
+        out.pivotX += (float)ddx;
+        out.pivotY += (float)ddy;
+    }
+    out.ok = true;
+    return true;
+}
 
 // Place a measured bbox at a spot, bottom-center, at ONE common draw scale
 // (ALMANAC_ZOMBIE_DRAW_SCALE) -- no per-zombie fit: every zombie in the
@@ -219,7 +295,21 @@ AlmanacZombieLayout almanac_zombie_place(int type, float target_cx,
     l.scale = scale;
     l.anchor_x = target_cx;
     l.anchor_y = target_bottom;
-    float w = r.bbox_w * scale, h = r.bbox_h * scale;
+    float w = 0, h = 0;
+    if (r.pose == AZ_POSE_DISCO)
+    {
+        w = r.bbox_w * scale; // hand-fitted numbers (see the recipe)
+        h = r.bbox_h * scale;
+    }
+    else
+    {
+        AlmanacPoseGeom g;
+        if (almanac_pose_geom(type, scale, g))
+        {
+            w = g.W * scale;
+            h = g.H * scale;
+        }
+    }
     l.bbox_l = target_cx - w / 2.0f;
     l.bbox_r = target_cx + w / 2.0f;
     l.bbox_b = target_bottom;
@@ -522,10 +612,10 @@ bool almanac_zombie_crop(int type, float &l, float &t, float &r, float &b)
     return true;
 }
 
-// The crop rect mapped into window coords for a resolved layout: pose-space
-// point P renders at (pose_origin + P * scale), where the origin is the
-// drawZombie box's inner anchor (+61,+141) for walk poses and the
-// drawSkinSegment x/y for the segment/disco/zomboss poses.
+// The crop rect mapped into window coords for a resolved layout: the rect
+// is PIVOT-space, so a pose-space point P renders at (draw pivot + P*scale)
+// -- the probe pivot (the draw's scale-invariant anchor), boss-compensated
+// for the Zomboss entry (see almanac_pose_geom).
 bool almanac_zombie_clip_rect(int type, const AlmanacZombieLayout &l,
                               SDL_Rect &clip)
 {
@@ -534,16 +624,15 @@ bool almanac_zombie_clip_rect(int type, const AlmanacZombieLayout &l,
         return false;
     int x_location = 0, y_location = 0;
     almanac_zombie_draw_args(type, l, x_location, y_location);
-    float ox = (float)x_location, oy = (float)y_location;
-    if (ZOMBIE_RECIPE[type].pose == AZ_POSE_WALK)
-    {
-        ox += 61.0f;
-        oy += 141.0f;
-    }
-    clip.x = (int)floorf(ox + cl * l.scale);
-    clip.y = (int)floorf(oy + ct * l.scale);
-    clip.w = (int)ceilf(ox + cr * l.scale) - clip.x;
-    clip.h = (int)ceilf(oy + cb * l.scale) - clip.y;
+    AlmanacPoseGeom g;
+    if (!almanac_pose_geom(type, l.scale, g))
+        return false;
+    float px = (float)x_location + g.pivotX;
+    float py = (float)y_location + g.pivotY;
+    clip.x = (int)floorf(px + cl * l.scale);
+    clip.y = (int)floorf(py + ct * l.scale);
+    clip.w = (int)ceilf(px + cr * l.scale) - clip.x;
+    clip.h = (int)ceilf(py + cb * l.scale) - clip.y;
     return true;
 }
 
@@ -605,12 +694,18 @@ void almanac_draw_zombie_icon(int type, float clock, const AlmanacZombieLayout &
         break;
     case AZ_POSE_ZOMBOSS:
         // Head-attack loop: head track subset (no body in front of/behind the
-        // dome) + the doctor overlay riding the boss_head track (bossdriver
-        // anchors exactly like the body draw).
+        // dome) + the doctor overlay riding the boss_head track. The body
+        // draw passes the boss doc compensation as ddx/ddy (the retail pivot
+        // centers the doc's empty space -- see reanimz::bossDocCompensation);
+        // the driver anchors itself the same way, so the pair is shared.
         reanimz::setZombieScaleMul(1.0f);
-        reanimz::drawSkinSegment(reanimz::SKIN_ZOMBOSS, "anim_head_idle", clock,
-                                 x_location, y_location, false, false, 0, 0,
-                                 l.scale, true, &kBossBodyCrop);
+        {
+            int ddx, ddy;
+            reanimz::bossDocCompensation(l.scale, ddx, ddy);
+            reanimz::drawSkinSegment(reanimz::SKIN_ZOMBOSS, "anim_head_idle", clock,
+                                     x_location, y_location, false, false,
+                                     ddx, ddy, l.scale, true, &kBossBodyCrop);
+        }
         bossdriver::draw("anim_head_idle", clock, true, x_location, y_location,
                          l.scale, false, false);
         break;
@@ -678,17 +773,29 @@ void almanac_zombie_draw_args(int type, const AlmanacZombieLayout &l,
                               int &x_location, int &y_location)
 {
     const AlmanacZombie &r = ZOMBIE_RECIPE[type];
-    x_location = (int)(l.anchor_x - r.cx_off * l.scale + 0.5f);
-    y_location = (int)(l.anchor_y - r.foot_off * l.scale + 0.5f);
-    if (r.pose == AZ_POSE_WALK)
+    if (r.pose == AZ_POSE_DISCO)
     {
-        // drawZombie takes the top-left of the 166x144 game zombie box and
-        // anchors the art at (x+61, y+141+~); see reanim_zombie.cpp
-        // MASS_CENTER_X / ART_BOTTOM_Y. Segment/disco/zomboss poses anchor at
-        // the doc origin directly.
-        x_location -= 61;
-        y_location -= 141;
+        // Hand-fitted numbers: the disco doc draws raw at (x, y) (its own
+        // namespace below, DISCO_DRAW_SCALE folded into the offsets), so the
+        // recipe's center/foot offsets map straight onto the anchor.
+        x_location = (int)(l.anchor_x - r.cx_off * l.scale + 0.5f);
+        y_location = (int)(l.anchor_y - r.foot_off * l.scale + 0.5f);
+        return;
     }
+    // Probe placement (see almanac_pose_geom): the pose's bbox center lands
+    // on anchor_x and its bottom on anchor_y -- x_location/y_location feed
+    // drawZombie / drawSkinSegment directly (the retail pivot anchors the
+    // art, so the same pair works for walk, segment and boss poses; the
+    // boss doc compensation is already folded into the probed pivot).
+    AlmanacPoseGeom g;
+    if (!almanac_pose_geom(type, l.scale, g))
+    {
+        x_location = 0;
+        y_location = 0;
+        return;
+    }
+    x_location = (int)(l.anchor_x - g.pivotX - g.C * l.scale + 0.5f);
+    y_location = (int)(l.anchor_y - g.pivotY - g.B * l.scale + 0.5f);
 }
 
 void draw_almanac_button(const Button &b, int label_dir, int highlight_dir,

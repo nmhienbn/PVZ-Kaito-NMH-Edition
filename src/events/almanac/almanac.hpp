@@ -30,13 +30,15 @@ bool draw_plant_preview(int type, float clock, int center_x, int foot_y);
 // are scissored to the cell/patch instead (crop rect, then container clip).
 //
 // Placement is bottom-center: the zombie's EFFECTIVE bbox (the pose-space
-// crop rect for the types that crop, the union bbox of the pose otherwise --
-// measured off-screen by demo/almanac_calib_dump.cpp at scale 1) x the common
-// scale, centered on the target x with the bbox bottom on the foot line.
+// crop rect for the types that crop, the OPAQUE-pixel union bbox of the pose
+// otherwise -- probed at runtime through reanimz::zombiePoseGeom /
+// skinPoseGeom, see almanac_pose_geom in the .cpp) x the common scale,
+// centered on the target x with the bbox bottom on the foot line.
 // AlmanacZombieLayout is the resolved placement; almanac_zombie_draw_args
-// maps it to the reanimz call arguments (drawZombie box convention, or
-// drawSkinSegment x_location/y_location for the segment poses). Same math
-// feeds the real scene and demo/almanac_layout_check.cpp.
+// maps it onto the reanimz draw arguments via the retail pivot: one
+// x_location/y_location pair feeds drawZombie AND drawSkinSegment (the
+// pivot anchors the art, so a single convention serves every pose). Same
+// math feeds the real scene and demo/almanac_layout_check.cpp.
 inline constexpr float ALMANAC_ZOMBIE_DRAW_SCALE = 0.55f;
 
 struct AlmanacZombieLayout
@@ -81,15 +83,18 @@ int almanac_zombies_scroll_row_at(int thumb_top);
 AlmanacZombieLayout almanac_zombie_grid_layout(int type, int cell_x, int cell_y);
 // Resolved layout of the detail-card preview icon.
 AlmanacZombieLayout almanac_zombie_preview_layout(int type);
-// reanimz call arguments for a resolved layout.
+// reanimz call arguments for a resolved layout (the probe's pivot placement:
+// x/y such that the effective bbox centers on anchor_x and bottoms on
+// anchor_y; (0,0) when the pose probe fails).
 void almanac_zombie_draw_args(int type, const AlmanacZombieLayout &layout,
                               int &x_location, int &y_location);
-// Pose-space crop rect (units at scale 1, relative to the pose draw origin:
-// drawSkinSegment's x/y for the segment poses, the drawZombie box's inner
-// anchor (x+61, y+141) for the walk poses). True when the type renders its
-// FULL pose and shows only this rect (catapult driver, gargantuar torso,
-// zomboni vehicle + driver, zomboss head). The rect is also the effective
-// bbox the layout fits/centers.
+// Pose-space crop rect, PIVOT space: doc point (30,120) as origin with the
+// skin's retail mScaleZombie folded in -- the same frame the probes report
+// and the retail pivot anchors the draw about (a pivot-space point P renders
+// at the draw pivot + P*scale). True when the type renders its FULL pose and
+// shows only this rect (catapult driver, gargantuar torso, zomboni vehicle +
+// driver, zomboss head). The rect is also the effective bbox the layout
+// fits/centers.
 bool almanac_zombie_crop(int type, float &l, float &t, float &r, float &b);
 // The crop rect mapped into window coords for a resolved layout (the
 // pose-origin mapping inside almanac_draw_zombie_icon). false = no crop.

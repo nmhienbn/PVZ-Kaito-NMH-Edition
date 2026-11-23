@@ -93,6 +93,11 @@ If true, Update zombie status.
 */
 bool has_zombie_reached_plant(Zombie &zombie)
 {
+    // D1: a headless zombie is dying and cannot eat (repvz !mHasHead makes
+    // CheckIfPreyCaught bail out), so it never stops at a tile -- it shambles
+    // straight over the plant while bleeding out.
+    if (zombie.head_dropped)
+        return false;
     // Scan columns right-to-left: the zombie walks left, so the rightmost
     // blocked tile its attack box overlaps is the one it bumps into first
     // (wide vehicle boxes can bridge two tiles at once, repvz (:406 133 px).
@@ -166,9 +171,16 @@ void move_zombies(vector<Zombie *> &zombies)
 {
     for (auto &zombie : zombies)
     {
+        zombie->last_ground_dx = 0.0f;
+        zombie->last_step_px = 0;
+        // Damage-flash / charm-swirl clocks tick once per logic tick, even
+        // while frozen or buttered (repvz mJustGotShotCounter decrements in
+        // Zombie::Update; D2 moved this out of the render pass).
+        zombie->update_logic_timers();
         // Ice-shroom hold: the zombie stands dead still for freeze_time ticks,
         // then keeps the ice-shroom chill afterwards (repvz HitIceTrap:
         // ApplyChill(true) = 2000cs, longer than the snow-pea 1000cs chill).
+        // A fully frozen zombie does not animate either.
         if (zombie->freeze_time)
         {
             zombie->freeze_time--;
@@ -182,30 +194,43 @@ void move_zombies(vector<Zombie *> &zombies)
             zombie->butter_time--;
             continue;
         }
-        // subclass movement override (pole vault flight, newspaper gasp):
-        // true means the tick's movement is fully handled.
-        if (zombie->on_move_tick())
-            continue;
         /*Walking speed this tick: the per-zombie roll in px/tick, chilled to
-        x0.4 (CHILLED_SPEED_FACTOR; HEAD: the walk pin halves the anim rate
-        with it). Subclass paces come via speed_px_per_tick(); the whack
-        sprint ramp scales there (big_trouble minis keep the plain roll --
-        only their walk ANIMATION doubles, reanim layer).
-        Retail pacing: every speed constant is the original CS_VEL figure
-        x HEAD_SPEED_SCALE (=1.0), so the plain-roll mean is CS_VEL(0.30)
-        = 30 px/s like the original. Every tick the float carry takes the
-        full velocity and x_location steps ONLY the whole-pixel part -- so
-        a plain walker moves 0 or 1 px per tick with no frozen pauses at
-        the float level, and no tick ever lurches more than a pixel past
-        its pace (1 px max at the 23-37 px/s band, 2 px at the 66-91 px/s
-        fast classes). The carry drains even while blocked, so a zombie
-        released from a bite resumes without any backlog lurch.*/
+        x0.4 (CHILLED_SPEED_FACTOR). Subclass paces come via
+        speed_px_per_tick(); the whack sprint ramp scales there.*/
         float v = zombie->speed_px_per_tick();
         if (zombie->cold_time)
             v *= CHILLED_SPEED_FACTOR;
-        zombie->walk_carry += v;
+        // subclass movement override (pole vault flight, newspaper gasp):
+        // true means the tick's movement is fully handled; the animation
+        // still advances below.
+        const bool handled = zombie->on_move_tick();
+        /*D2: the walk animation advances here, in LOGIC, and the doc's
+        _ground track reports the ground actually covered (retail
+        UpdateZombieWalking, Zombie.cpp:4126-4133: dx = ground.x(new anim
+        time) - ground.x(old anim time), x mScaleZombie). The reanim rate is
+        derived from the rolled pace, so the average equals velX. States with
+        no distance-driven walk segment (eating, one-shots, vault, swim,
+        zamboni, bobsled, dolphin jump, digger tunnel) fall back to raw velX
+        and a fixed anim rate. Nothing is computed in the draw pass, so the
+        movement is identical with or without rendered frames.*/
+        const bool walking = zombie->is_moving && v > 0.0f;
+        bool ground_driven = false;
+        const float ground_dx =
+            zombie->update_logic_animation(walking ? v : 0.0f, ground_driven);
+        if (handled)
+            continue;
+        if (!walking)
+            continue;
+        /*Carry the fractional distance; whole pixels step x_location below.
+        On ground-driven states the delta IS the distance covered (the seam
+        tick holds at 0 and the stride is repaid across the loop, so the
+        average is exactly v). The carry drains even while blocked, so a
+        zombie released from a bite resumes without any backlog lurch.*/
+        zombie->walk_carry += ground_driven ? ground_dx : v;
         int step = (int)zombie->walk_carry;
         zombie->walk_carry -= step;
+        zombie->last_ground_dx = ground_driven ? ground_dx : 0.0f;
+        zombie->last_step_px = step;
         // Hypnotized zombies march right and ignore plants/grave rules; the
         // zombie-vs-zombie fight in update loop marks them stopped.
         if (zombie->is_charmed)

@@ -52,6 +52,10 @@ If the zombie reached plant_type, apply its bites on the plant_type:
 */
 bool apply_zombie_bite_on_plant(Zombie &zombie, vector<Plants *> &plants, int &p_ind)
 {
+    // D1: headless dying zombies cannot eat (repvz CheckIfPreyCaught's
+    // !mHasHead early-out): they walk over the tile and bleed out instead.
+    if (zombie.head_dropped)
+        return false;
     if (has_zombie_reached_block(zombie, plants[p_ind]->get_row(), plants[p_ind]->get_col()))
     {
         // Stacked tile (lily pad + rider, see support_plant.hpp): the zombie
@@ -118,8 +122,9 @@ void handle_zombie_plant_encounter(vector<Zombie *> &zombies, vector<Plants *> &
 {
     for (auto &zombie : zombies)
     {
-        if (zombie->is_charmed || zombie->freeze_time || zombie->butter_time)
-            continue; // charmed walk past plants, frozen/buttered do nothing
+        if (zombie->is_charmed || zombie->freeze_time || zombie->butter_time ||
+            zombie->head_dropped)
+            continue; // charmed walk past plants, frozen/buttered/headless do nothing
         if (zombie->bite_time == 0)
         {
             // Pumpkin shell stack: the zombie chews the SHELL before the plant
@@ -163,6 +168,13 @@ void handle_charmed_zombie_bites(vector<Zombie *> &zombies, vector<ZombiePart> &
             delete c;
             zombies.erase(zombies.begin() + ci);
             ci--;
+            continue;
+        }
+        // D1: a headless charmed zombie cannot bite either (repvz
+        // CheckIfPreyCaught bails on !mHasHead); it just shambles on.
+        if (c->head_dropped)
+        {
+            c->is_moving = true;
             continue;
         }
         Zombie *target = nullptr;
@@ -229,6 +241,38 @@ void update_zombies_status(vector<Zombie *> &zombies, vector<Plants *> &plants, 
     // Jackbox blast victims queued during last frame's move pass are erased
     // here, outside any zombie-vector iteration.
     drain_jack_explosion_kills(zombies);
+
+    /*D1: dying bodies bleed out every logic tick (repvz Zombie::Update's
+    isDying branch, Zombie.cpp:4661-4688): a headless zombie, or a
+    zomboni/catapult whose body fell under 200 original HP. The head-drop
+    tick itself is skipped once (bleed_pending), so a normal 10-pea kill lands
+    ~0.7 s after the head comes off. Death finalizes here, outside any other
+    zombie iteration, with the headless corpse render.*/
+    for (size_t i = 0; i < zombies.size();)
+    {
+        Zombie *z = zombies[i];
+        if (!z->is_dying_body())
+        {
+            ++i;
+            continue;
+        }
+        if (z->bleed_pending)
+        {
+            z->bleed_pending = false;
+            ++i;
+            continue;
+        }
+        z->bleed_health(z->headless_bleed_per_tick());
+        if (z->get_health() <= 0.0f)
+        {
+            play_sound_effect(ZOMBIE_FALLING_MUSIC_DIRECTORY);
+            z->add_zombie_die(zombie_parts);
+            delete z;
+            zombies.erase(zombies.begin() + i);
+            continue;
+        }
+        ++i;
+    }
 
     // Update all zombies' moving status
     update_moving_status_for_zombies(zombies);

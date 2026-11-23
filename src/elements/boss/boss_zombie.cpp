@@ -166,10 +166,17 @@ void BossZombie::render_zombie()
     default:
         break;
     }
+    // Zomboss doc compensation: drawSkinSegment's retail pivot anchors the
+    // doc's (30, 120) point, but the boss art sits ~(672.75, 325.47) doc
+    // units off the box origin at scale 1 -- the compensation pair restores
+    // the measured idle placement, and bossdriver::draw passes the same pair
+    // so the dome driver stays glued to the body.
+    int boss_dx, boss_dy;
+    reanimz::bossDocCompensation(0.6f * WORLD_SCALE, boss_dx, boss_dy);
     if (!reanimz::drawSkinSegment(reanimz::SKIN_ZOMBOSS, seg, anim_t,
                                   x_location, y_location,
                                   cold_time > 0, attacked_time > 0,
-                                  0, 0, 0.6f * WORLD_SCALE, loop))
+                                  boss_dx, boss_dy, 0.6f * WORLD_SCALE, loop))
         Zombie::render_zombie();
     else
     {
@@ -253,12 +260,15 @@ void BoulderZombie::add_zombie_die(vector<ZombiePart> &)
 void BoulderZombie::render_zombie()
 {
     int skin = ice ? reanimz::SKIN_BOSS_ICEBALL : reanimz::SKIN_BOSS_FIREBALL;
-    // Retail-size ball (scale_audit §8.4): the doc draws at skin scale 1.186,
-    // so mul 0.84 lands the ~250px ball on screen (0.28 drew it at -66.8%).
+    // Retail-size ball at the retail pivot (scale_audit 8.4): the fire doc's
+    // total bottom (256.6, incl. the superglow halo) keeps the ball's floor
+    // at y+225.6 -- the same pixel the fitted 0.84 draw landed on. The doc
+    // pivot (30, 120) sits at the ball's center, so (x+10, y-43) keeps the
+    // ball's screen center on the boulder slot.
     if (!reanimz::drawSkinSegment(skin, "anim_role", anim_t,
-                                  x_location + 10, y_location + 111,
+                                  x_location + 10, y_location - 43,
                                   false, attacked_time > 0,
-                                  0, 0, 0.84f * WORLD_SCALE, true))
+                                  0, 0, 1.0f * WORLD_SCALE, true))
         return; // no sprite-sheet fallback worth drawing
     // anim advances per logic tick, not per render (auto-FPS)
     for (int _lt = logic_ticked; _lt > 0 && !check_status(game_state, IS_PAUSED); _lt--)

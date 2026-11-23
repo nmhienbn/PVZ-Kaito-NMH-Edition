@@ -19,51 +19,7 @@ reanim::SdlReanimRenderer *g_renderer = nullptr;
 reanim::ReanimDoc g_boss_doc;   // only for the Boss_head anchor transform
 reanim::ReanimDoc g_driver_doc; // the dome driver
 const reanim::Track *g_head_track = nullptr;
-float g_anchor_dx = 0.0f, g_anchor_dy = 0.0f; // zomboss doc-space anchor
 bool g_tried = false, g_ok = false, g_enabled = true;
-
-// Values mirrored from reanim_zombie.cpp's initSkin calibration (fixed
-// ZOMBIE_SCALE / MASS_CENTER_X / ART_BOTTOM_Y): the driver overlay must ride
-// on the exact same doc-space anchor drawSkinSegment computed for the
-// Zomboss body, or it drifts off the dome.
-const float ZOMBIE_SCALE = 1.01f;
-const float MASS_CENTER_X = 61.0f;
-const float ART_BOTTOM_Y = 136.0f;
-
-reanim::DrawStats measure(reanim::ReanimDoc &doc, int first, int last,
-                          bool feet_only)
-{
-    reanim::DrawOptions m;
-    m.measureOnly = true;
-    reanim::DrawStats acc;
-    for (int fr = first; fr <= last; fr += 4)
-    {
-        reanim::DrawStats st = g_renderer->Draw(
-            doc, (float)fr, 0, 0, 1.0f,
-            [&](const std::string &n) {
-                if (!feet_only)
-                    return false;
-                std::string l = n;
-                for (char &c : l)
-                    c = (char)tolower((unsigned char)c);
-                return l.find("foot") == std::string::npos &&
-                       l.find("toe") == std::string::npos;
-            },
-            m);
-        if (!st.hasBounds)
-            continue;
-        if (!acc.hasBounds)
-            acc = st;
-        else
-        {
-            acc.minX = std::min(acc.minX, st.minX);
-            acc.minY = std::min(acc.minY, st.minY);
-            acc.maxX = std::max(acc.maxX, st.maxX);
-            acc.maxY = std::max(acc.maxY, st.maxY);
-        }
-    }
-    return acc;
-}
 
 bool init()
 {
@@ -93,18 +49,6 @@ bool init()
         SDL_Log("boss driver: Zombie_boss.reanim has no Boss_head track");
         return false;
     }
-    auto it = g_boss_doc.segments.find("anim_idle");
-    if (it == g_boss_doc.segments.end())
-        return false;
-    reanim::DrawStats acc = measure(g_boss_doc, it->second.first,
-                                    it->second.last, false);
-    reanim::DrawStats feet = measure(g_boss_doc, it->second.first,
-                                     it->second.last, true);
-    if (!acc.hasBounds)
-        return false;
-    float floor_u = feet.hasBounds ? feet.maxY : acc.maxY;
-    g_anchor_dx = MASS_CENTER_X - ZOMBIE_SCALE * (acc.minX + acc.maxX) * 0.5f;
-    g_anchor_dy = ART_BOTTOM_Y - ZOMBIE_SCALE * floor_u;
     return true;
 }
 
@@ -159,10 +103,18 @@ int draw(const char *boss_seg, float boss_anim_t, bool boss_loop,
     opt.loopWrapFirst = 0;
     opt.loopWrapLast = n - 1;
     opt.attachFrom = &head;
-    float ox = (float)x_location + g_anchor_dx * scale_mul;
-    float oy = (float)y_location + g_anchor_dy * scale_mul;
+    // Same retail pivot anchor as reanimz::drawSkinSegment's Zomboss body
+    // draw (the boss doc's own geom: scale 1.0, no image offset), with the
+    // SAME bossDocCompensation deltas the body call passes -- the driver
+    // rides the head transform on top of that origin, so sharing the pair
+    // keeps the dome glued to the body at every scale mul.
+    int ddx, ddy;
+    reanimz::bossDocCompensation(scale_mul, ddx, ddy);
+    const float s = 1.0f * scale_mul; // retail mScaleZombie of the boss: 1.0
+    float ox = (float)x_location + 45.0f - 30.0f * s + (float)ddx;
+    float oy = (float)y_location + 132.0f - 120.0f * s + (float)ddy;
     reanim::DrawStats st = g_renderer->Draw(
-        g_driver_doc, dlocal, ox, oy, ZOMBIE_SCALE * scale_mul,
+        g_driver_doc, dlocal, ox, oy, s,
         [](const std::string &n) { return kHide.count(n) > 0; }, opt);
     return st.partsDrawn;
 }

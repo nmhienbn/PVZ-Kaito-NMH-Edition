@@ -143,7 +143,7 @@ void BalloonZombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
     {
         zombie_parts.push_back(ZombiePart(reanimz::DEATH_PART_IMG, 1, row, x_location,
                                           ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
-                                          reanimz::SKIN_BALLOON));
+                                          reanimz::SKIN_BALLOON, false, head_dropped));
         return;
     }
     Zombie::add_zombie_die(zombie_parts);

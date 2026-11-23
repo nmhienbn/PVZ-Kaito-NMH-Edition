@@ -180,7 +180,7 @@ void DancingZombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
     {
         zombie_parts.push_back(ZombiePart(reanimz::DEATH_PART_IMG, 1, row, x_location,
                                           ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
-                                          reanimz::SKIN_DANCER));
+                                          reanimz::SKIN_DANCER, false, head_dropped));
         return;
     }
     Zombie::add_zombie_die(zombie_parts);
@@ -231,7 +231,7 @@ void BackupDancerZombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
     {
         zombie_parts.push_back(ZombiePart(reanimz::DEATH_PART_IMG, 1, row, x_location,
                                           ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
-                                          reanimz::SKIN_BACKUP));
+                                          reanimz::SKIN_BACKUP, false, head_dropped));
         return;
     }
     Zombie::add_zombie_die(zombie_parts);

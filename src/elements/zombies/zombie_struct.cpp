@@ -224,6 +224,138 @@ float Zombie::get_health() const
     return health;
 }
 
+/*D1: full-size body pool of this type in clone HP units (1 unit = 20
+original HP). Values are repvz ZombieInitialize's mBodyHealth / 20: the
+common 270 body (normal/flag/cone/bucket/door/newspaper/football/bobsled/
+ducky/snorkel/digger/balloon/imp/backup), 500 for ladder/polevault/dancer/
+dolphin/jackbox/pogo, 450 bungee, 850 catapult, 1350 zomboni/yeti, 3000
+gargantuar, 40000 zomboss. health_scale folds in Big-Trouble minis (every
+pool /4, Zombie.cpp:862-867).*/
+float Zombie::body_max_health() const
+{
+    float body;
+    switch (type)
+    {
+    case LADDER_TYPE:
+    case POLEVAULT_TYPE:
+    case DANCER_TYPE:
+    case DOLPHINRIDER_TYPE:
+    case JACKBOX_TYPE:
+    case POGO_TYPE:
+        body = 25.0f; // 500 original HP
+        break;
+    case BUNGEE_TYPE:      body = 22.5f;  break; // 450
+    case CATAPULT_TYPE:    body = 42.5f;  break; // 850
+    case ZOMBONI_TYPE:
+    case YETI_TYPE:        body = 67.5f;  break; // 1350
+    case GARGANTUAR_TYPE:  body = 150.0f; break; // 3000
+    case ZOMBOSS_TYPE:     body = 2000.0f; break; // 40000
+    default:               body = 13.5f;  break; // 270
+    }
+    return body * health_scale;
+}
+
+/*D1: body health left after the helm/shield tier still in front of it.
+- Helm types (cone/bucket/football/digger): the helm sits above the body in
+  the combined pool, so body = min(health, body_max); the moment health
+  passes below body_max the helmet is gone and the body takes the rest.
+- Carried shields (door/newspaper/ladder): shield_damage records how much of
+  the shield tier has been soaked (straight shots) while lobbed/fume hits
+  can land on the body underneath, so the exact split is
+  health - (shield_total - shield_damage).*/
+float Zombie::body_health() const
+{
+    const float bm = body_max_health();
+    float cap = shield_body_cap();
+    if (cap >= 0)
+    {
+        float shield_total = *ZOMBIE_HEALTH_LIMIT[type].rbegin() * health_scale - bm;
+        float shield_left = shield_total - shield_damage;
+        if (shield_left < 0)
+            shield_left = 0;
+        float body = health - shield_left;
+        return body > 0 ? body : 0;
+    }
+    return health < bm ? health : bm;
+}
+
+bool Zombie::is_dying_body() const
+{
+    if (head_dropped)
+        return true;
+    if (type == ZOMBONI_TYPE || type == CATAPULT_TYPE)
+        return body_health() < 10.0f * health_scale; // 200 original HP
+    return false;
+}
+
+/*repvz Zombie::CanLoseBodyParts (Zombie.cpp:3490-3502): vehicles, the boss,
+flying balloons and mounted riders keep their parts; a bobsled team keeps
+its members intact while the sled is on the ice.*/
+bool Zombie::can_lose_body_parts() const
+{
+    if (type == ZOMBONI_TYPE || type == BUNGEE_TYPE || type == CATAPULT_TYPE ||
+        type == GARGANTUAR_TYPE || type == ZOMBOSS_TYPE)
+        return false;
+    if (is_flying() || is_riding_vehicle())
+        return false;
+    return true;
+}
+
+/*D1 head pop (repvz UpdateDamageStates: mBodyHealth < mBodyMaxHealth/3 ->
+DropHead, Zombie.cpp:3918-3933). Runs after the virtual determine_appearance
+so every zombie family (including the subclasses that entirely override the
+appearance pass) loses its head at the body threshold exactly once. The
+headless body keeps its walk art but the render hook hides anim_head*/
+/*anim_hair*/ /*anim_tongue (SetupReanimForLostHead) and add_zombie_die
+suppresses the death head-pop.*/
+void Zombie::update_damage_states(vector<ZombiePart> &zombie_parts)
+{
+    if (!can_lose_body_parts() || head_dropped)
+        return;
+    if (body_health() >= body_max_health() / 3.0f)
+        return;
+
+    head_dropped = true;
+    bleed_pending = true; // do not bleed on the very tick the head comes off
+    if (reanimz::ready())
+    {
+        zombie_parts.push_back(ZombiePart(reanimz::DROP_HEAD_IMG, 1, row, x_location,
+                                          ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
+                                          reanimz::zombieSkinForType(type)));
+    }
+    else
+    {
+        zombie_parts.push_back(ZombiePart(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_FRAME,
+                                          row, x_location + 80,
+                                          HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT,
+                                          cold_time > 0));
+    }
+}
+
+/*D1 headless bleed: repvz Zombie::Update's isDying branch (Zombie.cpp:4661-
+4688). aDamage is 1 original HP, yeti 10, but the mBodyMaxHealth >= 500
+branch overrides both to 3. The original applies it only when Rand(5)==0,
+i.e. on average aDamage/5 original HP per original tick (20 HP/s for a plain
+body). Clone units per 60 Hz tick = aDamage/5 x100/60 (ticks) /20 (HP unit).
+body_max_health() is in clone units (original HP / 20), so the 500-HP
+threshold is 500/20 = 25 units.*/
+float Zombie::headless_bleed_per_tick() const
+{
+    float orig_hp = 1.0f;
+    if (type == YETI_TYPE)
+        orig_hp = 10.0f;
+    if (body_max_health() / health_scale >= 500.0f / 20.0f)
+        orig_hp = 3.0f;
+    return (orig_hp / 5.0f / 20.0f) * (100.0f / 60.0f);
+}
+
+void Zombie::bleed_health(float dmg)
+{
+    health -= dmg;
+    if (health < 0)
+        health = 0;
+}
+
 bool Zombie::wears_duckytube() const
 {
     return directory_num == DUCKYTUBE_WALK_DIRECTORY ||
@@ -296,45 +428,33 @@ void Zombie::determine_appearance(vector<ZombiePart> &zombie_parts)
             auto d = degrade_of.find(directory_num);
             if (d != degrade_of.end())
                 directory_num = d->second;
-            /*The arm pops crossing 2/3 of the TRUE body pool (repvz
-            UpdateDamageStates: mBodyHealth < 2*mBodyMaxHealth/3,
-            Zombie.cpp:3892) -- hardcoding tier <= 9 only matched the 270
-            body. Armored carriers share the 270-normal body, the ladder
-            holder has 500 body under its shield, everything else reaching
-            this branch is body-only so the largest tier IS the pool (same
-            table lose.cpp zombie_has_head uses). The boss keeps its parts.*/
-            if (type != ZOMBOSS_TYPE)
-            {
-                float body_max;
-                switch (type)
-                {
-                case DOOR_TYPE:
-                case NEWSPAPER_TYPE:
-                case FOOTBALL_TYPE:
-                case BOBSLED_TYPE:
-                    body_max = *ZOMBIE_HEALTH_LIMIT[NORMAL_TYPE].rbegin(); // 13.5 = 270 body
-                    break;
-                case LADDER_TYPE:
-                    body_max = 25; // 500 body under the ladder shield
-                    break;
-                default:
-                    body_max = *tiers.rbegin(); // body-only pool
-                    break;
-                }
-                if (tier <= body_max * 2.0f / 3.0f + 1e-4f)
-                {
-                    if (reanimz::ready())
-                        zombie_parts.push_back(ZombiePart(reanimz::DROP_ARM_IMG, 1, row, x_location,
-                                                          ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
-                    else
-                        zombie_parts.push_back(ZombiePart(ZOMBIE_ARM_DIRECTORY, 1, row, x_location,
-                                                          ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
-                }
-            }
         }
     }
     // Armor drop if necessary
     armor_drop(zombie_parts);
+    /*D1 arm pop (repvz UpdateDamageStates: mBodyHealth < 2*mBodyMaxHealth/3,
+    Zombie.cpp:3913). Done off the derived BODY pool, not off a tier value:
+    a cone's 370-pt helmet sits above the 270-pt body, so the arm only pops
+    once the body itself (helmet gone) falls under 180 original HP (9 clone
+    units). Door/newspaper shields and the swimming/dolphin phases keep the
+    arm (repvz DropArm, Zombie.cpp:3882-3906). Subclasses that override this
+    perform their own arm step; update_damage_states only adds the head.*/
+    if (can_lose_body_parts() && !arm_dropped &&
+        type != DOOR_TYPE && type != NEWSPAPER_TYPE &&
+        !is_submerged() && !is_riding_vehicle())
+    {
+        if (body_health() < body_max_health() * 2.0f / 3.0f && body_health() > 0.0f)
+        {
+            arm_dropped = true;
+            if (reanimz::ready())
+                zombie_parts.push_back(ZombiePart(reanimz::DROP_ARM_IMG, 1, row, x_location,
+                                                  ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
+                                                  reanimz::zombieSkinForType(type)));
+            else
+                zombie_parts.push_back(ZombiePart(ZOMBIE_ARM_DIRECTORY, 1, row, x_location,
+                                                  ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
+        }
+    }
 }
 
 /*
@@ -353,6 +473,7 @@ bool Zombie::decrease_health(vector<ZombiePart> &zombie_parts)
             shield_damage += 1; // soaked from the top: the shield takes it first
     }
     determine_appearance(zombie_parts);
+    update_damage_states(zombie_parts);
     // clamp: an overkill hit must not leave the zombie walking at negative health
     if (health <= 0)
     {
@@ -386,6 +507,7 @@ bool Zombie::take_hit(const float &dmg, vector<ZombiePart> &zombie_parts)
     }
     attacked_time = MAX_TIME_BLINK;
     determine_appearance(zombie_parts);
+    update_damage_states(zombie_parts);
     return health <= 0;
 }
 
@@ -438,6 +560,7 @@ bool Zombie::take_body_hit(const float &dmg, vector<ZombiePart> &zombie_parts)
         return true;
     }
     health = shield_hp + body_hp; // == health - dmg, booked into the body
+    update_damage_states(zombie_parts);
     return false;
 }
 
@@ -473,6 +596,7 @@ bool Zombie::take_shield_and_body_hit(const float &dmg, vector<ZombiePart> &zomb
     }
     health = shield_hp - chip + body_hp;
     determine_appearance(zombie_parts); // shield-crack art, newspaper rage
+    update_damage_states(zombie_parts);
     return false;
 }
 /*Charred corpse kind: one reanim doc per zombie group (repvz ApplyBurn
@@ -511,7 +635,7 @@ void Zombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
         // one reanim death animation (head pop included) instead of 2 sheets
         zombie_parts.push_back(ZombiePart(reanimz::DEATH_PART_IMG, 1, row, x_location,
                                           ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
-                                          0, drowned));
+                                          0, drowned, head_dropped));
         if (type == FLAG_TYPE)
             zombie_parts.push_back(ZombiePart(reanimz::DROP_FLAG_IMG, 1, row, x_location,
                                               ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
@@ -520,9 +644,11 @@ void Zombie::add_zombie_die(vector<ZombiePart> &zombie_parts)
     zombie_parts.push_back(ZombiePart(ZOMBIE_DIE_DIRECTORY, ZOMBIE_DIE_FRAME,
                                       row, x_location,
                                       ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0));
-    zombie_parts.push_back(ZombiePart(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_FRAME,
-                                      row, x_location + 80,
-                                      HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, cold_time > 0));
+    // a headless death leaves no head to toss
+    if (!head_dropped)
+        zombie_parts.push_back(ZombiePart(ZOMBIE_HEAD_DIRECTORY, HEAD_ZOMBIE_FRAME,
+                                          row, x_location + 80,
+                                          HEAD_ZOMBIE_WIDTH, HEAD_ZOMBIE_HEIGHT, cold_time > 0));
 }
 
 /*
@@ -598,6 +724,75 @@ void Zombie::render_zombie()
 }
 
 /*
+Per logic tick: damage-flash and charm-swirl clocks. These used to age inside
+Zombie::display (renderer cadence); they now run once per fixed logic tick, so
+they are identical whether or not frames are drawn (D2).
+*/
+void Zombie::update_logic_timers()
+{
+    if (attacked_time > 0)
+        attacked_time--;
+    if (charm_flash > 0)
+        charm_flash--;
+}
+
+/*
+Per logic tick: advance the sheet pose + reanim clock. `walk_v` is this tick's
+chilled forward pace in px (0 when not walking). When the current state has a
+usable _ground walk track the reanim clock is advanced by the distance-locked
+feed and the resulting ground delta (board px, forward-positive) is returned
+with ground_driven=true; otherwise the caller moves by walk_v and the reanim
+plays at its fixed rate (eat, one-shots, special phases).
+
+This is the D2 move of the old display-side aging: standing still (or eating)
+no longer depends on a frame being rendered.
+*/
+float Zombie::update_logic_animation(float walk_v, bool &ground_driven)
+{
+    ground_driven = false;
+    // Chill countdown used to live in the render loop; when it ends the
+    // pending bite/step budgets halve back (the chill doubled them).
+    if (cold_time)
+        if (--cold_time == 0)
+        {
+            bite_time /= 2;
+            next_step_time /= 2;
+        }
+    // Legacy sheet pose: distance-driven while walking, fixed otherwise.
+    if (is_moving && walk_v > 0.0f)
+    {
+        walk_stride_acc += walk_v;
+        while (walk_stride_acc >= ZOMBIE_WALK_STRIDE_PX)
+        {
+            walk_stride_acc -= ZOMBIE_WALK_STRIDE_PX;
+            frame++;
+        }
+    }
+    else if (cold_time % 2 == 0)
+    {
+        frame++;
+    }
+    // Reanim clock: the walk states step BY the _ground track; everything
+    // else keeps the pinned per-tick feed.
+    float ground_dx = 0.0f;
+    bool stepped = false;
+    if (is_moving && walk_v > 0.0f)
+        stepped = reanimz::stepWalkReanim(directory_num, armor_dir, reanim_time,
+                                          walk_v, cold_time > 0, ground_dx);
+    ground_driven = stepped;
+    if (!stepped)
+    {
+        reanim_time += reanim_rate;
+        float seg_len = reanimz::segmentLength(directory_num, cold_time > 0);
+        if (seg_len > 0 && reanim_time >= seg_len)
+            reanim_time -= seg_len;
+    }
+    if (frame >= ZOMBIE_FRAME * all_img[directory_num].n_sheet)
+        frame = 0;
+    return ground_dx;
+}
+
+/*
 display zombie
 */
 void Zombie::display(const int &_row)
@@ -631,15 +826,13 @@ void Zombie::display(const int &_row)
             win.set_texture_alpha(HYPNO_AURA_DIRECTORY, all_img[HYPNO_AURA_DIRECTORY].alpha);
             // one-shot swirl burst right after the bite (repvz
             // PARTICLE_MIND_CONTROL emitter: the glyph recolored to the charm
-            // purple, Zombie.cpp:3417-3418)
+            // purple, Zombie.cpp:3417-3418). Its clock ticks in logic
+            // (update_logic_timers); drawing is state-only now.
             if (charm_flash > 0)
             {
                 win.set_texture_color(MIND_CONTROL_DIRECTORY, 230, 15, 245);
                 win.draw_png_height_scaled(MIND_CONTROL_DIRECTORY, x_location - 37 + layout_dx, ry - 15 + layout_dy - body_lift, world_px(45));
                 win.set_texture_color(MIND_CONTROL_DIRECTORY, 255, 255, 255);
-                // anim advances per logic tick, not per render (auto-FPS)
-                for (int _lt = logic_ticked; _lt > 0 && charm_flash > 0 && check_status(game_state, IS_PAUSED) == false; _lt--)
-                    charm_flash--;
             }
         }
         // kernel-pult butter pat pasted on the zombie's crown (repvz
@@ -667,72 +860,9 @@ void Zombie::display(const int &_row)
             else // sheet fallback: keep the legacy hand-tuned offset
                 win.draw_png(BUTTER_BULLET_DIRECTORY, x_location - 22 + layout_dx, ry + 8 + layout_dy - body_lift, world_px(36), world_px(22));
         }
-        // Hit-flash decay runs even while frozen/buttered: repvz decrements
-        // mJustGotShotCounter on every Zombie::Update (Zombie.cpp:4366-4367).
-        // Gating it under the stun held the full-body flash for the whole
-        // butter hold (the "blinking stunned zombie" bug).
-        for (int _lt = logic_ticked; _lt > 0 && check_status(game_state, IS_PAUSED) == false && attacked_time > 0; _lt--)
-            attacked_time--;
-        // zombie next frame (a fully frozen zombie does not even animate);
-        // anims advance ONCE PER LOGIC TICK (auto-FPS: logic_ticked = the
-        // tick count of this rendered frame -- turbo runs 2, keeping the
-        // doubled movement and anim rates in lockstep).
-        for (int _lt = logic_ticked; _lt > 0 && check_status(game_state, IS_PAUSED) == false && !freeze_time && !butter_time; _lt--)
-        {
-            if (cold_time)
-                if (--cold_time == 0)
-                {
-                    bite_time /= 2;
-                    next_step_time /= 2;
-                }
-            // Walk anim advances on GROUND COVERED, not time: one sheet pose
-            // per ZOMBIE_WALK_STRIDE_PX px of travel (retail _ground-track
-            // stride lock; see zombie_struct.hpp). The rolled and the chilled
-            // pace both scale the step rate through speed_px_per_tick(), so
-            // feet stay planted -- the old fixed every-tick advance scurried
-            // ~2.4x too fast for the ground actually covered.
-            const float walk_v = speed_px_per_tick() * (cold_time ? CHILLED_SPEED_FACTOR : 1.0f);
-            bool walk_fed = false;
-            if (is_moving && walk_v > 0.0f)
-            {
-                walk_stride_acc += walk_v;
-                while (walk_stride_acc >= ZOMBIE_WALK_STRIDE_PX)
-                {
-                    walk_stride_acc -= ZOMBIE_WALK_STRIDE_PX;
-                    frame++;
-                }
-                // reanim walk: the same stride lock (retail UpdateAnimSpeed)
-                // -- feed units per ground px from the doc's _ground track.
-                // < 0 = not a distance-driven walk state (eat, one-shots,
-                // snorkel/pogo/bobsled/catapult/dolphin): pinned rate below.
-                const float feed_per_px =
-                    reanimz::walkFeedPerPx(directory_num, armor_dir, cold_time > 0);
-                if (feed_per_px >= 0.0f)
-                {
-                    reanim_time += walk_v * feed_per_px;
-                    walk_fed = true;
-                }
-            }
-            else if (cold_time % 2 == 0)
-            {
-                // Non-walk states (eating, ...) keep the per-tick pose; the
-                // discrete sheets halve it while chilled.
-                frame++;
-            }
-            // reanim runs at 12 fps, the game at 60 -> reanim_rate (0.2 by
-            // default); the distance-driven walk states advanced on ground
-            // covered above instead. Subclasses can speed a segment up
-            // (pole vault).
-            if (!walk_fed)
-                reanim_time += reanim_rate;
-            {
-                float seg_len = reanimz::segmentLength(directory_num, cold_time > 0);
-                if (seg_len > 0 && reanim_time >= seg_len)
-                    reanim_time -= seg_len;
-            }
-            if (frame >= ZOMBIE_FRAME * all_img[directory_num].n_sheet)
-                frame = 0;
-        }
+        // Hit-flash decay and animation clocks run in logic now
+        // (update_logic_timers / update_logic_animation in move_zombies): the
+        // render pass no longer advances zombie state (D2).
     }
 }
 
@@ -867,7 +997,8 @@ Zombie part constructor
 ZombiePart::ZombiePart(const int &_img_num, const int &_frame_clk,
                        const int &_r, const int &_x,
                        const int &_w, const int &_h, const bool &_cold,
-                       const int &_skin, const bool &_in_water)
+                       const int &_skin, const bool &_in_water,
+                       const bool &_headless)
 {
     img_num = _img_num;
     frame_clk = _frame_clk;
@@ -878,6 +1009,7 @@ ZombiePart::ZombiePart(const int &_img_num, const int &_frame_clk,
     is_cold = _cold;
     skin = _skin;
     in_water = _in_water;
+    headless = _headless;
 }
 
 /*@return 'true' if display finished*/
@@ -899,7 +1031,8 @@ bool ZombiePart::display(const int &_row)
 {
     if (img_num == reanimz::DEATH_PART_IMG)
         return display_reanim_death(_row);
-    if (img_num <= reanimz::DROP_ARM_IMG && img_num >= reanimz::DROP_FLAG_IMG)
+    if (img_num == reanimz::DROP_HEAD_IMG ||
+        (img_num <= reanimz::DROP_ARM_IMG && img_num >= reanimz::DROP_FLAG_IMG))
         return display_reanim_drop(_row);
     if (img_num == reanimz::CHARRED_PART_IMG)
         return display_reanim_charred(_row);

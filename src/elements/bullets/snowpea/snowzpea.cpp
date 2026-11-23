@@ -18,7 +18,7 @@ SnowzPea::SnowzPea(int _row, int _x) : Bullet(SNOWZPEA, _row, _x)
     height = 25;
     directory_num = SNOWZ_PEA_DIRECTORY;
     slow_down_rate = 2;
-    y_location = cells[row][0].y1 + 20 + roof_tile_dy(get_block_col(_x));
+    y_location = cells[row][0].y1 + 10 + roof_tile_dy(get_block_col(_x));
     bind_roof_slope();
 }
 

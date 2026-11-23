@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <numeric>
 #include <unordered_set>
 
 namespace reanimz {
@@ -28,11 +29,10 @@ bool gInitTried = false;
 // trimmed here (the 2Pak doc closes its loop with a copy of the first pose).
 float gFlagLoopLen = 0.0f;
 
-// Placement calibration (computed in init from the walk-segment bbox).
-float gScale = 1.0f;
-float gAnchorDX = 0.0f; // ox = x_location + gAnchorDX
-float gAnchorDY = 0.0f; // oy = y_location + gAnchorDY
-float gFloorY = 0.0f;   // reanim-units maxY of the walk bbox (zombie floor line)
+// Placement calibration: the anchor itself is the retail pivot formula (see
+// the placement block below the skin table); only the doc-space feet line of
+// the walk loop is measured (the drop-part bounce plane).
+float gFloorY = 0.0f;
 
 // Big Trouble Little Zombie (3-5) shrink factor (1.0 = off), set by the
 // game hook (reanim_game_hooks.cpp) from level.special. Applied around the
@@ -71,11 +71,14 @@ int loopPlayLast(const reanim::ReanimDoc& doc, int first, int last) {
 }
 
 // Extra character skins (pole vaulter, newspaper, football, dancer, and the
-// area 3-5 zombies): full clone-anatomy reanim self-contained docs,
-// calibrated the same way as the base zombie.
+// area 3-5 zombies): full clone-anatomy reanim self-contained docs, placed
+// by the retail pivot formula like the base zombie.
 
+// Placement of a skin: the retail draw scale (mScaleZombie), the netted
+// per-type image offsets and the measured doc-space feet line of the walk
+// pose (drop-part bounce plane).
 struct SkinGeom {
-    float scale = 1.0f, anchorDX = 0.0f, anchorDY = 0.0f, floorY = 0.0f;
+    float scale = 1.0f, offX = 0.0f, offY = 0.0f, floorY = 0.0f;
 };
 
 struct ExtraSkinDef {
@@ -122,7 +125,7 @@ const reanim::ReanimDoc* skinDoc(int skin) {
     return nullptr;
 }
 
-SkinGeom baseGeom() { return SkinGeom{gScale, gAnchorDX, gAnchorDY, gFloorY}; }
+SkinGeom baseGeom(); // defined below (plain-doc geometry)
 
 SkinGeom geomFor(int skin) {
     if (skin > SKIN_PLAIN && skin < COUNT_ZOMBIE_SKIN)
@@ -134,94 +137,68 @@ const char* REANIM_DIR = "./resources/reanim";
 const char* REANIM_FILE = "Zombie.reanim";
 const char* FLAG_FILE = "Zombie_flagpole.reanim";
 
-// Game conventions: zombie box is 166x144, feet at ART_BOTTOM_Y below the
-// box top. Original-engine chain (repvz): Zombie::GetPosYBasedOnRow =
-// Board::GetPosYBasedOnRow - 30 (Zombie.cpp:8075-8098), the reanim draw
-// origin sits at mPosY - 8 (Zombie.cpp:5323), and the retail walk art's feet
-// land ~49 px above the box bottom at final scale -- so the original plants
-// the feet at ~y+136 (row top + ~87; verified by measuring DrawStats of the
-// walk loop against a lane grid). The old sprite sheets' opaque bottom edge
-// was y+141, which stood the reanim zombies ~5 px deeper into their lane
-// than the original.
-const float ART_BOTTOM_Y = 136.0f;
-// On-screen scale shared by every zombie skin. The zombie docs are now the
-// 2Pak HD set (resources/reanim, converted from assets_src/2Pak_PvZ compiled
-// reanim). The 2Pak walk bbox measures 92.9x117.2 reanim units while the
-// retail pvz1 set it replaced measured 93.9x137.6 (retail included the tall
-// anim_hair strand; 2Pak has no visible hair), so the scale is bumped to keep
-// the ON-SCREEN walk bbox exactly the size it rendered at before the swap:
-//   ZOMBIE_SCALE = 1.01 * 137.59 / 117.17 = 1.186
-// The extra bulk is the 2Pak art's own proportions (larger head/coat), which
-// is intended. This is FIXED, not fitted per frame: re-deriving the scale
-// from each doc's bbox would re-scale every zombie for a packaging detail
-// instead of art. It is the DEFAULT: the 2Pak docs don't share one unit size
-// against the retail set (R scatters 0.77..1.22 over skins), so the skins
-// whose walk height missed retail by >10% carry their own scale below
-// (scale_audit §8.1: scale = ZOMBIE_SCALE * H_retail / H_2pak).
-const float ZOMBIE_SCALE = 1.186f;
-// Per-skin on-screen scale; unlisted skins keep the shared ZOMBIE_SCALE.
-// Multiplies in at calibration time (initSkin/initCharred/base init), so the
-// editor/registry scale-mul (setZombieScaleMul) stays orthogonal on top.
+// RETAIL PLACEMENT (repvz Zombie::UpdateReanim + GetDrawPos, Zombie.cpp:
+// 5307-5362 / 5899-6162), ported verbatim: the reanim draws with its doc
+// origin at
+//   ox = x + 45 + offX - 30*s + ddx
+//   oy = y + 132 + bodyY + offY - 120*s + ddy       (s = skin scale x mul)
+// so the doc point (30, 120) is the scale-invariant pivot the art grows
+// about. Retail chain: mX = (int)mPosX (= x), mPosY = y + 20;
+// SetPosition(anOffsetX + 30 - 30s, anOffsetY + 120 - 120s) with
+// anOffsetX = mImageOffsetX + 15 and anOffsetY = mImageOffsetY + mBodyY -
+// 8 (Zombie.cpp:5309-5310, 5362) -- the 45/132 constants are the
+// 15+30 / (20-8+120) sums, and the body reanim scales by OverrideScale(s).
+// offX/offY fold the retail per-type ImageOffsetX/Y table (GetDrawPos
+// :5966-6001) plus the balloon/pogo spawn raises (GetPosYBasedOnRow
+// :8017-8025: balloon -30, pogo -16 vs their +17/+16 draw offsets) and
+// bungee's -18 (:6148). NOT ported: the football mini-scale sink
+// (+20-20s Y, :5325-5328 -- retail-scale minis only exist in the clone as
+// Big Trouble, which already anchors about the pivot) and the
+// backward-walk mirror (+90*s X, :5352-5355; no such state here). ddx/ddy
+// are caller draw deltas: bungee's hang dy (plays retail mBodyY) and the
+// Zomboss doc compensation (bossDocCompensation).
+// Retail mScaleZombie (repvz ZombieInitialize: 0.8 for the GOTY dancer and
+// backup dancer, 1.0 for every other type; Big Trouble's 0.5 is the editor
+// scale mul, not part of the skin scale).
 float skin_scale(int skin) {
     switch (skin) {
-    case SKIN_BACKUP:     return 0.80f; // = 1.186*142/211 (retail x0.8, Zombie.cpp:657)
-    case SKIN_GARGANTUAR: return 0.82f; // = 1.186*237/343
-    // Dancer now uses the disco doc (2Pak zombie_jackson: moonwalk/point set),
-    // not the bare-backup-body Zombie_dancer.reanim it replaced. Its walk bbox
-    // is 160.4 units vs the old doc's 132.4; the factor keeps the dancer's
-    // on-screen walk height at the calibrated ~114 px (retail x0.8,
-    // Zombie.cpp:638; almanac DISCO_DRAW_SCALE was derived from this size).
-    case SKIN_DANCER:     return 0.71f; // = 0.86*132.4/160.4 (disco doc swap)
-    case SKIN_ZOMBONI:    return 0.96f; // = 1.186*169/208
-    case SKIN_POGO:       return 1.00f; // = 1.186*133/158
-    case SKIN_ZOMBOSS:    return 1.00f; // = 1.186*680/806
-    case SKIN_BUNGEE:     return 1.01f; // = 1.186*106/125
-    case SKIN_DIGGER:     return 1.02f; // = 1.186*153/178
-    case SKIN_BALLOON:    return 1.05f; // = 1.186*130/147
-    case SKIN_CATAPULT:   return 1.07f; // = 1.186*159/177
-    case SKIN_SNORKEL:    return 1.08f; // = 1.186*170/187
-    default:              return ZOMBIE_SCALE;
+    case SKIN_DANCER: return 0.8f;
+    case SKIN_BACKUP: return 0.8f;
+    default:          return 1.0f;
     }
 }
-// Horizontal anchor of the walk-bbox center. The original draws the zombie
-// reanim with its origin at mX + 15 (repvz Zombie.cpp:5309, scale 1), which
-// puts the walk-bbox center at about mX + 61. The old 123 aligned the art to
-// the clone's own sprite sheets, not the retail game; the retail per-type
-// ImageOffsetX/Y below is applied on top of this shared anchor.
-const float MASS_CENTER_X = 61.0f;
-// Retail per-type ImageOffsetX/Y (repvz ZombieDefinition image_offset): added
-// on top of the shared +61 walk-bbox anchor. Skins without a retail entry
-// keep (0,0).
+// Netted per-type image offsets (retail GetDrawPos + the spawn raises and
+// bungee's -18 folded in -- see the placement block above).
 void skinImageOffset(int skin, float& dx, float& dy) {
     dx = 0.0f;
     dy = 0.0f;
     switch (skin) {
-    case SKIN_POLEVAULT:   dx = -6.0f;  dy = -11.0f; break;
-    case SKIN_ZOMBONI:     dx = 68.0f;  dy = -23.0f; break;
-    case SKIN_BOBSLED:     dx = 0.0f;   dy = -12.0f; break;
-    case SKIN_BALLOON:     dx = 0.0f;   dy = 17.0f;  break;
-    case SKIN_POGO:        dx = 0.0f;   dy = 16.0f;  break;
-    case SKIN_CATAPULT:    dx = -25.0f; dy = -18.0f; break;
-    case SKIN_GARGANTUAR:  dx = 0.0f;   dy = -8.0f;  break;
     case SKIN_FOOTBALL:    dx = 0.0f;   dy = -16.0f; break;
     case SKIN_YETI:        dx = 0.0f;   dy = -20.0f; break;
+    case SKIN_CATAPULT:    dx = -25.0f; dy = -18.0f; break;
+    case SKIN_POLEVAULT:   dx = -6.0f;  dy = -11.0f; break;
+    case SKIN_ZOMBONI:     dx = 68.0f;  dy = -23.0f; break;
+    case SKIN_GARGANTUAR:  dx = 0.0f;   dy = -8.0f;  break;
+    case SKIN_BOBSLED:     dx = 0.0f;   dy = -12.0f; break;
+    case SKIN_BUNGEE:      dx = -18.0f; dy = 0.0f;  break;
+    case SKIN_BALLOON:     dx = 0.0f;   dy = -13.0f; break; // +17 draw, -30 raise
+    case SKIN_POGO:        dx = 0.0f;   dy = 0.0f;   break; // +16 draw, -16 lower
     default: break;
     }
 }
-// The current part PNGs are cropped to the opaque art, so the walk-bbox
-// maxY IS the feet line; older exports carried ~6px (@game scale) of
-// transparent padding under the feet, which this constant compensated.
-const float ART_PAD_BOTTOM = 0.0f;
 
-// Big Trouble Little Zombie drawing geometry: apply gZombieScaleMul around
-// the walk anchor (bbox center / feet line), so the art shrinks in place
-// instead of floating off the lawn.
+SkinGeom baseGeom() { return SkinGeom{skin_scale(SKIN_PLAIN), 0.0f, 0.0f, gFloorY}; }
+
+// Big Trouble Little Zombie drawing geometry: solve the draw origin/scale
+// for one zombie box (the retail pivot formula above). bodyY plays retail
+// mBodyY (bungee's hang); ddx/ddy are the caller draw deltas.
 void zombieDrawGeom(const SkinGeom& geo, float x_location, float y_location,
+                    float bodyY, float ddx, float ddy, float scale_mul,
                     float& scale, float& ox, float& oy) {
-    const float k = gZombieScaleMul;
-    scale = geo.scale * k;
-    ox = x_location + MASS_CENTER_X - k * (MASS_CENTER_X - geo.anchorDX);
-    oy = y_location + ART_BOTTOM_Y - k * (ART_BOTTOM_Y + ART_PAD_BOTTOM - geo.anchorDY);
+    const float s = geo.scale * scale_mul;
+    scale = s;
+    ox = x_location + 45.0f + geo.offX - 30.0f * s + ddx;
+    oy = y_location + 132.0f + geo.offY + bodyY - 120.0f * s + ddy;
 }
 
 std::string lowerOf(std::string s) {
@@ -879,19 +856,19 @@ const DropSpec& dropSpecFor(int drop_img, int skin) {
     static const DropSpec HEAD = {SKIN_PLAIN, false, kHeadTracks, 3, nullptr,
                                   28.5f, 29.0f, 23.5f,
                                   {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                   -12.0f, 12.0f, 0, 0.0f}};
+                                   -12.0f, 12.0f, 90, 0.3f}};
     static const DropSpec POLE_HEAD = {SKIN_POLEVAULT, false, poleHeadTracks, 3, nullptr,
                                        46.5f, 46.0f, 24.5f,
                                        {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                        -12.0f, 12.0f, 0, 0.0f}};
+                                        -12.0f, 12.0f, 90, 0.3f}};
     static const DropSpec PAPER_HEAD = {SKIN_NEWSPAPER, false, paperHeadTracks, 4, nullptr,
                                         39.0f, 32.0f, 25.5f,
                                         {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                         -12.0f, 12.0f, 0, 0.0f}};
+                                         -12.0f, 12.0f, 90, 0.3f}};
     static const DropSpec FOOT_HEAD = {SKIN_FOOTBALL, false, footHeadTracks, 2, nullptr,
                                        56.5f, 38.0f, 23.5f,
                                        {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                        -12.0f, 12.0f, 0, 0.0f}};
+                                        -12.0f, 12.0f, 90, 0.3f}};
     // DANCE_* were re-measured on the disco (2Pak zombie_jackson) doc after it
     // replaced the bare-backup-body dancer doc: frame-0 union bbox of the part
     // tracks, tools/measure_zombie_drop.py -> head (27.0, 20.2, 32.7), arm
@@ -899,7 +876,7 @@ const DropSpec& dropSpecFor(int drop_img, int skin) {
     static const DropSpec DANCE_HEAD = {SKIN_DANCER, false, danceHeadTracks, 3, nullptr,
                                         27.0f, 20.0f, 32.5f,
                                         {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                         -12.0f, 12.0f, 0, 0.0f}};
+                                         -12.0f, 12.0f, 90, 0.3f}};
     // ARM: LaunchSpeed 40 and AccY 15 per the xml -- the toss is *meant* to be
     // a weak up-left pop (unlike the flying head at 330/[150 185]). cx/cy are
     // the true center of the recomposed 3-track arm (the rotation pivot and
@@ -934,7 +911,7 @@ const DropSpec& dropSpecFor(int drop_img, int skin) {
     static const DropSpec BACKUP_HEAD = {SKIN_BACKUP, false, backupHeadTracks, 3, nullptr,
                                          74.0f, 14.0f, 35.0f,
                                          {3.8f, 150.0f, 185.0f, 0.42f, 0.3f, 0.0f,
-                                          -12.0f, 12.0f, 0, 0.0f}};
+                                          -12.0f, 12.0f, 90, 0.3f}};
     static const DropSpec BACKUP_ARM = {SKIN_BACKUP, false, backupArmTracks, 3, nullptr,
                                         59.0f, 28.5f, 8.0f,
                                         {0.46f, 90.0f, 185.0f, 0.37f, 0.5f, 0.0f,
@@ -1016,8 +993,9 @@ void drawPop(const DropSpec& spec, float aging_time, float ox, float oy,
     const SkinGeom geo = geomFor(spec.docSkin);
     float spawnX = ox + scale * spec.cx;
     float spawnY = oy + scale * spec.cy;
-    // Bounce plane = visible feet line (floorY is the padded quad bottom).
-    float floorDy = (oy + scale * geo.floorY - ART_PAD_BOTTOM) - scale * spec.halfH - spawnY;
+    // Bounce plane = the visible feet line (the part PNGs are cropped to the
+    // opaque art, so the walk-bbox maxY IS the ground).
+    float floorDy = (oy + scale * geo.floorY) - scale * spec.halfH - spawnY;
     if (floorDy < 0) floorDy = 0;
 
     PopPose pop = simulatePop((int)(aging_time * 5.0f), floorDy, rng, spec.phys);
@@ -1044,11 +1022,11 @@ void drawPop(const DropSpec& spec, float aging_time, float ox, float oy,
                     opt);
 }
 
-// Load an extra self-contained character skin (pole vaulter / newspaper) and
-// calibrate its placement exactly like the base zombie: the skin's on-screen
-// skin_scale (ZOMBIE_SCALE for skins without a §8.1 override), bbox center
-// anchored at MASS_CENTER_X, feet line at ART_BOTTOM_Y. The feet
-// line is the quad bottom of the foot/toe tracks -- not the union bottom --
+// Load an extra self-contained character skin (pole vaulter / newspaper)
+// and pick up its placement: the retail skin scale + per-type offsets are
+// table-driven (skin_scale / skinImageOffset); only the doc-space feet line
+// of the walk pose is measured (the drop-part bounce plane). The feet line
+// is the opaque bottom of the foot/toe tracks -- not the union bottom --
 // so art that dips below the feet (planted pole tip in the run pose, a
 // swinging paper) can't push the zombie off the floor.
 bool initSkin(int skin, const char* file, reanim::ReanimDoc& doc, SkinGeom& geo,
@@ -1101,14 +1079,10 @@ bool initSkin(int skin, const char* file, reanim::ReanimDoc& doc, SkinGeom& geo,
     });
     float floorU = feet.hasBounds ? feet.maxY : acc.maxY;
     geo.scale = skin_scale(skin);
-    float imgOffX, imgOffY;
-    skinImageOffset(skin, imgOffX, imgOffY);
-    geo.anchorDX = MASS_CENTER_X + imgOffX - geo.scale * (acc.minX + acc.maxX) * 0.5f;
-    geo.anchorDY = ART_BOTTOM_Y + ART_PAD_BOTTOM + imgOffY - geo.scale * floorU;
+    skinImageOffset(skin, geo.offX, geo.offY);
     geo.floorY = floorU;
-    SDL_Log("reanimz skin: %s ready; walk bbox %.0fx%.0f, scale %.3f, anchor (%.1f, %.1f)",
-            file, acc.maxX - acc.minX, acc.maxY - acc.minY, geo.scale,
-            geo.anchorDX, geo.anchorDY);
+    SDL_Log("reanimz skin: %s ready; walk bbox %.0fx%.0f, feet line %.1f",
+            file, acc.maxX - acc.minX, acc.maxY - acc.minY, geo.floorY);
     return true;
 }
 
@@ -1185,7 +1159,8 @@ bool drawSkinZombie(const Spec& s, float reanim_time, int x_location, int y_loca
     if (!forceShow.empty()) opt.forceShow = &forceShow;
 
     float scale, ox, oy;
-    zombieDrawGeom(geo, (float)x_location, (float)y_location, scale, ox, oy);
+    zombieDrawGeom(geo, (float)x_location, (float)y_location, 0.0f, 0.0f, 0.0f,
+                   gZombieScaleMul, scale, ox, oy);
     auto hideTrack = [&](const std::string& n) { return hide.count(lowerOf(n)) > 0; };
     reanim::DrawStats stats = gRenderer->Draw(*doc, absFrame, ox, oy, scale, hideTrack, opt);
     if (partsDrawn) *partsDrawn = stats.partsDrawn;
@@ -1203,45 +1178,47 @@ bool drawSkinZombie(const Spec& s, float reanim_time, int x_location, int y_loca
 struct CharredDef {
     const char* file;
     const char* seg;      // play-once segment (nullptr: whole timeline)
-    const char* calibSeg; // calibration reference (nullptr: play segment)
 };
 
 const CharredDef CHARRED_DEFS[] = {
-    // 2Pak charred docs carry no anim_blink (calibration folds back to the
-    // play segment); their fps also changed (12, digger 15) vs retail (15).
-    /* CHARRED_GENERIC    */ {"Zombie_charred.reanim", nullptr, nullptr},
-    /* CHARRED_IMP        */ {"Zombie_charred_imp.reanim", nullptr, nullptr},
-    /* CHARRED_DIGGER     */ {"Zombie_charred_digger.reanim", "anim_crumble", nullptr},
-    /* CHARRED_ZAMBONI    */ {"Zombie_charred_zamboni.reanim", nullptr, nullptr},
-    /* CHARRED_CATAPULT   */ {"Zombie_charred_catapult.reanim", nullptr, nullptr},
-    /* CHARRED_GARGANTUAR */ {"Zombie_charred_gargantuar.reanim", nullptr, nullptr},
-    /* CHARRED_DIGGER_NOAXE*/{"Zombie_charred_digger.reanim", "anim_crumble_noaxe", nullptr},
+    // 2Pak charred docs carry no anim_blink (play folds back to the whole
+    // timeline); their fps also changed (12, digger 15) vs retail (15).
+    /* CHARRED_GENERIC    */ {"Zombie_charred.reanim", nullptr},
+    /* CHARRED_IMP        */ {"Zombie_charred_imp.reanim", nullptr},
+    /* CHARRED_DIGGER     */ {"Zombie_charred_digger.reanim", "anim_crumble"},
+    /* CHARRED_ZAMBONI    */ {"Zombie_charred_zamboni.reanim", nullptr},
+    /* CHARRED_CATAPULT   */ {"Zombie_charred_catapult.reanim", nullptr},
+    /* CHARRED_GARGANTUAR */ {"Zombie_charred_gargantuar.reanim", nullptr},
+    /* CHARRED_DIGGER_NOAXE*/{"Zombie_charred_digger.reanim", "anim_crumble_noaxe"},
 };
 const int COUNT_CHARRED = (int)(sizeof(CHARRED_DEFS) / sizeof(CHARRED_DEFS[0]));
+
+// Retail charred placement (repvz Zombie::ApplyBurn, Zombie.cpp:8729-8796):
+// the corpse doc draws at
+//   ox = x + offX + 20 - 20*k,  oy = y + offY + 120 - 120*k  (k = scale mul)
+// so doc point (20, 120) is its scale-invariant pivot. The table folds
+// retail's baseline (aCharredPosX = mPosX + 22, aCharredPosY = mPosY - 10
+// = y + 10) with the per-type deltas (imp -6, zamboni +61/-16, catapult
+// -36/-20, gargantuar -15/-10). Retail's balloon +31 rides the popped
+// balloon's altitude and is not ported (the clone's balloon pops before it
+// can burn); the digger's backward-walk +14 is not ported either. The
+// dancer/backup forced scale 1.0 (:8786-8789) is moot here: they use the
+// generic corpse, which already draws at k.
+const float CHARRED_OFF[COUNT_CHARRED][2] = {
+    /* CHARRED_GENERIC     */ {22.0f, 10.0f},
+    /* CHARRED_IMP         */ {16.0f, 10.0f},
+    /* CHARRED_DIGGER      */ {22.0f, 10.0f},
+    /* CHARRED_ZAMBONI     */ {83.0f, -6.0f},
+    /* CHARRED_CATAPULT    */ {-14.0f, -10.0f},
+    /* CHARRED_GARGANTUAR  */ {7.0f, 0.0f},
+    /* CHARRED_DIGGER_NOAXE*/ {22.0f, 10.0f},
+};
 
 reanim::ReanimDoc gCharredDoc[COUNT_CHARRED];
 bool gCharredReady[COUNT_CHARRED] = {};
 bool gCharredTried[COUNT_CHARRED] = {};
 int gCharredFirst[COUNT_CHARRED] = {}, gCharredLast[COUNT_CHARRED] = {};
-SkinGeom gCharredGeom[COUNT_CHARRED];
 
-// A burnt zombie's ash pile must swap in at the same on-screen size the living
-// zombie stood at (retail draws both at native retail resolution,
-// Zombie.cpp:8824-8863), so a heavy type's charred doc takes its skin's
-// per-skin scale; the generic/imp corpses keep the shared ZOMBIE_SCALE.
-int charredSkin(int kind) {
-    switch (kind) {
-    case CHARRED_DIGGER:
-    case CHARRED_DIGGER_NOAXE: return SKIN_DIGGER;
-    case CHARRED_ZAMBONI:      return SKIN_ZOMBONI;
-    case CHARRED_CATAPULT:     return SKIN_CATAPULT;
-    case CHARRED_GARGANTUAR:   return SKIN_GARGANTUAR;
-    default:                   return SKIN_PLAIN;
-    }
-}
-
-// Charred docs carry no foot/toe-named parts (body/pile/tail), so the floor
-// line is the union bottom (the ash pile sits on the ground).
 bool initCharred(int kind) {
     if (gCharredTried[kind]) return gCharredReady[kind];
     gCharredTried[kind] = true;
@@ -1260,40 +1237,6 @@ bool initCharred(int kind) {
     }
     gCharredFirst[kind] = first;
     gCharredLast[kind] = last;
-    int cf = first, cl = last;
-    if (def.calibSeg != nullptr)
-        docSegmentRange(doc, def.calibSeg, cf, cl);
-    // Measure the (standing) calibration frames and anchor the doc like every
-    // other zombie art: bbox mass center at MASS_CENTER_X, floor at
-    // ART_BOTTOM_Y.
-    reanim::DrawStats acc;
-    reanim::DrawOptions measure;
-    measure.measureOnly = true;
-    for (int fr = cf; fr <= cl; fr += 2) {
-        reanim::DrawStats st = gRenderer->Draw(doc, (float)fr, 0, 0, 1.0f,
-                                               nullptr, measure);
-        if (st.hasBounds) {
-            if (!acc.hasBounds)
-                acc = st;
-            else {
-                acc.minX = std::min(acc.minX, st.minX);
-                acc.minY = std::min(acc.minY, st.minY);
-                acc.maxX = std::max(acc.maxX, st.maxX);
-                acc.maxY = std::max(acc.maxY, st.maxY);
-            }
-        }
-    }
-    if (!acc.hasBounds) {
-        SDL_Log("reanimz charred: %s has no visible parts", def.file);
-        return false;
-    }
-    SkinGeom& geo = gCharredGeom[kind];
-    geo.scale = skin_scale(charredSkin(kind));
-    geo.anchorDX = MASS_CENTER_X - geo.scale * (acc.minX + acc.maxX) * 0.5f;
-    geo.anchorDY = ART_BOTTOM_Y + ART_PAD_BOTTOM - geo.scale * acc.maxY;
-    geo.floorY = acc.maxY;
-    SDL_Log("reanimz charred: %s ready; calib bbox %.0fx%.0f, anchor (%.1f, %.1f)",
-            def.file, acc.maxX - acc.minX, acc.maxY - acc.minY, geo.anchorDX, geo.anchorDY);
     gCharredReady[kind] = true;
     return true;
 }
@@ -1320,9 +1263,10 @@ bool init(ISpriteRenderer& renderer) {
     } else
         SDL_Log("reanimz: %s (flag zombie loses its flag)", err.c_str());
 
-    // Calibration: measure the walk-segment bbox (in reanim units) with an
-    // invisible measure-only pass, then anchor it into the game's 166x144 box
-    // at the skin's scale (PLAIN has no §8.1 override: the sheet-proven 1.186).
+    // Feet line of the plain walk loop (doc units): measured with an
+    // invisible measure-only pass for the drop-part bounce plane -- the
+    // anchor itself is the retail pivot formula (table-driven, nothing to
+    // fit: scale 1.0 like retail mScaleZombie).
     std::unordered_set<std::string> hide;
     for (const char* h : kBaseHidden) hide.insert(h);
 
@@ -1347,12 +1291,9 @@ bool init(ISpriteRenderer& renderer) {
         }
     }
     if (!acc.hasBounds) return gReady;
-    gScale = skin_scale(SKIN_PLAIN);
-    gAnchorDX = MASS_CENTER_X - gScale * (acc.minX + acc.maxX) * 0.5f;
-    gAnchorDY = ART_BOTTOM_Y + ART_PAD_BOTTOM - gScale * acc.maxY;
     gFloorY = acc.maxY;
-    SDL_Log("reanimz: ready; walk bbox %.0fx%.0f, scale %.3f, anchor (%.1f, %.1f)",
-            acc.maxX - acc.minX, acc.maxY - acc.minY, gScale, gAnchorDX, gAnchorDY);
+    SDL_Log("reanimz: ready; walk bbox %.0fx%.0f, feet line %.1f (retail pivot anchor)",
+            acc.maxX - acc.minX, acc.maxY - acc.minY, gFloorY);
     gReady = true;
 
     // Extra character skins; failures only disable that skin's reanim path.
@@ -1432,7 +1373,7 @@ bool headAnchor(int directory_num, int armor_dir, float reanim_time,
     float c = sinf(-t.ky * D2R) * t.sy, d = cosf(-t.ky * D2R) * t.sy;
     float scale, ox, oy;
     zombieDrawGeom(geomFor(s.skin), (float)x_location, (float)y_location,
-                   scale, ox, oy);
+                   0.0f, 0.0f, 0.0f, gZombieScaleMul, scale, ox, oy);
     const float cu[4] = {0.0f, (float)hw, (float)hw, 0.0f};
     const float cv[4] = {0.0f, 0.0f, (float)hh, (float)hh};
     float minX = 1e30f, maxX = -1e30f, minY = 1e30f;
@@ -1444,7 +1385,7 @@ bool headAnchor(int directory_num, int armor_dir, float reanim_time,
     }
     headCX = (minX + maxX) * 0.5f;
     headTopY = minY;
-    artMul = scale / ZOMBIE_SCALE;
+    artMul = scale; // skin scale x the big-trouble mul (retail scale: plain = 1.0)
     // Retail draws the pat 1.2x on gargantuars (Zombie.cpp:6296-6299).
     if (s.skin == SKIN_GARGANTUAR) artMul *= 1.2f;
     return true;
@@ -1537,6 +1478,103 @@ float walkFeedPerPx(int directory_num, int armor_dir, bool cold) {
     const SkinGeom geo = geomFor(s.skin);
     const float pxPerDocFrame = (aDistance / len) * geo.scale * gZombieScaleMul;
     return 1.0f / (chain * pxPerDocFrame * chillRateMul(cold));
+}
+
+// Linear _ground sample over the played window, clamped at its ends. The loop
+// seam is handled by the caller (the track restarts `aDistance` back), so the
+// sample never wraps into the first frame on its own.
+static float sampleGroundX(const reanim::Track &tr, int first, int last, float local)
+{
+    const auto &fr = tr.frames;
+    if (fr.empty())
+        return 0.0f;
+    float f = (float)first + local;
+    if (f > (float)last)
+        f = (float)last;
+    int i0 = (int)floorf(f);
+    if (i0 > last)
+        i0 = last;
+    if (i0 < first)
+        i0 = first;
+    if (i0 >= (int)fr.size())
+        i0 = (int)fr.size() - 1;
+    int i1 = i0 + 1 <= last && i0 + 1 < (int)fr.size() ? i0 + 1 : i0;
+    float sfrac = f - (float)i0;
+    if (sfrac < 0.0f)
+        sfrac = 0.0f;
+    return fr[i0].x + (fr[i1].x - fr[i0].x) * sfrac;
+}
+
+bool stepWalkReanim(int directory_num, int armor_dir, float &reanim_time,
+                    float speed_px, bool cold, float &ground_dx)
+{
+    ground_dx = 0.0f;
+    if (!gReady)
+        return false;
+    Spec s = specFromState(directory_num, armor_dir);
+    if (!s.ok || s.segName == nullptr)
+        return false;
+    bool driven = false;
+    for (const auto &r : kWalkFeedRules)
+        if (r.skin == s.skin && strcmp(r.segment, s.segName) == 0)
+        {
+            driven = true;
+            break;
+        }
+    if (!driven)
+        return false;
+    const reanim::ReanimDoc *doc = skinDoc(s.skin);
+    if (doc == nullptr || doc->fps <= 0.0f)
+        return false;
+    const reanim::Track *ground = nullptr;
+    for (const auto &tr : doc->tracks)
+        if (lowerOf(tr.name) == "_ground")
+        {
+            ground = &tr;
+            break;
+        }
+    if (ground == nullptr || (int)ground->frames.size() <= s.last)
+        return false;
+    const float aDistance = ground->frames[s.last].x - ground->frames[s.first].x;
+    if (aDistance < 1e-6f)
+        return false;
+    const float len = (float)(s.last - s.first + 1);
+    const float chill = chillRateMul(cold);
+    const float segLen = len / (playbackRateMul(s) * chill);
+    if (segLen <= 0.0f)
+        return false;
+    const float feed_per_px = walkFeedPerPx(directory_num, armor_dir, cold);
+    if (feed_per_px < 0.0f)
+        return false;
+    // Local frame mapping the draw applies, so the delta matches the drawn
+    // _ground pose exactly (plain docs skip docFpsMul; their doc is 12 fps).
+    float chain = playbackRateMul(s) * chill;
+    if (s.skin != SKIN_PLAIN)
+        chain *= docFpsMul(*doc);
+    chain *= gZombieTimeMul;
+    auto localOf = [&](float t)
+    {
+        float l = fmodf(t * chain, len);
+        if (l < 0.0f)
+            l += len;
+        return l;
+    };
+    const float locOld = localOf(reanim_time);
+    reanim_time += speed_px * feed_per_px;
+    if (reanim_time >= segLen || reanim_time < 0.0f)
+        reanim_time = fmodf(reanim_time, segLen);
+    if (reanim_time < 0.0f)
+        reanim_time = 0.0f;
+    const float locNew = localOf(reanim_time);
+    float dxDoc = sampleGroundX(*ground, s.first, s.last, locNew) -
+                  sampleGroundX(*ground, s.first, s.last, locOld);
+    // Loop seam: the clip restarts its ground track at the first frame; add
+    // the stride back so the wrap tick holds instead of lurching backwards.
+    if (locNew < locOld)
+        dxDoc += aDistance;
+    const SkinGeom geo = geomFor(s.skin);
+    ground_dx = dxDoc * geo.scale * gZombieScaleMul;
+    return true;
 }
 
 // The hide/forceShow sets the state machine implies (mirrors the original
@@ -1711,7 +1749,8 @@ bool drawZombie(int directory_num, int armor_dir, float reanim_time,
     if (!forceShow.empty()) opt.forceShow = &forceShow;
 
     float scale, ox, oy;
-    zombieDrawGeom(baseGeom(), (float)x_location, (float)y_location, scale, ox, oy);
+    zombieDrawGeom(baseGeom(), (float)x_location, (float)y_location, 0.0f, 0.0f, 0.0f,
+                   gZombieScaleMul, scale, ox, oy);
     auto hideTrack = [&](const std::string& n) { return hide.count(lowerOf(n)) > 0; };
     reanim::DrawStats body =
         gRenderer->Draw(gDoc, absFrame, ox, oy, scale, hideTrack, opt);
@@ -1846,7 +1885,7 @@ int deathLingerTicks(int skin, bool in_pool, unsigned seed) {
 }
 
 void drawDeathPart(float aging_time, int x_location, int y_location, bool cold,
-                   int skin, bool in_pool) {
+                   int skin, bool in_pool, bool headless) {
     const reanim::ReanimDoc* doc = skinDoc(skin);
     if (doc == nullptr) return;
     unsigned seed = (unsigned)x_location * 2654435761u ^ (unsigned)y_location * 40503u;
@@ -1871,7 +1910,8 @@ void drawDeathPart(float aging_time, int x_location, int y_location, bool cold,
                             0.0f, 1.0f);
 
     float scale, ox, oy;
-    zombieDrawGeom(geo, (float)x_location, (float)y_location, scale, ox, oy);
+    zombieDrawGeom(geo, (float)x_location, (float)y_location, 0.0f, 0.0f, 0.0f,
+                   gZombieScaleMul, scale, ox, oy);
 
     std::unordered_set<std::string> hide;
     if (skin == SKIN_PLAIN)
@@ -1900,8 +1940,10 @@ void drawDeathPart(float aging_time, int x_location, int y_location, bool cold,
 
     // Tossed head pop: only the skins with a dedicated DropSpec (plain..dancer
     // and the backup dancer); the area 3-5 skins, yeti and ducky tube play
-    // the clean corpse.
-    if ((skin >= SKIN_PLAIN && skin <= SKIN_DANCER) || skin == SKIN_BACKUP)
+    // the clean corpse. A zombie that died after its head was already torn
+    // off (D1) has no head left to pop.
+    if (!headless &&
+        ((skin >= SKIN_PLAIN && skin <= SKIN_DANCER) || skin == SKIN_BACKUP))
         drawPop(dropSpecFor(DEATH_PART_IMG, skin), aging_time, ox, oy, scale,
                 cold, fade, seed);
 }
@@ -1921,11 +1963,11 @@ void drawDropPart(int drop_img, float aging_time, int x_location, int y_location
                      ? 1.0f - std::clamp((t01 - spec.phys.fadeFrom) / span, 0.0f, 1.0f)
                      : 1.0f;
     // Same origin/scale chain as the corpse/body draw (zombieDrawGeom):
-    // with scale-mul 1 this lands exactly on the old x+anchorDX anchor, and
-    // big-trouble minis shrink + re-anchor around the feet like the body.
+    // big-trouble minis shrink + re-anchor around the pivot like the body.
     const SkinGeom geo = geomFor(skin);
     float scale, ox, oy;
-    zombieDrawGeom(geo, (float)x_location, (float)y_location, scale, ox, oy);
+    zombieDrawGeom(geo, (float)x_location, (float)y_location, 0.0f, 0.0f, 0.0f,
+                   gZombieScaleMul, scale, ox, oy);
     unsigned seed = (unsigned)x_location * 2654435761u ^ (unsigned)y_location * 40503u
                     ^ (unsigned)drop_img * 97u;
     drawPop(spec, aging_time, ox, oy, scale, cold, fade, seed);
@@ -1965,10 +2007,15 @@ void drawCharredPart(int kind, int ticks, int x_location, int y_location) {
     if (local > len - 1.0f) local = len - 1.0f;
     float absFrame = (float)first + local;
 
-    float scale, ox, oy;
-    zombieDrawGeom(gCharredGeom[kind], (float)x_location, (float)y_location, scale, ox, oy);
+    // Retail charred placement (ApplyBurn, Zombie.cpp:8778-8793): doc point
+    // (20, 120) is the corpse art's scale-invariant pivot; the only scale is
+    // the editor/big-trouble mul (skin scales never reach the charred docs:
+    // dancers/backup burn with the generic corpse at retail-forced 1.0).
+    const float k = gZombieScaleMul;
+    const float ox = (float)x_location + CHARRED_OFF[kind][0] + 20.0f - 20.0f * k;
+    const float oy = (float)y_location + CHARRED_OFF[kind][1] + 120.0f - 120.0f * k;
     reanim::DrawOptions opt;
-    gRenderer->Draw(doc, absFrame, ox, oy, scale, nullptr, opt);
+    gRenderer->Draw(doc, absFrame, ox, oy, k, nullptr, opt);
 }
 
 int charredLingerTicks(int kind) {
@@ -2073,16 +2120,238 @@ bool drawSkinSegment(int skin, const char* segment, float reanim_time,
     auto hideTrack = [&](const std::string& n) { return hideL.count(lowerOf(n)) > 0; };
     const bool anyHide = skin == SKIN_PLAIN || extraHide != nullptr || extraShow != nullptr;
 
-    float ox = (float)x_location + geo.anchorDX * scale_mul + (float)ddx;
-    float oy = (float)y_location + geo.anchorDY * scale_mul + (float)ddy;
+    // Retail pivot anchor (the zombieDrawGeom formula; the roof-agent callers
+    // bring their own scale_mul -- big trouble never runs there).
+    const float s = geo.scale * scale_mul;
+    float ox = (float)x_location + 45.0f + geo.offX - 30.0f * s + (float)ddx;
+    float oy = (float)y_location + 132.0f + geo.offY - 120.0f * s + (float)ddy;
     reanim::DrawStats st;
     if (anyHide)
-        st = gRenderer->Draw(*doc, absFrame, ox, oy, geo.scale * scale_mul, hideTrack, opt);
+        st = gRenderer->Draw(*doc, absFrame, ox, oy, s, hideTrack, opt);
     else
-        st = gRenderer->Draw(*doc, absFrame, ox, oy, geo.scale * scale_mul, nullptr, opt);
+        st = gRenderer->Draw(*doc, absFrame, ox, oy, s, nullptr, opt);
     if (partsDrawn) *partsDrawn = st.partsDrawn;
     if (stats) *stats = st;
     return true;
+}
+
+// --- placement probes (almanac / anim viewer) ---------------------------------
+//
+// Every probe measures the pose the draw path would render -- same doc, same
+// visibility set, same play window -- with the renderer's measureOnly pass at
+// the pose's own skin scale and origin (0, 0), then folds the retail pivot
+// (doc point (30, 120) pre-multiplied by the skin scale) away. What remains
+// is exactly the geometry the header documents: bbox center/bottom/size in
+// pivot space. Results are cached per pose after the first call (a sweep over
+// a full walk loop is a few hundred measure draws, done once).
+
+namespace {
+
+// Union box of one looping play window (the seam-trimmed range the draw path
+// sweeps). hideTrack may be an always-false callable (Draw checks it).
+reanim::DrawStats sweepPose(const reanim::ReanimDoc& doc, int first, int playLast,
+                            float scale,
+                            const std::function<bool(const std::string&)>& hideTrack,
+                            const reanim::DrawOptions& opt) {
+    reanim::DrawOptions measure = opt;
+    measure.measureOnly = true;
+    measure.flash = false;
+    reanim::DrawStats acc;
+    for (int fr = first; fr <= playLast; fr++) {
+        reanim::DrawStats st = gRenderer->Draw(doc, (float)fr, 0.0f, 0.0f, scale,
+                                               hideTrack, measure);
+        if (!st.hasBounds) continue;
+        if (!acc.hasBounds) {
+            acc = st;
+        } else {
+            acc.minX = std::min(acc.minX, st.minX);
+            acc.minY = std::min(acc.minY, st.minY);
+            acc.maxX = std::max(acc.maxX, st.maxX);
+            acc.maxY = std::max(acc.maxY, st.maxY);
+        }
+    }
+    return acc;
+}
+
+void unionStats(reanim::DrawStats& acc, const reanim::DrawStats& st) {
+    if (!st.hasBounds) return;
+    if (!acc.hasBounds) {
+        acc = st;
+        return;
+    }
+    acc.minX = std::min(acc.minX, st.minX);
+    acc.minY = std::min(acc.minY, st.minY);
+    acc.maxX = std::max(acc.maxX, st.maxX);
+    acc.maxY = std::max(acc.maxY, st.maxY);
+}
+
+// measured stats (origin 0, scale = skin scale) -> pivot-space pose geometry
+void foldPivot(const reanim::DrawStats& acc, const SkinGeom& geo, PoseGeom& out) {
+    out.pivotX = 45.0f + geo.offX;
+    out.pivotY = 132.0f + geo.offY;
+    out.C = (acc.minX + acc.maxX) * 0.5f - 30.0f * geo.scale;
+    out.B = acc.maxY - 120.0f * geo.scale;
+    out.W = acc.maxX - acc.minX;
+    out.H = acc.maxY - acc.minY;
+    out.ok = true;
+}
+
+// ZombieType (game_param.hpp) -> reanim skin. Types without their own doc
+// (basic/flag/cone/bucket/door/ducky-tube) stay on the plain doc.
+int typeToSkin(int zombie_type) {
+    switch (zombie_type) {
+    case POLEVAULT_TYPE:    return SKIN_POLEVAULT;
+    case NEWSPAPER_TYPE:    return SKIN_NEWSPAPER;
+    case FOOTBALL_TYPE:     return SKIN_FOOTBALL;
+    case DANCER_TYPE:       return SKIN_DANCER;
+    case BACKUP_TYPE:       return SKIN_BACKUP;
+    case SNORKEL_TYPE:      return SKIN_SNORKEL;
+    case ZOMBONI_TYPE:      return SKIN_ZOMBONI;
+    case BOBSLED_TYPE:      return SKIN_BOBSLED;
+    case DOLPHINRIDER_TYPE: return SKIN_DOLPHINRIDER;
+    case JACKBOX_TYPE:      return SKIN_JACKBOX;
+    case BALLOON_TYPE:      return SKIN_BALLOON;
+    case DIGGER_TYPE:       return SKIN_DIGGER;
+    case POGO_TYPE:         return SKIN_POGO;
+    case BUNGEE_TYPE:       return SKIN_BUNGEE;
+    case LADDER_TYPE:       return SKIN_LADDER;
+    case CATAPULT_TYPE:     return SKIN_CATAPULT;
+    case GARGANTUAR_TYPE:   return SKIN_GARGANTUAR;
+    case IMP_TYPE:          return SKIN_IMP;
+    case ZOMBOSS_TYPE:      return SKIN_ZOMBOSS;
+    case YETI_TYPE:         return SKIN_YETI;
+    default:                return SKIN_PLAIN;
+    }
+}
+
+} // namespace
+
+bool zombiePoseGeom(int directory_num, int armor_dir, PoseGeom& out) {
+    out.ok = false;
+    if (!gReady) return false;
+    const long long key = (((long long)directory_num) << 16) ^ (armor_dir & 0xFFFF);
+    static std::unordered_map<long long, PoseGeom> cache;
+    auto hit = cache.find(key);
+    if (hit != cache.end()) { out = hit->second; return out.ok; }
+
+    Spec s = specFromState(directory_num, armor_dir);
+    const reanim::ReanimDoc* doc = s.ok ? skinDoc(s.skin) : nullptr;
+    if (doc != nullptr) {
+        const SkinGeom geo = geomFor(s.skin);
+        std::unordered_set<std::string> hide, forceShow;
+        buildVisibility(s, hide, forceShow);
+        auto hideTrack = [&](const std::string& n) { return hide.count(lowerOf(n)) > 0; };
+        reanim::DrawOptions opt;
+        if (!forceShow.empty()) opt.forceShow = &forceShow;
+        opt.loopWrapFirst = s.first;
+        opt.loopWrapLast = s.last;
+        opt.loopBlendFrames = loopBlendFrames(s.skin, s.first, s.last);
+
+        reanim::DrawStats acc;
+        if (s.flag && gFlagReady) {
+            // Flag-bearer states union the flag doc, and the two clocks are
+            // coupled (one feed drives body and flag at the same rate), so
+            // the box needs every (body frame, flag phase) pairing of a full
+            // cycle: the lcm of the two loop lengths swept in lockstep, the
+            // flag riding the hand-delta attach exactly like drawZombie.
+            const int bodyLen = std::max(1, s.last - s.first + 1);
+            const int flagLen = std::max(1, (int)(gFlagLoopLen > 0.0f
+                    ? gFlagLoopLen : (float)gFlagDoc.frameCount));
+            const int L = std::lcm(bodyLen, flagLen);
+            static reanim::Transform sDeltaT;
+            static bool sRefReady = false;
+            reanim::DrawOptions measure = opt;
+            measure.measureOnly = true;
+            measure.flash = false;
+            for (int p = 0; p < L; p++) {
+                float absFrame = (float)s.first + (float)(p % bodyLen);
+                unionStats(acc, gRenderer->Draw(*doc, absFrame, 0.0f, 0.0f,
+                                                geo.scale, hideTrack, measure));
+                reanim::DrawOptions flagMeasure = measure;
+                if (flagHandDelta(absFrame, s.first, s.last, sDeltaT, sRefReady))
+                    flagMeasure.attachFrom = &sDeltaT;
+                unionStats(acc, gRenderer->Draw(gFlagDoc, (float)(p % flagLen), 0.0f, 0.0f,
+                                                geo.scale, nullptr, flagMeasure));
+            }
+        } else {
+            acc = sweepPose(*doc, s.first, s.last, geo.scale, hideTrack, opt);
+        }
+        if (acc.hasBounds) foldPivot(acc, geo, out);
+    }
+    cache[key] = out;
+    return out.ok;
+}
+
+bool skinPoseGeom(int skin, const char* segment, PoseGeom& out,
+                  const std::unordered_set<std::string>* extraHide) {
+    out.ok = false;
+    if (!gReady || segment == nullptr) return false;
+    std::string key = std::to_string(skin) + "|" + segment + "|";
+    if (extraHide != nullptr) {
+        std::vector<std::string> names(extraHide->begin(), extraHide->end());
+        std::sort(names.begin(), names.end());
+        for (const auto& n : names) key += lowerOf(n) + ",";
+    }
+    static std::unordered_map<std::string, PoseGeom> cache;
+    auto hit = cache.find(key);
+    if (hit != cache.end()) { out = hit->second; return out.ok; }
+
+    const reanim::ReanimDoc* doc = skin == SKIN_FLAGPOLE
+        ? (gFlagReady ? &gFlagDoc : nullptr) : skinDoc(skin);
+    if (doc != nullptr) {
+        int first, last;
+        if (docSegmentRange(*doc, segment, first, last)) {
+            const SkinGeom geo = skin == SKIN_FLAGPOLE ? baseGeom() : geomFor(skin);
+            const int playLast = loopPlayLast(*doc, first, last);
+            // drawSkinSegment's visibility: the base hide set on the plain
+            // doc plus the caller's extra hides.
+            std::unordered_set<std::string> hideL;
+            if (skin == SKIN_PLAIN)
+                for (const char* h : kBaseHidden) hideL.insert(h);
+            if (extraHide != nullptr)
+                for (const auto& t : *extraHide) hideL.insert(lowerOf(t));
+            auto hideTrack = [&](const std::string& n) { return hideL.count(lowerOf(n)) > 0; };
+            reanim::DrawOptions opt;
+            opt.loopWrapFirst = first;
+            opt.loopWrapLast = playLast;
+            opt.loopBlendFrames = loopBlendFrames(skin, first, playLast);
+            reanim::DrawStats acc =
+                sweepPose(*doc, first, playLast, geo.scale, hideTrack, opt);
+            if (acc.hasBounds) foldPivot(acc, geo, out);
+        }
+    }
+    cache[key] = out;
+    return out.ok;
+}
+
+void skinDrawPivot(int skin, float& pivotX, float& pivotY) {
+    const SkinGeom geo = skin == SKIN_FLAGPOLE ? baseGeom() : geomFor(skin);
+    pivotX = 45.0f + geo.offX;
+    pivotY = 132.0f + geo.offY;
+}
+
+void bossDocCompensation(float scale_mul, int& ddx, int& ddy) {
+    // The retail pivot anchor centers the Zomboss doc's own empty space: the
+    // boss art sits ~(672.75, 325.47) doc units off the box origin at scale
+    // 1, so the measured idle placement this port was calibrated against is
+    // restored by passing these ints as drawSkinSegment's ddx/ddy -- they
+    // cancel the pivot's +45/+132 exactly, leaving ox = x - 672.75*m and
+    // oy = y - 325.47*m (the pre-rework anchor, verified). bossdriver::draw
+    // adds the same pair to its own origin so the dome driver stays glued.
+    ddx = (int)lroundf(-642.75f * scale_mul - 45.0f);
+    ddy = (int)lroundf(-205.47f * scale_mul - 132.0f);
+}
+
+float skinScaleForType(int zombie_type) {
+    return skin_scale(typeToSkin(zombie_type));
+}
+
+int zombieSkinForType(int zombie_type) {
+    return typeToSkin(zombie_type);
+}
+
+void zombieImageOffsetForType(int zombie_type, float& dx, float& dy) {
+    skinImageOffset(typeToSkin(zombie_type), dx, dy);
 }
 
 // --- debug tooling (anim viewer): doc introspection --------------------------

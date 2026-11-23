@@ -63,14 +63,21 @@ bool Zombie::render_reanim(const int &_minus_x)
     static const std::unordered_set<std::string> FLAG_DUCKY_TUBE = {
         "zombie_duckytube", "zombie_whitewater", "zombie_whitewater2"
     };
+    // D1: a zombie that lost its head keeps walking on the headless art
+    // (repvz SetupReanimForLostHead hides anim_head* / anim_hair / anim_tongue;
+    // the severed head itself is the separate DROP_HEAD_IMG part).
+    static const std::unordered_set<std::string> HEADLESS_HIDE = {
+        "anim_head1", "anim_head2", "anim_hair", "anim_tongue"
+    };
     const auto *extra_show = (type == FLAG_TYPE && level.row_has_water(row))
                                  ? &FLAG_DUCKY_TUBE : nullptr;
+    const auto *extra_hide = head_dropped ? &HEADLESS_HIDE : nullptr;
     // Roof slope: draw the body down the sloped columns (render-only).
     return reanimz::drawZombie(directory_num, armor_dir, reanim_time,
                                x_location + layout_dx - _minus_x,
                                y_location + layout_dy + roof_slope_offset(x_location + layout_dx),
                                cold_time > 0, attacked_time > 0,
-                               nullptr, extra_show, nullptr, nullptr, fade);
+                               extra_hide, extra_show, nullptr, nullptr, fade);
 }
 
 bool ZombiePart::display_reanim_death(const int &_row)
@@ -82,7 +89,7 @@ bool ZombiePart::display_reanim_death(const int &_row)
     // The corpse anim and toss ride the same time multiplier as the walk
     // cycle, so big_trouble deaths pop proportionally faster.
     reanimz::drawDeathPart(frame * 0.2f * reanimz::zombieTimeMul(), x_location, y_location,
-                           is_cold, skin, in_water);
+                           is_cold, skin, in_water, headless);
     // anim advances per logic tick, not per render (auto-FPS)
     for (int _lt = logic_ticked; _lt > 0 && check_status(game_state, IS_PAUSED) == false; _lt--)
         frame++;

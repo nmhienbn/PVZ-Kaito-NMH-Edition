@@ -49,7 +49,7 @@ public:
         {
             zombie_parts.push_back(ZombiePart(reanimz::DEATH_PART_IMG, 1, row, x_location,
                                               ZOMBIE_WIDTH, ZOMBIE_HEIGHT, cold_time > 0,
-                                              m_skin));
+                                              m_skin, false, head_dropped));
             return;
         }
         Zombie::add_zombie_die(zombie_parts);

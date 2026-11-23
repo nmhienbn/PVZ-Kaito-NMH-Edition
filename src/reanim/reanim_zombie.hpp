@@ -3,8 +3,14 @@
 // Bridge between the game's zombie state machine (ImageType directory_num +
 // armor_dir + degrade chain) and the reanim renderer: maps every zombie
 // sprite-sheet directory to a reanim segment + track-visibility set + optional
-// armor image override, then draws with the game's placement conventions
-// (bottom-center of the 166x144 zombie box = zombie feet).
+// armor image override, then draws with the RETAIL placement formula (repvz
+// Zombie::UpdateReanim + GetDrawPos, Zombie.cpp:5307-5362/5899-6162): the doc
+// origin lands at
+//   ox = x + 45 + offX - 30*s,  oy = y + 132 + offY - 120*s   (s = skin scale
+// x the editor/big-trouble mul), so doc point (30, 120) is the scale-invariant
+// pivot the art grows about and the per-type retail image offsets (offX/offY)
+// shift the whole pose. See reanim_zombie.cpp's placement block for the
+// line-by-line derivation.
 
 #include <SDL.h>
 #include <string>
@@ -48,6 +54,10 @@ const int DROP_CONE_IMG = -102;
 const int DROP_BUCKET_IMG = -103;
 const int DROP_DOOR_IMG = -104;
 const int DROP_FLAG_IMG = -105;
+// D1 head pop: the severed head tossed when the body pool falls under 1/3
+// (repvz Zombie::DropHead, Zombie.cpp:3511-3540). Uses the same pop physics
+// as the death-anim head, but as a standalone part with its own lifetime.
+const int DROP_HEAD_IMG = -107;
 
 // Reanim skins for the extra character docs (0 = the plain zombie doc).
 const int SKIN_PLAIN = 0;
@@ -128,8 +138,8 @@ float effectiveLocalFrame(int directory_num, float reanim_time, bool chilled = f
 // Zombie::DrawButter, Zombie.cpp:6274-6321): center-X and top of the zombie's
 // anim_head1 image at its currently drawn frame, through the body's own draw
 // geometry (per-skin scale x the big-trouble/editor scale mul); artMul
-// reports that combined art scale relative to a plain zombie (1.0), for
-// sizing the pat. False when the reanim path isn't driving this state
+// reports that combined art scale (a plain zombie = 1.0), for sizing the
+// pat. False when the reanim path isn't driving this state
 // (caller keeps the legacy fixed offset).
 bool headAnchor(int directory_num, int armor_dir, float reanim_time,
                 bool cold, int x_location, int y_location,
@@ -158,6 +168,18 @@ float segmentLength(int directory_num, bool chilled = false);
 // its fixed rate: the caller then keeps its pinned per-tick feed.
 float walkFeedPerPx(int directory_num, int armor_dir, bool cold);
 
+// D2 movement source (retail Zombie::UpdateZombieWalking, Zombie.cpp:4126-
+// 4133): advance `reanim_time` by the distance-locked walk feed for
+// `speed_px` board px this tick (the same feed walkFeedPerPx derives) and
+// return the board-px `_ground` track delta that advance produces, so the
+// logic can move BY the animation. Returns false (and leaves reanim_time
+// untouched) for states with no usable _ground walk track -- the caller then
+// keeps moving by raw velX. The delta already includes the doc's skin scale
+// and the big-trouble/editor render multiplier, and is positive toward the
+// zombie's forward (left) direction.
+bool stepWalkReanim(int directory_num, int armor_dir, float &reanim_time,
+                    float speed_px, bool cold, float &ground_dx);
+
 // Retail playback-rate multiplier of a directory state (kPlayRateRules in
 // reanim_zombie.cpp): 1.0 for one-shots / unlisted segments and before init.
 // Debug tooling.
@@ -165,7 +187,9 @@ float playbackRateForDir(int directory_num, int armor_dir = -1);
 
 // Draw one zombie. Returns false (and draws nothing) when reanim assets are
 // unavailable -- the caller then falls back to the old sprite-sheet code.
-//   x_location/y_location: game zombie position (top-left of 166x144 box)
+//   x_location/y_location: game zombie position (top-left of 166x144 box);
+//     the retail pivot formula places doc point (30, 120) at
+//     (x + 45 + offX, y + 132 + offY), scale-invariant under the art scale.
 //   reanim_time: local time in reanim frames inside the current segment.
 //   extraHide: extra track names to hide on top of the state-derived set
 //     (debug tooling; any case). extraShow: track names to force-show instead
@@ -209,7 +233,8 @@ std::vector<TrackStatus> trackStatuses(int directory_num, int armor_dir,
 // anim_waterdeath when the doc has it and lingers only a flash
 // (repvz mZombieFade = 10 vs 100).
 void drawDeathPart(float aging_time, int x_location, int y_location, bool cold,
-                   int skin = SKIN_PLAIN, bool in_pool = false);
+                   int skin = SKIN_PLAIN, bool in_pool = false,
+                   bool headless = false);
 
 // Death-anim playback rate in reanim frames/sec for `skin` (repvz
 // Zombie.cpp:9078-9108): 24-30 fps seeded per corpse; football 24,
@@ -254,11 +279,13 @@ float skinSegmentLength(int skin, const char *segment);
 // /imp eat) -- see tools/find_walk_loop.py measurements.
 float loopBlendFrames(int skin, int first, int last);
 
-// Draw one segment of an extra skin anchored into the 166x144 game zombie
-// box (same calibration as drawZombie: feet at the box bottom), with extra
-// pixel offsets and a scale multiplier (Zomboss stands 2x). Returns false
-// when the skin/segment is unavailable. One-shot segments are clamped at
-// their last frame instead of wrapping when loop == false.
+// Draw one segment of an extra skin through the RETAIL pivot anchor (same
+// formula as drawZombie: ox = x + 45 + offX - 30*s, oy = y + 132 + offY -
+// 120*s, s = skin scale x scale_mul), with caller draw deltas and a scale
+// multiplier (Zomboss stands 2x). Returns false when the skin/segment is
+// unavailable. One-shot segments are clamped at their last frame instead of
+// wrapping when loop == false. ddx/ddy: bungee passes its hang (plays retail
+// mBodyY), the Zomboss body passes bossDocCompensation (below).
 // skin may also be SKIN_PLAIN (base doc, kBaseHidden accessories hidden the
 // way the game shows them) or SKIN_FLAGPOLE (the flag-pole doc, drawn at its
 // authored rest pose -- no hand attach).
@@ -274,6 +301,62 @@ bool drawSkinSegment(int skin, const char *segment, float reanim_time,
                      const std::unordered_set<std::string> *extraShow = nullptr,
                      int *partsDrawn = nullptr,
                      reanim::DrawStats *stats = nullptr);
+
+// --- placement probes (almanac / anim viewer) --------------------------------
+// Measured geometry of a draw pose in the retail pivot frame (doc point
+// (30, 120) = the scale-invariant anchor of the draw formula above):
+//   pivotX/pivotY: where that doc point lands on screen for a draw at
+//     (x_location, y_location) with scale_mul 1 and no deltas -- (45+offX,
+//     132+offY), the point the art grows about.
+//   C/B: pose bbox center-x / bottom in PIVOT space (doc - (30, 120)),
+//     pre-multiplied by the skin scale: a caller wanting the bbox centered
+//     on (ax, ay) at scale mul m passes
+//       x_location = ax - pivotX - m*C,  y_location = ay - pivotY - m*B
+//   W/H: bbox size at mul 1 (skin scale folded in).
+// The bbox is the renderer's OPAQUE union over the pose's play window (the
+// part PNGs are cropped to their art, and measureOnly bounds follow the
+// opaque pixels, so the probe reads the box the eye sees). Results are
+// cached per (pose, visibility) after the first call; ok=false when the
+// reanim assets are not loaded or the pose is unmappable.
+struct PoseGeom
+{
+    float pivotX = 0.0f, pivotY = 0.0f;
+    float C = 0.0f, B = 0.0f;
+    float W = 0.0f, H = 0.0f;
+    bool ok = false;
+};
+// drawZombie's pose for a (directory_num, armor_dir) state -- the plain doc,
+// the extra-skin docs and the flag-bearer's flag doc union (the pole rides
+// the flagHandDelta attach, like the real draw).
+bool zombiePoseGeom(int directory_num, int armor_dir, PoseGeom &out);
+// drawSkinSegment's pose for a skin segment; extraHide mirrors its parameter
+// (e.g. the almanac Zomboss body-out set). SKIN_FLAGPOLE measures the rest
+// pose of the flagpole doc.
+bool skinPoseGeom(int skin, const char *segment, PoseGeom &out,
+                  const std::unordered_set<std::string> *extraHide = nullptr);
+// Draw pivot of a skin: (45+offX, 132+offY) from the retail formula (the
+// doc point (30, 120) anchor at mul 1, no deltas).
+void skinDrawPivot(int skin, float &pivotX, float &pivotY);
+
+// Zomboss doc compensation: drawSkinSegment's retail pivot anchor centers
+// the doc's empty space (the boss art sits ~672/325 doc units off the box
+// origin); the measured idle anchor (pre-rework calibration) is restored by
+// passing these ints as drawSkinSegment's ddx/ddy. bossdriver::draw adds
+// the same pair to its own origin so the dome driver stays glued to the
+// body. Exact: ddx = -642.75*m - 45, ddy = -205.47*m - 132.
+void bossDocCompensation(float scale_mul, int &ddx, int &ddy);
+
+// Retail mScaleZombie of a zombie TYPE (0.8 for the GOTY dancers, 1.0 for
+// everyone else; Big Trouble's 0.5 is NOT folded in -- it rides the editor
+// scale mul). Debug/shadow tooling.
+float skinScaleForType(int zombie_type);
+// Reanim skin (SKIN_*) the draw path uses for a zombie TYPE (D1 drop-part FX
+// choose the same doc as the body).
+int zombieSkinForType(int zombie_type);
+// Retail per-type image offsets (GetDrawPos netted with the balloon/pogo
+// spawn raises and bungee's -18): the same values the draw path's
+// skinImageOffset table carries, keyed by ZombieType. Shadow tooling.
+void zombieImageOffsetForType(int zombie_type, float &dx, float &dy);
 
 // --- debug tooling (anim viewer): doc introspection -------------------------
 struct SegmentInfo

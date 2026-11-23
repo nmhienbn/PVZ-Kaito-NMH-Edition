@@ -27,14 +27,18 @@ its walk off the reanim "_ground" track so one stride covers a fixed distance
 (Zombie::UpdateAnimSpeed, Zombie.cpp:6685-6694), and its legacy sprite path
 rolls mAnimTicksPerFrame 12/15 by speed (PickRandomSpeed, Zombie.cpp:1218-
 1222). The 46-pose sheet walk cycle spans the same ground as the reanim cycle
-it mirrors: 55.8 doc-px of _ground travel (Zombie.reanim anim_walk 31..170) x
-ZOMBIE_SCALE 1.186 = 66.2 board px over 46 poses x ZOMBIE_FRAME 3 = 138
-frame-indices -> 0.48 px per index. `frame` advances on ground covered, so
-each zombie's step rate scales with its rolled speed and the feet stay
-planted; at the 0.30 px/cs mean (0.5 px/tick) a full cycle takes ~2.2 s and
-holds 2 footfalls (~33 px apart), the retail gait. The old 3.6 px per index
-(a 497 px cycle, ~7.5x too long for the ground actually covered) glided the
-same ~9x desync the fixed-rate reanim feed had.*/
+it mirrors: 55.8 doc-px of _ground travel (Zombie.reanim anim_walk 31..170)
+over 46 poses x ZOMBIE_FRAME 3 = 138 frame-indices -> 0.48 px per index, tuned
+at the old 1.186 zoom. STALE-BUT-KEPT: the reanim path now renders at retail
+scale 1.0 (ZOMBIE_SCALE deleted), where the same 55.8 doc-px of travel
+implies 0.404 px per index -- 0.48 is kept so the sheet pacing stays at its
+tuned pre-rework feel; a retail-true stride is a pure re-tune of this value.
+`frame` advances on ground covered, so each zombie's step rate scales with
+its rolled speed and the feet stay planted; at the 0.30 px/cs mean (0.5
+px/tick) a full cycle takes ~2.2 s and holds 2 footfalls (~33 px apart), the
+retail gait. The old 3.6 px per index (a 497 px cycle, ~7.5x too long for
+the ground actually covered) glided the same ~9x desync the fixed-rate
+reanim feed had.*/
 constexpr float ZOMBIE_WALK_STRIDE_PX = 0.48f;
 
 /*Chilled movement factor (original Zombie.cpp:70 CHILLED_SPEED_FACTOR =
@@ -66,18 +70,23 @@ private:
     // died while swimming (pool lane / snorkel underwater): the reanim death
     // then plays anim_waterdeath with the short linger (repvz mZombieFade=10)
     bool in_water = false;
+    // died after its head was already torn off (D1): the reanim death segment
+    // already hides the head group, and the usual tossed-head pop is skipped.
+    bool headless = false;
 
 public:
     ZombiePart(const int &_img_num, const int &_frame_clk,
                const int &_r, const int &_x,
                const int &_w, const int &_h, const bool &_cold = false,
-               const int &_skin = 0, const bool &_in_water = false);
+               const int &_skin = 0, const bool &_in_water = false,
+               const bool &_headless = false);
     // debug/harness introspection: the part's img slot (DEATH_PART_IMG /
     // DROP_*_IMG / CHARRED_PART_IMG / sheet directory) and its payload (reanim
     // skin for deaths/drops, CHARRED_* kind for charred corpses)
     int img() const { return img_num; }
     int payload() const { return skin; }
     bool in_pool() const { return in_water; }
+    bool is_headless_corpse() const { return headless; }
     bool display(const int &_row);
     // reanim death corpse path (used when img_num == REANIM_DEATH_IMG)
     bool display_reanim_death(const int &_row);
@@ -154,8 +163,23 @@ public:
     not time, so slow/rolled/chilled zombies step proportionally slower and the
     feet stay synced with x_location (retail _ground-track behavior).*/
     float walk_stride_acc = 0.0f;
+    /*D2 diagnostics: the _ground delta fed to movement this tick (board px,
+    0 when the state is not ground-driven) and the whole-pixel step actually
+    applied. The autoplay walk check logs their running totals -- they must
+    match, proving the feet track the applied dx exactly.*/
+    float last_ground_dx = 0.0f;
+    int last_step_px = 0;
     int degrade_steps = 0;       // armor/degrade tiers already fired (threshold catch-up)
     bool is_charmed = false; // hypnotized: walks right, fights other zombies
+    /*D1 damage-state bookkeeping (repvz Zombie::UpdateDamageStates /
+    DropHead / DropArm, Zombie.cpp:3511-3934): the arm and head each pop at
+    most once, at 2/3 and 1/3 of the true BODY pool. A headless zombie keeps
+    walking but bleeds out (mHasHead == false => isDying, Zombie.cpp:4661-
+    4688) and can no longer eat. bleed_pending skips the bleed tick on which
+    the head itself dropped (the "~0.7 s after the 10th pea" cadence).*/
+    bool arm_dropped = false;
+    bool head_dropped = false;
+    bool bleed_pending = false;
     // ticks left of the one-shot purple swirl burst after the charm bite
     // (armed with CHARM_FLASH_TICKS by the trance hook)
     int charm_flash = 0;
@@ -254,6 +278,39 @@ public:
 
     int get_row() const;
     float get_health() const;
+    /*D1 body-pool split: `health` is the combined pool (body + helm/shield).
+    body_max_health() is the per-type 270/500/... original-HP body converted
+    to clone units (x health_scale); body_health() subtracts whatever helm/
+    shield tier is still soaking damage (min(health, body_max) for helms,
+    health - remaining carried shield for door/newspaper/ladder). Arm/head
+    thresholds and the headless bleed read these, exactly like the original's
+    mBodyHealth/mBodyMaxHealth (Zombie.cpp:3908-3934, 4661-4688).*/
+    float body_max_health() const;
+    float body_health() const;
+    /*repvz Update's isDying test (Zombie.cpp:4663-4670): a zombie whose head
+    is gone, or a zomboni/catapult whose body is under 200 original HP
+    (10 clone units). Those bleed out each tick until dead.*/
+    bool is_dying_body() const;
+    /*repvz Zombie::CanLoseBodyParts (Zombie.cpp:3490-3502).*/
+    virtual bool can_lose_body_parts() const;
+    /*Per-tick arm/head pop pass; called after determine_appearance in every
+    damage path. Pushes the head/arm FX once (reanimz DROP_*_IMG).*/
+    void update_damage_states(vector<ZombiePart> &zombie_parts);
+    /*Headless dying: original HP lost per ORIGINAL tick (1, yeti 10 but
+    overridden to 3 for mBodyMaxHealth >= 500, Zombie.cpp:4672-4687) mapped
+    to clone HP per 60 Hz logic tick (x100/60 original ticks, /20 HP unit).*/
+    float headless_bleed_per_tick() const;
+    /*Simple health subtraction used by the bleed (no armor/appearance work:
+    the bleeding body is already bare and headless).*/
+    void bleed_health(float dmg);
+    /*Per logic tick: hit-flash/chill clocks (run even frozen/buttered).
+    Render frames no longer age zombie state (D2).*/
+    void update_logic_timers();
+    /*Per logic tick: advance the sheet pose + reanim clock. `walk_v` is this
+    tick's chilled forward pace (0 when not walking). When the state has a
+    _ground track, returns the board-px ground delta caused by the advance
+    and sets ground_driven; otherwise caller moves by raw walk_v.*/
+    float update_logic_animation(float walk_v, bool &ground_driven);
     /*Narrow write access to the pooled health for spawn-time team assembly:
     bobsled mates spawn with the bare body+sled tier instead of the leader's
     full helm stack (level_data.cpp materialize_wave_plans; original only the
@@ -338,8 +395,9 @@ public:
 };
 
 /*Sheet-sprite ground anchor (the fallback path when no reanim set is loaded):
-reanim zombies plant their feet at y_location + 136 (reanim ART_BOTTOM_Y =
-row top + 86); the 166x144 sheet frames carry their opaque feet at +141 and
+reanim zombies anchor at the retail pivot (reanim_zombie.cpp: doc point
+(30,120) lands at (x+45, y+132)), the plain walk's opaque feet landing at
+~y+134.8; the 166x144 sheet frames carry their opaque feet at +141 and
 the door's 196x197 frames at ~+135, so drawing bottom-anchored at
 ground + (frame_height - feet_row) drops every sheet onto that same ground
 line (the plain set lifts 5 px, the door sheets stay put).*/

@@ -454,7 +454,12 @@ Block previewCell(bool zombie, int slot, bool compare)
 
 void drawZombieShadow(const Block &cell)
 {
-    win.draw_png(SHADOW_DIRECTORY, cell.x1 + 85, cell.y2 - 40, 96, 40);
+    // Retail Zombie::DrawShadow geometry for a plain walking zombie (the
+    // state this preview mirrors): the 86x36 blob centers on the game box's
+    // (x + 23, y + 112) -- offX/offY 0, s = 1, the generic +23 table entry.
+    // The preview box's top sits 50px above the cell, so the center lands at
+    // (cell.x1 + 23, cell.y1 + 62); the blob is drawn from its top-left.
+    win.draw_png(SHADOW_DIRECTORY, cell.x1 + 23 - 43, cell.y1 + 62 - 18, 86, 36);
 }
 void drawPlantShadow(const Block &cell)
 {
@@ -463,47 +468,44 @@ void drawPlantShadow(const Block &cell)
 
 // Animated grid-card recipe per type: everyone stands the walk loop of its
 // reanim skin (Zomboss his doc's anim_idle -- drawZombie has no directory for
-// him). bbox_w/bbox_h/cx_off/foot_off describe the pose's union bounds at
-// scale 1, exactly like the almanac's measured ZOMBIE_RECIPE (almanac.cpp
-// mirrors the same poses; values copied at build time, walk-pose variants
-// where the almanac crops/poses instead are measured from this clone's
-// reanimz init probe). cx_off = bbox center-x in pose space (drawZombie box
-// anchor (61,141) is the origin), foot_off = bbox bottom.
+// him). The card carries POSE SELECTION only -- the pose's bounds and center
+// are probed at draw time (reanimz::zombiePoseGeom / skinPoseGeom, the same
+// opaque-union geometry the body draw anchors with), so the table can never
+// drift from the art.
 struct ZCard
 {
     int walk_dir;
-    int armor_dir; // CONE1_DIRECTORY / BUCKET1_DIRECTORY, -1 otherwise
-    float bbox_w, bbox_h, cx_off, foot_off;
-    int skin;         // >= 0: draw that skin's `seg` instead of the walk dir
-    const char *seg;
+    int armor_dir = -1; // CONE1_DIRECTORY / BUCKET1_DIRECTORY, -1 otherwise
+    int skin = -1;      // >= 0: draw that skin's `seg` instead of the walk dir
+    const char *seg = nullptr;
 };
 const ZCard ZCARD[COUNT_ZOMBIE_TYPE] = {
-    {ZOMBIE_WALK1_DIRECTORY, -1, 109, 137, -1.0f, -7.0f, -1, nullptr},            // normal
-    {FLAG_ZOMBIE_WALK1_1_DIRECTORY, -1, 161, 179, -27.0f, -7.0f, -1, nullptr},    // flag
-    {ZOMBIE_WALK1_DIRECTORY, CONE1_DIRECTORY, 110, 170, -1.5f, -7.0f, -1, nullptr},  // conehead
-    {ZOMBIE_WALK1_DIRECTORY, BUCKET1_DIRECTORY, 122, 162, -7.5f, -7.0f, -1, nullptr}, // buckethead
-    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, -1, 128, 147, -10.5f, 3.0f, -1, nullptr},     // screen door
-    {POLEVAULT_WALK_DIRECTORY, -1, 110, 140, 0.0f, -7.0f, -1, nullptr},           // pole vaulter
-    {NEWSPAPER_WALK_DIRECTORY, -1, 132, 140, -8.5f, -8.0f, -1, nullptr},          // newspaper
-    {FOOTBALL_RUN_DIRECTORY, -1, 162, 157, -2.5f, -13.0f, -1, nullptr},           // football
-    {DANCER_WALK_DIRECTORY, -1, 76, 114, 0.0f, -7.0f, -1, nullptr},               // dancer
-    {BACKUP_WALK_DIRECTORY, -1, 79, 137, -2.0f, -7.0f, -1, nullptr},              // backup dancer
-    {DUCKYTUBE_WALK_DIRECTORY, -1, 109, 137, -1.0f, -7.0f, -1, nullptr},          // ducky tube
-    {SNORKEL_WALK_DIRECTORY, -1, 100, 119, -39.5f, 35.0f, -1, nullptr},           // snorkel
-    {ZOMBONI_DRIVE_DIRECTORY, -1, 214, 168, -3.5f, -6.0f, -1, nullptr},           // zomboni
-    {BOBSLED_WALK_DIRECTORY, -1, 126, 144, -1.5f, -6.0f, -1, nullptr},            // bobsled team
-    {DOLPHINRIDER_WALK_DIRECTORY, -1, 104, 128, 0.0f, -10.0f, -1, nullptr},       // dolphin rider (wading)
-    {JACKBOX_WALK_DIRECTORY, -1, 106, 143, -2.5f, -7.0f, -1, nullptr},            // jack-in-the-box
-    {BALLOON_WALK_DIRECTORY, -1, 99, 130, 0.0f, -5.0f, -1, nullptr},              // balloon
-    {DIGGER_WALK_DIRECTORY, -1, 108, 142, -0.5f, -9.0f, -1, nullptr},             // digger
-    {POGO_WALK_DIRECTORY, -1, 69, 130, 1.0f, 9.0f, -1, nullptr},                  // pogo
-    {BUNGEE_WALK_DIRECTORY, -1, 109, 106, -1.0f, -6.0f, -1, nullptr},             // bungee
-    {LADDER_WALK_DIRECTORY, -1, 141, 135, 2.0f, -6.0f, -1, nullptr},              // ladder
-    {CATAPULT_WALK_DIRECTORY, -1, 247, 159, 0.0f, -24.0f, -1, nullptr},           // catapult (whole vehicle)
-    {GARGANTUAR_WALK_DIRECTORY, -1, 212, 237, 0.0f, 15.0f, -1, nullptr},          // gargantuar (full body)
-    {IMP_WALK_DIRECTORY, -1, 79, 93, -3.0f, -3.0f, -1, nullptr},                  // imp
-    {0, -1, 324, 679, 170.0f, 0.0f, reanimz::SKIN_ZOMBOSS, "anim_idle"},          // zomboss: full body, own doc
-    {YETI_WALK_DIRECTORY, -1, 160, 176, -3.5f, -9.0f, -1, nullptr},               // zombie yeti
+    {ZOMBIE_WALK1_DIRECTORY, -1},                       // normal
+    {FLAG_ZOMBIE_WALK1_1_DIRECTORY, -1},                // flag
+    {ZOMBIE_WALK1_DIRECTORY, CONE1_DIRECTORY},          // conehead
+    {ZOMBIE_WALK1_DIRECTORY, BUCKET1_DIRECTORY},       // buckethead
+    {DOOR_ZOMBIE_WALK1_1_DIRECTORY, -1},                // screen door
+    {POLEVAULT_WALK_DIRECTORY, -1},                     // pole vaulter
+    {NEWSPAPER_WALK_DIRECTORY, -1},                    // newspaper
+    {FOOTBALL_RUN_DIRECTORY, -1},                      // football
+    {DANCER_WALK_DIRECTORY, -1},                       // dancer
+    {BACKUP_WALK_DIRECTORY, -1},                        // backup dancer
+    {DUCKYTUBE_WALK_DIRECTORY, -1},                     // ducky tube
+    {SNORKEL_WALK_DIRECTORY, -1},                       // snorkel
+    {ZOMBONI_DRIVE_DIRECTORY, -1},                      // zamboni
+    {BOBSLED_WALK_DIRECTORY, -1},                      // bobsled team
+    {DOLPHINRIDER_WALK_DIRECTORY, -1},                  // dolphin rider (wading)
+    {JACKBOX_WALK_DIRECTORY, -1},                       // jack-in-the-box
+    {BALLOON_WALK_DIRECTORY, -1},                      // balloon
+    {DIGGER_WALK_DIRECTORY, -1},                        // digger
+    {POGO_WALK_DIRECTORY, -1},                          // pogo
+    {BUNGEE_WALK_DIRECTORY, -1},                       // bungee
+    {LADDER_WALK_DIRECTORY, -1},                       // ladder
+    {CATAPULT_WALK_DIRECTORY, -1},                      // catapult (whole vehicle)
+    {GARGANTUAR_WALK_DIRECTORY, -1},                    // gargantuar (full body)
+    {IMP_WALK_DIRECTORY, -1},                           // imp
+    {0, -1, reanimz::SKIN_ZOMBOSS, "anim_idle"},        // zomboss: full body, own doc
+    {YETI_WALK_DIRECTORY, -1},                          // zombie yeti
 };
 // ONE common art scale for the card roster: a normal zombie reads 90px tall
 // in the 100px window (~90% of the cell). Arts whose measured bounds exceed
@@ -513,25 +515,35 @@ const float VIEWER_ZICON_SCALE = 0.66f;
 const int VIEWER_ZART_FIT = 92;    // card art box (px) inside the 100x100 window
 const int VIEWER_ZFOOT_INSET = 8;  // art bottom lifts off the cell bottom
 
-// Card-sized reanim portrait for one grid cell, bottom-center anchored
-// (almanac placement math: bbox centered on the cell, bbox bottom on the foot
-// line). The caller scissored us to the cell inset, so nothing spills.
+// Card-sized reanim portrait for one grid cell, bottom-center anchored:
+// probe placement (reanimz::PoseGeom) -- the pose's probed bbox centers on
+// the cell with its bottom on the foot line, via the retail pivot formula
+// x = anchor - pivotX - m*C, y = anchor - pivotY - m*B (same math as the
+// almanac's almanac_zombie_draw_args). The caller scissored us to the cell
+// inset, so nothing spills.
 void drawGridZombie(int type, float clock, int x, int y)
 {
     if (!reanimz::ready())
         return;
     const ZCard &r = ZCARD[type];
+    reanimz::PoseGeom g;
+    bool have = r.skin >= 0 ? reanimz::skinPoseGeom(r.skin, r.seg, g)
+                            : reanimz::zombiePoseGeom(r.walk_dir, r.armor_dir, g);
+    if (!have)
+        return;
     float s = VIEWER_ZICON_SCALE;
-    if (VIEWER_ZART_FIT / r.bbox_w < s)
-        s = VIEWER_ZART_FIT / r.bbox_w;
-    if (VIEWER_ZART_FIT / r.bbox_h < s)
-        s = VIEWER_ZART_FIT / r.bbox_h;
+    if (VIEWER_ZART_FIT / g.W < s)
+        s = VIEWER_ZART_FIT / g.W;
+    if (VIEWER_ZART_FIT / g.H < s)
+        s = VIEWER_ZART_FIT / g.H;
     float anchor_x = x + VIEWER_ZCELL_W / 2.0f;
     float anchor_y = y + VIEWER_ZCELL_H - VIEWER_ZFOOT_INSET;
-    int xl = (int)(anchor_x - r.cx_off * s + 0.5f);
-    int yl = (int)(anchor_y - r.foot_off * s + 0.5f);
+    int xl = (int)(anchor_x - g.pivotX - g.C * s + 0.5f);
+    int yl = (int)(anchor_y - g.pivotY - g.B * s + 0.5f);
     if (r.skin >= 0)
     {
+        // the grid shows the FULL body poses: no boss doc compensation here
+        // (the almanac compensates only its cropped Zomboss head vignette)
         reanimz::drawSkinSegment(r.skin, r.seg, clock + type * 7.0f, xl, yl,
                                  false, false, 0, 0, s);
         return;
@@ -539,7 +551,7 @@ void drawGridZombie(int type, float clock, int x, int y)
     reanimz::setZombieScaleMul(s);
     reanimz::setZombieTimeMul(1.0f);
     reanimz::drawZombie(r.walk_dir, r.armor_dir, clock + type * 7.0f,
-                        xl - 61, yl - 141, false, false);
+                        xl, yl, false, false);
     reanimz::setZombieScaleMul(1.0f);
     reanimz::setZombieTimeMul(1.0f);
 }

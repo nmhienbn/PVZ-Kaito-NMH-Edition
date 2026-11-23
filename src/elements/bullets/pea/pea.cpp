@@ -62,7 +62,7 @@ Pea::Pea(int _row, int _x, int _dir) : Bullet(PEA, _row, _x)
     dir = _dir < 0 ? -1 : 1;
     angle = dir < 0 ? 180 : 0;
     directory_num = PEA_DIRECTORY;
-    y_location = cells[row][0].y1 + 20 + roof_tile_dy(get_block_col(_x));
+    y_location = cells[row][0].y1 + 10 + roof_tile_dy(get_block_col(_x));
     // On a roof the shot keeps its height while the slope climbs under it:
     // peas out of the slanted columns dive into the shingles.
     bind_roof_slope();
