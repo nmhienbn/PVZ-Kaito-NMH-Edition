@@ -119,7 +119,7 @@ void ArmoredZombie::render_zombie()
 
     // current frame
     int sframe = frame / ZOMBIE_FRAME + spec.overlay_frame_bias->at(directory_num);
-    int x_loc = x_location + spec.overlay_x_bias;
+    int x_loc = x_location - 62 + spec.overlay_x_bias;
     // The helm rides the body art: the body is bottom-anchored on the ground
     // line, its top `body_lift` px off the old box top.
     const int feet = dir_height > ZOMBIE_HEIGHT ? ZOMBIE_DOOR_FEET_Y : ZOMBIE_SHEET_FEET_Y;
@@ -158,14 +158,14 @@ void ArmoredZombie::display_credited(const int &_minus_x)
     int sframe = frame / ZOMBIE_FRAME / 2;
     const int feet = dir_height > ZOMBIE_HEIGHT ? ZOMBIE_DOOR_FEET_Y : ZOMBIE_SHEET_FEET_Y;
     win.draw_nth_frame_bl(directory_num, sframe, dir_width, dir_height,
-                          x_location - _minus_x,
+                          x_location - _minus_x - 62,
                           y_location + ZOMBIE_SHEET_GROUND_Y + dir_height - feet,
                           dir_width, dir_height);
 
     sframe += spec.overlay_frame_bias->at(directory_num);
     // the helm rides the body art, whose top lifted by (feet - ground)
     const int body_lift = feet - ZOMBIE_SHEET_GROUND_Y;
-    int x_loc = x_location + spec.overlay_x_bias - _minus_x;
+    int x_loc = x_location - 62 + spec.overlay_x_bias - _minus_x;
     int y_loc = y_location + spec.overlay_y_bias - body_lift + spec.overlay_h;
     win.draw_nth_frame_bl(armor_dir, sframe, spec.overlay_w, spec.overlay_h,
                           x_loc, y_loc, spec.overlay_w, spec.overlay_h);

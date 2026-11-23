@@ -524,7 +524,7 @@ bool almanac_zombie_crop(int type, float &l, float &t, float &r, float &b)
 
 // The crop rect mapped into window coords for a resolved layout: pose-space
 // point P renders at (pose_origin + P * scale), where the origin is the
-// drawZombie box's inner anchor (+123,+141) for walk poses and the
+// drawZombie box's inner anchor (+61,+141) for walk poses and the
 // drawSkinSegment x/y for the segment/disco/zomboss poses.
 bool almanac_zombie_clip_rect(int type, const AlmanacZombieLayout &l,
                               SDL_Rect &clip)
@@ -537,7 +537,7 @@ bool almanac_zombie_clip_rect(int type, const AlmanacZombieLayout &l,
     float ox = (float)x_location, oy = (float)y_location;
     if (ZOMBIE_RECIPE[type].pose == AZ_POSE_WALK)
     {
-        ox += 123.0f;
+        ox += 61.0f;
         oy += 141.0f;
     }
     clip.x = (int)floorf(ox + cl * l.scale);
@@ -683,10 +683,10 @@ void almanac_zombie_draw_args(int type, const AlmanacZombieLayout &l,
     if (r.pose == AZ_POSE_WALK)
     {
         // drawZombie takes the top-left of the 166x144 game zombie box and
-        // anchors the art at (x+123, y+141+~); see reanim_zombie.cpp
+        // anchors the art at (x+61, y+141+~); see reanim_zombie.cpp
         // MASS_CENTER_X / ART_BOTTOM_Y. Segment/disco/zomboss poses anchor at
         // the doc origin directly.
-        x_location -= 123;
+        x_location -= 61;
         y_location -= 141;
     }
 }

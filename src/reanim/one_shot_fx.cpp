@@ -125,7 +125,7 @@ void spawn_butter_splat(const Zombie *z)
     }
     // Sheet fallback: the legacy hand-tuned crown spot (same point the pat
     // draw uses, rect center).
-    spawn(FX_BUTTER_SPLAT, bx + 58, by + 19, z->row);
+    spawn(FX_BUTTER_SPLAT, bx - 4, by + 19, z->row);
 }
 
 void mower_dust(int x, int y, int row)

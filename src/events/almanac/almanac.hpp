@@ -86,7 +86,7 @@ void almanac_zombie_draw_args(int type, const AlmanacZombieLayout &layout,
                               int &x_location, int &y_location);
 // Pose-space crop rect (units at scale 1, relative to the pose draw origin:
 // drawSkinSegment's x/y for the segment poses, the drawZombie box's inner
-// anchor (x+123, y+141) for the walk poses). True when the type renders its
+// anchor (x+61, y+141) for the walk poses). True when the type renders its
 // FULL pose and shows only this rect (catapult driver, gargantuar torso,
 // zomboni vehicle + driver, zomboss head). The rect is also the effective
 // bbox the layout fits/centers.

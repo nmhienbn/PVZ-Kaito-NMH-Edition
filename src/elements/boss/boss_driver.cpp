@@ -27,7 +27,7 @@ bool g_tried = false, g_ok = false, g_enabled = true;
 // on the exact same doc-space anchor drawSkinSegment computed for the
 // Zomboss body, or it drifts off the dome.
 const float ZOMBIE_SCALE = 1.01f;
-const float MASS_CENTER_X = 123.0f;
+const float MASS_CENTER_X = 61.0f;
 const float ART_BOTTOM_Y = 136.0f;
 
 reanim::DrawStats measure(reanim::ReanimDoc &doc, int first, int last,

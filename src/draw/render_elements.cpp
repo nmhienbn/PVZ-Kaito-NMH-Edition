@@ -195,7 +195,7 @@ void display_shadow()
         int sw = max(1, (int)lround(96 * k * WORLD_SCALE));
         int sh = max(1, (int)lround(40 * k * WORLD_SCALE));
         win.draw_png(SHADOW_DIRECTORY,
-                     zombie->x_location + 85 + (96 - sw) / 2,
+                     zombie->x_location + 23 + (96 - sw) / 2,
                      cells[zombie->row][0].y2 - 40 + (40 - sh) / 2 +
                          roof_slope_offset(zombie->x_location),
                      sw, sh);

@@ -63,13 +63,25 @@ float plant_idle_height_px(int plantType);
 // scaleMul (F2 layout editor): extra multiplier on the calibrated scale,
 // growing the art about its pinned bottom-center (refCX/refBottom stay on
 // (cell center, footY)); 1.0 = unchanged.
+// Retail placement for the in-game plant renderer: doc origin (the cell
+// top-left plus PlantDrawHeightOffset) at scale 1.0 * WORLD_SCALE. When null
+// (almanac, seed-chooser preview, debug viewer) drawPlant keeps the legacy
+// artH-normalised, bottom-pinned placement.
+struct PlantPlacement
+{
+    float x = 0.0f;
+    float y = 0.0f;
+    float scale = 1.0f;
+};
+
 bool drawPlant(int plantType, int sheetDir, float sframe, int nSheet,
                float reanimClock, int cellX1, int cellX2, int footY,
                int gameHeight, bool flash,
                const std::unordered_set<std::string>* extraHide = nullptr,
                const std::unordered_set<std::string>* extraShow = nullptr,
                int* partsDrawn = nullptr, float* sampledFrame = nullptr,
-               float flash_fade = 1.0f, float scaleMul = 1.0f);
+               float flash_fade = 1.0f, float scaleMul = 1.0f,
+               const PlantPlacement* retailPlacement = nullptr);
 
 // Track names (lowercase) of the plant's reanim doc; empty when the plant has
 // no loaded skin. For debug tooling.

@@ -468,7 +468,7 @@ void drawPlantShadow(const Block &cell)
 // mirrors the same poses; values copied at build time, walk-pose variants
 // where the almanac crops/poses instead are measured from this clone's
 // reanimz init probe). cx_off = bbox center-x in pose space (drawZombie box
-// anchor (123,141) is the origin), foot_off = bbox bottom.
+// anchor (61,141) is the origin), foot_off = bbox bottom.
 struct ZCard
 {
     int walk_dir;
@@ -539,7 +539,7 @@ void drawGridZombie(int type, float clock, int x, int y)
     reanimz::setZombieScaleMul(s);
     reanimz::setZombieTimeMul(1.0f);
     reanimz::drawZombie(r.walk_dir, r.armor_dir, clock + type * 7.0f,
-                        xl - 123, yl - 141, false, false);
+                        xl - 61, yl - 141, false, false);
     reanimz::setZombieScaleMul(1.0f);
     reanimz::setZombieTimeMul(1.0f);
 }

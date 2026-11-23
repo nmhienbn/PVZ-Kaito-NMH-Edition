@@ -183,12 +183,31 @@ float skin_scale(int skin) {
     default:              return ZOMBIE_SCALE;
     }
 }
-// Horizontal box offset of the walk-bbox center, measured against the old
-// sprite sheets: ZombieWalk*.png art has its bbox center at x+120 and its
-// feet band at x+130 (the zombie shadow is centered at x+133). Anchoring the
-// reanim bbox center at x+123 puts the reanim feet band (~3px right of the
-// bbox center) exactly on the sheet feet position.
-const float MASS_CENTER_X = 123.0f;
+// Horizontal anchor of the walk-bbox center. The original draws the zombie
+// reanim with its origin at mX + 15 (repvz Zombie.cpp:5309, scale 1), which
+// puts the walk-bbox center at about mX + 61. The old 123 aligned the art to
+// the clone's own sprite sheets, not the retail game; the retail per-type
+// ImageOffsetX/Y below is applied on top of this shared anchor.
+const float MASS_CENTER_X = 61.0f;
+// Retail per-type ImageOffsetX/Y (repvz ZombieDefinition image_offset): added
+// on top of the shared +61 walk-bbox anchor. Skins without a retail entry
+// keep (0,0).
+void skinImageOffset(int skin, float& dx, float& dy) {
+    dx = 0.0f;
+    dy = 0.0f;
+    switch (skin) {
+    case SKIN_POLEVAULT:   dx = -6.0f;  dy = -11.0f; break;
+    case SKIN_ZOMBONI:     dx = 68.0f;  dy = -23.0f; break;
+    case SKIN_BOBSLED:     dx = 0.0f;   dy = -12.0f; break;
+    case SKIN_BALLOON:     dx = 0.0f;   dy = 17.0f;  break;
+    case SKIN_POGO:        dx = 0.0f;   dy = 16.0f;  break;
+    case SKIN_CATAPULT:    dx = -25.0f; dy = -18.0f; break;
+    case SKIN_GARGANTUAR:  dx = 0.0f;   dy = -8.0f;  break;
+    case SKIN_FOOTBALL:    dx = 0.0f;   dy = -16.0f; break;
+    case SKIN_YETI:        dx = 0.0f;   dy = -20.0f; break;
+    default: break;
+    }
+}
 // The current part PNGs are cropped to the opaque art, so the walk-bbox
 // maxY IS the feet line; older exports carried ~6px (@game scale) of
 // transparent padding under the feet, which this constant compensated.
@@ -1082,8 +1101,10 @@ bool initSkin(int skin, const char* file, reanim::ReanimDoc& doc, SkinGeom& geo,
     });
     float floorU = feet.hasBounds ? feet.maxY : acc.maxY;
     geo.scale = skin_scale(skin);
-    geo.anchorDX = MASS_CENTER_X - geo.scale * (acc.minX + acc.maxX) * 0.5f;
-    geo.anchorDY = ART_BOTTOM_Y + ART_PAD_BOTTOM - geo.scale * floorU;
+    float imgOffX, imgOffY;
+    skinImageOffset(skin, imgOffX, imgOffY);
+    geo.anchorDX = MASS_CENTER_X + imgOffX - geo.scale * (acc.minX + acc.maxX) * 0.5f;
+    geo.anchorDY = ART_BOTTOM_Y + ART_PAD_BOTTOM + imgOffY - geo.scale * floorU;
     geo.floorY = floorU;
     SDL_Log("reanimz skin: %s ready; walk bbox %.0fx%.0f, scale %.3f, anchor (%.1f, %.1f)",
             file, acc.maxX - acc.minX, acc.maxY - acc.minY, geo.scale,

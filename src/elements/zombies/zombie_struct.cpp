@@ -557,7 +557,7 @@ void Zombie::render_zombie()
     const float dbg = rsdl_debug_scale(this);
     const int dw = (int)lroundf(dir_width * dbg * WORLD_SCALE);
     const int dh = (int)lroundf(dir_height * dbg * WORLD_SCALE);
-    const int zx = x_location + layout_dx + (dir_width - dw) / 2;
+    const int zx = x_location - 62 + layout_dx + (dir_width - dw) / 2;
     const int zyb = y_bottom + layout_dy;
     // zombie
     // current frame
@@ -626,7 +626,7 @@ void Zombie::display(const int &_row)
             int pulse = 90 + (glow_phase <= 16 ? glow_phase : 32 - glow_phase) * 4;
             win.set_texture_color(HYPNO_AURA_DIRECTORY, 230, 15, 245);
             win.set_texture_alpha(HYPNO_AURA_DIRECTORY, pulse);
-            win.draw_png(HYPNO_AURA_DIRECTORY, x_location + layout_dx + 8, ry - 20 + layout_dy - body_lift, world_px(150), world_px(165));
+            win.draw_png(HYPNO_AURA_DIRECTORY, x_location - 54 + layout_dx, ry - 20 + layout_dy - body_lift, world_px(150), world_px(165));
             win.set_texture_color(HYPNO_AURA_DIRECTORY, 255, 255, 255);
             win.set_texture_alpha(HYPNO_AURA_DIRECTORY, all_img[HYPNO_AURA_DIRECTORY].alpha);
             // one-shot swirl burst right after the bite (repvz
@@ -635,7 +635,7 @@ void Zombie::display(const int &_row)
             if (charm_flash > 0)
             {
                 win.set_texture_color(MIND_CONTROL_DIRECTORY, 230, 15, 245);
-                win.draw_png_height_scaled(MIND_CONTROL_DIRECTORY, x_location + layout_dx + 25, ry - 15 + layout_dy - body_lift, world_px(45));
+                win.draw_png_height_scaled(MIND_CONTROL_DIRECTORY, x_location - 37 + layout_dx, ry - 15 + layout_dy - body_lift, world_px(45));
                 win.set_texture_color(MIND_CONTROL_DIRECTORY, 255, 255, 255);
                 // anim advances per logic tick, not per render (auto-FPS)
                 for (int _lt = logic_ticked; _lt > 0 && charm_flash > 0 && check_status(game_state, IS_PAUSED) == false; _lt--)
@@ -665,7 +665,7 @@ void Zombie::display(const int &_row)
                              (int)lroundf(head_top - 0.5f * bh), bw, bh);
             }
             else // sheet fallback: keep the legacy hand-tuned offset
-                win.draw_png(BUTTER_BULLET_DIRECTORY, x_location + layout_dx + 40, ry + 8 + layout_dy - body_lift, world_px(36), world_px(22));
+                win.draw_png(BUTTER_BULLET_DIRECTORY, x_location - 22 + layout_dx, ry + 8 + layout_dy - body_lift, world_px(36), world_px(22));
         }
         // Hit-flash decay runs even while frozen/buttered: repvz decrements
         // mJustGotShotCounter on every Zombie::Update (Zombie.cpp:4366-4367).
@@ -792,17 +792,18 @@ void Zombie::display_grave_rise(const int &rise_clk)
             (int)lround(buried) + layout_dy;
         const int vis = clip_bottom - (zyb - dir_height);
         const int cols = all_img[directory_num].c_sheet;
+        const int sheet_dx = dx - 62; // legacy sheets shared the old +120 anchor
         if (vis > 0 && cols > 0)
         {
             const int sframe = frame / ZOMBIE_FRAME;
             if (vis >= dir_height)
                 win.draw_nth_frame_bl(directory_num, sframe, dir_width,
-                                      dir_height, dx, zyb, dir_width,
+                                      dir_height, sheet_dx, zyb, dir_width,
                                       dir_height);
             else
                 win.draw_png(directory_num, dir_width * (sframe % cols),
-                             dir_height * (sframe / cols), dir_width, vis, dx,
-                             zyb - dir_height, dir_width, vis);
+                             dir_height * (sframe / cols), dir_width, vis,
+                             sheet_dx, zyb - dir_height, dir_width, vis);
         }
     }
 
@@ -849,7 +850,7 @@ void Zombie::display_credited(const int &_minus_x)
     const int dw = world_px(dir_width);
     const int dh = world_px(dir_height);
     win.draw_nth_frame_bl(directory_num, sframe, dir_width, dir_height,
-                          x_location - _minus_x + (dir_width - dw) / 2,
+                          x_location - _minus_x - 62 + (dir_width - dw) / 2,
                           y_location + ZOMBIE_SHEET_GROUND_Y + dir_height - feet,
                           dw, dh);
 
@@ -914,7 +915,7 @@ bool ZombiePart::display(const int &_row)
         int sframe = frame / frame_clk;
         const int dw = world_px(width);
         const int dh = world_px(height);
-        const int dx = x_location + (width - dw) / 2;
+        const int dx = x_location - 62 + (width - dw) / 2;
         win.draw_nth_frame_bl(img_num, sframe, width, height,
                               dx, y_bottom, dw, dh);
         // cold

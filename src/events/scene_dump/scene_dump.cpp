@@ -477,6 +477,42 @@ bool run_if_requested()
 
     vector<string> skipped;
 
+    if (scene == "plants")
+    {
+        // Reference peashooter in column 0 of every lane, then every plant
+        // type the game supports across columns 1..8, row-major (40 types fit
+        // the 5x8 block exactly).
+        for (int row = 0; row < (int)cells.size(); row++)
+            add_plant(PEASHOOTER_TYPE, row, 0, skipped);
+        for (int t = 0; t < PLANT_COUNT; t++)
+        {
+            int row = t / (HORIZ_BLOCK_COUNT - 1);
+            int col = t % (HORIZ_BLOCK_COUNT - 1) + 1;
+            if (row < (int)cells.size())
+                add_plant(t, row, col, skipped);
+        }
+    }
+    else if (scene == "zombies")
+    {
+        // Every zombie type, five per lane at the standard dump x slots.
+        // Day has five lanes; the 26th type spills onto a sixth row slot if
+        // the level ever has one, otherwise it is parked on lane 0 off the
+        // right edge so it still appears in the report.
+        static const int zx[5] = {300, 440, 580, 720, 860};
+        for (int t = 0; t < COUNT_ZOMBIE_TYPE; t++)
+        {
+            int row = t / 5;
+            int x = zx[t % 5];
+            if (row >= (int)cells.size())
+            {
+                row = 0;
+                x = 1000;
+            }
+            add_zombie(t, row, x, skipped);
+        }
+    }
+    else
+    {
     // Row 0: one of every classic front-yard plant + an armed Potato Mine.
     add_plant(PEASHOOTER_TYPE, 0, 0, skipped);
     add_plant(SUNFLOWER_TYPE, 0, 1, skipped);
@@ -534,6 +570,7 @@ bool run_if_requested()
                 z->x_location = --x;
             game_characters.zombies.push_back(z);
         }
+    }
     }
 
     // Age the animations by PVZ_SCENE_TICKS (default 30) without a gameplay

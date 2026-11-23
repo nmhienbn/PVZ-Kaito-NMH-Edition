@@ -867,11 +867,17 @@ float splitPeaLocal(float sframe, int nSheet, int segLen) {
 
 bool drawSplitPea(PlantSkin& skin, int sheetDir, float sframe, int nSheet,
                   int cellX1, int cellX2, int footY, bool flash,
-                  int* partsDrawn, float scaleMul) {
+                  int* partsDrawn, float scaleMul,
+                  const PlantPlacement* retailPlacement) {
     if (!skin.calibrated && !calibrate(SPLITPEA_TYPE, skin)) return false;
-    float scale = skin.scale * scaleMul;
-    float ox = (cellX1 + cellX2) * 0.5f + skin.dx - scale * skin.refCX;
-    float oy = (float)footY - skin.padBottom + skin.dy - scale * skin.refBottom;
+    float scale = retailPlacement ? retailPlacement->scale
+                                  : skin.scale * scaleMul;
+    float ox = retailPlacement
+                   ? retailPlacement->x
+                   : (cellX1 + cellX2) * 0.5f + skin.dx - scale * skin.refCX;
+    float oy = retailPlacement
+                   ? retailPlacement->y
+                   : (float)footY - skin.padBottom + skin.dy - scale * skin.refBottom;
     bool attack = (sheetDir == SPLITPEA_ATTACK_DIRECTORY);
 
     // (cluster, window first/last) — back head first so the front faces hug it.
@@ -1067,7 +1073,7 @@ bool drawPlant(int plantType, int sheetDir, float sframe, int nSheet,
                const std::unordered_set<std::string>* extraHide,
                const std::unordered_set<std::string>* extraShow,
                int* partsDrawn, float* sampledFrame, float flash_fade,
-               float scaleMul) {
+               float scaleMul, const PlantPlacement* retailPlacement) {
     if (!gReady) return false;
     if (plantType < 0 || plantType >= SKIN_COUNT) return false;
     PlantSkin& skin = gSkins[plantType];
@@ -1077,7 +1083,8 @@ bool drawPlant(int plantType, int sheetDir, float sframe, int nSheet,
     if (plantType == SPLITPEA_TYPE) {
         if (sampledFrame) *sampledFrame = -1.0f; // composite: no single frame
         return drawSplitPea(skin, sheetDir, sframe, nSheet, cellX1, cellX2,
-                            footY, flash, partsDrawn, scaleMul);
+                            footY, flash, partsDrawn, scaleMul,
+                            retailPlacement);
     }
 
     SegPick pick = pickSegment(plantType, sheetDir);
@@ -1122,10 +1129,16 @@ bool drawPlant(int plantType, int sheetDir, float sframe, int nSheet,
     (void)gameHeight; // placement comes from the sheet-measured targets now
     // scaleMul (F2 layout editor): multiplies the calibrated scale; refCX /
     // refBottom scale along, so the art's bottom-center stays pinned on the
-    // (cell center, footY) anchor.
-    float scale = skin.scale * scaleMul;
-    float ox = (cellX1 + cellX2) * 0.5f + skin.dx - scale * skin.refCX;
-    float oy = (float)footY - skin.padBottom + skin.dy - scale * skin.refBottom;
+    // (cell center, footY) anchor. In-game drawing passes retailPlacement
+    // instead: doc origin at the cell top-left at scale 1.0.
+    float scale = retailPlacement ? retailPlacement->scale
+                                  : skin.scale * scaleMul;
+    float ox = retailPlacement
+                   ? retailPlacement->x
+                   : (cellX1 + cellX2) * 0.5f + skin.dx - scale * skin.refCX;
+    float oy = retailPlacement
+                   ? retailPlacement->y
+                   : (float)footY - skin.padBottom + skin.dy - scale * skin.refBottom;
 
     reanim::DrawOptions opt;
     opt.tint = pick.tint;
