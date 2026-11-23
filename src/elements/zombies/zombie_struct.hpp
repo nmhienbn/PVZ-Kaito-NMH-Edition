@@ -46,6 +46,10 @@ constexpr float ZOMBIE_WALK_STRIDE_PX = 0.48f;
 halved separately (BITE_CLK_COUNT doubling = the original's even-tick
 chew gating).*/
 constexpr float CHILLED_SPEED_FACTOR = 0.4f;
+/*Retail walk pace factor for zombies moved by their _ground track: the anim
+rate formula carries 47 * SECONDS_PER_UPDATE = 0.47 (Zombie.cpp:6694), so the
+covered distance averages 0.47 * mVelX.*/
+constexpr float GROUND_WALK_PACE = 0.47f;
 
 /*Float range roll (repvz LawnCommon RandRangeFloat). Zombie speed variance
 uses tiny bands, so integer rand(L, R) is not enough.*/

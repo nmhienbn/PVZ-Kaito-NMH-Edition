@@ -776,9 +776,16 @@ float Zombie::update_logic_animation(float walk_v, bool &ground_driven)
     // else keeps the pinned per-tick feed.
     float ground_dx = 0.0f;
     bool stepped = false;
+    /*Retail ground-driven walkers do NOT cover mVelX per tick: the anim rate is
+    mVelX * (frames / distance) * 47 / scale fps (Zombie.cpp:6694) and the step
+    is groundDelta * SECONDS_PER_UPDATE * rate * scale (Zombie.cpp:4133,
+    Reanimator.cpp:1247), so the average pace is 0.47 * mVelX. Feeding the
+    distance-locked stepper 0.47 * v reproduces both that anim rate and that
+    pace. Phases without _ground keep raw v (the fallback below).*/
     if (is_moving && walk_v > 0.0f)
         stepped = reanimz::stepWalkReanim(directory_num, armor_dir, reanim_time,
-                                          walk_v, cold_time > 0, ground_dx);
+                                          walk_v * GROUND_WALK_PACE, cold_time > 0,
+                                          ground_dx);
     ground_driven = stepped;
     if (!stepped)
     {
